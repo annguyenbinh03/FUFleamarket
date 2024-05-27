@@ -61,7 +61,7 @@ CREATE TABLE [dbo].[ProductImage](
 	[imageName] NVARCHAR(50) NOT NULL,
 	[imageLink] NVARCHAR(300) NOT NULL,
 	CONSTRAINT FK_ProductImage_PrimaryKey PRIMARY KEY ([productId], [imageName]) ,
-	CONSTRAINT FK_ProductImage_User FOREIGN KEY ([productId]) REFERENCES [dbo].[User] ([userId]),
+	CONSTRAINT FK_ProductImage_Product FOREIGN KEY ([productId]) REFERENCES [dbo].[Product] ([productId])
 )
 
 CREATE TABLE [dbo].[Wishlist](
@@ -77,18 +77,20 @@ CREATE TABLE [dbo].[Promotion](
 	[name] NVARCHAR(50) NOT NULL,
 	[description] NVARCHAR(300) NOT NULL,
 	[period] INT NOT NULL,
-	[price] MONEY,
+	[productQuantity] INT NOT NULL,
+	[price] MONEY NOT NULL
 )
 
 CREATE TABLE [dbo].[PromotionOrder](
 	[promoOrderId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[startDate] DATETIME NOT NULL,
 	[endDate] DATETIME NOT NULL,
-	[productId] INT,
-	[price] MONEY, 
-	[promotionId] INT,
+	[userId] INT NOT NULL,
+	[price] MONEY NOT NULL, 
+	[productQuantity] INT NOT NULL,
+	[promotionId] INT NOT NULL,
 	CONSTRAINT FK_PromotionOrder_Promotion FOREIGN KEY ([promotionId]) REFERENCES [dbo].[Promotion] ([promotionId]),
-	CONSTRAINT FK_PromotionOrder_Product FOREIGN KEY ([productId]) REFERENCES [dbo].[Product] ([productId])
+	CONSTRAINT FK_PromotionOrder_User FOREIGN KEY ([userId]) REFERENCES [dbo].[User] ([userId])
 )
 
 CREATE TABLE [dbo].[Order](
@@ -224,27 +226,27 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Promotion] ([name], [description], [period], [price])
+INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price])
 VALUES
-    ('Vip1', '7 days', 7, 50),
-    ('Vip2', '30 days', 30, 150),
-    ('Vip3', '1 years', 365, 1500);
+    ('Cơ bản 1', 'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100),
+    ('Chuyên nghiệp 1 ', 'Dành cho người bán chuyên nghiệp', 150 , 30, 500),
+    ('Gói VIP 1 ', 'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000);
 GO
 
 
 GO
-INSERT INTO [dbo].[PromotionOrder] ( [startDate], [endDate], [productId], [price], [promotionId])
+INSERT INTO [dbo].[PromotionOrder] ([startDate], [endDate], [userId], [price], [productQuantity], [promotionId])
 VALUES
-    ( '2024-05-01', '2024-05-10', 1, 50, 1),
-    ( '2024-05-02', '2024-05-15', 2, 150, 2),
-    ( '2024-05-03', '2024-05-12', 3,  1500, 3),
-    ('2024-05-04', '2024-05-18', 4, 119.99, 1),
-    ('2024-05-05', '2024-05-14', 5, 69.99, 2),
-    ( '2024-05-06', '2024-05-16', 6, 59.99, 3),
-    ('2024-05-07', '2024-05-11', 7, 89.99, 1),
-    ( '2024-05-08', '2024-05-17', 8, 109.99, 2),
-    ( '2024-05-09', '2024-05-13', 9, 49.99, 3),
-    ( '2024-05-10', '2024-05-19', 10, 89.99, 1);
+    ('2024-05-01', '2024-05-10', 1, 99.99, 10, 1),
+    ('2024-05-02', '2024-05-15', 2, 49.99, 30, 2),
+    ('2024-05-03', '2024-05-12', 3, 79.99, 100, 3),
+    ('2024-05-04', '2024-05-18', 4, 119.99, 10, 1),
+    ('2024-05-05', '2024-05-14', 5, 69.99, 30, 2),
+    ('2024-05-06', '2024-05-16', 1, 59.99, 100, 3),
+    ('2024-05-07', '2024-05-11', 2, 89.99, 10, 1),
+    ('2024-05-08', '2024-05-17', 3, 109.99, 2, 2),
+    ('2024-05-09', '2024-05-13', 4, 49.99, 1, 3),
+    ('2024-05-10', '2024-05-19', 5, 89.99, 1, 1);
 GO
 
 
