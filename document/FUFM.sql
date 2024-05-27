@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[User](
 CREATE TABLE [dbo].[Address](
 	[addressId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[userId] INT NOT NULL,
-	[address]  NVARCHAR(255) NOT NULL,
+	[specificAddress]  NVARCHAR(255) NOT NULL,
 	CONSTRAINT FK_Address_User FOREIGN KEY ([userId]) REFERENCES [dbo].[User] ([userId])
 )
 
@@ -134,7 +134,7 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Address] ([userId], [address])
+INSERT INTO [dbo].[Address] ([userId], [specificAddress])
 VALUES
     (1, '123 Main Street'),
     (2, '456 Elm Avenue'),
