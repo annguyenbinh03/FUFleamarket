@@ -1,7 +1,64 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\mappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\userdto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\userdto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\mappers\\addressmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\addressmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\addressdto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\addressdto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\repository\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\fufleamarketcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\fufleamarketcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +66,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 212,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +79,188 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AddressMapper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\AddressMapper.cs",
+              "RelativeDocumentMoniker": "DTO\\Mappers\\AddressMapper.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\AddressMapper.cs",
+              "RelativeToolTip": "DTO\\Mappers\\AddressMapper.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA8AAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:59:09.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Address.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Address.cs",
+              "RelativeDocumentMoniker": "BusinessObjects\\Models\\Address.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Address.cs",
+              "RelativeToolTip": "BusinessObjects\\Models\\Address.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABQAAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:45:58.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserMapper.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\UserMapper.cs",
+              "RelativeDocumentMoniker": "DTO\\Mappers\\UserMapper.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\UserMapper.cs",
+              "RelativeToolTip": "DTO\\Mappers\\UserMapper.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAwwBkAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:28:56.407Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DTO.csproj",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+              "RelativeDocumentMoniker": "DTO\\DTO.csproj",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+              "RelativeToolTip": "DTO\\DTO.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-05-27T14:38:15.751Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FufleaMarketContext.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\FufleaMarketContext.cs",
+              "RelativeDocumentMoniker": "DTO\\FufleaMarketContext.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\FufleaMarketContext.cs",
+              "RelativeToolTip": "DTO\\FufleaMarketContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T14:55:52.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
+              "RelativeToolTip": "Repository\\UserRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T14:52:03.893Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Interfaces\\IUserRepository.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IUserRepository.cs",
+              "RelativeToolTip": "Repository\\Interfaces\\IUserRepository.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAvwAsAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T14:51:01.93Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\UserController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\UserController.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T14:48:47.792Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AddressDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\AddressDto\\AddressDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\AddressDto\\AddressDTO.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\AddressDto\\AddressDTO.cs",
+              "RelativeToolTip": "DTO\\AddressDto\\AddressDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:30:58.568Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\User.cs",
+              "RelativeDocumentMoniker": "BusinessObjects\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\User.cs",
+              "RelativeToolTip": "BusinessObjects\\Models\\User.cs",
+              "ViewState": "AQIAACoAAAAAAAAAAAAAAEEAAABfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:04:14.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserDTO.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\UserDto\\UserDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\UserDto\\UserDTO.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\UserDto\\UserDTO.cs",
+              "RelativeToolTip": "DTO\\UserDto\\UserDTO.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAAACIAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:18:10.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Feedback.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Feedback.cs",
+              "RelativeDocumentMoniker": "BusinessObjects\\Models\\Feedback.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Feedback.cs",
+              "RelativeToolTip": "BusinessObjects\\Models\\Feedback.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAgwBsAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T15:50:59.98Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeToolTip": "WebAPI\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-27T14:58:07.816Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "WebAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\appsettings.json",
+              "RelativeToolTip": "WebAPI\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-05-27T14:47:32.759Z",
+              "EditorCaption": ""
             }
           ]
         }

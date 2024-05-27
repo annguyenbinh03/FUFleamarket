@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+    "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.5, )"
@@ -64,6 +68,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.5, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -86,14 +94,14 @@
         }
       }
     },
-    "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
+    "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
         "projectName": "DTO",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\DTO\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -110,8 +118,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "C:\\Users\\Admin\\Desktop\\OnDemandTuTor\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj"
               }
             }
           }

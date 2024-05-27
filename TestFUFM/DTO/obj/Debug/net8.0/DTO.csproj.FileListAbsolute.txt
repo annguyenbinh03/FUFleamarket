@@ -1,0 +1,16 @@
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.deps.json
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.dll
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.pdb
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\BusinessObjects.dll
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\BusinessObjects.pdb
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.AssemblyInfoInputs.cache
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.AssemblyInfo.cs
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.sourcelink.json
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.Up2Date
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.dll
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\refint\DTO.dll
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.pdb
+C:\Users\Admin\Desktop\DemoProject\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\ref\DTO.dll
