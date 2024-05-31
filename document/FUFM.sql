@@ -1,4 +1,7 @@
 ﻿GO
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'FUFleaMarket')
+   DROP DATABASE [FUFleaMarket]
+GO
 CREATE DATABASE [FUFleaMarket]
 GO
 GO
@@ -14,7 +17,7 @@ CREATE TABLE [dbo].[User](
 	[phoneNumber] NVARCHAR(20) NULL,
 	[introduction] NVARCHAR(300) NULL,
 	[roleId] INT NOT NULL,
-	[status] BIT NOT NULL,
+	[isDeleted] BIT NOT NULL,
 	[avarta] NVARCHAR(200) NULL,
 
 )
@@ -51,7 +54,7 @@ CREATE TABLE [dbo].[Product](
 	[description] NVARCHAR(2000) NOT NULL,
 	[sellerId] INT NOT NULL,
 	[categoryId] INT NOT NULL,
-	[status] BIT NOT NULL,
+	[status] INT NOT NULL,
 	CONSTRAINT FK_Product_User FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Message_Category FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([categoryId])
 )
@@ -78,7 +81,8 @@ CREATE TABLE [dbo].[Promotion](
 	[description] NVARCHAR(300) NOT NULL,
 	[period] INT NOT NULL,
 	[productQuantity] INT NOT NULL,
-	[price] MONEY NOT NULL
+	[price] MONEY NOT NULL,
+	[isDeleted] BIT NOT NULL,
 )
 
 CREATE TABLE [dbo].[PromotionOrder](
@@ -98,13 +102,15 @@ CREATE TABLE [dbo].[Order](
 	[orderDate] DATETIME NOT NULL,
 	[price] MONEY NOT NULL,
 	[buyerId] INT NOT NULL,
+	[sellerId] INT NOT NULL,
 	[paymentMethod] NVARCHAR(20) NOT NULL,
 	[status] INT NOT NULL,
 	[note] NVARCHAR(1000),
 	[productId] INT NOT NULL,
 	[quantity] INT NOT NULL,
 	[receiverAddress] NVARCHAR(255) NOT NULL,
-	CONSTRAINT FK_Order_User FOREIGN KEY ([buyerId]) REFERENCES [dbo].[User] ([userId]),
+	CONSTRAINT FK_Order_UserBuy FOREIGN KEY ([buyerId]) REFERENCES [dbo].[User] ([userId]),
+	CONSTRAINT FK_Order_UserSell FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Order_Product  FOREIGN KEY ([productId]) REFERENCES [dbo].[Product]([productId])
 )
 
@@ -118,18 +124,18 @@ CREATE TABLE [dbo].[Feedback](
 )
 
 
-GO
-INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [status], [avarta])
+GO	
+INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta])
 VALUES
-    ('password1', 'John Doe', 'johndoe@example.com', '1234567890', 'Introduction 1', 1, 1, 'avatar1.jpg'),
-    ('password2', 'Jane Smith', 'janesmith@example.com', '0987654321', 'Introduction 2', 2, 1, 'avatar2.jpg'),
-    ('password3', 'David Johnson', 'davidjohnson@example.com', '9876543210', 'Introduction 3', 1, 0, 'avatar3.jpg'),
-    ('password4', 'Emily Brown', 'emilybrown@example.com', '0123456789', 'Introduction 4', 2, 1, 'avatar4.jpg'),
+    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 1, 1, 'avatar1.jpg'),
+    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 1, 1, 'avatar2.jpg'),
+    ('password3', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'avatar3.jpg'),
+    ('admin', 'Emily Brown', 'admin', '0123456789', 'Introduction 4', 2, 1, 'avatar4.jpg'),
     ('password5', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'avatar5.jpg'),
     ('password6', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'avatar6.jpg'),
     ('password7', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'avatar7.jpg'),
     ('password8', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 2, 0, 'avatar8.jpg'),
-    ('password9', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'Introduction 9', 1, 1, 'avatar9.jpg'),
+    ('password9', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'avatar9.jpg'),
     ('password10', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'avatar10.jpg');
 GO
 
@@ -226,11 +232,11 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price])
+INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price], [isDeleted])
 VALUES
-    ('Cơ bản 1', 'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100),
-    ('Chuyên nghiệp 1 ', 'Dành cho người bán chuyên nghiệp', 150 , 30, 500),
-    ('Gói VIP 1 ', 'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000);
+    ('Cơ bản 1', 'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100,0),
+    ('Chuyên nghiệp 1 ', 'Dành cho người bán chuyên nghiệp', 150 , 30, 500, 0),
+    ('Gói VIP 1 ', 'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000, 0);
 GO
 
 
@@ -251,18 +257,18 @@ GO
 
 
 GO
-INSERT INTO [dbo].[Order] ([orderDate], [price], [buyerId], [paymentMethod], [status], [note], [productId], [quantity], [receiverAddress])
+INSERT INTO [dbo].[Order] ([orderDate], [price], [buyerId], [sellerId], [paymentMethod], [status], [note], [productId], [quantity], [receiverAddress])
 VALUES
-    ('2024-05-01', 99.99, 1, 'Credit Card', 1, 'Please handle with care.', 1, 1, '123 Main St, City'),
-    ('2024-05-02', 49.99, 2, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, '456 Elm St, City'),
-    ('2024-05-03', 79.99, 3, 'Cash on Delivery', 1, NULL, 3, 1, '789 Oak St, City'),
-    ('2024-05-04', 119.99, 4, 'Credit Card', 1, NULL, 4, 1, '321 Pine St, City'),
-    ('2024-05-05', 69.99, 5, 'PayPal', 1, 'Gift wrapping required.', 5, 2, '654 Maple St, City'),
-    ('2024-05-06', 59.99, 1, 'Cash on Delivery', 1, NULL, 6, 1, '987 Cedar St, City'),
-    ('2024-05-07', 89.99, 2, 'Credit Card', 1, 'Please include a gift receipt.', 7, 1, '789 Oak St, City'),
-    ('2024-05-08', 109.99, 3, 'PayPal', 1, NULL, 8, 2, '543 Birch St, City'),
-    ('2024-05-09', 49.99, 4, 'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, '876 Walnut St, City'),
-    ('2024-05-10', 89.99, 5, 'Credit Card', 1, NULL, 10, 1, '234 Spruce St, City');
+    ('2024-05-01', 99.99, 1, 2,'Credit Card', 1, 'Please handle with care.', 1, 1, '123 Main St, City'),
+    ('2024-05-02', 49.99, 2, 3, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, '456 Elm St, City'),
+    ('2024-05-03', 79.99, 3, 4,'Cash on Delivery', 1, NULL, 3, 1, '789 Oak St, City'),
+    ('2024-05-04', 119.99, 4, 5,'Credit Card', 1, NULL, 4, 1, '321 Pine St, City'),
+    ('2024-05-05', 69.99, 5, 6,'PayPal', 1, 'Gift wrapping required.', 5, 2, '654 Maple St, City'),
+    ('2024-05-06', 59.99, 1, 7,'Cash on Delivery', 1, NULL, 6, 1, '987 Cedar St, City'),
+    ('2024-05-07', 89.99, 2, 8,'Credit Card', 1, 'Please include a gift receipt.', 7, 1, '789 Oak St, City'),
+    ('2024-05-08', 109.99, 3, 1,'PayPal', 1, NULL, 8, 2, '543 Birch St, City'),
+    ('2024-05-09', 49.99, 4, 1,'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, '876 Walnut St, City'),
+    ('2024-05-10', 89.99, 5, 1,'Credit Card', 1, NULL, 10, 1, '234 Spruce St, City');
 
 GO
 
