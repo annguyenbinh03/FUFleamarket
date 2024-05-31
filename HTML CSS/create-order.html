@@ -7,7 +7,7 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My post</title>
+    <title>Create Order</title>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -22,10 +22,8 @@
     </div>
     <!-- Header Section Begin -->
     <header class="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
-        <div class="logo p-2">
-            <a  href="index.html">
-                <img class="img-fluid" src="img/logo.png" alt="logo">
-            </a>         
+        <div class="logo p-2" href="">
+            <img class="img-fluid" src="img/logo.png" alt="logo">
         </div>
         <div class="btn-group dropdown ">
             <button type="button" class="btn dropdown-toggle text-white fs-5" id="autoDropdown"
@@ -93,8 +91,11 @@
                 <i class="fa fa-comments-o" aria-hidden="true"></i>
             </button>
             <button class="btn fs-5 text-white">
-                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                <a style="color: white; text-decoration: none;" href="my-post.html">
+                    <i class="fa fa-list-alt" aria-hidden="true"></i>
                 Quản lý tin
+                </a>
+                
             </button>
             <button class="btn fs-5 text-white">
                 <i class="fa fa-heart" aria-hidden="true"></i>
@@ -113,133 +114,122 @@
     </header>
     <!-- Header Section End -->
 
-    <!-- My Post Begin -->
-    <section class="mypost spad">
-        <div class="container bg-white px-2">
+
+    <!-- Create Order Section End -->
+    
+    <section class="create-order spad">
+        <div class="container bg-white py-4">
+            <div class="row p-3">
+                <div class="fs-3 fw-bold">Thông tin đơn hàng</div>
+                
+            </div>
             <div class="row">
-                <div class="shopview pt-4">
-                    <div class="d-flex justify-content-center">
-                        <div class="shop_avartar col-lg-2"
-                            style="background-image: url(https://cdn.chotot.com/G-1Z5ZbUlOQ2uJVjMhxxCver9aggaeYCn5ViRzXSzJY/preset:uac/plain/5880693cc1e7c23bec7c83355df078f1-731e14cfed11748e400f5a652062afa74f966b5d.jpg);">
+                <div class="col-lg-6 col-md-6 p-3">
+                    <div class="seller_buyer_wrapper rounded p-3 d-flex">
+                        <div class="fs-2 text-info px-2">
+                            <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
                         </div>
-                        <div class="shopname col-lg-10 fw-bold ms-2">
-                            Shop của best yasuo viet nam
-                            <div class="product__details__rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-half-o"></i>
-                                <span>(18 reviews)</span>
-                            </div>
+                        <div class="ps-2">
+                            <div> <strong> Người mua</strong></div>
+                            <div>Từ: Ho Minh Quyen (k17 HCM) | 0375995822</div>
+                            <div> Đường số 11</div>
+                            <div>Phường Dĩ An, Thành phố Dĩ An, Bình Dương</div>
                         </div>
                     </div>
                 </div>
-                <div class="postnav mt-3">
-                        <div >
-                            <button class="selected"  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" >ĐANG HIỂN THỊ (1)</span>
-                            </button>
-                            <button class=""  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" >HẾT HẠN (0)</span>
-                            </button>
-                            <button class=""  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" >BỊ TỪ CHỐI
-                                    (0)</span>
-                            </button>
-                            <button class=""  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" >CẦN THANH TOÁN (0)</span>
-                            </button>
-                            <button class=""  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" style="">CHỜ DUYỆT (0)</span>
-                            </button>
-                            <button class=""  role="tab" aria-selected="false" aria-disabled="false"
-                                tabindex="-1">
-                                <span class="" style="">ĐÃ ẨN (0)</span>
-                            </button>
+                <div class="col-lg-6 col-md-6 p-3">
+                    <div class="seller_buyer_wrapper rounded p-3 d-flex">
+                        <div class="fs-2 text-danger px-2">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
                         </div>
+                        <div class="ps-2">
+                            <div><strong>Người bán</strong></div>
+                            <div>Đến: Ho Minh Quyen (k17 HCM) | 0375995822</div>
+                            <div>Đường số 11</div>
+                            <div>Phường Dĩ An, Thành phố Dĩ An, Bình Dương</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="container bg-white px-5 mt-3 py-3">
-            <div class="product_container p-4">
-                <div class="row">
-                    <div class="col-8 col-md-8">
-                        <div class="row">
-                            <div class="col-lg-3 w-25 product_image">
-                                <img
-                                    src="https://cdn.chotot.com/KaeCJ37UZYOEULAGMmXXysx58XK2HN0NuGRDe19ghmc/preset:listing/plain/04ce7661b608efb996c24464a494c5b7-2878763638223117842.jpg"
-                                    alt="">
-                            </div>
-                            <div class="col-lg-8">
-                                <a href="" class="name">Chuột logitech M221</a>
-                                <div class="price">100.000đ</div>
-                                <div class="address">Phường Dĩ An, Thành phố Dĩ An, Bình Dương</div>
-                                <div class="created_date">Ngày đăng tin: <span>17/05/24</span></div>
-                            </div>
+           <div class="row px-5 pt-3">
+            <div class="col-lg-4 col-md-4 product_infor">
+                <div id="carouselExampleIndicators" class="carousel slide w-90" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                            class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                            aria-label="Slide 4"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="img/product/details/thumb-1.jpg" class="d-block w-100" alt="...">
                         </div>
-                        <div class="post_button mt-3 text-end">
-                            <button class="btn">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Sửa tin
-                            </button>
-                            <button class="btn">
-                                <i class="fa fa-eye-slash" aria-hidden="true"></i>Ẩn tin
-                            </button>
-                            <button class="btn">
-                                <i class="fa fa-share" aria-hidden="true"></i>Chia sẻ
-                            </button>
+                        <div class="carousel-item">
+                            <img src="img/product/details/thumb-2.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="img/product/details/thumb-3.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="img/product/details/thumb-4.jpg" class="d-block w-100" alt="...">
                         </div>
                     </div>
-                    <div class="col-4 col-md-4 d-inline-block">
-                        quảng cáo blabla
-                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                
-            </div>
-
-            <div class="product_container p-4">
-                <div class="row">
-                    <div class="col-8 col-md-8">
-                        <div class="row">
-                            <div class="col-lg-3 w-25 product_image">
-                                <img
-                                    src="https://cdn.chotot.com/KaeCJ37UZYOEULAGMmXXysx58XK2HN0NuGRDe19ghmc/preset:listing/plain/04ce7661b608efb996c24464a494c5b7-2878763638223117842.jpg"
-                                    alt="">
-                            </div>
-                            <div class="col-lg-8">
-                                <a href="" class="name">Chuột logitech M221</a>
-                                <div class="price">100.000đ</div>
-                                <div class="address">Phường Dĩ An, Thành phố Dĩ An, Bình Dương</div>
-                                <div class="created_date">Ngày đăng tin: <span>17/05/24</span></div>
-                            </div>
-                        </div>
-                        <div class="post_button mt-3 text-end">
-                            <button class="btn">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Sửa tin
-                            </button>
-                            <button class="btn">
-                                <i class="fa fa-eye-slash" aria-hidden="true"></i>Ẩn tin
-                            </button>
-                            <button class="btn">
-                                <i class="fa fa-share" aria-hidden="true"></i>Chia sẻ
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-4 col-md-4 d-inline-block">
-                        quảng cáo blabla
-                    </div>
+                <div class="product_name">
+                    Tee Zara Man Size S
                 </div>
-                
+                <div>
+                    <p class="price_wistlist_left">500.000 Đ</p>
+                </div>
             </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" placeholder="300.000đ">
+                    <label class="ms-2">Giá (vnd)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" placeholder="2">
+                        <label class="ms-2">Số lượng</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select">
+                        <option  value="1" selected>Thanh toán trực tiếp</option>
+                        <option  value="2">Chuyển khoản</option>
+                        </select>
+                        <label >Phương thức thanh toán</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" style="height: 200px"></textarea>
+                        <label class="ms-3">Ghi chú</label>
+                    </div>
+                    <div class="container text-end px-5 pt-3">
+                        <button class="btn btn-warning">Tạo hóa đơn</button>
+                    </div>
+                    </div>
+             
+           </div>
+           
         </div>
     </section>
-    <!-- My Post End -->
+
+
+
+    <!-- Create Order Section End -->
+
 
 
     <!-- Footer Section Begin -->

@@ -868,6 +868,37 @@ body {
 
 
 
+/*---------------------
+  Create Order
+-----------------------*/
+
+.create-order .seller_buyer_wrapper{
+	border: 1px solid silver;
+}
+
+
+
+.create-order .product_infor .price_wistlist_left{
+	margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*---------------------
   Footer
