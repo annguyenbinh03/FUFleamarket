@@ -22,12 +22,12 @@
     </div>
     <!-- Header Section Begin -->
     <header class="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
-        <div class="logo p-2" href="">
+        <div class="logo p-2" href="index.html">
             <a  href="index.html">
                 <img class="img-fluid" src="img/logo.png" alt="logo">
             </a>       
         </div>
-        <div class="btn-group dropdown ">
+        <div class="btn-group">
             <button type="button" class="btn dropdown-toggle text-white fs-5" id="autoDropdown"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-list" aria-hidden="true"></i>
@@ -98,16 +98,56 @@
             <button class="btn fs-5 text-white">
                 <i class="fa fa-heart" aria-hidden="true"></i>
             </button>
-            <span class="fs-5 user-dropdown">
-                <img class="userLogo mx-1" class="img-fluid" src="https://cdn.chotot.com/uac2/27021569" alt="">
-                <span>Sống Cho Vui</span>
-                &nbsp;
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
+            <span>
+                <div class="btn-group user-dropdown">
+                    <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        <img class="userLogo mx-1" class="img-fluid" src="https://cdn.chotot.com/uac2/27021569" alt="">
+                        <span  class="fs-5 username">Đăng nhập</span>
+                    </button>
+                    <ul style="padding: 0;" class="dropdown-menu">
+                        <div class="ps-3 pe-4 py-2 bg-body-secondary fw-bold">
+                            Quản lý đơn hàng
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-clipboard" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="my-order-buy.html">Đơn mua</a>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-file-text" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="my-order-sell.html">Đơn bán</a>
+                        </div>
+                        <div class="ps-3 pe-4  py-2 bg-body-secondary fw-bold">
+                            Khác
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="#"> Cài đặt tài khoản</a>
+                           
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="#"> Trợ giúp</a>
+                            
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="#"> Đóng góp ý kiến</a>
+                          
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center ps-3">
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <a class="dropdown-item" href="#"> Đăng xuất</a>
+                          
+                        </div>
+                    </ul>
+                  </div>
             </span>
         </div>
         <button class="btn mx-2 text-white fs-5 upPostBtn">
-            Đăng tin &nbsp;
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            <a href="upload-product.html">
+                Đăng tin &nbsp;
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </a>   
         </button>
     </header>
     <!-- Header Section End -->
@@ -168,22 +208,27 @@
                   </div>
                   <div class="input-group mb-3">
                     <span class="input-group-text">Giá bán</span> 
-                    <input required type="text" class="form-control" placeholder="Giá (vnd)" >
+                    <input required type="number" class="form-control" placeholder="Giá (vnd)" >
                   </div>
                   <div class="input-group mb-3">
                     <span class="input-group-text">Mô tả chi tiết</span> 
                     <textarea required class="form-control text_mota" 
-                    placeholder="- Xuất xứ, tình trạng chiếc điện thoại
+                    placeholder="- Xuất xứ, tình trạng sản phẩm
 - Thời gian sử dụng
 - Bảo hành nếu có
 - Sửa chữa, nâng cấp, phụ kiện đi kèm
-- Chấp nhận thanh toán/ vận chuyển qua Chợ Tốt
+- Chấp nhận thanh toán/ vận chuyển ra sao
 - Chính sách bảo hành, bảo trì, đổi trả hàng hóa/sản phẩm
 - Địa chỉ giao nhận, đổi trả hàng hóa/sản phẩm" rows="10"></textarea>
                   </div>
                   <div class="container d-flex justify-content-between px-5 pt-3">
                     <button class="btn btn-warning">Xem trước</button>
-                    <button class="btn btn-warning">Đăng tin</button>
+                    <button class="btn btn-warning">
+                        <a style="text-decoration: none;color: black;" href="my-post.html">
+                            Đăng tin
+                        </a>
+
+                    </button>
                 </div>
             </div>
            

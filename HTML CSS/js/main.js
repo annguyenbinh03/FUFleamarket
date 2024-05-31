@@ -1,11 +1,13 @@
-document.querySelector('.dropdown').addEventListener('mouseenter', function() {
-    this.querySelector('.dropdown-toggle').click();
-  });
+// document.querySelector('.dropdown').addEventListener('mouseenter', function() {
+//     this.querySelector('.dropdown-toggle').click();
+//   });
 
-  document.querySelector('.dropdown').addEventListener('mouseleave', function() {
-    this.querySelector('.dropdown-toggle').click();
-  });
-
+//   document.querySelector('.dropdown').addEventListener('mouseleave', function() {
+//     var dropdownToggle = this.querySelector('.dropdown-toggle');
+//     setTimeout(function() {
+//         dropdownToggle.click();
+//     }, 1000); // 0.5 giây
+// });
 
 
 (function ($) {

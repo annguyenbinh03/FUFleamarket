@@ -172,31 +172,28 @@ GO
 GO
 INSERT INTO [dbo].[Category] ([name])
 VALUES
-    ('Điện thoại di động'),
-    ('Máy tính xách tay'),
     ('Đồ điện tử'),
-    ('Thời trang nam'),
-    ('Thời trang nữ'),
-    ('Giày dép'),
-    ('Đồ gia dụng'),
-    ('Đồ chơi'),
-    ('Sách và văn phòng phẩm'),
-    ('Đồ thể thao');
+    ('Đồ dùng học tập'),
+    ('Điện lạnh'),
+    ('Đồ gia dụng, nội thất'),
+    ('Đồ ăn, thực phẩm'),
+    ('Thời trang'),
+    ('Giải trí, thể thao, sở thích');
 GO
 
 GO
 INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status])
 VALUES
     ('iPhone 13', 999.99, 1, 'The latest iPhone model with advanced features.', 1, 1, 1),
-    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 2, 1),
-    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 3, 1),
-    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 4, 1),
-    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 5, 1),
+    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1),
+    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1),
+    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1),
+    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1),
     ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1),
-    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 7, 1),
-    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 8, 1),
-    ('Bestselling Novel', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 9, 1),
-    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 10, 1);
+    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1),
+    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1),
+    ('Bestselling Novel', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1),
+    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1);
 GO
 
 
