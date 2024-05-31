@@ -34,7 +34,7 @@ public partial class Product
     public int CategoryId { get; set; }
 
     [Column("status")]
-    public bool Status { get; set; }
+    public int Status { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]

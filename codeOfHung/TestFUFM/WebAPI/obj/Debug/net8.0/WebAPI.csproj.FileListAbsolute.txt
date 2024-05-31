@@ -164,3 +164,11 @@ G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\obj\Debug\net8.0\refint\WebAPI.dll
 G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\obj\Debug\net8.0\WebAPI.pdb
 G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\obj\Debug\net8.0\WebAPI.genruntimeconfig.cache
 G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\obj\Debug\net8.0\ref\WebAPI.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+G:\SWP\Demo\FUFleamarket\TestFUFM\WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Options.dll

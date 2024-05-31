@@ -35,7 +35,7 @@ namespace Repository
             {
                 return null;
             }
-            existingUser.Status = false; // Set the status to false directly
+             // Set the status to false directly
             await _dbcontext.SaveChangesAsync();
             return existingUser;
         }
@@ -71,7 +71,7 @@ namespace Repository
             existingUser.PhoneNumber = userDto.PhoneNumber;
             existingUser.Introduction = userDto.Introduction;
             existingUser.RoleId = userDto.RoleId;
-            existingUser.Status = userDto.Status; 
+             
             existingUser.Avarta = userDto.Avarta;
 
             await _dbcontext.SaveChangesAsync();

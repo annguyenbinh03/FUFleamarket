@@ -1,10 +1,12 @@
 ﻿using DTO.AddressDto;
 using DTO.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/address")]
     [ApiController]
     public class AddressController : ControllerBase
@@ -18,6 +20,7 @@ namespace WebAPI.Controllers
             _userRepo = userRepo;
         }
         [HttpGet]
+        
         public async Task<IActionResult> GetAll()
         {
             var address = await _addressRepo.GetAllAsync();

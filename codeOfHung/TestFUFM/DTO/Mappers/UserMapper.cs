@@ -24,7 +24,7 @@ namespace DTO.Mappers
                 PhoneNumber = model.PhoneNumber,
                 Introduction = model.Introduction,
                 RoleId = model.RoleId,
-                Status = model.Status,
+                
                 Avarta = model.Avarta,
                 Addresses = model.Addresses.Select(x=> x.ToAddressDTO()).ToList(),
             };
@@ -40,7 +40,7 @@ namespace DTO.Mappers
                 PhoneNumber = userDto.PhoneNumber,
                 Introduction = userDto.Introduction,
                 RoleId = userDto.RoleId,
-                Status = userDto.Status,
+                
                 Avarta = userDto.Avarta,
             };
         }
