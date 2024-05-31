@@ -1,62 +1,86 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\",
+  "WorkspaceRootPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\mappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\usermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\repository\\interfaces\\iorderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\interfaces\\iorderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\userdto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\userdto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\mappers\\ordermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\ordermapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\mappers\\addressmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\addressmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\repository\\orderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\orderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\addressdto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\addressdto\\addressdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\address.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\repository\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\interfaces\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\fufleamarketcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\fufleamarketcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\dto\\dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\dto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\orderdto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\orderdto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\businessobjects\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\mappers\\productmappera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\mappers\\productmappera.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\repository\\productreposity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\productreposity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\orderdto\\createorderrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\orderdto\\createorderrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\orderdto\\updateorderrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\orderdto\\updateorderrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\messagedto\\updatemessagerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\messagedto\\updatemessagerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\messagedto\\createmessagerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\messagedto\\createmessagerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{96EE0642-8C1E-43B9-BA8B-608481E36BAD}|Repository\\Repository.csproj|solutionrelative:repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\businessobjects\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{929FE939-56C9-4EC6-9C26-64EADF82558D}|BusinessObjects\\BusinessObjects.csproj|solutionrelative:businessobjects\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\messagedto\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\messagedto\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|c:\\users\\admin\\desktop\\demoproject\\fufleamarket\\testfufm\\webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -65,202 +89,253 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 212,
-          "SelectedChildIndex": 10,
+          "DockedWidth": 269,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AddressMapper.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\AddressMapper.cs",
-              "RelativeDocumentMoniker": "DTO\\Mappers\\AddressMapper.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\AddressMapper.cs",
-              "RelativeToolTip": "DTO\\Mappers\\AddressMapper.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA8AAAAhAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:59:09.218Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Address.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Address.cs",
-              "RelativeDocumentMoniker": "BusinessObjects\\Models\\Address.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Address.cs",
-              "RelativeToolTip": "BusinessObjects\\Models\\Address.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAABQAAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:45:58.181Z",
-              "EditorCaption": ""
+              "Name": "ST:0:0:{d84ee353-0bef-5a41-a649-8f89aca5d84d}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserMapper.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\UserMapper.cs",
-              "RelativeDocumentMoniker": "DTO\\Mappers\\UserMapper.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\UserMapper.cs",
-              "RelativeToolTip": "DTO\\Mappers\\UserMapper.cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAwwBkAAAAmAAAA",
+              "Title": "IOrderRepository.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Interfaces\\IOrderRepository.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
+              "RelativeToolTip": "Repository\\Interfaces\\IOrderRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAABGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:28:56.407Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "DTO.csproj",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
-              "RelativeDocumentMoniker": "DTO\\DTO.csproj",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
-              "RelativeToolTip": "DTO\\DTO.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-05-27T14:38:15.751Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "FufleaMarketContext.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\FufleaMarketContext.cs",
-              "RelativeDocumentMoniker": "DTO\\FufleaMarketContext.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\FufleaMarketContext.cs",
-              "RelativeToolTip": "DTO\\FufleaMarketContext.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAA5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T14:55:52.227Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:50:08.168Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\UserRepository.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
-              "RelativeToolTip": "Repository\\UserRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAFAAAA",
+              "Title": "LoginGGController.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginGGController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\LoginGGController.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginGGController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\LoginGGController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T14:52:03.893Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:41:53.191Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\ProductController.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\ProductController.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T16:41:45.461Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "IUserRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IUserRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\Interfaces\\IUserRepository.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IUserRepository.cs",
-              "RelativeToolTip": "Repository\\Interfaces\\IUserRepository.cs",
-              "ViewState": "AQIAAAEAAAAAAAAAAAAvwAsAAAAvAAAA",
+              "Title": "LoginAdminController.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginAdminController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\LoginAdminController.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginAdminController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\LoginAdminController.cs",
+              "ViewState": "AQIAABkAAAAAAAAAAAAiwDwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T14:51:01.93Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:15:21.133Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrderMapper.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\OrderMapper.cs",
+              "RelativeDocumentMoniker": "DTO\\Mappers\\OrderMapper.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\OrderMapper.cs",
+              "RelativeToolTip": "DTO\\Mappers\\OrderMapper.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAQwBQAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:36:58.002Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OrderRepository.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\OrderRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\OrderRepository.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\OrderRepository.cs",
+              "RelativeToolTip": "Repository\\OrderRepository.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAUwE8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:37:51.417Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "WebAPI\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\UserController.cs",
-              "RelativeToolTip": "WebAPI\\Controllers\\UserController.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAAAzAAAA",
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\OrderController.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\OrderController.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAqwC0AAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T14:48:47.792Z",
+              "WhenOpened": "2024-05-31T15:27:11.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "AddressDTO.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\AddressDto\\AddressDTO.cs",
-              "RelativeDocumentMoniker": "DTO\\AddressDto\\AddressDTO.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\AddressDto\\AddressDTO.cs",
-              "RelativeToolTip": "DTO\\AddressDto\\AddressDTO.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAFAAAA",
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\UserRepository.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
+              "RelativeToolTip": "Repository\\UserRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:30:58.568Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:54:45.784Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\User.cs",
-              "RelativeDocumentMoniker": "BusinessObjects\\Models\\User.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\User.cs",
-              "RelativeToolTip": "BusinessObjects\\Models\\User.cs",
-              "ViewState": "AQIAACoAAAAAAAAAAAAAAEEAAABfAAAA",
+              "DocumentIndex": 6,
+              "Title": "OrderDTO.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\OrderDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\OrderDto\\OrderDTO.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\OrderDTO.cs",
+              "RelativeToolTip": "DTO\\OrderDto\\OrderDTO.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAswAsAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:04:14.557Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T15:33:37.238Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "UserDTO.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\UserDto\\UserDTO.cs",
-              "RelativeDocumentMoniker": "DTO\\UserDto\\UserDTO.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\DTO\\UserDto\\UserDTO.cs",
-              "RelativeToolTip": "DTO\\UserDto\\UserDTO.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAAACIAAAAFAAAA",
+              "DocumentIndex": 9,
+              "Title": "MessageController.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\MessageController.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Controllers\\MessageController.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\MessageController.cs",
+              "RelativeToolTip": "WebAPI\\Controllers\\MessageController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:18:10.51Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:41:52.634Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ProductMappera.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\ProductMappera.cs",
+              "RelativeDocumentMoniker": "DTO\\Mappers\\ProductMappera.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\ProductMappera.cs",
+              "RelativeToolTip": "DTO\\Mappers\\ProductMappera.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T16:41:25.041Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "Feedback.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Feedback.cs",
-              "RelativeDocumentMoniker": "BusinessObjects\\Models\\Feedback.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Feedback.cs",
-              "RelativeToolTip": "BusinessObjects\\Models\\Feedback.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAgwBsAAAA1AAAA",
+              "Title": "ProductReposity.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\ProductReposity.cs",
+              "RelativeDocumentMoniker": "Repository\\ProductReposity.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\ProductReposity.cs",
+              "RelativeToolTip": "Repository\\ProductReposity.cs",
+              "ViewState": "AQIAAFwAAAAAAAAAAAAswAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T15:50:59.98Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T16:00:17.229Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
-              "RelativeToolTip": "WebAPI\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAOAAAA",
+              "DocumentIndex": 14,
+              "Title": "UpdateMessageRequestDto.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\UpdateMessageRequestDto.cs",
+              "RelativeDocumentMoniker": "DTO\\MessageDto\\UpdateMessageRequestDto.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\UpdateMessageRequestDto.cs",
+              "RelativeToolTip": "DTO\\MessageDto\\UpdateMessageRequestDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-27T14:58:07.816Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T15:59:53.614Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\appsettings.json",
-              "RelativeDocumentMoniker": "WebAPI\\appsettings.json",
-              "ToolTip": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\WebAPI\\appsettings.json",
-              "RelativeToolTip": "WebAPI\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-27T14:47:32.759Z",
-              "EditorCaption": ""
+              "Title": "UpdateOrderRequestDto.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\UpdateOrderRequestDto.cs",
+              "RelativeDocumentMoniker": "DTO\\OrderDto\\UpdateOrderRequestDto.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\UpdateOrderRequestDto.cs",
+              "RelativeToolTip": "DTO\\OrderDto\\UpdateOrderRequestDto.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAAwA4AAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:35:25.261Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CreateOrderRequestDto.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\CreateOrderRequestDto.cs",
+              "RelativeDocumentMoniker": "DTO\\OrderDto\\CreateOrderRequestDto.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\CreateOrderRequestDto.cs",
+              "RelativeToolTip": "DTO\\OrderDto\\CreateOrderRequestDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:26:49.501Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Order.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "BusinessObjects\\Models\\Order.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Order.cs",
+              "RelativeToolTip": "BusinessObjects\\Models\\Order.cs",
+              "ViewState": "AQIAACIAAAAAAAAAAAAwwD0AAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:34:07.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CreateMessageRequestDto.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\CreateMessageRequestDto.cs",
+              "RelativeDocumentMoniker": "DTO\\MessageDto\\CreateMessageRequestDto.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\CreateMessageRequestDto.cs",
+              "RelativeToolTip": "DTO\\MessageDto\\CreateMessageRequestDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:51:48.123Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "MessageRepository.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\MessageRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\MessageRepository.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\MessageRepository.cs",
+              "RelativeToolTip": "Repository\\MessageRepository.cs",
+              "ViewState": "AQIAACgAAAAAAAAAAAA5wAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:54:40.487Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "MessageDTO.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\MessageDTO.cs",
+              "RelativeDocumentMoniker": "DTO\\MessageDto\\MessageDTO.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\MessageDTO.cs",
+              "RelativeToolTip": "DTO\\MessageDto\\MessageDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:51:42.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeToolTip": "WebAPI\\Program.cs",
+              "ViewState": "AQIAAGAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:31:48.075Z"
             }
           ]
         }

@@ -15,8 +15,25 @@ namespace DTO.Mappers
         {
             return new AddressDTO
             {
+                UserId = model.UserId,
                 AddressId = model.AddressId,
                 SpecificAddress = model.SpecificAddress,
+            };
+        }
+        public static Address ToAddressFromCreate(this CreateAddressRequestDto AddressDto, int UserId)
+        {
+            return new Address
+            {
+                
+                SpecificAddress = AddressDto.SpecificAddress,
+                UserId = UserId,
+            };
+        }
+        public static Address ToAddressFromUpdate(this UpdateAddressRequestDto AddressDto)
+        {
+            return new Address
+            {              
+                SpecificAddress = AddressDto.SpecificAddress,
             };
         }
     }

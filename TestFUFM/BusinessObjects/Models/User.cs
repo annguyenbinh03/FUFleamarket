@@ -36,8 +36,8 @@ public partial class User
     [Column("roleId")]
     public int RoleId { get; set; }
 
-    [Column("status")]
-    public bool Status { get; set; }
+    [Column("isDeleted")]
+    public bool IsDeleted { get; set; }
 
     [Column("avarta")]
     [StringLength(200)]
@@ -53,7 +53,10 @@ public partial class User
     public virtual ICollection<Message> MessageSenders { get; set; } = new List<Message>();
 
     [InverseProperty("Buyer")]
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Order> OrderBuyers { get; set; } = new List<Order>();
+
+    [InverseProperty("Seller")]
+    public virtual ICollection<Order> OrderSellers { get; set; } = new List<Order>();
 
     [InverseProperty("Seller")]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();

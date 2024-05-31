@@ -30,6 +30,9 @@ public partial class Promotion
     [Column("price", TypeName = "money")]
     public decimal Price { get; set; }
 
+    [Column("isDeleted")]
+    public bool IsDeleted { get; set; }
+
     [InverseProperty("Promotion")]
     public virtual ICollection<PromotionOrder> PromotionOrders { get; set; } = new List<PromotionOrder>();
 }

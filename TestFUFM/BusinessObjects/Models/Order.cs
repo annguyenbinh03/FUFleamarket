@@ -22,6 +22,9 @@ public partial class Order
     [Column("buyerId")]
     public int BuyerId { get; set; }
 
+    [Column("sellerId")]
+    public int SellerId { get; set; }
+
     [Column("paymentMethod")]
     [StringLength(20)]
     public string PaymentMethod { get; set; } = null!;
@@ -44,7 +47,7 @@ public partial class Order
     public string ReceiverAddress { get; set; } = null!;
 
     [ForeignKey("BuyerId")]
-    [InverseProperty("Orders")]
+    [InverseProperty("OrderBuyers")]
     public virtual User Buyer { get; set; } = null!;
 
     [InverseProperty("Order")]
@@ -53,4 +56,8 @@ public partial class Order
     [ForeignKey("ProductId")]
     [InverseProperty("Orders")]
     public virtual Product Product { get; set; } = null!;
+
+    [ForeignKey("SellerId")]
+    [InverseProperty("OrderSellers")]
+    public virtual User Seller { get; set; } = null!;
 }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {}
+    "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+    "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\DemoProject\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
+        "projectPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
+        "outputPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -45,6 +45,18 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.5, )"
+            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[8.0.5, )"

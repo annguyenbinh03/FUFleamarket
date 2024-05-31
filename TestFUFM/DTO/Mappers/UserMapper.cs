@@ -24,9 +24,36 @@ namespace DTO.Mappers
                 PhoneNumber = model.PhoneNumber,
                 Introduction = model.Introduction,
                 RoleId = model.RoleId,
-                Status = model.Status,
+                
                 Avarta = model.Avarta,
                 Addresses = model.Addresses.Select(x=> x.ToAddressDTO()).ToList(),
+            };
+        }
+        public static User ToStockFromCreateDTO(this CreateUserRequestDto userDto)
+        {
+            return new User
+            {
+                
+                Password = userDto.Password,
+                FullName = userDto.FullName,
+                Email = userDto.Email,
+                PhoneNumber = userDto.PhoneNumber,
+                Introduction = userDto.Introduction,
+                RoleId = userDto.RoleId,
+                
+                Avarta = userDto.Avarta,
+            };
+        }
+        public static ProfileUserDTO ToProfileUserDTO(this User model)
+        {
+            return new ProfileUserDTO
+            {               
+                FullName = model.FullName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Introduction = model.Introduction,               
+                Avarta = model.Avarta,
+                Addresses = model.Addresses.Select(x => x.ToAddressDTO()).ToList(),
             };
         }
     }
