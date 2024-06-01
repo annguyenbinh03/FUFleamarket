@@ -61,6 +61,11 @@ namespace Repository
             {
                 products = products.Where(s => s.CategoryId == query.CategoryId);
             }
+            // thêm chức năng sreach name
+            if (!string.IsNullOrWhiteSpace(query.ProductName))
+            {
+                products = products.Where(s => s.ProductName.Contains(query.ProductName));
+            }
 
             if (query.Price.HasValue)
             {
