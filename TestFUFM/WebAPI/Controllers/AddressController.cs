@@ -20,11 +20,34 @@ namespace WebAPI.Controllers
             _userRepo = userRepo;
         }
         [HttpGet]
-        
         public async Task<IActionResult> GetAll()
         {
-            var address = await _addressRepo.GetAllAsync();
-            var addressDto = address.Select(s => s.ToAddressDTO());
+            // Retrieve the UserId claim
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            // Parse the user ID from the claim
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("Invalid User ID claim.");
+            }
+
+            // Fetch addresses associated with the user ID
+            var addressOfUser = await _addressRepo.GetAddressByIdAsync(userId);
+
+            // Check if any addresses were found
+            if (addressOfUser == null || !addressOfUser.Any())
+            {
+                return NotFound("No addresses found for the user.");
+            }
+
+            // Convert addresses to DTOs
+            var addressDto = addressOfUser.Select(x => x.ToAddressDTO()).ToList();
+
+            // Return the addresses in the response
             return Ok(addressDto);
         }
         [HttpGet("{id:int}")]

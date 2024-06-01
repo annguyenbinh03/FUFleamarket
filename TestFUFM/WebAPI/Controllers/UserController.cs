@@ -16,11 +16,35 @@ namespace WebAPI.Controllers
             _userRepo = userRepo;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllUser()
+        public async Task<IActionResult> GetProfileUser()
         {
-            var userModels = await _userRepo.GetAllUserAsync();
-            var users = userModels.Select(x=>x.ToUserDTO()).ToList();   
-            return Ok(users);
+            // Retrieve the UserId claim
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            // Parse the user ID from the claim
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("Invalid User ID claim.");
+            }
+
+            // Fetch the profile associated with the user ID
+            var profileOfUser = await _userRepo.GetProfileUser(userId);
+
+            // Check if any profile data was found
+            if (profileOfUser == null || !profileOfUser.Any())
+            {
+                return NotFound("No profile found for the user.");
+            }
+
+            // Convert the profile data to DTOs
+            var profileDto = profileOfUser.Select(x => x.ToUserDTO()).ToList();
+
+            // Return the profile data in the response
+            return Ok(profileDto);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)

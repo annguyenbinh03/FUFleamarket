@@ -15,7 +15,8 @@ namespace Repository.Interfaces
         Task<Address> CreateAsync(Address addressModel);
         Task<Address?> UpdateAsync(int id, UpdateAddressRequestDto addressModel);
         Task<Address?> DeleteAsync(int id);
-        
+        Task<IEnumerable<Address>> GetAddressByIdAsync(int id);
+
 
     }
 }

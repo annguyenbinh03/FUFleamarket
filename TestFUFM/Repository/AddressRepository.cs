@@ -57,5 +57,10 @@ namespace Repository.Interfaces
             await _dbcontext.SaveChangesAsync();
             return existingAddress;
         }
+        public async Task<IEnumerable<Address>> GetAddressByIdAsync(int id)
+        {
+            // Query the database to get addresses by User ID
+            return await _dbcontext.Addresses.Where(address => address.UserId == id).ToListAsync();
+        }
     }
 }

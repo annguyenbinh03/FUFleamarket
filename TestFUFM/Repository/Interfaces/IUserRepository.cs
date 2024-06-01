@@ -17,6 +17,6 @@ namespace Repository.Interfaces
         public Task<User?> DeleteAsync(int id);
         public Task<bool> UserExists(int id);
 
-
+        Task<IEnumerable<User>> GetProfileUser(int userId);
     }
 }

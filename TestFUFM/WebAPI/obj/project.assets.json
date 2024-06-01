@@ -3396,19 +3396,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\quy duc\\.nuget\\packages\\": {}
+    "C:\\Users\\Khanh Hung\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
+      "projectUniqueName": "G:\\SWP\\COde\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
-      "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
-      "packagesPath": "C:\\Users\\quy duc\\.nuget\\packages\\",
-      "outputPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\WebAPI\\obj\\",
+      "projectPath": "G:\\SWP\\COde\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
+      "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
+      "outputPath": "G:\\SWP\\COde\\FUFleamarket\\TestFUFM\\WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\quy duc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3422,8 +3422,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\Service\\Service.csproj": {
-              "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\Service\\Service.csproj"
+            "G:\\SWP\\COde\\FUFleamarket\\TestFUFM\\Service\\Service.csproj": {
+              "projectPath": "G:\\SWP\\COde\\FUFleamarket\\TestFUFM\\Service\\Service.csproj"
             }
           }
         }
