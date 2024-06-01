@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,13 +42,28 @@ namespace WebAPI.Controllers
                 return BadRequest("Authentication failed.");
             }
 
+            // Debugging: List all claims
+            var claims = authenticateResult.Principal.Claims;
+            foreach (var claim in claims)
+            {
+                Console.WriteLine($"{claim.Type}: {claim.Value}");
+            }
+
             // Get user information from claims
             var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
+            var username = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name) ?? authenticateResult.Principal.FindFirstValue("name");
+            var profilePicture = authenticateResult.Principal.FindFirstValue("picture") ?? authenticateResult.Principal.FindFirstValue("urn:google:picture");
+
+            // Ensure email is from @fpt.edu.vn domain
+            if (email == null || !email.EndsWith("@fpt.edu.vn"))
+            {
+                return BadRequest("Only users with an @fpt.edu.vn email are allowed.");
+            }
 
             // Generate JWT token with user's email and role
             var token = GenerateJwtToken(email, "User");
 
-            return Ok(new { Token = token });
+            return Ok(new { Token = token, Username = username, ProfilePicture = profilePicture });
         }
 
         private string GenerateJwtToken(string email, string role)

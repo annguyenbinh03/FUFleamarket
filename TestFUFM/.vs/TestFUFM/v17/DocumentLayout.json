@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -29,14 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\orderdto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\orderdto\\orderdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\controllers\\loginggcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -77,10 +81,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\dto\\messagedto\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D73711A7-BB3D-46A7-B2A5-DD6122E44ABA}|DTO\\DTO.csproj|solutionrelative:dto\\messagedto\\messagedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|g:\\swp\\demo\\fufleamarket\\testfufm\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F81D74A4-BB1C-481B-A404-B901F11918C7}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -90,7 +90,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 269,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -98,31 +98,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IOrderRepository.cs",
-              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\Interfaces\\IOrderRepository.cs",
-              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
-              "RelativeToolTip": "Repository\\Interfaces\\IOrderRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAABGAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T16:50:08.168Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
               "Title": "LoginGGController.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginGGController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\LoginGGController.cs",
               "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginGGController.cs",
               "RelativeToolTip": "WebAPI\\Controllers\\LoginGGController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAADUAAAAAAAAAAAAmwE8AAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T16:41:53.191Z"
+              "WhenOpened": "2024-05-31T16:41:53.191Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "ProductController.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\ProductController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\ProductController.cs",
@@ -134,7 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "LoginAdminController.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\LoginAdminController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\LoginAdminController.cs",
@@ -142,11 +131,12 @@
               "RelativeToolTip": "WebAPI\\Controllers\\LoginAdminController.cs",
               "ViewState": "AQIAABkAAAAAAAAAAAAiwDwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T16:15:21.133Z"
+              "WhenOpened": "2024-05-31T16:15:21.133Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "OrderMapper.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\OrderMapper.cs",
               "RelativeDocumentMoniker": "DTO\\Mappers\\OrderMapper.cs",
@@ -158,7 +148,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "OrderRepository.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\OrderRepository.cs",
               "RelativeDocumentMoniker": "Repository\\OrderRepository.cs",
@@ -170,20 +160,45 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "OrderController.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\OrderController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\OrderController.cs",
               "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\OrderController.cs",
               "RelativeToolTip": "WebAPI\\Controllers\\OrderController.cs",
-              "ViewState": "AQIAADcAAAAAAAAAAAAqwC0AAAAJAAAA",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAuwDwAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T15:27:11.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
+              "RelativeToolTip": "WebAPI\\Program.cs",
+              "ViewState": "AQIAADEAAAAAAAAAAAAQwEoAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T15:31:48.075Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "IOrderRepository.cs",
+              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Interfaces\\IOrderRepository.cs",
+              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\Interfaces\\IOrderRepository.cs",
+              "RelativeToolTip": "Repository\\Interfaces\\IOrderRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAABGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T16:50:08.168Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "UserRepository.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\UserRepository.cs",
               "RelativeDocumentMoniker": "Repository\\UserRepository.cs",
@@ -195,7 +210,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "OrderDTO.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\OrderDTO.cs",
               "RelativeDocumentMoniker": "DTO\\OrderDto\\OrderDTO.cs",
@@ -207,7 +222,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "MessageController.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Controllers\\MessageController.cs",
               "RelativeDocumentMoniker": "WebAPI\\Controllers\\MessageController.cs",
@@ -219,7 +234,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "ProductMappera.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\Mappers\\ProductMappera.cs",
               "RelativeDocumentMoniker": "DTO\\Mappers\\ProductMappera.cs",
@@ -231,7 +246,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "ProductReposity.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\ProductReposity.cs",
               "RelativeDocumentMoniker": "Repository\\ProductReposity.cs",
@@ -243,7 +258,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "UpdateMessageRequestDto.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\UpdateMessageRequestDto.cs",
               "RelativeDocumentMoniker": "DTO\\MessageDto\\UpdateMessageRequestDto.cs",
@@ -255,7 +270,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "UpdateOrderRequestDto.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\UpdateOrderRequestDto.cs",
               "RelativeDocumentMoniker": "DTO\\OrderDto\\UpdateOrderRequestDto.cs",
@@ -267,7 +282,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "CreateOrderRequestDto.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\OrderDto\\CreateOrderRequestDto.cs",
               "RelativeDocumentMoniker": "DTO\\OrderDto\\CreateOrderRequestDto.cs",
@@ -279,7 +294,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Order.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\Models\\Order.cs",
               "RelativeDocumentMoniker": "BusinessObjects\\Models\\Order.cs",
@@ -291,7 +306,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "CreateMessageRequestDto.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\CreateMessageRequestDto.cs",
               "RelativeDocumentMoniker": "DTO\\MessageDto\\CreateMessageRequestDto.cs",
@@ -303,7 +318,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "MessageRepository.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\Repository\\MessageRepository.cs",
               "RelativeDocumentMoniker": "Repository\\MessageRepository.cs",
@@ -315,7 +330,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "MessageDTO.cs",
               "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\MessageDto\\MessageDTO.cs",
               "RelativeDocumentMoniker": "DTO\\MessageDto\\MessageDTO.cs",
@@ -324,18 +339,6 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T15:51:42.993Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "Program.cs",
-              "DocumentMoniker": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
-              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
-              "ToolTip": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\WebAPI\\Program.cs",
-              "RelativeToolTip": "WebAPI\\Program.cs",
-              "ViewState": "AQIAAGAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T15:31:48.075Z"
             }
           ]
         }

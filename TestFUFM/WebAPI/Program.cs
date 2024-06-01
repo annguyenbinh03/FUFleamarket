@@ -10,32 +10,31 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
-namespace WebAPI
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Cấu hình dịch vụ
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
 
-            // Cấu hình dịch vụ
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
+            // Thêm xác thực JWT vào Swagger
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+                Description = "JWT Authorization header using the Bearer scheme",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer"
+            });
 
-                // Thêm xác thực JWT vào Swagger
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer"
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
         {
             new OpenApiSecurityScheme
             {
@@ -47,103 +46,99 @@ namespace WebAPI
             },
             new string[] { }
         }
-                });
             });
+        });
 
-            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        });
+
+        // Cấu hình xác thực JWT
+        var jwtSettings = builder.Configuration.GetSection("JWT");
+        var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+        });
 
-            // Cấu hình xác thực JWT
-            var jwtSettings = builder.Configuration.GetSection("JWT");
-            var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+        // Cấu hình phân quyền
+        builder.Services.AddAuthorization(options =>
+        {
+            // Loại bỏ chính sách phân quyền Admin hiện tại
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
 
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-            });
+        // Cấu hình middleware xác thực Google
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
+        .AddGoogle(options =>
+        {
+            options.ClientId = "322601838674-qfe0e53u7o8fqlm4nhi7ic7ohil7r1hf.apps.googleusercontent.com";
+            options.ClientSecret = "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";
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+            options.ClaimActions.MapJsonKey("picture", "picture", "url");
+        });
 
-            // Cấu hình phân quyền
-            builder.Services.AddAuthorization(options =>
-            {
-                // Loại bỏ chính sách phân quyền Admin hiện tại
-                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser()
-                    .Build();
-            });
+        // Cấu hình DbContext
+        builder.Services.AddDbContext<FufleaMarketContext>(options =>
+        {
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        });
 
-            // Cấu hình middleware xác thực Google
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            })
-            .AddCookie()
-            .AddGoogle(options =>
-            {
-                options.ClientId = "322601838674-qfe0e53u7o8fqlm4nhi7ic7ohil7r1hf.apps.googleusercontent.com";
-                options.ClientSecret = "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";
-            });
+        // Đăng ký các repository
+        builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+        builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+        builder.Services.AddScoped<IPromotionOrderRepository, PromotionOrderRepository>();
+        builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
+        builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+        builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-            // Cấu hình DbContext
-            builder.Services.AddDbContext<FufleaMarketContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
+        builder.Services.AddScoped<IProductReposity, ProductReposity>();
 
-            // Đăng ký các repository
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
-            builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-            builder.Services.AddScoped<IPromotionOrderRepository, PromotionOrderRepository>();
-            builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
-            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-            builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        var app = builder.Build();
 
-            builder.Services.AddScoped<IProductReposity, ProductReposity>();
-
-            var app = builder.Build();
-
-            // Cấu hình Swagger
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
-            }
-
-            app.UseCors(x => x.AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowAnyOrigin());
-            app.UseAuthentication(); //CORS
-
-            // Cấu hình middleware và routing
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapControllers();
-
-            app.Run();
-
+        // Cấu hình Swagger
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
         }
+
+        // Cấu hình middleware và routing
+        app.UseHttpsRedirection();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+
+        app.Run();
     }
 }
