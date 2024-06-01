@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {}
+    "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {}
   },
   "projects": {
-    "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+    "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
-        "outputPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
+        "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\quy duc\\.nuget\\packages\\",
+        "outputPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\quy duc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -106,17 +106,17 @@
         }
       }
     },
-    "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
+    "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+        "projectUniqueName": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
         "projectName": "DTO",
-        "projectPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
-        "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
-        "outputPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\DTO\\obj\\",
+        "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj",
+        "packagesPath": "C:\\Users\\quy duc\\.nuget\\packages\\",
+        "outputPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\DTO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\quy duc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -130,8 +130,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "G:\\SWP\\Demo\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\duc\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj"
               }
             }
           }

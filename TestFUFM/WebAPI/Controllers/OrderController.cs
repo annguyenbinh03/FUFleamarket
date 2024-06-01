@@ -4,6 +4,7 @@ using DTO.Mappers;
 using DTO.MessageDto;
 using DTO.OrderDto;
 using DTO.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
@@ -19,11 +20,13 @@ namespace WebAPI.Controllers
     {
         private readonly IOrderRepository _orderRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IProductReposity _productRepo;
 
-        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo)
+        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo)
         {
             _orderRepo = orderRepo;
-            _userRepo = userRepo;   
+            _userRepo = userRepo;
+            _productRepo = productRepo;
         }
         [HttpGet("sold")]
         public async Task<IActionResult> GetSoldOrders()
@@ -66,22 +69,45 @@ namespace WebAPI.Controllers
             }
             return Ok(orders.ToOrderDTO());
         }
-        [HttpPost("{BuyerId:int}/{SellerId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int BuyerId, [FromRoute] int SellerId, [FromBody] CreateOrderRequestDto createDTO)
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] CreateOrderRequestDto createDTO)
         {
-            if (!await _userRepo.UserExists(SellerId))
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
             {
-                return BadRequest("SellerId does not exist");
-            }
-            if (!await _userRepo.UserExists(BuyerId))
-            {
-                return BadRequest("BuyerId does not exist");
+                return Unauthorized("Không tìm thấy claim user ID");
             }
 
-            var orderModel = createDTO.ToOrderFromCreateDTO(BuyerId, SellerId);
+            var userId = int.Parse(userIdClaim.Value);
+
+            // Fetch the product details to get the SellerId
+            var product = await _productRepo.GetProductById(createDTO.ProductId);
+            if (product == null)
+            {
+                return BadRequest("ProductId does not exist");
+            }
+
+            // Set BuyerId as the logged-in user's UserId
+            var buyerId = userId;
+            var sellerId = product.SellerId; // Assuming the Product entity has a SellerId field
+
+            // Create the order model from the DTO
+            var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);
+
+            // Save the order to the database
             await _orderRepo.CreateOrderAsync(orderModel);
-            return CreatedAtAction(nameof(GetByOrderId), new { id = orderModel.OrderId }, orderModel.ToOrderDTO());
+
+            // Return the created order details including BuyerId, SellerId, and ProductId
+            var orderDto = orderModel.ToOrderDTO();
+            orderDto.BuyerId = buyerId;
+            orderDto.SellerId = sellerId;
+            orderDto.ProductId = createDTO.ProductId;
+
+            return CreatedAtAction(nameof(GetByOrderId), new { id = orderModel.OrderId }, orderDto);
         }
+
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromBody] UpdateOrderRequestDto updateOrder)

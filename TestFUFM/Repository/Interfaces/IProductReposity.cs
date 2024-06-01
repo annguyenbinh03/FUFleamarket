@@ -22,6 +22,7 @@ namespace Repository.Interfaces
         Task<Product?> DeleteAsync(int id);
 
         Task<bool> ProductExist(int id);
+        Task<Product> GetProductById(int productId);
 
     }
 

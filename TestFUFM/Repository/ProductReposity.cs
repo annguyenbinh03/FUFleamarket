@@ -114,5 +114,10 @@ namespace Repository
             await _context.SaveChangesAsync();
             return existingProduct;
         }
+        public async Task<Product> GetProductById(int productId)
+        {
+            return await _context.Products.FindAsync(productId);
+        }
+
     }
 }

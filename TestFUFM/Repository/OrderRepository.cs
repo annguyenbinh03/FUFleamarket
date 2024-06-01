@@ -37,10 +37,10 @@ namespace Repository
             {
                 return null;
             }
-            existingOrder.OrderDate = updateOrder.OrderDate;            
+            existingOrder.OrderDate = updateOrder.OrderDate;
             existingOrder.PaymentMethod = updateOrder.PaymentMethod;
             existingOrder.Status = updateOrder.Status;
-            existingOrder.Note = updateOrder.Note;        
+            existingOrder.Note = updateOrder.Note;
             existingOrder.Quantity = updateOrder.Quantity;
             existingOrder.ReceiverAddress = updateOrder.ReceiverAddress;
 
