@@ -106,3 +106,21 @@ D:\Ki-5\SWP1\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.dll
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\refint\Repository.dll
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.pdb
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\ref\Repository.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\Repository.deps.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\Repository.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\Repository.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\DTO.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\DTO.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\bin\Debug\net8.0\BusinessObjects.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.csproj.AssemblyReference.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.GeneratedMSBuildEditorConfig.editorconfig
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.AssemblyInfoInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.AssemblyInfo.cs
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.csproj.CoreCompileInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.sourcelink.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.csproj.Up2Date
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\refint\Repository.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\Repository.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\Repository\obj\Debug\net8.0\ref\Repository.dll

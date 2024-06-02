@@ -88,3 +88,18 @@ D:\Ki-5\SWP1\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\refint\Busin
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\bin\Debug\net8.0\BusinessObjects.deps.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\bin\Debug\net8.0\BusinessObjects.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.AssemblyReference.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfoInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfo.cs
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.CoreCompileInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.sourcelink.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\refint\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll

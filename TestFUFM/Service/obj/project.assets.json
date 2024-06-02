@@ -2961,19 +2961,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Khanh Hung\\.nuget\\packages\\": {}
+    "C:\\Users\\quy duc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
+      "projectUniqueName": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\New folder\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
-      "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
-      "outputPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Service\\obj\\",
+      "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\New folder\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
+      "packagesPath": "C:\\Users\\quy duc\\.nuget\\packages\\",
+      "outputPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\New folder\\FUFleamarket\\TestFUFM\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\quy duc\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2987,8 +2987,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj": {
-              "projectPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj"
+            "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\New folder\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj": {
+              "projectPath": "C:\\KY5_SUMMER2024-ALL-PROJECT\\SWP391\\New folder\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj"
             }
           }
         }

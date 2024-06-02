@@ -1,61 +1,44 @@
-﻿using BusinessObjects.Models;
-using DTO;
-using Microsoft.EntityFrameworkCore;
-using Repository.Interfaces;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using BusinessObjects.Models;
+using BusinessObjects;
+using DTO.WishlistDto;
 
-namespace Repository
+public class WishlistRepository : IWishlistRepository
 {
-    public class WishlistRepository : IWishlistRepository
+    private readonly FufleaMarketContext _context;
+
+    public WishlistRepository(FufleaMarketContext context)
     {
-        private readonly FufleaMarketContext _dbcontext;
+        _context = context;
+    }
 
-        public WishlistRepository(FufleaMarketContext dbcontext)
-        {
-            _dbcontext = dbcontext;
-        }
+    public async Task<Product> GetProductByIdAsync(int productId)
+    {
+        return await _context.Products.FindAsync(productId);
+    }
 
-        public async Task<Product> CreateWishlistAsync(Product product)
-        {
-            try
-            {
-                _dbcontext.Products.Add(product);
-                await _dbcontext.SaveChangesAsync();
-                return product;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while creating the wishlist", ex);
-            }
-        }
+    public async Task<bool> CreateWishlistAsync(WishlistDTO wishlistDto)
+    {
+        var sql = "INSERT INTO Wishlist (userId, productId) VALUES (@p0, @p1)";
+        var result = await _context.Database.ExecuteSqlRawAsync(sql, wishlistDto.UserId, wishlistDto.ProductId);
+        return result > 0;
+    }
 
-        public async Task<Product> GetProductInWishlistAsync(int userid, int productid)
-        {
-            User user = await _dbcontext.Users.Include(u => u.ProductsNavigation)
-                                              .FirstOrDefaultAsync(u => u.UserId == userid);
-            if (user == null)
-                return null;
+    public async Task<bool> WishlistItemExistsAsync(int userId, int productId)
+    {
+        var sql = "SELECT COUNT(*) FROM Wishlist WHERE userId = @p0 AND productId = @p1";
+        var count = await _context.Database.ExecuteSqlRawAsync(sql, userId, productId);
+        return count > 0;
+    }
 
-            Product product = user.ProductsNavigation.FirstOrDefault(p => p.ProductId == productid);
-            return product;
-        }
-
-        public Task<Product> GetProductInWishlistAsync(object userId, int productid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Product>> GetWishlistAsync(int userid)
-        {
-            User user = await _dbcontext.Users.Include(u => u.ProductsNavigation)
-                                              .FirstOrDefaultAsync(u => u.UserId == userid);
-
-            return user?.ProductsNavigation?.ToList() ?? new List<Product>();
-        }
-
-        
+    public async Task<IEnumerable<Product>> GetWishlistByUserIdAsync(int userId)
+    {
+        var sql = @"SELECT p.* FROM Wishlist w
+                    JOIN Product p ON w.ProductId = p.ProductId
+                    WHERE w.UserId = @p0";
+        return await _context.Products.FromSqlRaw(sql, userId).ToListAsync();
     }
 }

@@ -94,3 +94,19 @@ D:\Ki-5\SWP1\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.dll
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\refint\DTO.dll
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.pdb
 D:\Ki-5\SWP1\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\ref\DTO.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.AssemblyReference.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.GeneratedMSBuildEditorConfig.editorconfig
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.AssemblyInfoInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.AssemblyInfo.cs
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.CoreCompileInputs.cache
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.sourcelink.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\refint\DTO.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.deps.json
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\DTO.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\BusinessObjects.dll
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\bin\Debug\net8.0\BusinessObjects.pdb
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\DTO.csproj.Up2Date
+C:\KY5_SUMMER2024-ALL-PROJECT\SWP391\New folder\FUFleamarket\TestFUFM\DTO\obj\Debug\net8.0\ref\DTO.dll

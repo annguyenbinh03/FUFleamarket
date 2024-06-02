@@ -1,16 +1,13 @@
-﻿using BusinessObjects.Models;
-using Microsoft.AspNetCore.Mvc;
-using Repository.Interfaces;
-using DTO.Mappers;
-using DTO.WishlistDto;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using BusinessObjects.Models;
+using BusinessObjects;
+using DTO.WishlistDto;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/wishlist")]
+    [Route("api/[controller]")]
     [ApiController]
     public class WishlistController : ControllerBase
     {
@@ -21,70 +18,67 @@ namespace WebAPI.Controllers
             _wishlistRepo = wishlistRepo;
         }
 
-        [HttpGet("{userid}")]
-        public async Task<IActionResult> GetAllOrder([FromRoute] int userid)
-        {
-            List<Product> products = await _wishlistRepo.GetWishlistAsync(userid);
-
-            if (products == null || !products.Any())
-            {
-                return NotFound();
-            }
-
-            var productModels = products.Select(x => x.ToWishListDTO()).ToList();
-
-            return Ok(productModels);
-        }
-
-        [HttpGet("{userid}/{productid}")]
-        public async Task<IActionResult> GetById([FromRoute] int userid, [FromRoute] int productid)
-        {
-            Product product = await _wishlistRepo.GetProductInWishlistAsync(userid, productid);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            var productModel = product.ToWishListDTO();
-
-            return Ok(productModel);
-        }
-
         [HttpPost]
-        public async Task<IActionResult> CreateWishlist([FromBody] CreateWishlistDto wishlistDto)
+        public async Task<IActionResult> CreateWishlist([FromBody] WishlistDTO wishlistDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Tạo một đối tượng Product từ dữ liệu DTO
-            var product = new Product
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                ProductName = wishlistDto.ProductName,
-                Description = wishlistDto.Description,
-                Price = wishlistDto.Price,
-                IsNew = wishlistDto.IsNew,
-                SellerId = wishlistDto.SellerId,
-                CategoryId = wishlistDto.CategoryId,
-               
-            };
+                return Unauthorized("Invalid user ID format");
+            }
 
-            // Gọi phương thức CreateWishlistAsync của repository để tạo mới sản phẩm trong danh sách mong muốn
-            var createdProduct = await _wishlistRepo.CreateWishlistAsync(product);
+            wishlistDto.UserId = userId;
 
-            // Kiểm tra xem sản phẩm đã được tạo thành công hay không
-            if (createdProduct == null)
+            var existingProduct = await _wishlistRepo.GetProductByIdAsync(wishlistDto.ProductId);
+            if (existingProduct == null)
             {
-                // Nếu không, trả về lỗi 500
+                return NotFound("Product not found with the provided ProductId.");
+            }
+
+            var exists = await _wishlistRepo.WishlistItemExistsAsync(userId, wishlistDto.ProductId);
+            if (exists)
+            {
+                return Conflict("This item is already in the wishlist.");
+            }
+
+            var result = await _wishlistRepo.CreateWishlistAsync(wishlistDto);
+            if (!result)
+            {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
 
-            // Nếu sản phẩm đã được tạo thành công, trả về mã trạng thái 201 Created
-            // và URL của sản phẩm được tạo
-            return CreatedAtAction(nameof(GetById), new { userid = createdProduct.Users, productid = createdProduct.ProductId }, createdProduct);
+            return CreatedAtAction(nameof(GetById), new { userid = wishlistDto.UserId, productid = wishlistDto.ProductId }, wishlistDto);
         }
 
+        [HttpGet("{userid}/{productid}")]
+        public async Task<IActionResult> GetById(int userid, int productid)
+        {
+            var exists = await _wishlistRepo.WishlistItemExistsAsync(userid, productid);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            return Ok(new WishlistDTO { UserId = userid, ProductId = productid });
+        }
+
+        [HttpGet("user/{userid}")] // New endpoint to get all wishlist items for a user
+        public async Task<IActionResult> GetWishlistByUserId(int userid)
+        {
+            var wishlistItems = await _wishlistRepo.GetWishlistByUserIdAsync(userid);
+
+            if (wishlistItems == null || !wishlistItems.Any())
+            {
+                return NotFound("No items found in the wishlist.");
+            }
+
+            return Ok(wishlistItems);
+        }
     }
 }

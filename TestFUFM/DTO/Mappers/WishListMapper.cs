@@ -10,13 +10,8 @@ namespace DTO.Mappers
             return new WishlistDTO
             {
                 ProductId = model.ProductId,
-                ProductName = model.ProductName,
-                Description = model.Description,
-                Price = model.Price,
-                IsNew = model.IsNew,
-                SellerId = model.SellerId,
-                CategoryId = model.CategoryId,
-               
+
+
             };
         }
 
@@ -24,13 +19,8 @@ namespace DTO.Mappers
         {
             return new Product
             {
-                ProductName = createWishlist.ProductName,
-                Description = createWishlist.Description,
-                Price = createWishlist.Price,
-                IsNew = createWishlist.IsNew,
-                SellerId = createWishlist.SellerId,
-                CategoryId = createWishlist.CategoryId,
-                
+                ProductId = createWishlist.ProductId
+
 
             };
 
