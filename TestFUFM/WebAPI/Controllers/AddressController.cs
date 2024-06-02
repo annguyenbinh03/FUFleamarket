@@ -1,12 +1,15 @@
-﻿using DTO.AddressDto;
+﻿using BusinessObjects.Models;
+using DTO.AddressDto;
 using DTO.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
-    
+
     [Route("api/address")]
     [ApiController]
     public class AddressController : ControllerBase
@@ -51,7 +54,7 @@ namespace WebAPI.Controllers
             return Ok(addressDto);
         }
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute]int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var address = await _addressRepo.GetByIdAsync(id);
             if (address == null)
@@ -60,38 +63,113 @@ namespace WebAPI.Controllers
             }
             return Ok(address.ToAddressDTO());
         }
-        [HttpPost("{userId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int userId, CreateAddressRequestDto createDto)
+        [HttpPost("CreateAddress")]
+        public async Task<IActionResult> Create([FromBody] CreateAddressRequestDto createDto)
         {
-            if(!await _userRepo.UserExists(userId))
+            if (createDto == null)
             {
-                return BadRequest("User does not exist");
+                return BadRequest("Address data is required.");
             }
-            var addressModel = createDto.ToAddressFromCreate(userId);
-            await _addressRepo.CreateAsync(addressModel);
-            return CreatedAtAction(nameof(GetById),new { id = addressModel.AddressId },addressModel.ToAddressDTO());
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found.");
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized("Invalid user ID claim.");
+            }
+
+            try
+            {
+                var addressModel = createDto.ToAddressFromCreate(userId);
+                await _addressRepo.CreateAsync(addressModel);
+                var addressDto = addressModel.ToAddressDTO();
+                addressDto.UserId = userId;
+                return CreatedAtAction(nameof(GetById), new { id = addressModel.AddressId }, addressDto);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // _logger.LogError(ex, "Error creating address.");
+                return StatusCode(500, "An error occurred while creating the address.");
+            }
         }
+
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("UpdateAddress/{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, UpdateAddressRequestDto updateDto)
         {
-            var address = await _addressRepo.UpdateAsync(id, updateDto);
-            if (address == null)
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                return NotFound("Address not found");
+                return Unauthorized("Invalid user ID format");
             }
-            return Ok(address.ToAddressDTO());
+
+            var existingAddress = await _addressRepo.GetByIdAsync(id);
+            if (existingAddress == null)
+            {
+                return NotFound("Address not found with the provided ID.");
+            }
+
+            if (existingAddress.UserId != userId)
+            {
+                return Unauthorized("This is not your Address, please enter your Address ID.");
+            }
+
+            var addressModel = await _addressRepo.UpdateAsync(id, updateDto);
+
+            return Ok(addressModel.ToAddressDTO());
         }
+
+
+
+
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("DeleteAddress/{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var addressModel = await _addressRepo.DeleteAsync(id);
-            if(addressModel == null)
+            // Extract the UserId from the claims
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                return NotFound("Address does not exist");
+                return Unauthorized("Invalid user ID format");
             }
-            return NoContent();
+
+            // Fetch the address to be deleted
+            var existingAddress = await _addressRepo.GetByIdAsync(id);
+            if (existingAddress == null)
+            {
+                return NotFound("Address not found with the provided ID.");
+            }
+
+            // Check if the address belongs to the current user
+            if (existingAddress.UserId != userId)
+            {
+                return Unauthorized("This is not your Address, please enter your Address ID.");
+            }
+
+            try
+            {
+                // Attempt to delete the address
+                var deletedAddress = await _addressRepo.DeleteAsync(id);
+                if (deletedAddress == null)
+                {
+                    return NotFound("Failed to delete the address, please try again.");
+                }
+
+                // Convert to DTO (ensure you have a method to do this)
+                var updatedAddress = deletedAddress.ToAddressDTO();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
+
+
     }
 }

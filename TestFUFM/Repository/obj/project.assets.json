@@ -2943,19 +2943,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {}
+    "C:\\Users\\Khanh Hung\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
+      "projectUniqueName": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
       "projectName": "Repository",
-      "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\obj\\",
+      "projectPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
+      "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
+      "outputPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\Repository\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2969,8 +2969,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
-              "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj"
+            "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
+              "projectPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj"
             }
           }
         }
@@ -3005,7 +3005,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

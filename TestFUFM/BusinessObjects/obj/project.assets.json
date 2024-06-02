@@ -4265,19 +4265,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {}
+    "C:\\Users\\Khanh Hung\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+      "projectUniqueName": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
       "projectName": "BusinessObjects",
-      "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
+      "projectPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+      "packagesPath": "C:\\Users\\Khanh Hung\\.nuget\\packages\\",
+      "outputPath": "G:\\SWP\\CodeUp\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Khanh Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4365,7 +4365,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
