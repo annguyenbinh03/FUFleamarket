@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gIKKGyOegXXZXCjgOjXbDDoIEm8U47104jW+QFTp0+x43QV/c70PK5stXNe84W7hDMWe7BQkrdpDJJxyzsRDOQ==",
+  "dgSpecHash": "zp2ovs8ToRfuDWMgXQ0dHj8w71TGGjcQpnG3GdhWb4SkK/2CAmW9+JcwL9rvbAfOcMwnTbiZ1A58akwWNRxodg==",
   "success": true,
-  "projectFilePath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
+  "projectFilePath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Service\\Service.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

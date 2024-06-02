@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xkhCFUKI4LqZQm6TvX2hR0lo/Wwra4yQeU7AK5+QuGO/JMYs1d61LIQXMd5ta59AEhEthsEat0vskv/K2EEKcA==",
+  "dgSpecHash": "TN1yhOul1OVanLzyBJFkQaeN06e+llLKx05nOn73xZnf8dYHRLwC1QSau996j9NxtXcFcgee5s6ewHnHJMmUXw==",
   "success": true,
-  "projectFilePath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
+  "projectFilePath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

@@ -2948,11 +2948,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
+      "projectUniqueName": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
       "projectName": "Repository",
-      "projectPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
+      "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\Repository.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Repository\\obj\\",
+      "outputPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Repository\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -2969,8 +2969,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
-              "projectPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj"
+            "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj": {
+              "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\DTO\\DTO.csproj"
             }
           }
         }

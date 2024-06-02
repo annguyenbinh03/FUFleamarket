@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {}
+    "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {}
   },
   "projects": {
-    "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
+    "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
+        "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\BusinessObjects.csproj",
         "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
+        "outputPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",

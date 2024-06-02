@@ -3401,11 +3401,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
+      "projectUniqueName": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
       "projectName": "WebAPI",
-      "projectPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
+      "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\WebAPI\\WebAPI.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\WebAPI\\obj\\",
+      "outputPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3422,8 +3422,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Service\\Service.csproj": {
-              "projectPath": "D:\\Ki-5\\SWP\\FUFleamarket\\TestFUFM\\Service\\Service.csproj"
+            "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Service\\Service.csproj": {
+              "projectPath": "D:\\Ki-5\\SWP1\\FUFleamarket\\TestFUFM\\Service\\Service.csproj"
             }
           }
         }

@@ -11,7 +11,9 @@ namespace Repository.Interfaces
     {
         Task<List<Category>> GetALLAsync();
         Task<Category?> GetByIDAsync(int id);
+        Task<Category?> CreateAsync(Category categoryModel);
 
-
+        Task<Category?> UpdateAsync(Category categoryModel);
+        Task<Category?> DeleteAsync(int id); // Thêm phương thức DeleteAsync
     }
 }
