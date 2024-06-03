@@ -1,1 +1,11 @@
 TestFUFM/.vs
+TestFUFM/BusinessObjects/obj
+TestFUFM/BusinessObjects/bin
+TestFUFM/Repository/obj
+TestFUFM/Repository/bin
+TestFUFM/DTO/obj
+TestFUFM/DTO/bin
+TestFUFM/Service/obj
+TestFUFM/Service/bin
+TestFUFM/WebAPI/obj
+TestFUFM/WebAPI/bin
