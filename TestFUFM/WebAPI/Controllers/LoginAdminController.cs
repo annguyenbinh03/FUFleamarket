@@ -32,6 +32,11 @@ public class LoginAdminController : ControllerBase
             return Unauthorized("Invalid email or password");
         }
 
+        if (user.IsDeleted)
+        {
+            return Unauthorized("This account has been deleted.");
+        }
+
         var token = GenerateJwtToken(user);
         return Ok(new { Token = token });
     }
@@ -40,14 +45,22 @@ public class LoginAdminController : ControllerBase
     {
         var jwtSettings = _configuration.GetSection("JWT");
 
+        string role = user.RoleId switch
+        {
+            0 => "User",
+            1 => "Admin",
+            2 => "Admin",
+            _ => "User" // Default role
+        };
+
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, "Admin"), // Gán vai trò Admin
+            new Claim(ClaimTypes.Role, role), // Dynamically assign role
             new Claim("UserId", user.UserId.ToString())
         };
-        
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
