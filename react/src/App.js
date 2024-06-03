@@ -28,6 +28,7 @@ function App() {
           <Route path="/buy-order" element={<BuyOrder />} />
           <Route path="/sell-order" element={<SellOrder />} />
           <Route path="/search-product" element={<SearchProduct />} />
+          <Route path="/search-product/:categoryIdParam" element={<SearchProduct />} />      
           <Route path="/admin-process-request" element={<AdminProcessRequest />} />
           <Route path="/aboutUs" element={<AboutUs />} />
         </Routes>
@@ -38,3 +39,4 @@ function App() {
 }
 
 export default App;
+

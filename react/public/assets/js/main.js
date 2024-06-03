@@ -10,18 +10,28 @@
 // });
 
 
-(function ($) {
-    $(window).on('load', function () {
-        $(".loader").fadeOut();
-        $("#preloder").delay(200).fadeOut("slow");
-    });
+window.addEventListener('load', function () {
+    var loader = document.querySelector('.loader');
+    var preloder = document.querySelector('#preloder');
 
-    $('.set-bg').each(function () {
-        var bg = $(this).data('setbg');
-        $(this).css('background-image', 'url(' + bg + ')');
-    });
-})(jQuery);
+    if (loader) {
+        loader.style.display = 'none';
+    }
 
+    if (preloder) {
+        setTimeout(function () {
+            preloder.style.display = 'none';
+        }, 200);
+    }
+});
+
+var setBgElements = document.querySelectorAll('.set-bg');
+setBgElements.forEach(function (element) {
+    var bg = element.getAttribute('data-setbg');
+    if (bg) {
+        element.style.backgroundImage = 'url(' + bg + ')';
+    }
+});
 
 /*---------------------
   Upload Product Begin
@@ -124,33 +134,28 @@ const handleSelectedFiles = ([...files]) => {
     fileCompletedStatus.innerText = `${completedFiles} / ${totalFiles} files completed`;
 }
 // Function to handle file drop event
-fileUploadBox.addEventListener("drop", (e) => {
+fileUploadBox?.addEventListener("drop", (e) => {
     e.preventDefault();
     handleSelectedFiles(e.dataTransfer.files);
     fileUploadBox.classList.remove("active");
     fileUploadBox.querySelector(".file-instruction").innerText = "Drag files here or";
 });
 // Function to handle file dragover event
-fileUploadBox.addEventListener("dragover", (e) => {
+fileUploadBox?.addEventListener("dragover", (e) => {
     e.preventDefault();
     fileUploadBox.classList.add("active");
     fileUploadBox.querySelector(".file-instruction").innerText = "Release to upload or";
 });
 // Function to handle file dragleave event
-fileUploadBox.addEventListener("dragleave", (e) => {
+fileUploadBox?.addEventListener("dragleave", (e) => {
     e.preventDefault();
     fileUploadBox.classList.remove("active");
     fileUploadBox.querySelector(".file-instruction").innerText = "Drag files here or";
 });
-fileBrowseInput.addEventListener("change", (e) => handleSelectedFiles(e.target.files));
-fileBrowseButton.addEventListener("click", () => fileBrowseInput.click());
+fileBrowseInput?.addEventListener("change", (e) => handleSelectedFiles(e.target.files));
+fileBrowseButton?.addEventListener("click", () => fileBrowseInput.click());
 
 
 
 
 
-
-
-/*---------------------
-  Upload Product End
------------------------*/

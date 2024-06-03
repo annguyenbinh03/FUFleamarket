@@ -1,4 +1,5 @@
 TestFUFM/.vs
+TestFUFM/BusinessObjects/FufleaMarketContext.cs
 TestFUFM/BusinessObjects/obj
 TestFUFM/BusinessObjects/bin
 TestFUFM/Repository/obj
@@ -10,3 +11,4 @@ TestFUFM/Service/bin
 TestFUFM/WebAPI/obj
 TestFUFM/WebAPI/bin
 react/node_modules
+react/.env
