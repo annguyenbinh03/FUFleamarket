@@ -127,10 +127,10 @@ CREATE TABLE [dbo].[Feedback](
 GO	
 INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta])
 VALUES
-    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 1, 1, 'avatar1.jpg'),
-    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 1, 1, 'avatar2.jpg'),
+    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 0, 0, 'avatar1.jpg'),
+    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 0, 0, 'avatar2.jpg'),
     ('password3', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'avatar3.jpg'),
-    ('admin', 'Emily Brown', 'admin', '0123456789', 'Introduction 4', 2, 1, 'avatar4.jpg'),
+    ('admin', 'Emily Brown', 'admin', '0123456789', 'Introduction 4', 2, 0, 'avatar4.jpg'),
     ('password5', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'avatar5.jpg'),
     ('password6', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'avatar6.jpg'),
     ('password7', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'avatar7.jpg'),
