@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTO.AddressDto;
+using BusinessObjects.AddressDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

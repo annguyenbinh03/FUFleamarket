@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using BusinessObjects.Models;
 
-namespace BusinessObjects.Models;
+namespace BusinessObjects;
 
 public partial class FufleaMarketContext : DbContext
 {
@@ -37,8 +38,11 @@ public partial class FufleaMarketContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-9MJD423N\\QUYDUC;Initial Catalog=FUFleaMarket;User ID=SA;Password=12345;TrustServerCertificate=True");
-
+        => optionsBuilder.UseSqlServer("Data Source= ;Initial Catalog=FUFleaMarket;User ID=SA;Password=12345;TrustServerCertificate=True");
+    //   LAPTOP-9MJD423N\\QUYDUC    
+    //   DESKTOP-MQ0K2RJ\\SQLEXPRESS
+    //   DESKTOP-IACSCNA\\DANTHU
+    //   DESKTOP-JSUUR41\\SQLEXPRESS
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>

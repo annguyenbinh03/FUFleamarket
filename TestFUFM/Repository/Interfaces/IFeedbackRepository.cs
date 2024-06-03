@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTO.FeedbackDto;
+using BusinessObjects.FeedbackDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

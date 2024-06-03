@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Models;
-using DTO.Helpers;
-using DTO.ProductDto;
-using DTO.UserDto;
+using BusinessObjects.Helpers;
+using BusinessObjects.ProductDto;
+using BusinessObjects.UserDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

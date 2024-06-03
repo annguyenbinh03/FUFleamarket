@@ -1,4 +1,4 @@
-﻿namespace DTO.WishlistDto
+﻿namespace BusinessObjects.WishlistDto
 {
     public class CreateWishlistDto
     {

@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO;
-using DTO.FeedbackDto;
+using BusinessObjects;
+using BusinessObjects.FeedbackDto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

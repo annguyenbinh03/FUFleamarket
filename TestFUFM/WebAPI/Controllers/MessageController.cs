@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO.Mappers;
-using DTO.MessageDto;
+using BusinessObjects.Mappers;
+using BusinessObjects.MessageDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 

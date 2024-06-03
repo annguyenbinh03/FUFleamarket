@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Models;
-using DTO.CategoryDto;
+using BusinessObjects.CategoryDto;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     public static class CategoryMapper
     {

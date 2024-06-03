@@ -1,5 +1,5 @@
-﻿using DTO.CategoryDto;
-using DTO.Mappers;
+﻿using BusinessObjects.CategoryDto;
+using BusinessObjects.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;

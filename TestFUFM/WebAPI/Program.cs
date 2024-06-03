@@ -1,5 +1,5 @@
 using BusinessObjects.Models;
-using DTO;
+using BusinessObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -133,11 +133,10 @@ public class Program
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
         }
 		//show useCros with CorsPolicy
-
-            app.UseCors( builder =>
-            {
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            } );
+        app.UseCors( builder =>
+        {
+            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        } );
         // Cấu hình middleware và routing
         app.UseHttpsRedirection();
         app.UseAuthentication();

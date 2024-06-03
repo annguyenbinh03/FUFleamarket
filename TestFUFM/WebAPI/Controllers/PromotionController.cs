@@ -1,5 +1,5 @@
-﻿using DTO.Mappers;
-using DTO.PromotionDto;
+﻿using BusinessObjects.Mappers;
+using BusinessObjects.PromotionDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 

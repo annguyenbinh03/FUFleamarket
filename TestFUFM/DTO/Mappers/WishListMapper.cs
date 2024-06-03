@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Models;
-using DTO.WishlistDto;
+using BusinessObjects.WishlistDto;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     public static class WishListMapper
     {

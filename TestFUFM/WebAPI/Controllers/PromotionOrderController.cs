@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO.Mappers;
-using DTO.PromotionOrderDto;
+using BusinessObjects.Mappers;
+using BusinessObjects.PromotionOrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 

@@ -1,13 +1,13 @@
 ﻿using BusinessObjects.Models;
-using DTO.AddressDto;
-using DTO.MessageDto;
+using BusinessObjects.AddressDto;
+using BusinessObjects.MessageDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     public static class MessageMapper
     {

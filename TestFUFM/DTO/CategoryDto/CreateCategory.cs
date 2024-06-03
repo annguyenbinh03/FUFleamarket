@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DTO.CategoryDto
+namespace BusinessObjects.CategoryDto
 {
     public class CreateCategory
     {

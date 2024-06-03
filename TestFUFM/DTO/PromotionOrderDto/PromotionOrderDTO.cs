@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.PromotionOrderDto
+namespace BusinessObjects.PromotionOrderDto
 {
     public class PromotionOrderDTO
     {      

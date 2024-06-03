@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.ProductImageDto
+namespace BusinessObjects.ProductImageDto
 {
     public class ProductImageDTO
     {

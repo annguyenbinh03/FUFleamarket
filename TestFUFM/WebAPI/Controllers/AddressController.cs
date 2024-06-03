@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO.AddressDto;
-using DTO.Mappers;
+using BusinessObjects.AddressDto;
+using BusinessObjects.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

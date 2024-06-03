@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.AccountDto
+namespace BusinessObjects.AccountDto
 {
     public class Admin
     {

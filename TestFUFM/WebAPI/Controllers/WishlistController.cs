@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using BusinessObjects.Models;
 using BusinessObjects;
-using DTO.WishlistDto;
+using BusinessObjects.WishlistDto;
 
 namespace WebAPI.Controllers
 {

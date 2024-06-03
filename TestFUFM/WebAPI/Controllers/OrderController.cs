@@ -1,9 +1,9 @@
 ﻿using BusinessObjects.Models;
-using DTO;
-using DTO.Mappers;
-using DTO.MessageDto;
-using DTO.OrderDto;
-using DTO.UserDto;
+using BusinessObjects;
+using BusinessObjects.Mappers;
+using BusinessObjects.MessageDto;
+using BusinessObjects.OrderDto;
+using BusinessObjects.UserDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;

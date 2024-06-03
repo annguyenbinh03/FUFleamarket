@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTO;
+using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using System;

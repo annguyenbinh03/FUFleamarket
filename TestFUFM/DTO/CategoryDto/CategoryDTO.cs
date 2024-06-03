@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.CategoryDto
+namespace BusinessObjects.CategoryDto
 {
     public  class CategoryDTO
     {

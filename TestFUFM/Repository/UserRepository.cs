@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO;
-using DTO.Mappers;
+using BusinessObjects;
+using BusinessObjects.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTO.UserDto;
+using BusinessObjects.UserDto;
 
 namespace Repository
 {

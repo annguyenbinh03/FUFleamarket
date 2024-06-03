@@ -1,6 +1,6 @@
 ﻿using BusinessObjects.Models;
-using DTO.PromotionDto;
-using DTO.UserDto;
+using BusinessObjects.PromotionDto;
+using BusinessObjects.UserDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

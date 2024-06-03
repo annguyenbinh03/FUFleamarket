@@ -1,5 +1,5 @@
-﻿using DTO.Mappers;
-using DTO.UserDto;
+﻿using BusinessObjects.Mappers;
+using BusinessObjects.UserDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 

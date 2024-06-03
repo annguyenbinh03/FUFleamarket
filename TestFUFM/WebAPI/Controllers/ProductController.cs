@@ -1,9 +1,9 @@
 ﻿using BusinessObjects.Models;
-using DTO;
-using DTO.Helpers;
-using DTO.Mappers;
-using DTO.ProductDto;
-using DTO.UserDto;
+using BusinessObjects;
+using BusinessObjects.Helpers;
+using BusinessObjects.Mappers;
+using BusinessObjects.ProductDto;
+using BusinessObjects.UserDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.OrderDto
+namespace BusinessObjects.OrderDto
 {
     public class CreateOrderRequestDto
     {

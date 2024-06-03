@@ -1,5 +1,5 @@
-﻿using DTO.FeedbackDto;
-using DTO.Mappers;
+﻿using BusinessObjects.FeedbackDto;
+using BusinessObjects.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 namespace WebAPI.Controllers

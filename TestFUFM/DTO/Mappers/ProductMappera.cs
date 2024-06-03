@@ -1,14 +1,14 @@
 ﻿using BusinessObjects.Models;
-using DTO.CategoryDto;
-using DTO.ProductDto;
-using DTO.UserDto;
+using BusinessObjects.CategoryDto;
+using BusinessObjects.ProductDto;
+using BusinessObjects.UserDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     //public static class ProductMapper
     //{

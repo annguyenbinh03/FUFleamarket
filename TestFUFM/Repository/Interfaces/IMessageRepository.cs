@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTO.MessageDto;
+using BusinessObjects.MessageDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

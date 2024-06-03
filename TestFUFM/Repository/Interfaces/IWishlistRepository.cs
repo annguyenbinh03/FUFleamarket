@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using BusinessObjects.Models;
-using DTO.WishlistDto;
+using BusinessObjects.WishlistDto;
 
 public interface IWishlistRepository
 {

@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTO.AddressDto;
+using BusinessObjects.AddressDto;
 
-namespace DTO.UserDto
+namespace BusinessObjects.UserDto
 {
     public class UserDTO
     {

@@ -172,13 +172,13 @@ GO
 GO
 INSERT INTO [dbo].[Category] ([name])
 VALUES
-    ('Đồ điện tử'),
-    ('Đồ dùng học tập'),
-    ('Điện lạnh'),
-    ('Đồ gia dụng, nội thất'),
-    ('Đồ ăn, thực phẩm'),
-    ('Thời trang'),
-    ('Giải trí, thể thao, sở thích');
+    (N'Đồ điện tử'),
+    (N'Đồ dùng học tập'),
+    (N'Điện lạnh'),
+    (N'Đồ gia dụng, nội thất'),
+    (N'Đồ ăn, thực phẩm'),
+    (N'Thời trang'),
+    (N'Giải trí, thể thao, sở thích');
 GO
 
 GO

@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.Models;
-using DTO.PromotionDto;
+using BusinessObjects.PromotionDto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using BusinessObjects;
 namespace Repository
 {
     public class PromotionRepository : IPromotionRepository

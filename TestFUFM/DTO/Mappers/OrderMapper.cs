@@ -1,9 +1,9 @@
 ﻿using Api.orderDto;
 
 using BusinessObjects.Models;
-using DTO.OrderDto;
+using BusinessObjects.OrderDto;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     public static class OrderMapper
     {

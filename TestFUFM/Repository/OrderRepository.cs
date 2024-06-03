@@ -1,7 +1,7 @@
 ﻿using Api.orderDto;
 using BusinessObjects.Models;
-using DTO;
-using DTO.OrderDto;
+using BusinessObjects;
+using BusinessObjects.OrderDto;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using System;

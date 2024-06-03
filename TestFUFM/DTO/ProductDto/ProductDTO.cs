@@ -1,11 +1,11 @@
 ﻿using BusinessObjects.Models;
-using DTO.CategoryDto;
-using DTO.Mappers;
-using DTO.ProductImageDto;
-using DTO.UserDto;
+using BusinessObjects.CategoryDto;
+using BusinessObjects.Mappers;
+using BusinessObjects.ProductImageDto;
+using BusinessObjects.UserDto;
 using System.Collections.Generic;
 
-namespace DTO.ProductDto
+namespace BusinessObjects.ProductDto
 {
     public class ProductDTO
     {

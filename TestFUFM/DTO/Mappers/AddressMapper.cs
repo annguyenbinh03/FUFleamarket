@@ -1,12 +1,12 @@
 ﻿using BusinessObjects.Models;
-using DTO.AddressDto;
+using BusinessObjects.AddressDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.Mappers
+namespace BusinessObjects.Mappers
 {
     public static class AddressMapper
     {

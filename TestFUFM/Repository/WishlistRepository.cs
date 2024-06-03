@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
 using BusinessObjects;
-using DTO.WishlistDto;
+using BusinessObjects.WishlistDto;
 
 public class WishlistRepository : IWishlistRepository
 {

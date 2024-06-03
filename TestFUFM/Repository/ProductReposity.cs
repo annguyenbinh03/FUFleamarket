@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.Models;
-using DTO;
-using DTO.Helpers;
-using DTO.ProductDto;
+using BusinessObjects;
+using BusinessObjects.Helpers;
+using BusinessObjects.ProductDto;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using System;

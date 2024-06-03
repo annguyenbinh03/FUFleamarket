@@ -1,6 +1,6 @@
-﻿using DTO.Mappers;
-using DTO.ProductDto;
-using DTO.ProductImageDto;
+﻿using BusinessObjects.Mappers;
+using BusinessObjects.ProductDto;
+using BusinessObjects.ProductImageDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 

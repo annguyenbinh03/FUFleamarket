@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTO.AddressDto
+namespace BusinessObjects.AddressDto
 {
     public class AddressDTO
     {
