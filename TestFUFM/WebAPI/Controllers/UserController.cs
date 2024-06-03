@@ -1,7 +1,10 @@
 ﻿using BusinessObjects.Mappers;
 using BusinessObjects.UserDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -15,38 +18,51 @@ namespace WebAPI.Controllers
         {
             _userRepo = userRepo;
         }
-        [HttpGet]
+
+        // Lấy thông tin người dùng hiện tại
+        [HttpGet("Profile")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetProfileUser()
         {
-            // Retrieve the UserId claim
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
                 return Unauthorized("User ID claim not found.");
             }
 
-            // Parse the user ID from the claim
             if (!int.TryParse(userIdClaim.Value, out var userId))
             {
                 return BadRequest("Invalid User ID claim.");
             }
 
-            // Fetch the profile associated with the user ID
             var profileOfUser = await _userRepo.GetProfileUser(userId);
-
-            // Check if any profile data was found
             if (profileOfUser == null || !profileOfUser.Any())
             {
                 return NotFound("No profile found for the user.");
             }
 
-            // Convert the profile data to DTOs
             var profileDto = profileOfUser.Select(x => x.ToUserDTO()).ToList();
-
-            // Return the profile data in the response
             return Ok(profileDto);
         }
-        [HttpGet("{id}")]
+
+        // Lấy tất cả người dùng (chỉ admin)
+        [HttpGet("AllProfile(Admin)")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userRepo.GetAllUserAsync();
+            if (users == null || !users.Any())
+            {
+                return NotFound("No users found.");
+            }
+
+            var userDTOs = users.Select(user => user.ToUserDTO()).ToList();
+            return Ok(userDTOs);
+        }
+
+        
+        [HttpGet("SearchProfileOfUserById(Admin)/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var user = await _userRepo.GetByIdAsync(id);
@@ -56,29 +72,63 @@ namespace WebAPI.Controllers
             }
             return Ok(user.ToUserDTO());
         }
-        [HttpPost]
+
+        
+        [HttpPost("CreateAccount")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Create([FromBody] CreateUserRequestDto userDTO)
         {
-            var userModel = userDTO.ToStockFromCreateDTO();
+            var userModel = userDTO.ToUserFromCreateDTO();
             await _userRepo.CreateAsync(userModel);
-            return CreatedAtAction(nameof(GetById), new { id =userModel.UserId }, userModel.ToUserDTO());
+            return CreatedAtAction(nameof(GetById), new { id = userModel.UserId }, userModel.ToUserDTO());
         }
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto updateDto)
+
+        
+        [HttpPut("UpdateProfileOfUser")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequestDto updateDto)
         {
-            var userModel = await _userRepo.UpdateAsync(id,updateDto);
+            if (updateDto == null)
+            {
+                return BadRequest("Update data is required.");
+            }
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized("Invalid user ID claim.");
+            }
+
+            var updatedUser = await _userRepo.UpdateAsync(userId, updateDto);
+            if (updatedUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedUser.ToUserDTO());
+        }
+
+        [HttpPut("UnBanAccountOfUser(Admin)/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnBanAccount([FromRoute] int id)
+        {
+            var userModel = await _userRepo.UnBanAccount(id);
             if (userModel == null)
             {
                 return NotFound();
             }
-            return Ok(userModel.ToUserDTO());
+            return NoContent();
         }
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute]int id)
+        [HttpPut("BanAccountOfUser(Admin)/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BanAccount([FromRoute] int id)
         {
-            var userModel = await _userRepo.DeleteAsync(id);
+            var userModel = await _userRepo.BanAccount(id);
             if (userModel == null)
             {
                 return NotFound();

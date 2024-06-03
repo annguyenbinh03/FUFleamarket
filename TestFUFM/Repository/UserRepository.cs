@@ -28,21 +28,28 @@ namespace Repository
             return userMode;
         }
 
-        public async Task<User?> DeleteAsync(int id)
+        public async Task<User?> BanAccount(int id)
         {
             var existingUser = await _dbcontext.Users.FirstOrDefaultAsync(x => x.UserId == id);
             if (existingUser == null)
             {
                 return null;
             }
-             // Set the status to false directly
+            existingUser.IsDeleted = true;
             await _dbcontext.SaveChangesAsync();
             return existingUser;
         }
-
-
-        
-
+        public async Task<User> UnBanAccount(int id)
+        {
+            var existingUser = await _dbcontext.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.IsDeleted = false;
+            await _dbcontext.SaveChangesAsync();
+            return existingUser;
+        }
         public async Task<List<User>> GetAllUserAsync()
         {
           return await _dbcontext.Users.Include(add => add.Addresses).ToListAsync();
@@ -69,9 +76,7 @@ namespace Repository
             existingUser.FullName = userDto.FullName;
             existingUser.Email = userDto.Email;
             existingUser.PhoneNumber = userDto.PhoneNumber;
-            existingUser.Introduction = userDto.Introduction;
-            existingUser.RoleId = userDto.RoleId;
-             
+            existingUser.Introduction = userDto.Introduction;                        
             existingUser.Avarta = userDto.Avarta;
 
             await _dbcontext.SaveChangesAsync();

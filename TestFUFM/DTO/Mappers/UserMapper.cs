@@ -24,23 +24,20 @@ namespace BusinessObjects.Mappers
                 PhoneNumber = model.PhoneNumber,
                 Introduction = model.Introduction,
                 RoleId = model.RoleId,
-                
+                IsDeleted = model.IsDeleted,
                 Avarta = model.Avarta,
                 Addresses = model.Addresses.Select(x=> x.ToAddressDTO()).ToList(),
             };
         }
-        public static User ToStockFromCreateDTO(this CreateUserRequestDto userDto)
+        public static User ToUserFromCreateDTO(this CreateUserRequestDto userDto)
         {
             return new User
-            {
-                
+            {                
                 Password = userDto.Password,
                 FullName = userDto.FullName,
                 Email = userDto.Email,
                 PhoneNumber = userDto.PhoneNumber,
-                Introduction = userDto.Introduction,
-                RoleId = userDto.RoleId,
-                
+                Introduction = userDto.Introduction,         
                 Avarta = userDto.Avarta,
             };
         }

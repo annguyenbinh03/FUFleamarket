@@ -19,11 +19,7 @@ namespace BusinessObjects.UserDto
         [StringLength(20)]
         public string? PhoneNumber { get; set; }
         [StringLength(300)]
-        public string? Introduction { get; set; }
-
-        public int RoleId { get; } = 1;
-
-        public bool Status { get; } = true;
+        public string? Introduction { get; set; }       
         [StringLength(200)]
         public string? Avarta { get; set; }
 

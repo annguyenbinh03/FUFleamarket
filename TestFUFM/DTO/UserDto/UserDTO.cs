@@ -26,7 +26,7 @@ namespace BusinessObjects.UserDto
 
         public int RoleId { get; set; }
 
-        public bool Status { get; set; }
+        public bool IsDeleted { get; set; }
 
         public string? Avarta { get; set; }
 

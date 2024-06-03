@@ -14,7 +14,8 @@ namespace Repository.Interfaces
         public Task<User?> GetByIdAsync(int id);
         public Task<User> CreateAsync(User userMode);
         public Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto);
-        public Task<User?> DeleteAsync(int id);
+        public Task<User?> BanAccount(int id);
+        public Task<User?> UnBanAccount(int id);
         public Task<bool> UserExists(int id);
 
         Task<IEnumerable<User>> GetProfileUser(int userId);
