@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { getProductbyProductIdAPI } from "../api/product";
 
 function Detail() {
   const { productId } = useParams();
@@ -8,11 +9,8 @@ function Detail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `https://localhost:7057/api/product/${productId}`
-        );
-        const data = await response.json();
-        setProduct(data);
+        const response = await getProductbyProductIdAPI(productId);
+        setProduct(response);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -56,7 +54,7 @@ function Detail() {
                         }`}
                       >
                         <img
-                          src= {image}
+                          src={image}
                           className="d-block w-100"
                           alt="Product Image"
                         />
@@ -89,8 +87,13 @@ function Detail() {
                   </button>
                 </div>
               ) : (
-                <div> <img className="carousel-inner"
-                src='https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain'/></div>
+                <div>
+                  {" "}
+                  <img
+                    className="carousel-inner"
+                    src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                  />
+                </div>
               )}
             </div>
             <div className="px-5 mt-2">
@@ -99,7 +102,7 @@ function Detail() {
               </div>
               <div className="price_wistlist d-flex justify-content-between">
                 <p className="price_wistlist_left">
-                  {product ? product.price : ""}
+                  ${product ? product.price : ""}
                 </p>
                 <button className="btn price_wistlist_right rounded-pill">
                   Lưu tin
@@ -114,17 +117,21 @@ function Detail() {
                 </p>
               </div>
               <div className="seller_address">
-                        <span className="khuvuc">Khu Vực</span>
-                        <div className="seller_address_flex d-flex justify-content-between">
-                            <div className="seller_address_left">
-                                <img className="img-fluid" alt="location" src="https://static.chotot.com/storage/icons/logos/ad-param/location.svg"/>
-                            </div>
-                            <div className="seller_address_right">
-                                Số 62 Ngõ 32 Phùng Khoang Trung Văn Nam Từ Liêm, Phường Trung Văn, Quận Nam Từ Liêm, Hà Nội
-                            </div>
-                        </div>
-                       
-                    </div>
+                <span className="khuvuc">Khu Vực</span>
+                <div className="seller_address_flex d-flex justify-content-between">
+                  <div className="seller_address_left">
+                    <img
+                      className="img-fluid"
+                      alt="location"
+                      src="https://static.chotot.com/storage/icons/logos/ad-param/location.svg"
+                    />
+                  </div>
+                  <div className="seller_address_right">
+                    Số 62 Ngõ 32 Phùng Khoang Trung Văn Nam Từ Liêm, Phường
+                    Trung Văn, Quận Nam Từ Liêm, Hà Nội
+                  </div>
+                </div>
+              </div>
               <div className="report_wrapper mt-3">
                 <div className="reprt_wrapper_text d-flex justify-content-between">
                   <div className="reprt_wrapper_text_left">
@@ -196,32 +203,49 @@ function Detail() {
                 <span>BẤM ĐỂ HIỆN SỐ</span>
               </div>
             </div>
-            <div className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
+
+            <button className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
               <span>
                 <i className="fa fa-comments-o" aria-hidden="true"></i>
               </span>
               <span>CHAT VỚI NGƯỜI BÁN</span>
-                        </div>
-                        <div className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
-                            <span>
-                                <i className="fa fa-plus-square" aria-hidden="true"></i>
-                            </span>
-                            <span>TẠO HÓA ĐƠN</span>
-                        </div>
-                        <div className="safe_tip mt-5">
-                            <img alt="safe tips" className="pull-left" width="100" height="auto"
-                                src="https://st.chotot.com/storage/images/tips/2_other_cate.png" />
-                            <div className="safe_tip_text">
-                                <p className="pt-3" style={{ fontSize: '13px' }}>NÊN gặp mặt trực tiếp kiểm tra hàng trước khi giao
-                                    dịch.</p>
-                                <a href="https://www.youtube.com/watch?v=4oStw0r33so" target="blank" rel="nofollow">Tìm hiểu thêm »</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </button>
+
+            <button className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
+              <Link to={`/create-order/${productId}`}>
+                <span>
+                  <i className="fa fa-plus-square" aria-hidden="true"></i>
+                </span>
+                <span>TẠO HÓA ĐƠN</span>
+              </Link>
+            </button>
+
+            <div className="safe_tip mt-5">
+              <img
+                alt="safe tips"
+                className="pull-left"
+                width="100"
+                height="auto"
+                src="https://st.chotot.com/storage/images/tips/2_other_cate.png"
+              />
+              <div className="safe_tip_text">
+                <p className="pt-3" style={{ fontSize: "13px" }}>
+                  NÊN gặp mặt trực tiếp kiểm tra hàng trước khi giao dịch.
+                </p>
+                <a
+                  href="https://www.youtube.com/watch?v=4oStw0r33so"
+                  target="blank"
+                  rel="nofollow"
+                >
+                  Tìm hiểu thêm »
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </section>
+    </div>
+  );
 }
 
 export default Detail;

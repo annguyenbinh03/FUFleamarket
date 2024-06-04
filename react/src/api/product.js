@@ -26,9 +26,10 @@ export const getProductByCategoryAPI = (categoryId) => {
 // }
 
   
-export const getProductsAPI = () => {
-    return axiosClient.get(`${END_POINT.PRODUCTS}`);
-  };
+export const getProductbyProductIdAPI = async (productId) => {
+  return axiosClient.get(`${END_POINT.PRODUCTS}/${productId}`);
+};
+
   
   export const approveProductAPI = (productId) => {
     return axiosClient.put(`${END_POINT.PRODUCTS}/${productId}/approve`);
