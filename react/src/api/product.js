@@ -25,3 +25,15 @@ export const getProductByCategoryAPI = (categoryId) => {
 //     return axiosClient.put(`${END_POINT.TODOS}`,todo);
 // }
 
+  
+export const getProductsAPI = () => {
+    return axiosClient.get(`${END_POINT.PRODUCTS}`);
+  };
+  
+  export const approveProductAPI = (productId) => {
+    return axiosClient.put(`${END_POINT.PRODUCTS}/${productId}/approve`);
+  };
+  
+  export const rejectProductAPI = (productId) => {
+    return axiosClient.put(`${END_POINT.PRODUCTS}/${productId}/reject`);
+  };

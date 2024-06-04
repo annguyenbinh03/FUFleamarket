@@ -18,7 +18,7 @@ class Header extends React.Component {
             </Link>
           </div>
           <div className="btn-group dropdown ">
-            <button
+          <button
               type="button"
               className="btn dropdown-toggle text-white fs-5"
               id="autoDropdown"
@@ -26,7 +26,7 @@ class Header extends React.Component {
               aria-expanded="false"
             >
               <i className="fa fa-list" aria-hidden="true"></i>
-              <span>Danh mục</span>
+              <span> Danh mục </span>
             </button>
             <ul className="dropdown-menu ">
               <li>
@@ -48,7 +48,7 @@ class Header extends React.Component {
                     src="assets/img/icon/fridge.png"
                     alt="frideIcon"
                   />
-                  Điện lạnh
+                      Điện lạnh
                 </Link>
               </li>
               <li>
