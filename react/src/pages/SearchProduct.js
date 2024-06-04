@@ -27,6 +27,7 @@ function SearchProduct() {
         setError(err.message);
       } finally {
         setLoading(false);
+
       }
     };
 
