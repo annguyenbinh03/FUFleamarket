@@ -41,4 +41,20 @@ public class WishlistRepository : IWishlistRepository
                     WHERE w.UserId = @p0";
         return await _context.Products.FromSqlRaw(sql, userId).ToListAsync();
     }
+
+    public async Task<bool> DeleteWishlistAsync(WishlistDTO wishlistDto)
+    {
+        var userId = wishlistDto.UserId; // Lấy userId từ DTO được truyền vào
+
+        var sql = "DELETE FROM Wishlist WHERE userId = @p0 AND productId = @p1";
+        var rowsAffected = await _context.Database.ExecuteSqlRawAsync(sql, userId, wishlistDto.ProductId);
+
+        if (rowsAffected == 0)
+        {
+            return false; // Không tìm thấy mục trong danh sách mong muốn
+        }
+
+        await _context.SaveChangesAsync();
+        return true; // Xóa thành công
+    }
 }

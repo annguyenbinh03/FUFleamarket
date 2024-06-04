@@ -80,5 +80,41 @@ namespace WebAPI.Controllers
 
             return Ok(wishlistItems);
         }
+        [HttpDelete("{productid}")]
+        public async Task<IActionResult> DeleteWishlist(int productid)
+        {
+            // Lấy userId từ thông tin người dùng đã đăng nhập
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+
+            var wishlistDto = new WishlistDTO
+            {
+                UserId = userId,
+                ProductId = productid
+            };
+
+            var result = await _wishlistRepo.DeleteWishlistAsync(wishlistDto);
+
+            if (!result)
+            {
+                return NotFound("Item not found in the wishlist.");
+            }
+
+            return NoContent();
+        }
+        [HttpGet("user")]
+        public async Task<IActionResult> GetWishlistForCurrentUser()
+        {
+            // Lấy userId từ thông tin người dùng đã đăng nhập
+            var userId = int.Parse(User.FindFirstValue("UserId"));
+
+            var wishlistItems = await _wishlistRepo.GetWishlistByUserIdAsync(userId);
+
+            if (wishlistItems == null || !wishlistItems.Any())
+            {
+                return NotFound("No items found in the wishlist.");
+            }
+
+            return Ok(wishlistItems);
+        }
     }
 }

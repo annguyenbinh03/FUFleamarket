@@ -9,4 +9,5 @@ public interface IWishlistRepository
     Task<bool> CreateWishlistAsync(WishlistDTO wishlistDto);
     Task<bool> WishlistItemExistsAsync(int userId, int productId);
     Task<IEnumerable<Product>> GetWishlistByUserIdAsync(int userId);
+    Task<bool> DeleteWishlistAsync(WishlistDTO wishlistDto);
 }
