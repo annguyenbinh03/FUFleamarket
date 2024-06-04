@@ -15,5 +15,6 @@ namespace Repository.Interfaces
 
         Task<Category?> UpdateAsync(Category categoryModel);
         Task<Category?> DeleteAsync(int id); // Thêm phương thức DeleteAsync
+        Task<bool> IsCategoryNameExistsAsync(string name);
     }
 }

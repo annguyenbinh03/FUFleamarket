@@ -7,6 +7,8 @@ using BusinessObjects.UserDto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -18,92 +20,222 @@ namespace WebAPI.Controllers
         private readonly IProductReposity _productRepo;
         public ProductController(FufleaMarketContext context, IProductReposity productRepo)
         {
-            _productRepo= productRepo;
+            _productRepo = productRepo;
             _context = context;
         }
-        [HttpGet]
+
+
+        [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var products = await _productRepo.GetALLAsync(query);
-            var productDto = products.Select(s => s.ToProductDto());
 
-            return Ok(productDto);
+            var products = await _productRepo.GetALLAsync(query);
+            var productDtos = products.Select(p => p.ToProductDto());
+
+            return Ok(productDtos);
         }
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute]int id) 
+
+
+        [HttpGet("getproductbyid/{id:int}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var product =await _productRepo.GetByIdProductAsync(id);
+
+            // Get the maximum product ID
+            var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
+
+            if (id > maxProductId)
+            {
+                return BadRequest("Product ID exceeds the maximum available ID. Please enter a valid Product ID.");
+            }
+
+            var product = await _productRepo.GetByIdProductAsync(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
-
             return Ok(product.ToProductDto());
         }
-         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]CreateProductRequestDto productDto)
+
+
+        [HttpPost("createproductforsellers")]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] CreateProductRequestDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var productModel = productDto.ToProductFromCreateDTO();
-           await _productRepo.CreateAsync(productModel);
-            return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
 
-        }
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateProductRequestDto updateDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var productModel =await _productRepo.UpdateAsync(id, updateDto);
-            if (productModel == null)
+            if (productDto.CategoryId == 0)
             {
-                return NotFound();
+                return BadRequest("CategoryId is required.");
             }
+
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var sellerId))
+            {
+                return Unauthorized("Invalid user ID format");
+            }
+
+            var categoryExists = await _context.Categories.AnyAsync(c => c.CategoryId == productDto.CategoryId);
+            if (!categoryExists)
+            {
+                return BadRequest("The provided CategoryId does not exist.");
+            }
+
+            var productModel = productDto.ToProductFromCreateDTO(sellerId);
+            var seller = await _context.Users.FirstOrDefaultAsync(u => u.UserId == sellerId);
+            if (seller != null)
+            {
+                productModel.Seller = seller;
+            }
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == productModel.CategoryId);
+            if (category != null)
+            {
+                productModel.Category = category;
+            }
+
+            await _productRepo.CreateAsync(productModel);
+            return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
+        }
+
+
+        [HttpPut("updateproductforsellers/{productId:int}")]
+        [Authorize]
+        public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] UpdateProductRequestDto updateDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
+
+            if (productId > maxProductId)
+            {
+                return BadRequest("Product ID exceeds the maximum available ID. Please enter a valid Product ID.");
+            }
+
+            if (updateDto.CategoryId == 0)
+            {
+                return BadRequest("CategoryId is required.");
+            }
+
+            var categoryExists = await _context.Categories.AnyAsync(c => c.CategoryId == updateDto.CategoryId);
+            if (!categoryExists)
+            {
+                return BadRequest("The provided CategoryId does not exist.");
+            }
+
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var sellerId))
+            {
+                return Unauthorized("Invalid user ID format");
+            }
+
+            var existingProduct = await _productRepo.GetByIdProductAsync(productId);
+            if (existingProduct == null)
+            {
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
+            }
+
+            if (existingProduct.SellerId != sellerId)
+            {
+                return Unauthorized("This is not your product, please enter your product ID.");
+            }
+
+            var productModel = await _productRepo.UpdateAsync(sellerId, productId, updateDto);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == updateDto.CategoryId);
+            if (category != null)
+            {
+                productModel.Category = category;
+            }
+
             return Ok(productModel.ToProductDto());
         }
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+
+
+
+
+        [HttpDelete("deleteproductforsellers/{productId:int}")]
+        [Authorize]
+        public async Task<IActionResult> Delete([FromRoute] int productId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var productModel = await _productRepo.DeleteAsync(id);
-            if (productModel == null)
+
+            // Get the maximum product ID
+            var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
+
+            if (productId > maxProductId)
             {
-                return NotFound();
+                return BadRequest("Product ID exceeds the maximum available ID. Please enter a valid Product ID.");
+            }
+
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var sellerId))
+            {
+                return Unauthorized("Invalid user ID format");
             }
 
 
-            return NoContent();
+            var existingProduct = await _productRepo.GetByIdProductAsync(productId);
+            if (existingProduct == null)
+            {
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
+            }
 
+            if (existingProduct.SellerId != sellerId)
+            {
+                return Unauthorized("This is not your product, please enter your product ID.");
+            }
+
+            var deletedProduct = await _productRepo.DeleteAsync(productId);
+            if (deletedProduct == null)
+            {
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
+            }
+
+            var updatedProduct = deletedProduct.ToProductDto();
+            return Ok(updatedProduct);
         }
-        //[HttpDelete("{id:int}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
 
-        //    var productModel = await _productRepo.DeleteAsync(id);
-        //    if (productModel == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("admin/pending")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetPendingProducts()
+        {
+            var products = await _productRepo.GetProductsByStatusAsync(0);
 
-        //    // Update the properties on productModel
-        //    productModel.isNew = false;
-        //    productModel.status = 2;
+            var productDtos = products.Select(p => p.ToProductDto());
 
-        //    // Save the updated productModel in the repository
-        //    await _productRepo.UpdateAsync(productModel);
+            return Ok(productDtos);
+        }
 
-        //    return NoContent();
-        //}
+
+        [HttpGet("admin/confirmed")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetConfirmedProducts()
+        {
+            var products = await _productRepo.GetProductsByStatusAsync(1);
+
+            var productDtos = products.Select(p => p.ToProductDto());
+
+            return Ok(productDtos);
+        }
+
+        [HttpGet("admin/deleted")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetDeletedProducts()
+        {
+            var products = await _productRepo.GetProductsByStatusAsync(2);
+
+            var productDtos = products.Select(p => p.ToProductDto());
+
+            return Ok(productDtos);
+        }
+
+
+
     }
 }

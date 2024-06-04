@@ -12,34 +12,12 @@ namespace BusinessObjects.ProductDto
 
     public class CreateProductRequestDto
     {
-        //[Required(ErrorMessage = "ProductName is required")]
-        //[MinLength(5, ErrorMessage = "ProductName must be at least 5 characters")]
-        //[MaxLength(280, ErrorMessage = "ProductName must not exceed 280 characters")]
-        //public string ProductName { get; set; }
-
-
-
-        //public decimal Price { get; set; }
-
-
-        //[Required(ErrorMessage = "ProductName is required")]
-        //[MinLength(5, ErrorMessage = "ProductName must be at least 5 characters")]
-        //[MaxLength(280, ErrorMessage = "ProductName must not exceed 280 characters")]
-        //public string Description { get; set; }
-
-
-        //[Required(ErrorMessage = "SellerId is required.")]
-        //public int SellerId { get; set; }
-
-        //public int CategoryId { get; set; }
-
-
-        // public int Status { get; set; }
 
         [Required(ErrorMessage = "ProductName is required")]
         [MinLength(5, ErrorMessage = "ProductName must be at least 5 characters")]
         [MaxLength(280, ErrorMessage = "ProductName must not exceed 280 characters")]
         public string ProductName { get; set; }
+        [Required]
 
         public decimal Price { get; set; }
 
@@ -48,10 +26,10 @@ namespace BusinessObjects.ProductDto
         [MaxLength(280, ErrorMessage = "Description must not exceed 280 characters")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "SellerId is required.")]
-        public int SellerId { get; set; }
+
         [Required(ErrorMessage = "CategoryId is required.")]
         public int CategoryId { get; set; }
+
 
 
     }

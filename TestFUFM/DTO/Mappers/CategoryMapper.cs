@@ -5,6 +5,7 @@ namespace BusinessObjects.Mappers
 {
     public static class CategoryMapper
     {
+
        
             public static CategoryDTO ToCategoryDTO(this Category model)
             {
@@ -17,21 +18,22 @@ namespace BusinessObjects.Mappers
                     Name = model.Name
                 };
             }
-        public static Category ToCategoryFromCreate(this CreateCategory categoryDTO)
-        {
-            return new Category
+
+            public static Category ToCategoryFromCreate(this CreateCategory categoryDTO)
             {
-                Name = categoryDTO.Name,
-                // Không cần UserId nếu không liên quan đến Product
-            };
-        }
-        public static Category ToCategoryFromUpdate(this UpdateCategory categoryDTO)
-        {
-            return new Category
+                return new Category
+                {
+                    Name = categoryDTO.Name,
+                    // Không cần UserId nếu không liên quan đến Product
+                };
+            }
+            public static Category ToCategoryFromUpdate(this UpdateCategory categoryDTO)
             {
-                CategoryId = categoryDTO.CategoryId,
-                Name = categoryDTO.Name
-            };
+                return new Category
+                {
+                    CategoryId = categoryDTO.CategoryId,
+                    Name = categoryDTO.Name
+                };
+            }
         }
-    }
 }

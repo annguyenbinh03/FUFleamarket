@@ -9,37 +9,15 @@ namespace BusinessObjects.ProductDto
 {
     public class ProductDTO
     {
-        //public int ProductId { get; set; }
-
-        //public string ProductName { get; set; } = null!;
-
-
-        //public decimal Price { get; set; }
-
-        //public bool IsNew { get; set; }
-
-
-        //public string Description { get; set; } = null!;
-
-
-        //public int SellerId { get; set; }
-
-        //public int CategoryId { get; set; }
-
-
-        //public int Status { get; set; }
-
-        //public List<CategoryDTO> Categories { get; set; }
-        //public  List<ProductImageDTO> ProductImages { get; set; }
-
-
         public int ProductId { get; set; }
         public string ProductName { get; set; } = null!;
         public decimal Price { get; set; }
         public bool IsNew { get; set; }
         public string Description { get; set; } = null!;
-        public List<ProfileUserDTO> SellerId { get; set; }
+        public ProfileUserDTO Seller { get; set; } // Thay thế SellerId bằng Seller
         public int CategoryId { get; set; }
+
+        public string CategoryName { get; set; } = null!;
         public int Status { get; set; }
         public List<CategoryDTO> Categories { get; set; }
         public List<ProductImageDTO> ProductImages { get; set; }
@@ -48,7 +26,6 @@ namespace BusinessObjects.ProductDto
         {
             Categories = new List<CategoryDTO>();
             ProductImages = new List<ProductImageDTO>();
-            SellerId = new List<ProfileUserDTO>();
         }
     }
 }

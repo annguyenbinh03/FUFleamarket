@@ -21,6 +21,11 @@ namespace Repository
 
         public async Task<Category?> CreateAsync(Category categoryModel)
         {
+            if (await IsCategoryNameExistsAsync(categoryModel.Name))
+            {
+                throw new InvalidOperationException("Category name already exists.");
+            }
+
             await _Catecontext.Categories.AddAsync(categoryModel);
             await _Catecontext.SaveChangesAsync();
             return categoryModel;
@@ -44,6 +49,12 @@ namespace Repository
                 return null;
             }
 
+            // Xóa tất cả các sản phẩm liên quan đến danh mục này
+            var products = await _Catecontext.Products
+                .Where(p => p.CategoryId == id)
+                .ToListAsync();
+            _Catecontext.Products.RemoveRange(products);
+
             _Catecontext.Categories.Remove(categoryModel);
             await _Catecontext.SaveChangesAsync();
             return categoryModel;
@@ -57,11 +68,21 @@ namespace Repository
                 return null;
             }
 
+
+            if (await IsCategoryNameExistsAsync(categoryModel.Name))
+            {
+                throw new InvalidOperationException("Category name already exists.");
+            }
+
             existingCategory.Name = categoryModel.Name;
 
             _Catecontext.Categories.Update(existingCategory);
             await _Catecontext.SaveChangesAsync();
             return existingCategory;
+        }
+        public async Task<bool> IsCategoryNameExistsAsync(string name)
+        {
+            return await _Catecontext.Categories.AnyAsync(c => c.Name == name);
         }
     }
 }

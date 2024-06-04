@@ -9,12 +9,15 @@ namespace Repository.Interfaces
 {
     public interface IProductImageRepository
     {
-        Task<List<ProductImage>> GetALLAsync();
-        Task<ProductImage?> GetByIDAsync(int id);
-
+        Task<List<ProductImage>> GetAllByProductIdAsync(int productId);
+        Task<ProductImage> GetByIdAsync(int productId);
         Task<ProductImage> CreateAsync(ProductImage productImageModel);
+        Task<Product> UpdateAsync(int productId, string imageName, ProductImage productImageModel);
+        Task<Product> DeleteAsync(int productId, string imageName);
+        Task<bool> ExistsByNameOrLink(int productId, string imageName, string imageLink);
+        Task<bool> ProductExist(int productId);
+        Task<Product> GetProductByIdAsync(int productId);
 
-        Task<ProductImage?> UpdateAsync(int id, ProductImage productImageModel);
-        Task<ProductImage?> DeleteAsync(int  id);   
+        Task<List<ProductImage>> GetALLAsync();
     }
 }
