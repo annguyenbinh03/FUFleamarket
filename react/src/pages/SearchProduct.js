@@ -10,7 +10,7 @@ function SearchProduct() {
 
   useEffect( () => {
     firstFetchData();
-  });
+  },[]);
 
   const firstFetchData = async () => {
     setCategories(await getCategoryAPI());
