@@ -29,13 +29,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/detail/:productId" element={<Detail />} />
           <Route path="/create-order/:productId" element={<CreateOrder />} />
-          <Route path="/my_posts" element={<MyPosts />} />
+          <Route path="/my-posts" element={<MyPosts />} />
           <Route path="/upload-product" element={<PostProduct />} />
           <Route path="/buy-order" element={<BuyOrder />} />
           <Route path="/sell-order" element={<SellOrder />} />
           <Route path="/search-product" element={<SearchProduct />} />
           <Route path="/search-product/:categoryIdParam" element={<SearchProduct />} />
-          <Route path="/admin-process-request" element={<AdminProcessRequest />} />
+          <Route path="/admin/:adminParam" element={<AdminProcessRequest />} />
           <Route path="/aboutUs" element={<AboutUs />} />
         </Routes>
         <Footer />

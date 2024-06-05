@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { approveProductAPI, rejectProductAPI, getProductAPI } from "../api/product";
+import {  getProductAPI } from "../api/product";
 import { getCategoryAPI } from "../api/category";
 import CategoryList from "../component/CategoryList";
+import {  getProductConfirmedAPI, getProductDeletedAPI } from "../api/admin"
 
 function AdminProcessRequest() {
   const [products, setProducts] = useState([]);
@@ -37,7 +38,7 @@ function AdminProcessRequest() {
 
   const handleApproveProduct = async (productId) => {
     try {
-      await approveProductAPI(productId);
+      await getProductConfirmedAPI(productId);
       const updatedProducts = products.map((product) =>
         product.productId === productId ? { ...product, status: "Approved" } : product
       );
@@ -49,7 +50,7 @@ function AdminProcessRequest() {
 
   const handleRejectProduct = async (productId) => {
     try {
-      await rejectProductAPI(productId);
+      await getProductDeletedAPI(productId);
       const updatedProducts = products.filter((product) => product.productId !== productId);
       setProducts(updatedProducts);
     } catch (error) {
@@ -107,7 +108,7 @@ function AdminProcessRequest() {
                             <td>Sóp bi</td>
                             <td>Sống cho có</td>
                             <td>{product.productName}</td>
-                            <td>{product.status}</td>
+                            <td>{product.status === 1 ? 'Mới' : 'Đã sử dụng'}</td>                            
                             <td>{product.price}</td>
                             <td>{product.description}</td>
                             <td>{getCategoryName(product.categoryId)}</td>

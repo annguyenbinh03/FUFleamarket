@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getProductbyProductIdAPI } from "../api/product";
+import { getProductByProductIdAPI } from "../api/product";
 
 function CreateOrder() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        setIsLoading(true); // Set loading to true
-        const response = await getProductbyProductIdAPI(productId);
+        setIsLoading(true);
+        const response = await getProductByProductIdAPI(productId);
+        console.log(response);
         setProduct(response);
-        setIsLoading(false); // Set loading to false after fetching
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching product:", error);
-        setIsLoading(false); // Set loading to false even if error
+        setIsLoading(false);
       }
     };
 
@@ -58,26 +59,21 @@ function CreateOrder() {
                   <div>
                     <strong>Người bán</strong>
                   </div>
-                  {/* Define seller here */}
+
                   {isLoading ? (
                     <div>Đang tải thông tin người bán...</div>
                   ) : (
                     <>
-                      {product &&
-                      product.sellerId &&
-                      product.sellerId.length > 0 ? (
+                      {product?.seller?.fullName ? (
                         <>
                           <div>
-                            Đến: {product.sellerId[0].fullName} |{" "}
-                            {product.sellerId[0].phoneNumber}
-                          </div>{" "}
-                          {/* Display Seller Data */}
+                            Đến: {product.seller.fullName} |{" "}
+                            {product.seller.phoneNumber}
+                          </div>
                           <div>
-                            {product.sellerId[0].addresses.length > 0
-                              ? product.sellerId[0].addresses[0].address
-                              : "Address Not Found"}
-                          </div>{" "}
-                          {/* Display Seller Address */}
+                            {product.seller.addresses?.[0]?.address ||
+                              "Address Not Found"}
+                          </div>
                         </>
                       ) : (
                         <div>Không tìm thấy thông tin người bán</div>
@@ -178,7 +174,7 @@ function CreateOrder() {
                   <span className="visually-hidden">Next</span>
                 </button>
               </div>
-              {/* Render product details only if product exists */}
+
               {product ? (
                 <>
                   <div className="product_name">{product.productName}</div>
@@ -189,7 +185,6 @@ function CreateOrder() {
                     <p className="">{product.description}</p>
                   </div>
                   <div>
-                    
                     {product.isNew ? (
                       <p>Tình trạng mới</p>
                     ) : (
@@ -215,12 +210,11 @@ function CreateOrder() {
                 <label className="ms-2">Số lượng</label>
               </div>
               <div className="form-floating mb-3">
-                <select className="form-select">
-                  <option value={1} selected="">
-                    Thanh toán trực tiếp
-                  </option>
+                <select className="form-select" defaultValue="1">
+                  <option value={1}>Thanh toán trực tiếp</option>
                   <option value={2}>Chuyển khoản</option>
                 </select>
+
                 <label>Phương thức thanh toán</label>
               </div>
               <div className="form-floating mb-3">

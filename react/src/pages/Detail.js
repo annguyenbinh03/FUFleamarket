@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProductbyProductIdAPI } from "../api/product";
+import { getProductByProductIdAPI } from "../api/product";
 
 function Detail() {
   const { productId } = useParams();
@@ -9,7 +9,7 @@ function Detail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await getProductbyProductIdAPI(productId);
+        const response = await getProductByProductIdAPI(productId);
         setProduct(response);
       } catch (error) {
         console.error("Error fetching product:", error);
