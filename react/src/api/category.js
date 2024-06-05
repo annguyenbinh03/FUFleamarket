@@ -7,3 +7,4 @@ const END_POINT = {
 export const getCategoryAPI = () => {
     return axiosClient.get(`${END_POINT.CATEGORIES}`);
 }
+

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link as LinkRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Footer() {
     return (
@@ -24,23 +24,23 @@ function Footer() {
                                 <h6>Useful Links</h6>
                                 <ul>
                                     <li>
-                                        <LinkRouter to={'/aboutUs'}>
+                                        <Link to={'/aboutUs'}>
                                             About Us
-                                        </LinkRouter>
+                                        </Link>
                                     </li>
-                                    <li><a href="#">About Our Shop</a></li>
-                                    <li><a href="#">Secure Shopping</a></li>
-                                    <li><a href="#">Delivery infomation</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Our Sitemap</a></li>
+                                    <li><Link href="#">About Our Shop</Link></li>
+                                    <li><Link href="#">Secure Shopping</Link></li>
+                                    <li><Link href="#">Delivery infomation</Link></li>
+                                    <li><Link href="#">Privacy Policy</Link></li>
+                                    <li><Link href="#">Our Sitemap</Link></li>
                                 </ul>
                                 <ul>
-                                    <li><a href="#">Who We Are</a></li>
-                                    <li><a href="#">Our Services</a></li>
-                                    <li><a href="#">Projects</a></li>
-                                    <li><a href="#">Contact</a></li>
-                                    <li><a href="#">Innovation</a></li>
-                                    <li><a href="#">Testimonials</a></li>
+                                    <li><Link href="#">Who We Are</Link></li>
+                                    <li><Link href="#">Our Services</Link></li>
+                                    <li><Link href="#">Projects</Link></li>
+                                    <li><Link href="#">Contact</Link></li>
+                                    <li><Link href="#">Innovation</Link></li>
+                                    <li><Link href="#">Testimonials</Link></li>
                                 </ul>
                             </div>
                         </div>

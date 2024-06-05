@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-  // faClipboard, 
-  // faFileText, 
-  // faCog, 
-  // faInfoCircle, 
-  // faQuestionCircle, 
-  // faSignOutAlt 
-import { faClipboard,faFileText, faCog, faInfoCircle, faQuestionCircle, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 import MyPostButton from './component/MyPostButton';
 import UploadProductButton from './component/UploadProductButton';
 import SearchButton from './component/SearchButton';
+
 
 const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
   return (
@@ -50,7 +42,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
             <>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faClipboard} />
                   <Link to="/buy-order" className="dropdown-item">
                     Đơn mua
                   </Link>
@@ -58,7 +49,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faFileText} />
                   <Link to="/sell-order" className="dropdown-item">
                     Đơn bán
                   </Link>
@@ -71,7 +61,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faCog} />
                   <Link className="dropdown-item" to="#">
                     Cài đặt tài khoản
                   </Link>
@@ -79,7 +68,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faInfoCircle} />
                   <Link className="dropdown-item" href="#">
                     Trợ giúp
                   </Link>
@@ -87,7 +75,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faQuestionCircle} />
                   <Link className="dropdown-item" href="#">
                     Đóng góp ý kiến
                   </Link>
@@ -95,7 +82,6 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <FontAwesomeIcon icon={faSignOutAlt} />
                   <Link className="dropdown-item" onClick={handleLogout} href="#">
                     Đăng xuất
                   </Link>
@@ -130,40 +116,10 @@ const UserDropdown = ({ isLoggedIn, userData, handleLogin, handleLogout }) => {
   );
 };
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      userData: null
-    };
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-  }
 
-  handleLogin() {
-    // Gọi API đăng nhập
-    // ...
-    this.setState({
-      isLoggedIn: true,
-      userData: {
-        name: 'Tên người dùng',
-        avatar: 'https://cdn.chotot.com/uac2/27021569'
-      }
-    });
-  }
-
-  handleLogout() {
-    // Xóa token và thông tin người dùng
-    // ...
-    this.setState({
-      isLoggedIn: false,
-      userData: null
-    });
-  }
-
-  render() {
-    return (
+const Header = () => {
+  
+  return (
       <div>
         <header className="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
           <div className="logo p-2">
@@ -264,10 +220,10 @@ class Header extends React.Component {
 
           {/* Menu dropdown người dùng */}
           <UserDropdown 
-            isLoggedIn={this.state.isLoggedIn} 
-            userData={this.state.userData} 
-            handleLogin={this.handleLogin} 
-            handleLogout={this.handleLogout} 
+            // isLoggedIn={this.state.isLoggedIn} 
+            // userData={this.state.userData} 
+            // handleLogin={this.handleLogin} 
+            // handleLogout={this.handleLogout} 
           />
 
           {/* Nút đăng bài */}
@@ -280,6 +236,7 @@ class Header extends React.Component {
       </div>
     );
   }
-}
-
+ 
 export default Header;
+
+  
