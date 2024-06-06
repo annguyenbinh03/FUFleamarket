@@ -41,7 +41,9 @@ const Login = () => {
       console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.token;
       const roles = response?.data?.role;
-      setAuth({ email, password, roles, accessToken });
+      const fullName = response?.data?.fullName;
+      const avarta = response?.data?.avarta;
+      setAuth({ email, roles, fullName, avarta, accessToken });
       setEmail("");
       setPwd("");
       navigate(from, { replace: true });
@@ -60,47 +62,59 @@ const Login = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center">
-    <section className="register">
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          ref={userRef}
-          autoComplete="off"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          required
-        />
+    <div className="d-flex  justify-content-center">
+      <section className="register bg-white p-5">
+        <p
+          ref={errRef}
+          className={errMsg ? "errmsg" : "offscreen"}
+          aria-live="assertive"
+        >
+          {errMsg}
+        </p>
+        <h1 className="text-center p-3 pb-4">Đăng nhập</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="input-group input-group-lg mb-3">
+            <span class="input-group-text" id="basic-addon1">
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+              placeholder="Email"
+            />
+          </div>
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) => setPwd(e.target.value)}
-          value={password}
-          required
-        />
-        <button>Sign In</button>
-      </form>
-      <p>
-        Need an Account?
-        <br />
-        <span className="line">
-          {/*put router link here*/}
-          <Link href="#">Sign Up</Link>
-        </span>
-      </p>
-    </section>
+          <div class="input-group input-group-lg mb-3">
+            <span class="input-group-text" id="basic-addon1">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+            </span>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              onChange={(e) => setPwd(e.target.value)}
+              value={password}
+              required
+              placeholder="Mật khẩu"
+            />
+          </div>
+          <div className="d-flex justify-content-center py-2"> <button className="btn btn-secondary btn-lg px-5">Sign In</button></div>
+         
+        </form>
+        <div className="text-center pt-3">
+          Chưa có tài khoản?
+          <span className="line">
+            {/*put router link here*/}
+            <Link  href="#">Tạo ngay</Link>
+          </span>
+        </div>
+      </section>
     </div>
   );
 };

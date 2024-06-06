@@ -39,7 +39,7 @@ public class LoginAdminController : ControllerBase
 
         var token = GenerateJwtToken(user);
         var role = new int[] { user.RoleId};
-        return Ok(new { Token = token, role, fullName = user.FullName, id = user.UserId });
+        return Ok(new { Token = token, role, fullName = user.FullName, avarta = user.Avarta,id = user.UserId });
     }
 
     private string GenerateJwtToken(User user)

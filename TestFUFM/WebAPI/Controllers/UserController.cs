@@ -36,13 +36,13 @@ namespace WebAPI.Controllers
             }
 
             var profileOfUser = await _userRepo.GetProfileUser(userId);
-            if (profileOfUser == null || !profileOfUser.Any())
+            if (profileOfUser == null )
             {
                 return NotFound("No profile found for the user.");
             }
 
-            var profileDto = profileOfUser.Select(x => x.ToUserDTO()).ToList();
-            return Ok(profileDto);
+            var profileDto = profileOfUser.ToUserDTO();
+            return Ok(new { profile = profileDto });
         }
 
         // Lấy tất cả người dùng (chỉ admin)
@@ -69,7 +69,8 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(user.ToUserDTO());
+            var profile = user.ToUserDTO();
+            return Ok( profile );
         }
 
         

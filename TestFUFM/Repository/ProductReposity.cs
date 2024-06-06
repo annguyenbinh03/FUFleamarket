@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Repository
 {
@@ -174,5 +175,24 @@ namespace Repository
                 .ToListAsync();
         }
 
+        public async Task<string?> getSellerAddress(int sellerId)
+        {
+            User user = await _context.Users.Include(x => x.Addresses).FirstOrDefaultAsync(x => x.UserId == sellerId);
+            Address address = user?.Addresses.FirstOrDefault();
+            if (address != null)
+            {
+                return address.SpecificAddress;
+            }
+            else
+            {
+                return "";
+            }
+
+        }
+
+        public async Task<List<Product>?> GetProductByUserIdAsync(int userId)
+        {
+            return await _context.Products.Where(x => x.SellerId == userId).ToListAsync();
+        }
     }
 }

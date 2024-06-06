@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[User](
 	[introduction] NVARCHAR(300) NULL,
 	[roleId] INT NOT NULL,
 	[isDeleted] BIT NOT NULL,
-	[avarta] NVARCHAR(200) NULL,
+	[avarta] NVARCHAR(500) NULL,
 
 )
 
@@ -55,6 +55,7 @@ CREATE TABLE [dbo].[Product](
 	[sellerId] INT NOT NULL,
 	[categoryId] INT NOT NULL,
 	[status] INT NOT NULL,
+	[createdDate] DATE NULL,
 	CONSTRAINT FK_Product_User FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Message_Category FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([categoryId])
 )
@@ -127,16 +128,18 @@ CREATE TABLE [dbo].[Feedback](
 GO	
 INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta])
 VALUES
-    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 0, 0, 'avatar1.jpg'),
-    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 0, 0, 'avatar2.jpg'),
-    ('password3', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'avatar3.jpg'),
+    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 0, 0, 'https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg'),
+    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 0, 0, 'https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg'),
+    ('password3', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'https://zpsocial-f43-org.zadn.vn/310dc762c2792e277768.jpg'),
     ('admin', 'Emily Brown', 'admin', '0123456789', 'Introduction 4', 2, 0, 'avatar4.jpg'),
     ('password5', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'avatar5.jpg'),
     ('password6', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'avatar6.jpg'),
     ('password7', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'avatar7.jpg'),
     ('password8', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 2, 0, 'avatar8.jpg'),
     ('password9', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'avatar9.jpg'),
-    ('password10', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'avatar10.jpg');
+    ('password10', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'avatar10.jpg'),
+	 ('user', 'user name', 'user', '123124125125', 'Introduction 4', 0, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain'),
+	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain');
 GO
 
 GO
@@ -182,28 +185,28 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status])
+INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate])
 VALUES
     ('iPhone 13', 999.99, 1, 'The latest iPhone model with advanced features.', 1, 1, 1),
-    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1),
-    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1),
-    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1),
-    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1),
-    ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1),
-    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1),
-    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1),
-    ('Bestselling Novel', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1),
-    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1);
+    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,'2024-06-01' ),
+    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-02'),
+    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1), '2024-06-03',
+    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-04'),
+    ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, '2024-06-05'),
+    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06'),
+    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, '2024-06-07'),
+    ('Bestselling Novel', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, '2024-06-08'),
+    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-09');
 GO
 
 
 GO
 INSERT INTO [dbo].[ProductImage] ([productId], [imageName], [imageLink])
 VALUES
-    (1, 'Image 1', 'https://example.com/image1.jpg'),
-    (1, 'Image 2', 'https://example.com/image2.jpg'),
-    (2, 'Image 3', 'https://example.com/image3.jpg'),
-    (2, 'Image 4', 'https://example.com/image4.jpg'),
+    (1, 'Image 1', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain'),
+    (1, 'Image 2', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain'),
+    (2, 'Image 3', 'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
+    (2, 'Image 4', 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
     (3, 'Image 5', 'https://example.com/image5.jpg'),
     (3, 'Image 6', 'https://example.com/image6.jpg'),
     (4, 'Image 7', 'https://example.com/image7.jpg'),

@@ -1,30 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getProductByProductIdAPI } from "../api/product";
+import AuthContext from "../context/AuthProvider";
+import { getUserProfileAPI } from "../api/user";
+import { createOrderAPI } from "../api/order";
 
 function CreateOrder() {
+  const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [buyerAddress, setBuyerAddress] = useState(null);
+  const [buyer, setBuyer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getProductByProductIdAPI(productId);
-        console.log(response);
-        setProduct(response);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setIsLoading(false);
-      }
-    };
+  //upload
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [paymentMethod, setpaymentMethod] = useState("");
+  const [receiverAddress, setAddress] = useState("");
+  const [note, setNote] = useState("");
 
-    if (productId) {
+  const fetchProduct = async () => {
+    try {
+      setIsLoading(true);
+      var response = await getProductByProductIdAPI(productId);
+      setProduct(response.product);
+      setBuyerAddress(response.address);
+      response = await getUserProfileAPI(auth.accessToken);
+      setBuyer(response.profile);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (product === null) {
       fetchProduct();
     }
   }, [productId]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const orderDate = "2024-06-06T06:16:18.408Z" ;
+    const order = { price, quantity, paymentMethod,receiverAddress,note, productId,orderDate };
+    const response = await createOrderAPI(order, auth.accessToken);
+    console.log(response);
+   // navigate('/', { replace: true });
+  };
 
   return (
     <div>
@@ -44,9 +69,10 @@ function CreateOrder() {
                     {" "}
                     <strong> Người mua</strong>
                   </div>
-                  <div>Từ: Ho Minh Quyen (k17 HCM) | 0375995822</div>
-                  <div> Đường số 11</div>
-                  <div>Phường Dĩ An, Thành phố Dĩ An, Bình Dương</div>
+                  <div>
+                    Từ: {buyer?.fullName} | {buyer?.phoneNumber}
+                  </div>
+                  <div>{buyer?.addresses[0]?.specificAddress}</div>
                 </div>
               </div>
             </div>
@@ -70,10 +96,7 @@ function CreateOrder() {
                             Đến: {product.seller.fullName} |{" "}
                             {product.seller.phoneNumber}
                           </div>
-                          <div>
-                            {product.seller.addresses?.[0]?.address ||
-                              "Address Not Found"}
-                          </div>
+                          <div>{buyerAddress || "Address Not Found"}</div>
                         </>
                       ) : (
                         <div>Không tìm thấy thông tin người bán</div>
@@ -197,37 +220,69 @@ function CreateOrder() {
               )}
             </div>
             <div className="col-lg-8 col-md-8">
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="300.000đ"
-                />
-                <label className="ms-2">Giá (vnd)</label>
-              </div>
-              <div className="form-floating mb-3">
-                <input type="number" className="form-control" placeholder={2} />
-                <label className="ms-2">Số lượng</label>
-              </div>
-              <div className="form-floating mb-3">
-                <select className="form-select" defaultValue="1">
-                  <option value={1}>Thanh toán trực tiếp</option>
-                  <option value={2}>Chuyển khoản</option>
-                </select>
-
-                <label>Phương thức thanh toán</label>
-              </div>
-              <div className="form-floating mb-3">
-                <textarea
-                  className="form-control"
-                  style={{ height: 200 }}
-                  defaultValue={""}
-                />
-                <label className="ms-3">Ghi chú</label>
-              </div>
-              <div className="container text-end px-5 pt-3">
-                <button className="btn btn-warning">Tạo hóa đơn</button>
-              </div>
+              <form onSubmit={handleSubmit}>
+                <div className="form-floating mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="300.000đ"
+                    required
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                  <label className="ms-2">Giá (vnd)</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <input
+                    type="number"
+                    className="form-control"
+                    required
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
+                  <label className="ms-2">Số lượng</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <select
+                    className="form-select"
+                    defaultValue="Thanh toán trực tiếp"
+                    required
+                    value={paymentMethod}
+                    onChange={(e) => setpaymentMethod(e.target.value)}
+                  >
+                    <option value="Thanh toán trực tiếp">
+                      Thanh toán trực tiếp
+                    </option>
+                    <option value="Chuyển khoản">Chuyển khoản</option>
+                  </select>
+                  <label>Phương thức thanh toán</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    required
+                    value={receiverAddress}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                  <label className="ms-2">Địa điểm giao dịch</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <textarea
+                    className="form-control"
+                    style={{ height: 200 }}
+                    defaultValue={""}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                  <label className="ms-3">Ghi chú</label>
+                </div>
+                <div className="container text-end px-5 pt-3">
+                  <button type="submit" className="btn btn-warning">
+                    Tạo hóa đơn
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

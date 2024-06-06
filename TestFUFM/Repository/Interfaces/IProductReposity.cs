@@ -16,6 +16,8 @@ namespace Repository.Interfaces
 
         Task<Product?> GetByIdProductAsync(int id);
 
+        Task<List<Product>?> GetProductByUserIdAsync(int userId);
+
         Task<Product> CreateAsync(Product productModel);
 
         Task<Product?> UpdateAsync(int sellerId, int productId, UpdateProductRequestDto productDto);
@@ -31,6 +33,7 @@ namespace Repository.Interfaces
 
         Task<List<Product>> GetProductsByUserIdAsync(int userId);
 
+        Task<string?> getSellerAddress(int sellerId);
     }
 
 }

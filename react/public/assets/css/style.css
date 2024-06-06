@@ -154,6 +154,11 @@ body {
 	font-size: 20px;
 }
 
+.header .loginLink{
+	text-decoration: none;
+	color: white;
+}
+
 .upPostBtn {
 	background-color: blue !important;
 }
@@ -163,30 +168,10 @@ body {
 }
 
 
-.dropdown:hover>.dropdown-menu {
-	display: block !important;
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; /* remove the gap so it doesn't close */
 }
-
-.dropdown-submenu:hover>.dropdown-menu {
-	display: block !important;
-	left: 100%;
-	margin-top: -37px;
-}
-
-.dropdown-toggle::after {
-	margin-bottom: -2px;
-}
-
-.dropdown-menu li a.active {
-	color: #fff;
-}
-
-.custom-toggle-arrow {
-	font-size: 18px;
-	margin-top: 1px;
-	line-height: 12px;
-}
-
 
 /*---------------------
   Hero
@@ -408,6 +393,7 @@ body {
 .product{
 	padding-top: 50px;
 	padding-bottom: 0px;
+	min-height: 600px;
 } 
 
 .sidebar__item {
@@ -597,13 +583,17 @@ body {
     margin-right: 10px;	
 }
 
-.chat_button{
+.chat_button {
 	color: #cd1818;
     border: 1px solid  #cd1818;
 	border-radius: 2%;
 	font-weight: bold;
 	padding-top: 10px;
 	padding-bottom: 10px;
+}
+.chat_button a{
+	color: #cd1818;
+	text-decoration: none !important;
 }
 .chat_button i{
 	font-size: 30px;
@@ -810,7 +800,7 @@ body {
    text-decoration: underline;
   }
 
-.input-group span{
+  .file-uploader .input-group span{
 	width: 190px;
 }
 
@@ -830,6 +820,9 @@ body {
 }
 .postnav .selected{
 	opacity: .9;
+}
+.mypost{
+	min-height: 600px;
 }
 .mypost .product_image{
 	min-width: 144px;
@@ -855,7 +848,6 @@ body {
 
 .mypost .product_container{
 	margin-top: 5px;
-	border-bottom: silver solid 1px ;
 }
 
 .mypost .product_container .price{
@@ -877,6 +869,16 @@ body {
 	padding-right: 5px;
 }
 
+.mypost .btn-state{
+	padding: 6px 16px;
+    font-size: .875rem;
+	font-weight: bold;
+}
+
+.mypost .order{
+	box-shadow: 0 0 5px silver;
+}
+
 
 
 /*---------------------
@@ -894,6 +896,12 @@ body {
 /*---------------------
   Buy Order
 -----------------------*/
+.buy_order{
+	min-height: 650px;
+}
+.buy_order .order{
+	box-shadow: 0 0 5px silver;
+}
 
 .buy_order .product_image{
 	min-width: 144px;
@@ -949,12 +957,12 @@ body {
 -----------------------*/
 .footer {
 	background: #d7d9dd;
-	padding-top: 70px;
+	padding-top: 30px;
 	padding-bottom: 0;
 }
 
 .footer__about {
-	margin-bottom: 30px;
+	margin-bottom: 5px;
 }
 
 .footer__about ul{
@@ -1130,14 +1138,15 @@ body {
 
 .register {
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     min-height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: 1rem;
-    background-color: rgba(0,0,0,0.4);
-	margin-top: 200px;
+	margin-top: 110px;
+	margin-bottom: 90px;
+	border-radius: 5%;
 }
 
 .register form {
@@ -1148,24 +1157,14 @@ body {
     padding-bottom: 1rem;
 }
 
-.register input[type="text"],
-.register input[type="password"],
-.register button,
-.register textarea {
-  font-family: 'Nunito', sans-serif;
-  font-size: 22px;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
+.register .input-group-text{
+	min-width: 55px;
+	text-align: center;
+}
+.register .input-group-text i{
+    width: 20px;
 }
 
-.register label,
-.register button {
-  margin-top: 1rem;
-}
-
-.register button {
-  padding: 0.5rem;
-}
 
 .register .instructions {
     font-size: 0.75rem;

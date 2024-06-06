@@ -16,7 +16,10 @@ namespace Repository.Interfaces
         Task<Order?> UpdateOrderAsync(int id, UpdateOrderRequestDto dto);
         Task<Order?> DeleteOrderAsync(int id);
         Task<bool> OrderExistsAsync(int orderId);
-        Task<IEnumerable<Order>> GetOrdersBySellerIdAsync(int sellerId);
-        Task<IEnumerable<Order>> GetOrdersByBuyerIdAsync(int buyerId);
+        Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId);
+        Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId);
+
+        Task<bool> AcceptOrderAsync(int userId,int productId);
+        Task<bool> DenyOrderAsync(int userId, int productId);
     }
 }

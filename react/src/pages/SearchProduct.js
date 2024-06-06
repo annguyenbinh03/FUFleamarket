@@ -50,11 +50,12 @@ function SearchProduct() {
                   </div>
                 </div>
                 <div className="col-lg-8 col-md-8 d-flex justify-content-end">
-                  <div className="filter__sort me-3">
+                  <div className="filter__sort d-flex me-3">
                     <span className="me-2">Sắp xếp theo</span>
                     <select className="form-select form-select-sm">
-                      <option value="0">Giá từ thấp đến cao</option>
-                      <option value="1">Giá từ cao xuống thấp</option>
+                    <option value="0">Mới nhất</option>
+                      <option value="1">Giá từ thấp đến cao</option>
+                      <option value="2">Giá từ cao xuống thấp</option>
                     </select>
                   </div>
                   <div className="filter__option">

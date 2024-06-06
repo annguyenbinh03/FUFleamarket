@@ -1,17 +1,6 @@
-import { useContext } from "react";
-import { useNavigate} from "react-router-dom";
 import FeaturedProducts from "../component/FeaturedProducts";
-import AuthContext from "../context/AuthProvider";
 
 function Home() {
-  const { setAuth } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const logout = async () => {
-    setAuth({});
-    navigate('/');
-}
-
   return (
     <div>
       <section className="hero">

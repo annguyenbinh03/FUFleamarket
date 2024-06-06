@@ -18,6 +18,6 @@ namespace Repository.Interfaces
         public Task<User?> UnBanAccount(int id);
         public Task<bool> UserExists(int id);
 
-        Task<IEnumerable<User>> GetProfileUser(int userId);
+        Task<User> GetProfileUser(int userId);
     }
 }

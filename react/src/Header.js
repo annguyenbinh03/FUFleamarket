@@ -1,17 +1,26 @@
 import { React, useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import MyPostButton from "./component/MyPostButton";
 import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
 
-const UserDropdown = (auth) => {
-  console.log(auth?.accessToken);
-  console.log(auth?.accessToken ? true : false);
+const UserDropdown = (authContainer) => {
+  const auth = authContainer.auth;
+
+  const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const logout = (e) => {
+    e.preventDefault();
+    setAuth({});
+    navigate("/");
+  };
+
+  // console.log(auth);
   return (
     <span>
-      <div className="btn-group user-dropdown">
+      <div className="btn-group user-dropdown" style={{ width: "180px" }}>
         <button
           className="btn btn-secondary dropdown-toggle bg-transparent"
           type="button"
@@ -19,29 +28,36 @@ const UserDropdown = (auth) => {
           data-bs-auto-close="true"
           aria-expanded="false"
         >
-          {!auth ? (
+          {auth.email ? (
             <>
               <img
                 className="userLogo mx-1 img-fluid"
                 src="https://cdn.chotot.com/uac2/27021569"
                 alt=""
               />
-              <span className="fs-5 username">{auth.email}</span>
+              <span className="fs-5 username px-2">{auth.email}</span>
             </>
           ) : (
             <>
               <img
                 className="userLogo mx-1 img-fluid"
-                src="https://lh3.googleusercontent.com/a/ACg8ocIV43KaoeO09BZ0VJu16ByZhLijy8X_oW3I8jnQmEqNoYUt6-Y=s288-c-no"
+                src="https://th.bing.com/th/id/R.7ea4af7d8401d2b43ee841bfa2abe89d?rik=xidyUKdveUKULQ&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-download-icons-logos-emojis-users-2240.png&ehk=2%2bOqgdMZqFkKaBclc%2fPL9B86vLju3iBGiFmH64kXaTM%3d&risl=&pid=ImgRaw&r=0"
                 alt=""
               />
-              <span className="fs-5 username">Đăng nhập</span>
+              <span className="fs-5 username px-2">
+                <Link className="loginLink" to="/login">
+                  Đăng nhập
+                </Link>
+              </span>
             </>
           )}
         </button>
         <ul style={{ padding: 0 }} className="dropdown-menu">
-          {!auth ? (
+          {auth.email ? (
             <>
+              <div className="ps-2 pe-3 py-2 bg-body-secondary fw-bold">
+                Quản lý đơn hàng
+              </div>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
                   <Link to="/buy-order" className="dropdown-item">
@@ -84,7 +100,10 @@ const UserDropdown = (auth) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" href="#">
+                  <Link
+                    className="dropdown-item"
+                    onClick={ (e) => logout(e)}
+                  >
                     Đăng xuất
                   </Link>
                 </div>
@@ -104,20 +123,6 @@ const UserDropdown = (auth) => {
                   <a className="dropdown-item" href="#">
                     Đăng ký
                   </a>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link to="/buy-order" className="dropdown-item">
-                    Đơn mua
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link to="/sell-order" className="dropdown-item">
-                    Đơn bán
-                  </Link>
                 </div>
               </li>
             </>
@@ -141,13 +146,10 @@ const Header = () => {
         </div>
 
         {/* Menu danh mục */}
-        <div className="btn-group dropdown ">
+        <div className="dropdown ">
           <button
             type="button"
             className="btn dropdown-toggle text-white fs-5"
-            id="autoDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
           >
             <i className="fa fa-list" aria-hidden="true"></i>
             <span> Danh mục </span>

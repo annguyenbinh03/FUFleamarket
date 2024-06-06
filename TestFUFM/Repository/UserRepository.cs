@@ -87,10 +87,10 @@ namespace Repository
         {
             return _dbcontext.Users.AnyAsync(x => x.UserId == id);
         }
-        public async Task<IEnumerable<User>> GetProfileUser(int userId)
+        public async Task<User> GetProfileUser(int userId)
         {
             // Query the database to get the profile by User ID
-            return await _dbcontext.Users.Where(user => user.UserId == userId).ToListAsync();
+            return await _dbcontext.Users.Include(x=>x.Addresses).Where(user => user.UserId == userId).FirstOrDefaultAsync();
         }
     }
 }

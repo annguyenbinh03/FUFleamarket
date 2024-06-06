@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -39,8 +40,17 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            var soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId);
-            var orders = soldOrders.Select(x => x.ToOrderDTO()).ToList();
+            List<Order> soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId);
+            var orders = soldOrders.Select(soldOrders => new
+            {
+                order = soldOrders.ToOrderDTO(),
+                Product = new
+                {
+                    productId = soldOrders.Product.ProductId,
+                    productName = soldOrders.Product.ProductName,
+                    productPrice = soldOrders.Product.Price
+                }
+            }).ToList();
             return Ok(orders);
         }
 
@@ -55,8 +65,18 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId);
-            var orders = boughtOrders.Select(x => x.ToOrderDTO()).ToList();
+            List<Order> boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId);
+            var orders = boughtOrders.Select(boughtOrder => new 
+            {
+                order = boughtOrder.ToOrderDTO(),
+                Product = new
+                {
+                  productId =  boughtOrder.Product.ProductId,
+                  productName = boughtOrder.Product.ProductName,
+                  productPrice =  boughtOrder.Product.Price
+                }
+            }).ToList();
+
             return Ok(orders);
         }
         [HttpGet("{id}")]
@@ -118,6 +138,43 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+        [HttpPut]
+        [Route("acceptOrderRequest/{productId}")]
+        public async Task<IActionResult> AcceptOrderRequset([FromRoute] int productId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Không tìm thấy claim user ID");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+
+            bool result = await _orderRepo.AcceptOrderAsync(userId, productId);
+            if (result)
+            {
+                return Ok();
+            }        
+            return BadRequest();
+        }
+        [HttpPut]
+        [Route("denyOrderRequest/{productId}")]
+        public async Task<IActionResult> DenyOrderRequest([FromRoute] int productId)
+        {
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("Invalid user ID format");
+            }
+            bool result = await _orderRepo.DenyOrderAsync(userId, productId);
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+
         }
         [HttpDelete]
         [Route("{id}")]

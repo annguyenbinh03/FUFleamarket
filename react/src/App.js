@@ -45,7 +45,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/detail/:productId" element={<Detail />} />
-            <Route path="/create-order/:productId" element={<CreateOrder />} />
+           
 
             <Route path="/search-product" element={<SearchProduct />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
@@ -60,16 +60,17 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin,ROLES.User]} />}>
               <Route path="/sell-order" element={<SellOrder />} />
               <Route path="/my-posts" element={<MyPosts />} />
+              <Route path="/upload-product" element={<PostProduct />} />
+              <Route path="/create-order/:productId" element={<CreateOrder />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>
               <Route path="/buy-order" element={<BuyOrder />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />} >
-              <Route path="/upload-product" element={<PostProduct />} />
               <Route path="/users" element={<Users />} />
             </Route>
         </Routes>
-        <Footer />
+        <Footer/>
         <ToastContainer />
       </Suspense>
   );

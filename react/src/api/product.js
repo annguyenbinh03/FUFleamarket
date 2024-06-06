@@ -3,7 +3,9 @@ import axiosClient from './axiosClient'
 const END_POINT = {
     PRODUCTS: "product",
     LIST_PRODUCT: "product/listproduct",
-    GET_PRODUCT_BY_ID: "product/getproductbyid"
+    GET_PRODUCT_BY_ID: "product/getproductbyid",
+    CREATE_PRODUCT: "product/createproductforsellers",
+    GET_MY_PRODUCTS: "product/getmyproducts"
 }
 
 
@@ -22,19 +24,24 @@ export const getProductByProductIdAPI = (productId) => {
   return axiosClient.get(`${END_POINT.GET_PRODUCT_BY_ID}/${productId}`);
 };
 
-// export const delTodosAPI = (id) => {
-//     return axiosClient.delete(`${END_POINT.TODOS}/${id}`);
-// }
+export const createProductAPI = (product, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.post(`${END_POINT.CREATE_PRODUCT}`,product, config);
+}
 
-// export const addTodosAPI = (todo) => {
-//     return axiosClient.post(`${END_POINT.TODOS}`,todo);
-// }
+export const getMyProductsAPI = ( token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.get(`${END_POINT.GET_MY_PRODUCTS}`, config);
+}
 
-// export const editTodosAPI = (todo) => {
-//     return axiosClient.put(`${END_POINT.TODOS}`,todo);
-// }
-
-  
 
 
   

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects.Mappers;
 
 namespace Repository
 {
@@ -70,20 +71,58 @@ namespace Repository
         {
             return await _context.Orders.AnyAsync(o => o.OrderId == orderId);
         }
-        public async Task<IEnumerable<Order>> GetOrdersBySellerIdAsync(int sellerId)
+        public async Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId)
         {
             return await _context.Orders
                 .Where(order => order.SellerId == sellerId)
-                .Include(order => order.Feedbacks)
+                .Include(order => order.Product)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersByBuyerIdAsync(int buyerId)
+        public async Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId)
         {
             return await _context.Orders
                 .Where(order => order.BuyerId == buyerId)
-                .Include(order => order.Feedbacks)
+                .Include(order => order.Product)
                 .ToListAsync();
+        }
+
+        public async Task<bool> AcceptOrderAsync(int userId, int productId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            var order = await _context.Orders.FindAsync(productId);
+            if (userId == order?.SellerId) {
+                order.Status = 1;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public async Task<bool> DenyOrderAsync(int userId, int productId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            var order = await _context.Orders.FindAsync(productId);
+            if (userId == order?.SellerId)
+            {
+                order.Status = 2;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

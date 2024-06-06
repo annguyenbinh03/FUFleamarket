@@ -53,11 +53,31 @@ namespace WebAPI.Controllers
             }
 
             var product = await _productRepo.GetByIdProductAsync(id);
+            var address = await _productRepo.getSellerAddress(product.SellerId);
+            var productDTO = product.ToProductDto();
             if (product == null)
             {
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
-            return Ok(product.ToProductDto());
+            return Ok( new { product = productDTO, address });
+        }
+
+        [HttpGet("getmyproducts")]
+        [Authorize]
+        public async Task<IActionResult> GetMyproducts()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("Invalid user ID format");
+            }
+            // Get the maximum product ID
+            var products = await _productRepo.GetProductByUserIdAsync(userId);
+
+            return Ok(products);
         }
 
 

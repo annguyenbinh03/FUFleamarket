@@ -5,12 +5,13 @@ import { getProductByProductIdAPI } from "../api/product";
 function Detail() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-
+  const [address, setAddress] = useState(null);
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductByProductIdAPI(productId);
-        setProduct(response);
+        setProduct(response.product);
+        setAddress(response.address);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -56,7 +57,7 @@ function Detail() {
                         <img
                           src={image}
                           className="d-block w-100"
-                          alt="Product Image"
+                          alt="Product name"
                         />
                       </div>
                     ))}
@@ -92,7 +93,8 @@ function Detail() {
                   <img
                     className="carousel-inner"
                     src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
-                  />
+                  alt="product photos"
+                 />
                 </div>
               )}
             </div>
@@ -145,7 +147,7 @@ function Detail() {
                     Tin đăng này đã được kiểm duyệt. Nếu gặp vấn đề, vui lòng
                     báo cáo tin đăng hoặc liên hệ CSKH để được trợ giúp.
                     <a
-                      target="_blank"
+                      target=""
                       rel="noopener"
                       href="http://trogiup.chotot.com/ban-hang-tai-chotot-vn/kiem-duyet-tin/tai-sao-chotot-vn-duyet-tin-truoc-khi-dang/?utm_source=chotot&utm_medium=user_protection&utm_campaign=user_protection_ad_view&_gl=1*14e8mao*_ga*MjQyNTUxNzAzLjE3MTU4Njk2NDg.*_ga_XQVN5K27XX*MTcxNzA3NjM5OC4yNi4xLjE3MTcwNzY0NzUuNTYuMC4w&_ga=2.244153987.769978206.1716909043-242551703.1715869648"
                     >
@@ -171,15 +173,15 @@ function Detail() {
                   className="shop_avartar col-lg-2"
                   style={{
                     backgroundImage: `url(${
-                      product && product.shop
-                        ? product.shop.avatar
+                      product && product.seller
+                        ? product.seller.avarta
                         : "https://cdn.chotot.com/G-1Z5ZbUlOQ2uJVjMhxxCver9aggaeYCn5ViRzXSzJY/preset:uac/plain/5880693cc1e7c23bec7c83355df078f1-731e14cfed11748e400f5a652062afa74f966b5d.jpg"
                     })`,
                   }}
                 ></div>
                 <div className="shopname col-lg-10 fw-bold ms-2">
-                  {product && product.shop
-                    ? product.shop.name
+                  {product && product.seller
+                    ? product.seller.fullName
                     : "Shop của best yasuo viet nam"}
                   <div className="product__details__rating">
                     <i className="fa fa-star"></i>
@@ -191,32 +193,32 @@ function Detail() {
                   </div>
                 </div>
               </div>
-              <div className="show_phone_button d-flex justify-content-between align-items-center p-3 mt-5">
+              <div className="show_phone_button  d-flex justify-content-between align-items-center p-3 mt-5">
                 <span>
                   <img
                     alt="loadingIcon"
                     className="show_phone_button_icon"
                     src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
                   />
-                  {product && product.shop ? product.shop.phone : "096595 ***"}
+                  {product && product.seller ? product.seller.phoneNumber : "096595 ***"}
                 </span>
                 <span>BẤM ĐỂ HIỆN SỐ</span>
               </div>
             </div>
 
-            <button className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
+            <button className="chat_button w-100 d-flex justify-content-between align-items-center px-3 mt-2">
               <span>
                 <i className="fa fa-comments-o" aria-hidden="true"></i>
               </span>
               <span>CHAT VỚI NGƯỜI BÁN</span>
             </button>
 
-            <button className="chat_button d-flex justify-content-between align-items-center px-3 mt-2">
-              <Link to={`/create-order/${productId}`}>
+            <button className="chat_button  w-100  px-3 mt-2">
+              <Link className="d-flex justify-content-between align-items-center" to={`/create-order/${productId}`}>
                 <span>
                   <i className="fa fa-plus-square" aria-hidden="true"></i>
                 </span>
-                <span>TẠO HÓA ĐƠN</span>
+                <span >TẠO HÓA ĐƠN</span>
               </Link>
             </button>
 
