@@ -1148,10 +1148,6 @@ body {
     padding-bottom: 1rem;
 }
 
-.register a, a:visited {
-    color: #fff;
-}
-
 .register input[type="text"],
 .register input[type="password"],
 .register button,

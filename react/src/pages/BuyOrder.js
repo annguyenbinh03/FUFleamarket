@@ -1,4 +1,3 @@
-import React from "react";
 
 function BuyOrder() {
   // Khai báo mảng orders bên ngoài hàm return
@@ -37,6 +36,7 @@ function BuyOrder() {
         date: "30/5/2024",
       },
   ];
+
 
   return (
     <div>

@@ -34,8 +34,6 @@ function SearchProduct() {
     firstFetchData();
   }, [categoryIdParam]);
 
-  if (loading) return <Loading />;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <section className="product spad">

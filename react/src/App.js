@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loading from "./component/Loading";
 import Header from "./Header";
@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import RequireAuth from "./component/RequireAuth";
+import Unauthorized from "./component/Unauthorized";
+import Users from "./component/User";
 
 // Lazy loading components
 const Detail = lazy(() => import("./pages/Detail"));
@@ -26,35 +28,50 @@ const SearchProduct = lazy(
     })
 );
 
+const ROLES = {
+  'User': 0,
+  'Moderator': 1,
+  'Admin': 2
+};
+
+
 function App() {
   return (
-    <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Header />
         <Routes>
-        {/* public routes  */}
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/detail/:productId" element={<Detail />} />
-          <Route path="/create-order/:productId" element={<CreateOrder />} />
-          <Route path="/my-posts" element={<MyPosts />} />
-          <Route path="/upload-product" element={<PostProduct />} />
-          <Route path="/buy-order" element={<BuyOrder />} />
-          <Route path="/sell-order" element={<SellOrder />} />
-          <Route path="/search-product" element={<SearchProduct />} />
-          <Route path="/search-product/:categoryIdParam" element={<SearchProduct />} />
-          <Route path="/admin/:adminParam" element={<AdminProcessRequest />} />
-          <Route path="/aboutUs" element={<AboutUs />} />
-          {/* protected */}
-          <Route element={<RequireAuth/>}>  
+          {/* public routes  */}
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/detail/:productId" element={<Detail />} />
+            <Route path="/create-order/:productId" element={<CreateOrder />} />
+
+            <Route path="/search-product" element={<SearchProduct />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+
+            <Route
+              path="/search-product/:categoryIdParam"
+              element={<SearchProduct />}
+            />
+            <Route path="/admin/:adminParam" element={<AdminProcessRequest />} />
+            <Route path="/aboutUs" element={<AboutUs />} />
+            {/* protected */}
+            <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin,ROLES.User]} />}>
+              <Route path="/sell-order" element={<SellOrder />} />
+              <Route path="/my-posts" element={<MyPosts />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>
+              <Route path="/buy-order" element={<BuyOrder />} />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />} >
               <Route path="/upload-product" element={<PostProduct />} />
-          </Route>
+              <Route path="/users" element={<Users />} />
+            </Route>
         </Routes>
         <Footer />
         <ToastContainer />
       </Suspense>
-    </BrowserRouter>
   );
 }
 

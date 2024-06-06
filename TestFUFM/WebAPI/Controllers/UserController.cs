@@ -47,7 +47,6 @@ namespace WebAPI.Controllers
 
         // Lấy tất cả người dùng (chỉ admin)
         [HttpGet("AllProfile(Admin)")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userRepo.GetAllUserAsync();

@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
-import { getAllUserAPI } from "../api/user";
-
+import { useEffect, useState, useContext } from "react";
+import { getUserProfileAPI, } from "../api/user";
+import AuthContext from "../context/AuthProvider";
 const Users = () => {
-    const [users,setUsers] = useState();
+
+    const { auth } = useContext(AuthContext);
+
+    const [users,setUsers] = useState({});
 
     useEffect(()=>{
-        setUsers(getAllUserAPI());
+        setUsers(getUserProfileAPI(auth.accessToken));
+        console.log(users);
     },[])
     return ( 
         <article>
             <h2>Users list</h2>
             {users?.length?
             (
-                <ul>{users.map((user,i)=> <li key={i}>{user?.username}</li>)}</ul>
+                <ul>{users.map((user,i)=> <li key={i}>{user?.fullName}</li>)}</ul>
 
             ): <p>No users to display</p>
             }
