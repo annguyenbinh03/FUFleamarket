@@ -10,7 +10,7 @@ namespace Repository.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetAllOrderAsync();
+        Task<List<Order>> GetAllOrderAsync();
         Task<Order?> GetByOrderIdAsync(int id);
         Task<Order> CreateOrderAsync(Order orderModel);
         Task<Order?> UpdateOrderAsync(int id, UpdateOrderRequestDto dto);

@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import AuthContext from "../context/AuthProvider";
-import { getMyProductsAPI } from "../api/product";
+import AuthContext from "../../context/AuthProvider";
+import { getMyProductsAPI } from "../../api/product";
+import Header from "../../Header";
+import Footer from "../../Footer";
 
 function MyPosts() {
   const [products, setProducts] = useState([]);
@@ -10,7 +12,6 @@ function MyPosts() {
     try {
       var response = await getMyProductsAPI(auth.accessToken);
       setProducts(response);
-      console.log(products);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -22,6 +23,7 @@ function MyPosts() {
 
   return (
     <div>
+           <Header />
       <section className="mypost spad">
         <div className="container bg-white px-2">
           <div className="row">
@@ -124,12 +126,12 @@ function MyPosts() {
                         Đang chờ duyệt
                       </div>
                     ) : product.status === 1 ? (
-                      <div className="btn btn-state btn-succes mt-3">
+                      <div className="btn btn-state btn-success mt-3">
                         Đã được duyệt
                         </div>
                     ) : (
-                      <div className="btn  btn-state btn-danger btn-sm mt-3">
-                        Không được duyệt
+                      <div className="btn btn-state btn-danger mt-3">
+                        Từ chối duyệt
                       </div>
                     )}
                     </div>
@@ -177,6 +179,7 @@ function MyPosts() {
           ))}
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

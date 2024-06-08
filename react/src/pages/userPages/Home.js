@@ -1,8 +1,10 @@
-import FeaturedProducts from "../component/FeaturedProducts";
-
+import FeaturedProducts from "../../component/FeaturedProducts";
+import Header from "../../Header";
+import Footer from "../../Footer";
 function Home() {
-  return (
+  return (      
     <div>
+       <Header />
       <section className="hero">
         <div className="container bg-white pt-3">
           <div
@@ -194,8 +196,9 @@ function Home() {
           <FeaturedProducts />
         </div>
       </section>
+      <Footer/>
     </div>
   );
-}
+};
 
 export default Home;

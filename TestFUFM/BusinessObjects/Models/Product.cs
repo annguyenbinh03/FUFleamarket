@@ -36,6 +36,9 @@ public partial class Product
     [Column("status")]
     public int Status { get; set; }
 
+    [Column("createdDate", TypeName = "datetime")]
+    public DateTime? CreatedDate { get; set; }
+
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
     public virtual Category Category { get; set; } = null!;

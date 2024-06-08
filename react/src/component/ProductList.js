@@ -7,7 +7,7 @@ function ProductList({ products }) {
   return (
     <div className="row featured__filter">
       {products?.map((product) => (
-        <div className="col-lg-2 col-md-4 col-sm-6 mb-4" key={product.productId}>
+        <div className="col-lg-2 col-md-4 col-sm-6" key={product.productId}>
           <div className="featured__item">
             <div
               className="featured__item__pic set-bg"

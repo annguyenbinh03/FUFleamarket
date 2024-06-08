@@ -40,8 +40,11 @@ public partial class User
     public bool IsDeleted { get; set; }
 
     [Column("avarta")]
-    [StringLength(200)]
+    [StringLength(500)]
     public string? Avarta { get; set; }
+
+    [Column("createdDate", TypeName = "datetime")]
+    public DateTime CreatedDate { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();

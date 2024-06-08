@@ -22,7 +22,7 @@ namespace Repository
         }
 
         public async Task<Product> CreateAsync(Product productModel)
-        {
+        {     
             await _context.Products.AddAsync(productModel);
             await _context.SaveChangesAsync();
             return productModel;
@@ -31,10 +31,10 @@ namespace Repository
         public async Task<Product?> DeleteAsync(int id)
         {
             var productModel = await _context.Products
-                                             .Include(p => p.Seller)
-                                             .Include(p => p.Category)
-                                             .Include(p => p.ProductImages) // Bao gồm các hình ảnh sản phẩm
-                                             .FirstOrDefaultAsync(x => x.ProductId == id);
+                            .Include(p => p.Seller)
+                            .Include(p => p.Category)
+                            .Include(p => p.ProductImages) // Bao gồm các hình ảnh sản phẩm
+                            .FirstOrDefaultAsync(x => x.ProductId == id);
             if (productModel == null)
             {
                 return null;
@@ -48,8 +48,54 @@ namespace Repository
             return productModel;
         }
 
+        public async Task<bool> AcceptProductRequest(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return false;
+            }
+            product.Status = 1;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RejectProductRequest(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return false;
+            }
+            product.Status = 2;
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
 
+        public async Task<dynamic> AdminGetAllAsync(QueryObject query)
+        {
+            var products = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .Include(p => p.Seller)
+                .Select(p => new
+                {
+                    productId = p.ProductId,
+                    productName = p.ProductName,
+                    price = p.Price,
+                    isNew = p.IsNew,
+                    description = p.Description,
+                    status = p.Status,
+                    categoryName = p.Category.Name,
+                    seller = new
+                    {
+                        avarta = p.Seller.Avarta,
+                        fullName = p.Seller.FullName,
+                    }            
+                });
+            return products.ToList();
+        }
 
 
         public async Task<List<Product>> GetALLAsync(QueryObject query)
@@ -194,5 +240,7 @@ namespace Repository
         {
             return await _context.Products.Where(x => x.SellerId == userId).ToListAsync();
         }
+
+     
     }
 }

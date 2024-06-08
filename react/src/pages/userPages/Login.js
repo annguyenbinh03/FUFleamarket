@@ -1,7 +1,9 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, Navigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import { useRef, useState, useEffect, useContext } from "react";
-import AuthContext from "../context/AuthProvider";
+import AuthContext from "../../context/AuthProvider";
+import Header from "../../Header";
+import Footer from "../../Footer";
 
 const Login = () => {
   const { setAuth } = useContext(AuthContext);
@@ -46,7 +48,12 @@ const Login = () => {
       setAuth({ email, roles, fullName, avarta, accessToken });
       setEmail("");
       setPwd("");
-      navigate(from, { replace: true });
+      if(roles.includes(2)){
+        navigate("/admin", {replace: true});
+      }else{
+        navigate(from, { replace: true });
+      }
+     
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -62,6 +69,8 @@ const Login = () => {
   };
 
   return (
+    <div>
+       <Header />
     <div className="d-flex  justify-content-center">
       <section className="register bg-white p-5">
         <p
@@ -115,6 +124,8 @@ const Login = () => {
           </span>
         </div>
       </section>
+    </div>
+    <Footer/>
     </div>
   );
 };

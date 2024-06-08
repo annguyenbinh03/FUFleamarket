@@ -42,6 +42,9 @@ public partial class Order
     [Column("quantity")]
     public int Quantity { get; set; }
 
+    [Column("deliveryDate", TypeName = "datetime")]
+    public DateTime? DeliveryDate { get; set; }
+
     [Column("receiverAddress")]
     [StringLength(255)]
     public string ReceiverAddress { get; set; } = null!;

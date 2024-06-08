@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using BusinessObjects;
 
+
 [Route("api/[controller]")]
 [ApiController]
 public class LoginAdminController : ControllerBase
@@ -48,9 +49,9 @@ public class LoginAdminController : ControllerBase
 
         string role = user.RoleId switch
         {
-            0 => "User",
-            1 => "Admin",
+            1 => "User",
             2 => "Admin",
+            3 => "Admin",
             _ => "User" // Default role
         };
 
@@ -74,4 +75,7 @@ public class LoginAdminController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+
+    
 }

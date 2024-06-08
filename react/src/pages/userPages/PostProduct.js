@@ -1,6 +1,9 @@
 import { React,useContext,useState } from "react";
-import AuthContext from "../context/AuthProvider";
-import { createProductAPI } from "../api/product";
+import AuthContext from "../../context/AuthProvider";
+import { createProductAPI } from "../../api/product";
+import Header from "../../Header";
+import Footer from "../../Footer";
+
 function PostProduct() {
   const {auth} = useContext(AuthContext);
 
@@ -21,6 +24,7 @@ function PostProduct() {
   
   return (
     <div>
+                 <Header />
       <section className="upload-product spad">
         <div className="container bg-white py-4 d-flex">
           <div className="col-lg-4 com-md-4">
@@ -117,6 +121,7 @@ function PostProduct() {
      
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

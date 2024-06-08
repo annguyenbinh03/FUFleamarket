@@ -14,13 +14,17 @@ namespace Repository.Interfaces
     {
         Task<List<Product>> GetALLAsync(QueryObject query);
 
+        Task<dynamic> AdminGetAllAsync(QueryObject query);
+        Task<bool> AcceptProductRequest(int productId);
+        Task<bool> RejectProductRequest(int productId);
+
         Task<Product?> GetByIdProductAsync(int id);
 
         Task<List<Product>?> GetProductByUserIdAsync(int userId);
 
         Task<Product> CreateAsync(Product productModel);
 
-        Task<Product?> UpdateAsync(int sellerId, int productId, UpdateProductRequestDto productDto);
+        Task<Product?>  UpdateAsync(int sellerId, int productId, UpdateProductRequestDto productDto);
 
         Task<Product?> DeleteAsync(int id);
 
@@ -34,6 +38,8 @@ namespace Repository.Interfaces
         Task<List<Product>> GetProductsByUserIdAsync(int userId);
 
         Task<string?> getSellerAddress(int sellerId);
+
+     
     }
 
 }

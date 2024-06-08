@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[User](
 	[roleId] INT NOT NULL,
 	[isDeleted] BIT NOT NULL,
 	[avarta] NVARCHAR(500) NULL,
+	[createdDate] DATETIME NOT NULL
 
 )
 
@@ -55,7 +56,7 @@ CREATE TABLE [dbo].[Product](
 	[sellerId] INT NOT NULL,
 	[categoryId] INT NOT NULL,
 	[status] INT NOT NULL,
-	[createdDate] DATE NULL,
+	[createdDate] DATETIME NULL,
 	CONSTRAINT FK_Product_User FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Message_Category FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([categoryId])
 )
@@ -109,6 +110,7 @@ CREATE TABLE [dbo].[Order](
 	[note] NVARCHAR(1000),
 	[productId] INT NOT NULL,
 	[quantity] INT NOT NULL,
+	[deliveryDate] DATETIME NULL,
 	[receiverAddress] NVARCHAR(255) NOT NULL,
 	CONSTRAINT FK_Order_UserBuy FOREIGN KEY ([buyerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Order_UserSell FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
@@ -126,35 +128,38 @@ CREATE TABLE [dbo].[Feedback](
 
 
 GO	
-INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta])
+INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta], [createdDate])
 VALUES
-    ('password1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 0, 0, 'https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg'),
-    ('password2', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 0, 0, 'https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg'),
-    ('password3', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'https://zpsocial-f43-org.zadn.vn/310dc762c2792e277768.jpg'),
-    ('admin', 'Emily Brown', 'admin', '0123456789', 'Introduction 4', 2, 0, 'avatar4.jpg'),
-    ('password5', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'avatar5.jpg'),
-    ('password6', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'avatar6.jpg'),
-    ('password7', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'avatar7.jpg'),
-    ('password8', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 2, 0, 'avatar8.jpg'),
-    ('password9', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'avatar9.jpg'),
-    ('password10', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'avatar10.jpg'),
-	 ('user', 'user name', 'user', '123124125125', 'Introduction 4', 0, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain'),
-	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain');
+    ('1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 1, 0, 'https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg', GETDATE()),
+    ('1', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 1, 0, 'https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg', GETDATE()),
+    ('1', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'https://zpsocial-f43-org.zadn.vn/310dc762c2792e277768.jpg', GETDATE()),
+    ('admin', 'Admin name', 'admin', '0123456789', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.57236NGNujICB1CuE0X2MwAAAA?rs=1&pid=ImgDetMain', GETDATE()),
+    ('1', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'https://th.bing.com/th/id/R.808636cc55f2ccceac3dab65f59e06a0?rik=rYlKMlOaLmfyUg&pid=ImgRaw&r=0', GETDATE()),
+    ('1', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'https://demoda.vn/wp-content/uploads/2022/08/hinh-anh-avatar-nu-de-thuong.jpg', GETDATE()),
+    ('1', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'https://th.bing.com/th/id/OIP.dRG04_HcB012wboIb8azKwHaHa?rs=1&pid=ImgDetMain', GETDATE()),
+    ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 2, 0, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
+    ('1', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'https://th.bing.com/th/id/OIP.pAdUb6ZlM45prBGAjT__FAHaHW?rs=1&pid=ImgDetMain', GETDATE()),
+    ('1', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'https://kynguyenlamdep.com/wp-content/uploads/2022/08/avatar-ff-ngau.jpg', GETDATE()),
+	 ('user', 'user name', 'user', '123124125125', 'Introduction 4', 0, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
+	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE());
 GO
 
 GO
 INSERT INTO [dbo].[Address] ([userId], [specificAddress])
 VALUES
-    (1, '123 Main Street'),
-    (2, '456 Elm Avenue'),
-    (1, '789 Oak Lane'),
-    (3, '321 Pine Road'),
-    (1, '987 Maple Court'),
-    (2, '654 Cedar Lane'),
-    (1, '135 Walnut Street'),
-    (4, '864 Birch Avenue'),
-    (5, '246 Cherry Road'),
-    (2, '579 Spruce Lane');
+    (1, N'Vincom Plaza, Lê Văn Việt, Hiệp Phú, Quận 9, Thành phố Hồ Chí Minh, Vietnam'),
+    (2, N'Binh Thắng 2, Dĩ An, Binh Duong, Vietnam'),
+    (3, N'Đ. Mạc Đĩnh Chi, Khu phố Tân Hòa, Dĩ An, Bình Dương, Vietnam'),
+    (1, N'R6RX+P7V, QL14, Phường Bình Tân, Buôn Hồ, Đắk Lắk, Vietnam'),
+	(4, N'155 Đ. Nam Kỳ Khởi Nghĩa, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Vietnam'),
+    (5, N'103 Nguyễn Sinh Cung, Nghi Hương, Cửa Lò, Nghệ An 43000, Vietnam'),
+    (6, N'485 Song Hành Xa Lộ Hà Nội, Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam'),
+    (7, N'57 Đường Nguyễn Hoàng, Đống Đa, Thành phố Qui Nhơn, Bình Định, Vietnam'),
+    (8, N'Yongsan, Nhơn Bình, Thành phố Qui Nhơn, Bình Định 590000, Vietnam'),
+	(9, N'92/6 Trần Đại Nghĩa, Xã Bình Thắng, Dĩ An, Bình Dương 700000, Vietnam'),
+	(10, N'55 ĐT743A, Bình An, Dĩ An, Bình Dương, Vietnam'),
+	(12, N'Headquarter of VNU-HCM, Phường Linh Trung, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam'),
+    (12, N'120 Xa Lộ Hà Nội, Thành Phố, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam');
 GO
 
 GO
@@ -187,16 +192,16 @@ GO
 GO
 INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate])
 VALUES
-    ('iPhone 13', 999.99, 1, 'The latest iPhone model with advanced features.', 1, 1, 1),
-    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,'2024-06-01' ),
-    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-02'),
-    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1), '2024-06-03',
-    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-04'),
-    ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, '2024-06-05'),
-    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06'),
-    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, '2024-06-07'),
-    ('Bestselling Novel', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, '2024-06-08'),
-    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-09');
+    ('iPhone 13', 999.99, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01' ),
+    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE() ),
+    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE()),
+    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE()),
+    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE()),
+    ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, GETDATE()),
+    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE()),
+    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, GETDATE()),
+    ('Harry Potte V.1+2', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, GETDATE()),
+    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE());
 GO
 
 
@@ -204,15 +209,15 @@ GO
 INSERT INTO [dbo].[ProductImage] ([productId], [imageName], [imageLink])
 VALUES
     (1, 'Image 1', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain'),
-    (1, 'Image 2', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain'),
-    (2, 'Image 3', 'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
-    (2, 'Image 4', 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
-    (3, 'Image 5', 'https://example.com/image5.jpg'),
-    (3, 'Image 6', 'https://example.com/image6.jpg'),
-    (4, 'Image 7', 'https://example.com/image7.jpg'),
-    (5, 'Image 8', 'https://example.com/image8.jpg'),
-    (9, 'Image 9', 'https://example.com/image9.jpg'),
-    (10, 'Image 10', 'https://example.com/image10.jpg');
+    (2, 'Image 2', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain'),
+    (3, 'Image 3', 'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
+    (4, 'Image 4', 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
+    (5, 'Image 5', 'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
+    (6, 'Image 6', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
+    (7, 'Image 7', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
+    (8, 'Image 8', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
+    (9, 'Image 9', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
+    (10, 'Image 10', 'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
 GO
 
 
@@ -257,18 +262,18 @@ GO
 
 
 GO
-INSERT INTO [dbo].[Order] ([orderDate], [price], [buyerId], [sellerId], [paymentMethod], [status], [note], [productId], [quantity], [receiverAddress])
+INSERT INTO [dbo].[Order] ([orderDate], [price], [buyerId], [sellerId], [paymentMethod], [status], [note], [productId], [quantity], [deliveryDate],[receiverAddress])
 VALUES
-    ('2024-05-01', 99.99, 1, 2,'Credit Card', 1, 'Please handle with care.', 1, 1, '123 Main St, City'),
-    ('2024-05-02', 49.99, 2, 3, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, '456 Elm St, City'),
-    ('2024-05-03', 79.99, 3, 4,'Cash on Delivery', 1, NULL, 3, 1, '789 Oak St, City'),
-    ('2024-05-04', 119.99, 4, 5,'Credit Card', 1, NULL, 4, 1, '321 Pine St, City'),
-    ('2024-05-05', 69.99, 5, 6,'PayPal', 1, 'Gift wrapping required.', 5, 2, '654 Maple St, City'),
-    ('2024-05-06', 59.99, 1, 7,'Cash on Delivery', 1, NULL, 6, 1, '987 Cedar St, City'),
-    ('2024-05-07', 89.99, 2, 8,'Credit Card', 1, 'Please include a gift receipt.', 7, 1, '789 Oak St, City'),
-    ('2024-05-08', 109.99, 3, 1,'PayPal', 1, NULL, 8, 2, '543 Birch St, City'),
-    ('2024-05-09', 49.99, 4, 1,'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, '876 Walnut St, City'),
-    ('2024-05-10', 89.99, 5, 1,'Credit Card', 1, NULL, 10, 1, '234 Spruce St, City');
+    ('2024-05-01', 99.99, 1, 2,'Credit Card', 1, 'Please handle with care.', 1, 1, GETDATE(),'123 Main St, City'),
+    ('2024-05-02', 49.99, 2, 3, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, GETDATE(),'456 Elm St, City'),
+    ('2024-05-03', 79.99, 3, 4,'Cash on Delivery', 1, NULL, 3, 1, GETDATE(),'789 Oak St, City'),
+    ('2024-05-04', 119.99, 4, 5,'Credit Card', 1, NULL, 4, 1, GETDATE(),'321 Pine St, City'),
+    ('2024-05-05', 69.99, 5, 6,'PayPal', 1, 'Gift wrapping required.', 5, 2, GETDATE(),'654 Maple St, City'),
+    ('2024-05-06', 59.99, 1, 7,'Cash on Delivery', 1, NULL, 6, 1, GETDATE(),'987 Cedar St, City'),
+    ('2024-05-07', 89.99, 2, 8,'Credit Card', 1, 'Please include a gift receipt.', 7, 1, GETDATE(),'789 Oak St, City'),
+    ('2024-05-08', 109.99, 3, 1,'PayPal', 1, NULL, 8, 2, GETDATE(),'543 Birch St, City'),
+    ('2024-05-09', 49.99, 4, 1,'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, GETDATE(),'876 Walnut St, City'),
+    ('2024-05-10', 89.99, 5, 1,'Credit Card', 1, NULL, 10, 1, GETDATE(),'234 Spruce St, City');
 
 GO
 

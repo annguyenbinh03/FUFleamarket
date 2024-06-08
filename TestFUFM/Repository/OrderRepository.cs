@@ -20,7 +20,7 @@ namespace Repository
         {
             _context = context;
         }
-        public async Task<IEnumerable<Order>> GetAllOrderAsync()
+        public async Task<List<Order>> GetAllOrderAsync()
         {
             return await _context.Orders.Include(add => add.Feedbacks).ToListAsync();
 

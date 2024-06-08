@@ -1,10 +1,11 @@
-import { React, useState, useContext, useEffect } from "react";
+import { React,  useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import MyPostButton from "./component/MyPostButton";
 import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
+
 
 const UserDropdown = (authContainer) => {
   const auth = authContainer.auth;
@@ -22,20 +23,21 @@ const UserDropdown = (authContainer) => {
     <span>
       <div className="btn-group user-dropdown" style={{ width: "180px" }}>
         <button
-          className="btn btn-secondary dropdown-toggle bg-transparent"
+          className="btn btn-secondary dropdown-toggle bg-transparent "
           type="button"
           data-bs-toggle="dropdown"
           data-bs-auto-close="true"
           aria-expanded="false"
         >
-          {auth.email ? (
+          {auth?.email ? (
             <>
-              <img
+            <img
                 className="userLogo mx-1 img-fluid"
                 src="https://cdn.chotot.com/uac2/27021569"
                 alt=""
               />
-              <span className="fs-5 username px-2">{auth.email}</span>
+              <div className="fs-5 username px-2">{auth.fullName}</div>
+             
             </>
           ) : (
             <>
@@ -120,9 +122,9 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <a className="dropdown-item" href="#">
+                  <Link className="dropdown-item" >
                     Đăng ký
-                  </a>
+                  </Link>
                 </div>
               </li>
             </>
@@ -141,7 +143,7 @@ const Header = () => {
       <header className="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
         <div className="logo p-2">
           <Link to="/">
-            <img className="img-fluid" src="assets/img/logo.png" alt="logo" />
+            <img className="img-fluid" src={`../assets/img/logo.png`}  alt="logo" />
           </Link>
         </div>
 
@@ -171,7 +173,7 @@ const Header = () => {
               <Link to="/search-product/3" className="dropdown-item py-2">
                 <img
                   width="20px"
-                  src="assets/img/icon/fridge.png"
+                  src={`../assets/img/icon/fridge.png`}
                   alt="frideIcon"
                 />
                 Điện lạnh
@@ -181,7 +183,7 @@ const Header = () => {
               <Link to="/search-product/4" className="dropdown-item py-2">
                 <img
                   width="20px"
-                  src="assets/img/icon/sofa.png"
+                  src={`../assets/img/icon/sofa.png`}
                   alt="sofaIcon"
                 />
                 Đồ gia dụng, nội thất
@@ -194,20 +196,20 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="/fashion" className="dropdown-item py-2">
+              <Link to="/search-product/6" className="dropdown-item py-2">
                 <img
                   width="20px"
-                  src="assets/img/icon/woman-clothes.png"
+                  src={`../assets/img/icon/woman-clothes.png`}
                   alt="sofaIcon"
                 />
                 Thời trang
               </Link>
             </li>
             <li>
-              <Link to="/search-product/6" className="dropdown-item py-2">
+              <Link to="/search-product/7" className="dropdown-item py-2">
                 <img
                   width="20px"
-                  src="assets/img/icon/console.png"
+                  src={`../assets/img/icon/console.png`}
                   alt="sofaIcon"
                 />
                 Giải trí, thể thao, sở thích

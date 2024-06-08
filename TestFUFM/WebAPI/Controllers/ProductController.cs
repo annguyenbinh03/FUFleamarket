@@ -37,6 +37,48 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+        [HttpPut("adminacceptproductrequest/{productId:int}")]
+        [Authorize]
+        public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
+        {
+            var result = await _productRepo.AcceptProductRequest(productId);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPut("adminrejectproductrequest/{productId:int}")]
+        [Authorize]
+        public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
+        {
+            var result = await _productRepo.RejectProductRequest(productId);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+        [HttpGet("admingetlistproducts")]
+        [Authorize]
+        public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var products = await _productRepo.AdminGetAllAsync(query);
+    
+            return Ok(products);
+        }
 
         [HttpGet("getproductbyid/{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)

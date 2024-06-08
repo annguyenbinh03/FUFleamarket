@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProductByProductIdAPI } from "../api/product";
+import { getProductByProductIdAPI } from "../../api/product";
+import Header from "../../Header";
+import Footer from "../../Footer";
 
 function Detail() {
   const { productId } = useParams();
@@ -24,6 +26,7 @@ function Detail() {
 
   return (
     <div>
+         <Header />
       <section className="product-details spad">
         <div className="container bg-white py-4 d-flex">
           <div className="col-lg-8 col-md-8">
@@ -129,8 +132,7 @@ function Detail() {
                     />
                   </div>
                   <div className="seller_address_right">
-                    Số 62 Ngõ 32 Phùng Khoang Trung Văn Nam Từ Liêm, Phường
-                    Trung Văn, Quận Nam Từ Liêm, Hà Nội
+                   {product?.seller?.addresses?.[0]?.specificAddress || "Người này chưa tiết lộ thông tin về địa chỉ"}
                   </div>
                 </div>
               </div>
@@ -246,6 +248,7 @@ function Detail() {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }

@@ -54,6 +54,18 @@ namespace WebAPI.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("admingetorders")]
+        [Authorize]
+        public async Task<IActionResult> AdminGetAllOrders()
+        {
+            List<Order> soldOrders = await _orderRepo.GetAllOrderAsync();
+            var orders = soldOrders.Select(soldOrders => new
+            {
+                    // used Testing
+            }).ToList();
+            return Ok(orders);
+        }
+
         [HttpGet("bought")]
         public async Task<IActionResult> GetBoughtOrders()
         {

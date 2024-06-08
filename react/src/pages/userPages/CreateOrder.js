@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProductByProductIdAPI } from "../api/product";
-import AuthContext from "../context/AuthProvider";
-import { getUserProfileAPI } from "../api/user";
-import { createOrderAPI } from "../api/order";
+import { getProductByProductIdAPI } from "../../api/product";
+import AuthContext from "../../context/AuthProvider";
+import { getUserProfileAPI } from "../../api/user";
+import { createOrderAPI } from "../../api/order";
+import Header from "../../Header";
+import Footer from "../../Footer";
 
 function CreateOrder() {
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ function CreateOrder() {
 
   return (
     <div>
+         <Header />
       <section className="create-order spad">
         <div className="container bg-white py-4">
           <div className="row p-3">
@@ -287,6 +290,7 @@ function CreateOrder() {
           </div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 }
