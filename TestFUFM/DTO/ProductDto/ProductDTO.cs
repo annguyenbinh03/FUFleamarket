@@ -20,12 +20,12 @@ namespace BusinessObjects.ProductDto
         public string CategoryName { get; set; } = null!;
         public int Status { get; set; }
         public List<CategoryDTO> Categories { get; set; }
-        public List<ProductImageDTO> ProductImages { get; set; }
+        public ProductImageDTO ProductImages { get; set; }
 
         public ProductDTO()
         {
             Categories = new List<CategoryDTO>();
-            ProductImages = new List<ProductImageDTO>();
+            
         }
     }
 }

@@ -97,8 +97,8 @@ public class Program
         .AddCookie()
         .AddGoogle(options =>
         {
-            options.ClientId = "322601838674-qfe0e53u7o8fqlm4nhi7ic7ohil7r1hf.apps.googleusercontent.com";
-            options.ClientSecret = "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";
+            options.ClientId = "";
+            options.ClientSecret = "";
             options.Scope.Add("profile");
             options.Scope.Add("email");
             options.ClaimActions.MapJsonKey("picture", "picture", "url");
