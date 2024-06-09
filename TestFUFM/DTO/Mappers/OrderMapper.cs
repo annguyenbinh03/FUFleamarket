@@ -2,6 +2,7 @@
 
 using BusinessObjects.Models;
 using BusinessObjects.OrderDto;
+using DTO.OrderDto;
 
 namespace BusinessObjects.Mappers
 {
@@ -38,5 +39,38 @@ namespace BusinessObjects.Mappers
             Quantity = dto.Quantity,
             ReceiverAddress = dto.ReceiverAddress
         };
+
+        public static OrderShowProfileDTO ToOrderShowProfileOfSellerDTO(this BusinessObjects.Models.Order order)
+        {
+            return new OrderShowProfileDTO
+            {
+                OrderId = order.OrderId,
+                OrderDate = order.OrderDate,
+                Price = order.Price,               
+                Seller = order.Seller != null ? order.Seller.ToProfileUserDTO() : null,
+                PaymentMethod = order.PaymentMethod,
+                Note = order.Note,
+                ProductId = order.ProductId,
+                Quantity = order.Quantity,
+                Status = order.Status,
+                ReceiverAddress = order.ReceiverAddress
+            };
+        }
+        public static OrderShowProfileDTO ToOrderShowProfileOfBuyerDTO(this BusinessObjects.Models.Order order)
+        {
+            return new OrderShowProfileDTO
+            {
+                OrderId = order.OrderId,
+                OrderDate = order.OrderDate,
+                Price = order.Price,
+                Buyer = order.Buyer != null ? order.Buyer.ToProfileUserDTO() : null,
+                PaymentMethod = order.PaymentMethod,
+                Note = order.Note,
+                ProductId = order.ProductId,
+                Quantity = order.Quantity,
+                Status = order.Status,
+                ReceiverAddress = order.ReceiverAddress
+            };
+        }
     }
 }

@@ -43,15 +43,20 @@ namespace BusinessObjects.Mappers
         }
         public static ProfileUserDTO ToProfileUserDTO(this User model)
         {
+            
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model), "User model cannot be null.");
+            }
+
+           
             return new ProfileUserDTO
-            {               
-                FullName = model.FullName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                Introduction = model.Introduction,               
-                Avarta = model.Avarta,
-                Addresses = model.Addresses.Select(x => x.ToAddressDTO()).ToList(),
+            {
+                FullName = model.FullName ?? "No Full Name Provided", 
+                PhoneNumber = model.PhoneNumber ?? "No Phone Number Provided", 
+                Avarta = model.Avarta ?? "No Avatar Provided" 
             };
         }
+
     }
 }

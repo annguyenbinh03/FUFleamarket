@@ -89,20 +89,7 @@ public class Program
         });
 
         // Cấu hình middleware xác thực Google
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-        })
-        .AddCookie()
-        .AddGoogle(options =>
-        {
-            options.ClientId = "";
-            options.ClientSecret = "";
-            options.Scope.Add("profile");
-            options.Scope.Add("email");
-            options.ClaimActions.MapJsonKey("picture", "picture", "url");
-        });
+        
 
         // Cấu hình DbContext
         builder.Services.AddDbContext<FufleaMarketContext>(options =>

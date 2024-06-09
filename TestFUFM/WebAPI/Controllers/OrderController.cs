@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
-                return Unauthorized("Không tìm thấy claim user ID");
+                return Unauthorized("Claim user ID not found");
             }
 
             var userId = int.Parse(userIdClaim.Value);
@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
             List<Order> soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId);
             var orders = soldOrders.Select(soldOrders => new
             {
-                order = soldOrders.ToOrderDTO(),
+                order = soldOrders.ToOrderShowProfileOfBuyerDTO(),
                 Product = new
                 {
                     productId = soldOrders.Product.ProductId,
@@ -72,7 +72,7 @@ namespace WebAPI.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
-                return Unauthorized("Không tìm thấy claim user ID");
+                return Unauthorized("Claim user ID not found");
             }
 
             var userId = int.Parse(userIdClaim.Value);
@@ -80,7 +80,7 @@ namespace WebAPI.Controllers
             List<Order> boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId);
             var orders = boughtOrders.Select(boughtOrder => new 
             {
-                order = boughtOrder.ToOrderDTO(),
+                order = boughtOrder.ToOrderShowProfileOfSellerDTO(),
                 Product = new
                 {
                   productId =  boughtOrder.Product.ProductId,

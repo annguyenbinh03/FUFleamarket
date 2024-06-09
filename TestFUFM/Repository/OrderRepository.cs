@@ -76,6 +76,8 @@ namespace Repository
             return await _context.Orders
                 .Where(order => order.SellerId == sellerId)
                 .Include(order => order.Product)
+                
+                .Include(order => order.Buyer)
                 .ToListAsync();
         }
 
@@ -84,6 +86,8 @@ namespace Repository
             return await _context.Orders
                 .Where(order => order.BuyerId == buyerId)
                 .Include(order => order.Product)
+                .Include(order => order.Seller)
+                
                 .ToListAsync();
         }
 
