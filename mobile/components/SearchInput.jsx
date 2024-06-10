@@ -15,9 +15,9 @@ const SearchInput = ({ initialQuery }) => {
   const [query, setQuery] = useState(initialQuery || "");
 
   return (
-    <View className="flex flex-row items-center space-x-4 w-full h-16 px-4 bg-white-100 rounded-2xl border-2 border-black-200 focus:border-secondary">
+    <View className="flex flex-row items-center space-x-4 w-5/6 h-12 px-4 bg-white rounded-2xl border-2 border-gray-300 focus:border-secondary">
       <TextInput
-        className="text-base mt-0.5 text-white flex-1 font-pregular"
+        className="text-base mt-0.5 text-black flex-1 font-pregular"
         value={query}
         placeholder="Tìm kiếm"
         placeholderTextColor="#CDCDE0"

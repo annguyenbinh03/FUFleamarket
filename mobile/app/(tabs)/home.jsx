@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../constants";
 import Carousel from "../../components/Carousel ";
 import SearcInput from "../../components/SearchInput";
+import CategoriesList from "../../components/categoriesList";
 
 const FeaturedItem = ({ item, isSeeMoreButton }) => {
   if (isSeeMoreButton) {
@@ -139,60 +140,52 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#161622" style="light" />
-
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logo}>
           <Image source={images.logo} style={styles.logoImage} />
         </View>
 
-        <View style={styles.headerIcons}>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Bell")}
-          >
-            <FontAwesome5 name="bell" size={20} color="#fff" />
-          </TouchableOpacity>
+        {/* <View style={styles.headerIcons}>
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => console.log("Message")}
           >
-            <FontAwesome5 name="comments" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
+            <FontAwesome5 name="comments" size={20} color="#111111" />
+          </TouchableOpacity> 
+       <TouchableOpacity
             style={styles.iconButton}
             onPress={() => console.log("List")}
           >
-            <FontAwesome5 name="list-alt" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
+            <FontAwesome5 name="list-alt" size={20} color="#111111" />
+          </TouchableOpacity> 
+        <TouchableOpacity
             style={styles.iconButton}
             onPress={() => console.log("Heart")}
           >
-            <FontAwesome5 name="heart" size={20} color="#fff" />
+            <FontAwesome5 name="heart" size={20} color="#111111" />
+          </TouchableOpacity>
+        </View>  */}
+      </View>
+      <View>
+        {/* <Carousel /> */}
+
+        <View style={styles.searchContainer}>
+          {/* Thanh timf kiem */}
+          <SearcInput style={styles.searcInput} />
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => console.log("Bell")}
+          >
+            <FontAwesome5 name="bell" size={20} color="#111111" />
           </TouchableOpacity>
         </View>
       </View>
-      {/* Thanh timf kiem */}
-      <SearcInput />
-
-      {/* Carousel */}
-      <Carousel />
-
       {/* Categories */}
-      <View style={styles.categoriesContainer}>
-        <TouchableOpacity
-          style={styles.categoryButton}
-          onPress={() => console.log("Menu")}
-        >
-          <FontAwesome5 name="list" size={20} color="#fff" />
-          <Text style={styles.categoryButtonText}>Danh mục</Text>
-        </TouchableOpacity>
-      </View>
+      <CategoriesList />
 
       {/* Featured */}
       <FeaturedContainer featuredData={featuredData} />
-
       {/* Footer */}
       <View style={styles.footer}></View>
     </View>
@@ -206,21 +199,21 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center", // Center the content horizontally
     alignItems: "center",
-    padding: 10,
-    backgroundColor: "#FFA500",
-    borderWidth: 2,
-    borderColor: "#000",
-    width: "100%", // Chiều rộng chiếm toàn bộ màn hình
+    padding: 15,
+    backgroundColor: "#DD0000",
+    borderWidth: 0,
+    width: "100%", // Full screen width
   },
   logo: {
-    flex: 1, // Chiếm 1/3 chiều rộng header
-    alignItems: "center",
+    alignItems: "center", // Center the logo within its container
+    flex: 1,
   },
   logoImage: {
-    width: 70,
-    height: 25,
+    width: 100,
+    height: 100,
+    resizeMode: "contain",
   },
   categoryDropdown: {
     flex: 1,
@@ -254,71 +247,49 @@ const styles = StyleSheet.create({
     borderWidth: 2, // Độ dày viền
     borderColor: "#000", // Màu viền đen
   },
-  userContainer: {
-    width: 50, // Đặt kích thước chiều rộng
-    height: 50, // Đặt kích thước chiều cao để bằng chiều rộng tạo thành hình vuông
+  searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 4, // Giảm kích thước padding
-    backgroundColor: "#fff", // Màu trắng
-    borderRadius: 5,
-    borderWidth: 2, // Độ dày viền
-    borderColor: "#000", // Màu viền đen
-    justifyContent: "space-between",
+    padding: 10,
   },
+  // userContainer: {
+  //   width: 50, // Đặt kích thước chiều rộng
+  //   height: 50, // Đặt kích thước chiều cao để bằng chiều rộng tạo thành hình vuông
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   padding: 4, // Giảm kích thước padding
+  //   backgroundColor: "#fff", // Màu trắng
+  //   borderRadius: 5,
+  //   borderWidth: 2, // Độ dày viền
+  //   borderColor: "#000", // Màu viền đen
+  //   justifyContent: "space-between",
+  // },
 
-  userLogo: {
-    width: 25, // Thu nhỏ chiều rộng
-    height: 25, // Thu nhỏ chiều cao
-    borderRadius: 15,
-  },
-  userText: {
-    color: "#000", // Màu đen
-    marginLeft: 5,
-    fontSize: 12, // Thu nhỏ font size
-  },
-  upPostButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 8,
-    backgroundColor: "#fff", // Màu trắng
-    borderRadius: 5,
-    borderWidth: 2, // Độ dày viền
-    borderColor: "#000", // Màu viền đen
-  },
-  upPostButtonText: {
-    color: "#000", // Màu đen
-    marginLeft: 5,
-    fontSize: 12, // Thu nhỏ font size
-  },
-  categoriesContainer: {
-    flexDirection: "row", // Thêm để đặt các nút cạnh nhau
-    justifyContent: "flex-start", // Đặt nút Danh mục ở bên trái
-    alignItems: "center",
-    marginTop: 10,
-    padding: 5,
-    backgroundColor: "#fff", // Màu trắng
-    borderWidth: 2, // Độ dày viền
-    borderColor: "#000", // Màu viền đen
-    width: "100%", // Chiều rộng chiếm toàn bộ màn hình
-  },
+  // userLogo: {
+  //   width: 25, // Thu nhỏ chiều rộng
+  //   height: 25, // Thu nhỏ chiều cao
+  //   borderRadius: 15,
+  // },
+  // userText: {
+  //   color: "#000", // Màu đen
+  //   marginLeft: 5,
+  //   fontSize: 12, // Thu nhỏ font size
+  // },
+  // upPostButton: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   padding: 8,
+  //   backgroundColor: "#fff", // Màu trắng
+  //   borderRadius: 5,
+  //   borderWidth: 2, // Độ dày viền
+  //   borderColor: "#000", // Màu viền đen
+  // },
+  // upPostButtonText: {
+  //   color: "#000", // Màu đen
+  //   marginLeft: 5,
+  //   fontSize: 12, // Thu nhỏ font size
+  // },
 
-  categoryButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 5,
-    backgroundColor: "#FFA500", // Màu cam
-    borderRadius: 5,
-    borderWidth: 1, // Độ dày viền
-    borderColor: "#000", // Màu viền đen
-    marginRight: 10, // Khoảng cách giữa các nút
-  },
-
-  categoryButtonText: {
-    color: "#fff", // Màu trắng
-    marginLeft: 5,
-    fontSize: 12, // Thu nhỏ font size
-  },
   featuredContainer: {
     marginTop: 10,
     padding: 5,
@@ -369,20 +340,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  featuredItemFooterIcon: {
-    // ...
-  },
-  featuredItemFooterText: {
-    // ...
-  },
-  featuredItemFooterTime: {
-    color: "#000", // Màu đen
-    fontSize: 10, // Thu nhỏ font size
-  },
-  featuredItemFooterLocation: {
-    color: "#000", // Màu đen
-    fontSize: 10, // Thu nhỏ font size
   },
   seeMoreButton: {
     backgroundColor: "#FFA500", // Màu cam nổi bật

@@ -73,10 +73,10 @@ const Profile = () => {
       <View style={styles.detailsContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.aboutSection}>
-            <Text style={styles.aboutTitle}>About me</Text>
+            <Text style={styles.aboutTitle}>Thông tin liên hệ </Text>
             <Text style={styles.aboutText}>Số điện thoại: 0375995822</Text>
             <View style={styles.myShopHeader}>
-              <Text style={styles.myShopTitle}>Sản phẩm của tôi</Text>
+              <Text style={styles.myShopTitle}>Sản phẩm</Text>
               <TouchableOpacity>
                 <Text style={styles.viewAllText}>Xem thêm</Text>
               </TouchableOpacity>
@@ -148,7 +148,7 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f8f9fa" },
-  header: { flex: 0.6, backgroundColor: "#007AFF", padding: 20 },
+  header: { flex: 0.6, backgroundColor: "#ff8600", padding: 20 },
   avatarContainer: { alignItems: "center", marginTop: height * 0.1 },
   avatar: {
     width: thumbMeasure,

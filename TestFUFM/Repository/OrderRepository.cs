@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Mappers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Repository
 {
@@ -71,24 +72,45 @@ namespace Repository
         {
             return await _context.Orders.AnyAsync(o => o.OrderId == orderId);
         }
-        public async Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId)
+        public async Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false)
         {
-            return await _context.Orders
-                .Where(order => order.SellerId == sellerId)
-                .Include(order => order.Product)
-                
-                .Include(order => order.Buyer)
-                .ToListAsync();
+            IQueryable<Order> query = _context.Orders
+                        .Where(order => order.SellerId == sellerId)
+                        .Include(order => order.Product)
+                        .Include(order => order.Buyer);
+                        
+
+           
+            if (sortByDate)
+            {
+                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+            }
+            else if (sortByPrice)
+            {
+                query = descending ? query.OrderByDescending(order => order.Price) : query.OrderBy(order => order.Price);
+            }
+
+            return await query.ToListAsync();
         }
 
-        public async Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId)
+        public async Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false)
         {
-            return await _context.Orders
+            IQueryable<Order> query = _context.Orders
                 .Where(order => order.BuyerId == buyerId)
                 .Include(order => order.Product)
-                .Include(order => order.Seller)
-                
-                .ToListAsync();
+                .Include(order => order.Seller);
+
+            if (sortByDate)
+            {
+                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+            }
+            else if (sortByPrice)
+            {
+                query = descending ? query.OrderByDescending(order => order.Price) : query.OrderBy(order => order.Price);
+            }
+
+            return await query.ToListAsync();
+
         }
 
         public async Task<bool> AcceptOrderAsync(int userId, int productId)
@@ -99,7 +121,8 @@ namespace Repository
                 return false;
             }
             var order = await _context.Orders.FindAsync(productId);
-            if (userId == order?.SellerId) {
+            if (userId == order?.SellerId)
+            {
                 order.Status = 1;
                 await _context.SaveChangesAsync();
                 return true;

@@ -16,8 +16,8 @@ namespace Repository.Interfaces
         Task<Order?> UpdateOrderAsync(int id, UpdateOrderRequestDto dto);
         Task<Order?> DeleteOrderAsync(int id);
         Task<bool> OrderExistsAsync(int orderId);
-        Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId);
-        Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId);
+        Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false);
+        Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false);
 
         Task<bool> AcceptOrderAsync(int userId,int productId);
         Task<bool> DenyOrderAsync(int userId, int productId);

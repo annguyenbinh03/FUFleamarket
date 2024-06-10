@@ -33,7 +33,8 @@
     "react-native-star-rating": "^1.1.0",
     "react-native-stars": "^1.2.2",
     "react-native-url-polyfill": "^2.0.0",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "tailwindcss-react-native": "^1.7.10"
   },
   "devDependencies": {
     "@babel/core": "^7.24.3",

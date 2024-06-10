@@ -11,6 +11,7 @@ using Repository.Interfaces;
 
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace WebAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers
             _productRepo = productRepo;
         }
         [HttpGet("sold")]
-        public async Task<IActionResult> GetSoldOrders()
+        public async Task<IActionResult> GetSoldOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
@@ -40,19 +41,26 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            List<Order> soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId);
-            var orders = soldOrders.Select(soldOrders => new
+           
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            var soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            var orders = soldOrders.Select(order => new
             {
-                order = soldOrders.ToOrderShowProfileOfBuyerDTO(),
+                order = order.ToOrderShowProfileOfBuyerDTO(),
                 Product = new
                 {
-                    productId = soldOrders.Product.ProductId,
-                    productName = soldOrders.Product.ProductName,
-                    productPrice = soldOrders.Product.Price
+                    productId = order.Product.ProductId,
+                    productName = order.Product.ProductName,
+                    productPrice = order.Product.Price
                 }
             }).ToList();
+
             return Ok(orders);
         }
+
 
         [HttpGet("admingetorders")]
         [Authorize]
@@ -67,7 +75,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("bought")]
-        public async Task<IActionResult> GetBoughtOrders()
+        public async Task<IActionResult> GetBoughtOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
@@ -77,7 +85,10 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            List<Order> boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId);
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId, sortByDate, sortByPrice, descending);
             var orders = boughtOrders.Select(boughtOrder => new 
             {
                 order = boughtOrder.ToOrderShowProfileOfSellerDTO(),

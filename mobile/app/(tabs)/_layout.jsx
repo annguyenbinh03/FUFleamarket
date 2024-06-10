@@ -43,7 +43,7 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.home}
                 color={color}
-                name="Home"
+                name="Trang chủ"
                 focused={focused}
               />
             ),
@@ -58,7 +58,7 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name="Market"
+                name="Chợ"
                 focused={focused}
               />
             ),
@@ -73,7 +73,22 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.plus}
                 color={color}
-                name="CreatePost"
+                name="Đăng tin"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="message"
+          options={{
+            title: "Tin nhắn",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.menu}
+                color={color}
+                name="Tin nhắn"
                 focused={focused}
               />
             ),
@@ -88,7 +103,7 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.profile}
                 color={color}
-                name="Profile"
+                name="Tôi"
                 focused={focused}
               />
             ),
