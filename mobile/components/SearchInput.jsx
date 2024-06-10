@@ -19,7 +19,7 @@ const SearchInput = ({ initialQuery }) => {
       <TextInput
         className="text-base mt-0.5 text-white flex-1 font-pregular"
         value={query}
-        placeholder="Search a video topic"
+        placeholder="Tìm kiếm"
         placeholderTextColor="#CDCDE0"
         onChangeText={(e) => setQuery(e)}
       />
@@ -30,7 +30,7 @@ const SearchInput = ({ initialQuery }) => {
           if (query === "")
             return Alert.alert(
               "Missing Query",
-              "Please input something to search results across database"
+              "Vui lòng nhập sản phẩm bạn muốn vào ô tìm kiếm "
             );
 
           if (pathname.startsWith("/search")) router.setParams({ query });

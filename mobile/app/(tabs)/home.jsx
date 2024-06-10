@@ -63,7 +63,6 @@ const FeaturedContainer = ({ featuredData }) => {
 };
 
 const Home = () => {
-  const navigation = useNavigation();
   const featuredData = [
     {
       id: 1,
@@ -344,7 +343,7 @@ const styles = StyleSheet.create({
     padding: 8, // Thu nhỏ padding
     borderRadius: 10,
     marginRight: 5, // Thu nhỏ margin
-    width: Dimensions.get("window").width * 0.4, // Chiều rộng 40% màn hình
+    width: Dimensions.get("window").width * 0.4,
     borderWidth: 2, // Độ dày viền
     borderColor: "#000", // Màu viền đen
   },
