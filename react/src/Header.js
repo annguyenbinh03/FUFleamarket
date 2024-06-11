@@ -15,6 +15,7 @@ const UserDropdown = (authContainer) => {
   const logout = (e) => {
     e.preventDefault();
     setAuth({});
+    localStorage.removeItem('auth');
     navigate("/");
   };
 
@@ -23,7 +24,7 @@ const UserDropdown = (authContainer) => {
     <span>
       <div className="btn-group user-dropdown" style={{ width: "180px" }}>
         <button
-          className="btn btn-secondary dropdown-toggle bg-transparent "
+          className="btn btn-secondary d-flex align-items-center dropdown-toggle bg-transparent "
           type="button"
           data-bs-toggle="dropdown"
           data-bs-auto-close="true"
@@ -36,7 +37,7 @@ const UserDropdown = (authContainer) => {
                 src="https://cdn.chotot.com/uac2/27021569"
                 alt=""
               />
-              <div className="fs-5 username px-2">{auth.fullName}</div>
+              <div className="fs-5 username px-1">{auth.fullName}</div>
              
             </>
           ) : (
@@ -46,7 +47,7 @@ const UserDropdown = (authContainer) => {
                 src="https://th.bing.com/th/id/R.7ea4af7d8401d2b43ee841bfa2abe89d?rik=xidyUKdveUKULQ&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-download-icons-logos-emojis-users-2240.png&ehk=2%2bOqgdMZqFkKaBclc%2fPL9B86vLju3iBGiFmH64kXaTM%3d&risl=&pid=ImgRaw&r=0"
                 alt=""
               />
-              <span className="fs-5 username px-2">
+              <span className="fs-5 username px-1">
                 <Link className="loginLink" to="/login">
                   Đăng nhập
                 </Link>

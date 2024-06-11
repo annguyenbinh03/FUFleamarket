@@ -3,6 +3,7 @@ import AuthContext from "../../context/AuthProvider";
 import { getMyProductsAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import { Link } from "react-router-dom";
 
 function MyPosts() {
   const [products, setProducts] = useState([]);
@@ -137,9 +138,9 @@ function MyPosts() {
                     </div>
 
                     <div className="col-lg-8">
-                      <a href="" className="name">
+                      <Link to={`/detail/${product.productId}`}>
                         {product.productName}
-                      </a>
+                      </Link>
                       <div className="price">{product.price}</div>
                       <div className="address">
                         Phường Dĩ An, Thành phố Dĩ An, Bình Dương

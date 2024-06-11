@@ -140,7 +140,7 @@ body {
 .header .username {
   display: inline-block;
   line-height: 50px;
-    width: 100px;
+    max-width: 170px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; 

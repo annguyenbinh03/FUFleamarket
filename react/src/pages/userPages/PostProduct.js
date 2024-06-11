@@ -3,9 +3,11 @@ import AuthContext from "../../context/AuthProvider";
 import { createProductAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import { useNavigate } from "react-router-dom";
 
 function PostProduct() {
   const {auth} = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
@@ -17,14 +19,14 @@ function PostProduct() {
     e.preventDefault();
     const product = { productName, price, description,categoryId,isNew};
     const response = await createProductAPI(product, auth.accessToken);
-    console.log(response);
+    navigate("/my-posts", {replace: true});
    // navigate('/', { replace: true });
   };
 
   
   return (
     <div>
-                 <Header />
+      <Header />
       <section className="upload-product spad">
         <div className="container bg-white py-4 d-flex">
           <div className="col-lg-4 com-md-4">

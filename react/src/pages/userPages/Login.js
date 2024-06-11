@@ -1,4 +1,4 @@
-import { Link, useNavigate, Navigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
@@ -6,7 +6,7 @@ import Header from "../../Header";
 import Footer from "../../Footer";
 
 const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { auth ,setAuth } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +22,6 @@ const Login = () => {
   useEffect(() => {
     setEmail("");
     setPwd("");
-
     userRef.current.focus();
   }, []);
 
@@ -40,12 +39,12 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.token;
       const roles = response?.data?.role;
       const fullName = response?.data?.fullName;
       const avarta = response?.data?.avarta;
       setAuth({ email, roles, fullName, avarta, accessToken });
+      localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken }));
       setEmail("");
       setPwd("");
       if(roles.includes(2)){
@@ -83,8 +82,8 @@ const Login = () => {
         <h1 className="text-center p-3 pb-4">Đăng nhập</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group input-group-lg mb-3">
-            <span class="input-group-text" id="basic-addon1">
-            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+            <span className="input-group-text" id="basic-addon1">
+            <i className="fa fa-envelope-o" aria-hidden="true"></i>
             </span>
             <input
               type="text"
@@ -99,9 +98,9 @@ const Login = () => {
             />
           </div>
 
-          <div class="input-group input-group-lg mb-3">
-            <span class="input-group-text" id="basic-addon1">
-            <i class="fa fa-lock" aria-hidden="true"></i>
+          <div className="input-group input-group-lg mb-3">
+            <span className="input-group-text" id="basic-addon1">
+            <i className="fa fa-lock" aria-hidden="true"></i>
             </span>
             <input
               type="password"

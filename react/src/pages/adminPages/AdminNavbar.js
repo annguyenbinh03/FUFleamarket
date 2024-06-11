@@ -15,7 +15,7 @@ const AdminNavBar = () => {
             </div>
             <div className="d-flex flex-column px-3">
               <span className="fw-bold mb-1">David Grey. H</span>
-              <span className="text-secondary text-small">Admin</span>
+              <span className="text-secondary text-small">{auth.fullName}</span>
             </div>
             <div className="d-flex align-items-center">
             <i class="fa fa-bookmark text-danger" aria-hidden="true"></i>

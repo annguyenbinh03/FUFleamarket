@@ -7,13 +7,12 @@ import Footer from "../../Footer";
 function Detail() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [address, setAddress] = useState(null);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductByProductIdAPI(productId);
         setProduct(response.product);
-        setAddress(response.address);
       } catch (error) {
         console.error("Error fetching product:", error);
       }

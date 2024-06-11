@@ -39,9 +39,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/detail/:productId" element={<Detail />} />
-           
-
-
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/search-product" element={<SearchProduct />} />
             <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
