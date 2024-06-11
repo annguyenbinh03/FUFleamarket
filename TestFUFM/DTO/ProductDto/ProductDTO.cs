@@ -14,11 +14,11 @@ namespace BusinessObjects.ProductDto
         public decimal Price { get; set; }
         public bool IsNew { get; set; }
         public string Description { get; set; } = null!;
-        public ProfileUserDTO Seller { get; set; } // Thay thế SellerId bằng Seller
+        public ProfileUserDTO Seller { get; set; } 
         public int CategoryId { get; set; }
-
         public string CategoryName { get; set; } = null!;
         public int Status { get; set; }
+        public string CreatedDate { get; set; }
         public List<CategoryDTO> Categories { get; set; }
         public ProductImageDTO ProductImages { get; set; }
 
