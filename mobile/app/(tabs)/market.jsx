@@ -1,12 +1,13 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { View, Text, Button } from "react-native";
 
-const Market = () => {
+const PostProduct = () => {
   return (
-    <View>
-      <Text className="text-3xl">Market</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Trang chợ</Text>
+      <Button title="Chợ" onPress={() => console.log("Check")} />
     </View>
   );
 };
 
-export default Market;
+export default PostProduct;

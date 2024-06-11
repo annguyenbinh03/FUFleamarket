@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { View, Text, Button } from "react-native";
 
-const Message = () => {
+const PostProduct = () => {
   return (
-    <View>
-      <Text>Message</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Trang Nhắn tin</Text>
+      <Button title="Nhắn tin" onPress={() => console.log("Check")} />
     </View>
   );
 };
 
-export default Message;
+export default PostProduct;

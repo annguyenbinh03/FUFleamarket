@@ -9,10 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-picker/picker": "^2.7.7",
     "@react-navigation/native": "^6.1.17",
     "cli": "^1.0.1",
     "expo": "^51.0.11",
     "expo-av": "~14.0.5",
+    "expo-cli": "^6.3.10",
     "expo-constants": "~16.0.2",
     "expo-device": "~6.0.2",
     "expo-document-picker": "~12.0.1",
@@ -20,6 +22,7 @@
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.15",
     "expo-status-bar": "~1.12.1",
+    "global": "^4.4.0",
     "install": "^0.13.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",

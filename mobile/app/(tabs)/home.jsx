@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import { images } from "../../constants";
 import Carousel from "../../components/Carousel ";
 import SearcInput from "../../components/SearchInput";
-import CategoriesList from "../../components/categoriesList";
+import CategoriesList from "../../components/CategoriesList";
 
 const FeaturedItem = ({ item, isSeeMoreButton }) => {
   if (isSeeMoreButton) {
@@ -53,7 +53,11 @@ const FeaturedContainer = ({ featuredData }) => {
           <FeaturedItem item={item} isSeeMoreButton={item.isSeeMoreButton} />
         )}
         keyExtractor={(item) =>
-          item.isSeeMoreButton ? "seeMore" : item.id.toString()
+          item.isSeeMoreButton
+            ? "seeMore"
+            : item.id
+            ? item.id.toString()
+            : "null"
         }
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -64,78 +68,23 @@ const FeaturedContainer = ({ featuredData }) => {
 };
 
 const Home = () => {
-  const featuredData = [
-    {
-      id: 1,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 2,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 3,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 4,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 5,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 6,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-    {
-      id: 7,
-      image: {
-        uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-      },
-      title: "Crab Pool Security",
-      price: "$30.00",
-      time: "15 giờ trước",
-      location: "Tp Hồ Chí Minh",
-    },
-  ];
+  const [featuredData, setFeaturedData] = useState([]); // Khởi tạo mảng sản phẩm rỗng
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await fetch(
+          "https://localhost:7057/api/product/listproduct"
+        );
+        const data = await response.json();
+        setFeaturedData(data); // Cập nhật mảng sản phẩm
+      } catch (error) {
+        console.error("Error fetching featured products:", error);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []); // Chạy useEffect một lần khi component được render
 
   return (
     <View style={styles.container}>
@@ -144,42 +93,27 @@ const Home = () => {
       <View style={styles.header}>
         <View style={styles.logo}>
           <Image source={images.logo} style={styles.logoImage} />
+          <View style={styles.searchContainer}>
+            {/* Thanh timf kiem */}
+            <SearcInput style={styles.searcInput} />
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => console.log("Bell")}
+            >
+              <FontAwesome5 name="bell" size={20} color="#111111" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => console.log("Message")}
+            >
+              <FontAwesome5 name="comments" size={20} color="#111111" />
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* <View style={styles.headerIcons}>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Message")}
-          >
-            <FontAwesome5 name="comments" size={20} color="#111111" />
-          </TouchableOpacity> 
-       <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("List")}
-          >
-            <FontAwesome5 name="list-alt" size={20} color="#111111" />
-          </TouchableOpacity> 
-        <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Heart")}
-          >
-            <FontAwesome5 name="heart" size={20} color="#111111" />
-          </TouchableOpacity>
-        </View>  */}
       </View>
       <View>
         {/* <Carousel /> */}
-
-        <View style={styles.searchContainer}>
-          {/* Thanh timf kiem */}
-          <SearcInput style={styles.searcInput} />
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Bell")}
-          >
-            <FontAwesome5 name="bell" size={20} color="#111111" />
-          </TouchableOpacity>
-        </View>
+        <Carousel />
       </View>
       {/* Categories */}
       <CategoriesList />

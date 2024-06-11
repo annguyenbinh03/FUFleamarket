@@ -65,7 +65,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="createPost"
+          name="postProduct"
           options={{
             title: "Đăng tin",
             headerShown: false,
