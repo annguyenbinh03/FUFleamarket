@@ -50,15 +50,15 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="market"
+          name="postManager"
           options={{
-            title: "Chợ",
+            title: "Quản lý tin",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.bookmark}
                 color={color}
-                name="Chợ"
+                name="Quản lý tin"
                 focused={focused}
               />
             ),

@@ -1,6 +1,9 @@
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import DetailProduct from "./userScreens/detailProduct";
+import ProductList from "../components/ProductList";
+import AllProduct from "./userScreens/AllProduct";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,6 +40,16 @@ const RootLayout = () => {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={{ headerShown: false }}
+      /> */}
+      {/* <Stack.Screen
+        name="ProductList"
+        component={AllProduct}
+        options={{ headerShown: false }}
+      /> */}
     </Stack>
   );
 };

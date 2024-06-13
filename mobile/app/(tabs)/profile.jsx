@@ -90,54 +90,6 @@ const Profile = () => {
                   style={styles.image}
                 />
               </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
-              <View style={styles.item}>
-                <Image
-                  source={{
-                    uri: "https://th.bing.com/th/id/R.615fbddd5d36723e18d1778551444013?rik=8hxKBlr57HaP9A&pid=ImgRaw&r=0",
-                  }}
-                  style={styles.image}
-                />
-              </View>
             </View>
           </View>
         </ScrollView>
