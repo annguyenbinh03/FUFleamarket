@@ -42,7 +42,8 @@ namespace BusinessObjects.Mappers
                 Description = productDto.Description,
                 SellerId = sellerId,
                 CategoryId = productDto.CategoryId,
-                Status = 0
+                Status = 0,
+                CreatedDate = DateTime.Now
             };
         }
 
