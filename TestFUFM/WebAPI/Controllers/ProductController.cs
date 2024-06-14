@@ -128,30 +128,28 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("CategoryId is required.");
             }
-
-            var userIdClaim = User.FindFirstValue("UserId");
-            if (!int.TryParse(userIdClaim, out var sellerId))
+           
+            if (!int.TryParse(User.FindFirstValue("UserId"), out var sellerId))
             {
                 return Unauthorized("Invalid user ID format");
             }
-
-            var categoryExists = await _context.Categories.AnyAsync(c => c.CategoryId == productDto.CategoryId);
-            if (!categoryExists)
-            {
-                return BadRequest("The provided CategoryId does not exist.");
-            }
-
+           
+            int standardProductLimit = 5; 
+            int totalProductLimit = standardProductLimit;
+           
             var currentPromotionOrders = await _context.PromotionOrders
                 .Include(po => po.Promotion)
                 .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
                 .ToListAsync();
-
-            if (currentPromotionOrders == null || !currentPromotionOrders.Any())
+          
+            if (currentPromotionOrders != null && currentPromotionOrders.Any())
             {
-                return BadRequest("No valid promotions found for the user.");
-            }
+                var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
 
-            int totalProductLimit = currentPromotionOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
+                int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
+
+                totalProductLimit = standardProductLimit + additionalProductLimit;
+            }
 
             var currentProductCount = await _context.Products.CountAsync(p => p.SellerId == sellerId);
             if (currentProductCount >= totalProductLimit)
@@ -160,11 +158,13 @@ namespace WebAPI.Controllers
             }
 
             var productModel = productDto.ToProductFromCreateDTO(sellerId);
+
             var seller = await _context.Users.FirstOrDefaultAsync(u => u.UserId == sellerId);
             if (seller != null)
             {
                 productModel.Seller = seller;
             }
+
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == productModel.CategoryId);
             if (category != null)
             {
@@ -172,6 +172,7 @@ namespace WebAPI.Controllers
             }
 
             await _productRepo.CreateAsync(productModel);
+
             return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
         }
 
