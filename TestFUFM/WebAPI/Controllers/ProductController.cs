@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("listproduct")]
+        [HttpGet("ListProduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
-        [HttpPut("adminacceptproductrequest/{productId:int}")]
+        [HttpPut("Admin/AcceptProductRequest/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
         {
@@ -52,7 +52,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("adminrejectproductrequest/{productId:int}")]
+        [HttpPut("Admin/RejectProductRequest/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
         {
@@ -66,27 +66,14 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
         }
+       
 
-
-        [HttpGet("admingetlistproducts")]
-        [Authorize]
-        public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var products = await _productRepo.AdminGetAllAsync(query);
-    
-            return Ok(products);
-        }
-
-        [HttpGet("getproductbyid/{id:int}")]
+        [HttpGet("GetProductById/{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Get the maximum product ID
             var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
 
             if (id > maxProductId)
@@ -104,9 +91,9 @@ namespace WebAPI.Controllers
             return Ok( new { product = productDTO, address });
         }
 
-        [HttpGet("getmyproducts")]
-        [Authorize]
-        public async Task<IActionResult> GetMyproducts()
+        [HttpGet("GetMyProducts")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetMyProducts()
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -116,20 +103,26 @@ namespace WebAPI.Controllers
             {
                 return Unauthorized("Invalid user ID format");
             }
-            // Get the maximum product ID
+
             var products = await _productRepo.GetProductByUserIdAsync(userId);
+
+            if (products == null || !products.Any())
+            {
+                return BadRequest("You don't have any products yet");
+            }
 
             return Ok(products);
         }
 
 
-        [HttpPost("createproductforsellers")]
-        [Authorize]
+        [HttpPost("CreateProductForSellers")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Create([FromBody] CreateProductRequestDto productDto)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
-
+            }
 
             if (productDto.CategoryId == 0)
             {
@@ -146,6 +139,24 @@ namespace WebAPI.Controllers
             if (!categoryExists)
             {
                 return BadRequest("The provided CategoryId does not exist.");
+            }
+
+            var currentPromotionOrders = await _context.PromotionOrders
+                .Include(po => po.Promotion)
+                .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
+                .ToListAsync();
+
+            if (currentPromotionOrders == null || !currentPromotionOrders.Any())
+            {
+                return BadRequest("No valid promotions found for the user.");
+            }
+
+            int totalProductLimit = currentPromotionOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
+
+            var currentProductCount = await _context.Products.CountAsync(p => p.SellerId == sellerId);
+            if (currentProductCount >= totalProductLimit)
+            {
+                return BadRequest($"You have reached the maximum number of products allowed ({totalProductLimit}).");
             }
 
             var productModel = productDto.ToProductFromCreateDTO(sellerId);
@@ -165,7 +176,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPut("updateproductforsellers/{productId:int}")]
+        [HttpPut("UpdateProductForSellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] UpdateProductRequestDto updateDto)
         {
@@ -220,14 +231,13 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpDelete("deleteproductforsellers/{productId:int}")]
+        [HttpDelete("DeleteProductForSellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int productId)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            // Get the maximum product ID
+           
             var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
 
             if (productId > maxProductId)
@@ -263,7 +273,7 @@ namespace WebAPI.Controllers
             return Ok(updatedProduct);
         }
 
-        [HttpGet("admin/pending")]
+        [HttpGet("Admin/Pending")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPendingProducts()
         {
@@ -275,7 +285,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("admin/confirmed")]
+        [HttpGet("Admin/Confirmed")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetConfirmedProducts()
         {
@@ -286,7 +296,7 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
-        [HttpGet("admin/deleted")]
+        [HttpGet("Admin/Deleted")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDeletedProducts()
         {
