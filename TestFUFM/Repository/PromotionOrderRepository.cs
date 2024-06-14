@@ -30,6 +30,11 @@ namespace Repository
             return await _dbcontext.PromotionOrders.ToListAsync();
         }
 
+        public async Task<IEnumerable<PromotionOrder>> GetAllByUserIdAsync(int userId)
+        {
+            return await _dbcontext.PromotionOrders.Where(po => po.UserId == userId).ToListAsync();
+        }
+
         public async Task<PromotionOrder?> GetByIdAsync(int id)
         {
             return await _dbcontext.PromotionOrders.FindAsync(id);
