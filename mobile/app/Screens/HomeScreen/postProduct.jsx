@@ -13,8 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { images } from "../../constants";
-import SearchInput from "../../components/SearchInput";
+import { images } from "../../../constants";
+import SearchInput from "../../../components/SearchInput";
 import { Picker } from "@react-native-picker/picker";
 
 const PostProduct = () => {
@@ -168,6 +168,7 @@ const PostProduct = () => {
 };
 
 export default PostProduct;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -175,16 +176,14 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between", // Align logo and icons
     alignItems: "center",
     padding: 15,
     backgroundColor: "#DD0000",
-    borderWidth: 0,
     width: "100%",
   },
   logo: {
     alignItems: "center",
-    flex: 1,
   },
   logoImage: {
     width: 100,
@@ -194,65 +193,16 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
   },
-  // ... other styles ...
-
+  iconButton: {
+    marginLeft: 10, // Add space between icons
+  },
   content: {
     padding: 20,
   },
-  productImageArea: {
-    marginBottom: 20,
-  },
-  productImageTitle: {
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  productImageInfo: {
-    marginBottom: 10,
-  },
-  productImageLink: {
-    color: "blue",
-    textDecorationLine: "underline",
-  },
-  fileUploader: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    borderRadius: 5,
-  },
-  uploaderHeader: {
-    marginBottom: 10,
-  },
-  uploaderTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  fileCompletedStatus: {},
-  fileUploadBox: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  boxTitle: {
-    fontSize: 14,
-    marginBottom: 10,
-  },
-  fileInstruction: {
-    color: "gray",
-  },
-  fileBrowseButton: {
-    fontWeight: "bold",
-  },
-  productDetailArea: {
-    marginBottom: 20,
-  },
-  productDetailTitle: {
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
+  // ... (rest of your existing styles)
+
+  // Reusable Styles
   inputGroup: {
     marginBottom: 15,
   },

@@ -11,11 +11,11 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { images } from "../../constants";
-import Carousel from "../../components/Carousel ";
-import SearcInput from "../../components/SearchInput";
-import ProductListContainer from "./../../components/ProductList";
-import Categories from "../../components/Categories";
+import { images } from "../../../constants";
+import Carousel from "../../../components/Carousel ";
+import SearcInput from "../../../components/SearchInput";
+import ProductListContainer from "../../../components/ProductList";
+import Categories from "../../../components/Categories";
 
 const Home = () => {
   return (

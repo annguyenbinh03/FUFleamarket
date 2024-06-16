@@ -16,8 +16,22 @@ const Categories = () => {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+  const categoryImages = {
+    1: "https://th.bing.com/th/id/OIP.BGwhDC-5eqhHHqZkDPDMygHaE7?rs=1&pid=ImgDetMain",
+    2: "https://th.bing.com/th/id/OIP.h8ad_GoFNr756ufq9-aaNwAAAA?pid=ImgDet&w=204&h=175&c=7",
+    3: "https://th.bing.com/th/id/OIP.eCRz4IvORHX8GuPK9QtnBQAAAA?rs=1&pid=ImgDetMain",
+
+    4: "https://th.bing.com/th/id/R.d5e39142b9c02fd27a0323ea09f50294?rik=1IKuzLMieHFNrA&pid=ImgRaw&r=0",
+
+    5: "https://th.bing.com/th/id/OIP.WRjgN9bpfQAMR9FG4RVUQgHaI3?rs=1&pid=ImgDetMain",
+
+    6: "https://i.pinimg.com/originals/b0/9e/ee/b09eee4a864f044d7616cf3fd8271279.jpg",
+    7: "https://th.bing.com/th/id/OIP.jxfGNxjhixVX3BMtJ_H4vgAAAA?rs=1&pid=ImgDetMain",
+    8: "https://th.bing.com/th/id/OIP.ID8Wa0zGXGAaRuqICpPyoAHaER?w=323&h=186&c=7&r=0&o=5&pid=1.7",
+  };
+
   useEffect(() => {
-    fetch("http://10.0.2.2:5144/api/category") // Thay thế bằng URL API của bạn
+    fetch("http://10.0.2.2:5144/api/category")
       .then((res) => res.json())
       .then((data) => {
         setCategories(data);
@@ -39,7 +53,7 @@ const Categories = () => {
       <View style={styles.categoriesContainer}>
         <FlatList
           data={categories}
-          horizontal={true} // Hiển thị danh mục theo chiều ngang
+          horizontal={true}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -48,12 +62,14 @@ const Categories = () => {
                 navigation.navigate("ProductList", {
                   categoryId: item.categoryId,
                 })
-              } // Truyền categoryId khi chuyển sang ProductList
+              }
             >
               <View>
                 <Image
                   source={{
-                    uri: "https://lighthouse.chotot.com/_next/image?url=https%3A%2F%2Fstatic.chotot.com%2Fstorage%2Fchapy-pro%2Fnewcats%2Fv8%2F5000.png&w=256&q=95",
+                    uri:
+                      categoryImages[item.categoryId] ||
+                      "https://lighthouse.chotot.com/_next/image?url=https%3A%2F%2Fstatic.chotot.com%2Fstorage%2Fchapy-pro%2Fnewcats%2Fv8%2F5000.png&w=256&q=95",
                   }}
                   style={styles.categoryPic}
                 />
@@ -91,7 +107,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 5,
-    marginBottom: 5, // Khoảng cách giữa icon và text
+    marginBottom: 5,
   },
   categoryText: {
     fontSize: 14,

@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("screen");
-const numColumns = 2; // Chia thành 2 cột
+const numColumns = 2;
 const thumbMeasure = (width - 48 - 32) / numColumns;
 
 const ProductItem = ({ item }) => {
@@ -39,9 +39,9 @@ const ProductItem = ({ item }) => {
           source={{ uri: item.seller.avarta }} // Sử dụng avarta từ API
           style={styles.sellerAvatar}
         />
-        <Text style={styles.sellerName}>12 giờ trước</Text>
+        <Text style={styles.sellerName}>{item.createdDate}</Text>
         <Text style={styles.sellerName}> - </Text>
-        <Text style={styles.sellerName}>Hồ Chí Minh</Text>
+        <Text style={styles.sellerName}>{item.address}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -52,8 +52,25 @@ const ProductListContainer = () => {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+  // useEffect(() => {
+  //   getProductAPI()
+  //     .then((repoonse) => {
+  //       console.log(repoonse);
+  //       setProductList(repoonse.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error("Error fetching product data:", err);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // if (loading) {
+  //   return <ActivityIndicator size="large" color="#0000ff" />;
+  // }
+
   useEffect(() => {
-    fetch("http://10.0.2.2:5144/api/product/listproduct") // Thay thế bằng URL API của bạn
+    fetch("http://10.0.2.2:5144/api/product/listproduct")
       .then((res) => res.json())
       .then((data) => {
         setProductList(data);
