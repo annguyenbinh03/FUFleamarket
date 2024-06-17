@@ -8,13 +8,7 @@ namespace BusinessObjects.PromotionOrderDto
 {
     public class CreatePromotionOrderRequestDto
     {
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }       
-        public decimal Price { get; set; }
-
-        public int ProductQuantity { get; set; }
-
         public int PromotionId { get; set; }
+        public int ProductQuantity { get; set; }
     }
 }

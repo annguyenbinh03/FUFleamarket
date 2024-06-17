@@ -21,6 +21,7 @@ namespace BusinessObjects.Mappers
                 Period = model.Period,
                 ProductQuantity = model.ProductQuantity,
                 Price = model.Price,
+                IsDeleted = model.IsDeleted,
             };
         }
         public static Promotion ToPromotionFromCreateDTO(this CreatePromotionRequestDto CreateModel)

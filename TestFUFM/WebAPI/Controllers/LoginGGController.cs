@@ -1,91 +1,120 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Azure.Core;
+using BusinessObjects.Models;
+using BusinessObjects;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using System;
 
-namespace WebAPI.Controllers
+[ApiController]
+[Route("[controller]")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class AuthController : ControllerBase
+    private readonly IConfiguration _configuration;
+    private readonly FufleaMarketContext _context;
+
+    public AuthController(FufleaMarketContext context, IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _context = context;
+        _configuration = configuration;
+    }
 
-        public AuthController(IConfiguration configuration)
+    [HttpGet("google-response")]
+    public async Task<IActionResult> GoogleResponse()
+    {
+        var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+        if (!authenticateResult.Succeeded)
         {
-            _configuration = configuration;
+            return BadRequest("Xác thực thất bại.");
         }
 
-        [HttpGet("login-google")]
-        public IActionResult LoginGoogle(string returnUrl = "/")
+        var claims = authenticateResult.Principal.Claims;
+        foreach (var claim in claims)
         {
-            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse", new { returnUrl }) };
-            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+            Console.WriteLine($"{claim.Type}: {claim.Value}");
         }
 
-        [HttpGet("google-response")]
-        public async Task<IActionResult> GoogleResponse(string returnUrl = "/")
+        var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
+        var fullName = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name) ?? authenticateResult.Principal.FindFirstValue("name");
+        var profilePicture = authenticateResult.Principal.FindFirstValue("picture") ?? authenticateResult.Principal.FindFirstValue("urn:google:picture");
+
+        if (email == null || !email.EndsWith("@fpt.edu.vn"))
         {
-            var authenticateResult = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            return BadRequest("Chỉ người dùng có email @fpt.edu.vn được phép.");
+        }
 
-            if (!authenticateResult.Succeeded)
+        try
+        {
+            var existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (existingUser == null)
             {
-                return BadRequest("Authentication failed.");
+                User user = new User
+                {
+                    Email = email,
+                    Avarta = profilePicture,
+                    FullName = fullName,
+                    RoleId = 1,
+                    IsDeleted = false,
+                    CreatedDate = DateTime.UtcNow,
+                };
+
+                _context.Users.Add(user);
+                _context.SaveChanges();
             }
 
-            // Debugging: List all claims
-            var claims = authenticateResult.Principal.Claims;
-            foreach (var claim in claims)
-            {
-                Console.WriteLine($"{claim.Type}: {claim.Value}");
-            }
-
-            // Get user information from claims
-            var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
-            var username = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name) ?? authenticateResult.Principal.FindFirstValue("name");
-            var profilePicture = authenticateResult.Principal.FindFirstValue("picture") ?? authenticateResult.Principal.FindFirstValue("urn:google:picture");
-
-            // Ensure email is from @fpt.edu.vn domain
-            if (email == null || !email.EndsWith("@fpt.edu.vn"))
-            {
-                return BadRequest("Only users with an @fpt.edu.vn email are allowed.");
-            }
-
-            // Generate JWT token with user's email and role
             var token = GenerateJwtToken(email, "User");
 
-            return Ok(new { Token = token, Username = username, ProfilePicture = profilePicture });
-        }
 
-        private string GenerateJwtToken(string email, string role)
+            return Ok(new { Token = token, Username = fullName, ProfilePicture = profilePicture });
+        }
+        catch (Exception ex)
         {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Role, role)
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationInMinutes"])),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+            return StatusCode(500, "Lỗi máy chủ nội bộ");
         }
+    }
+
+    private string GenerateJwtToken(string email, string role)
+    {
+        var jwtSettings = _configuration.GetSection("JWT");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
+
+        // Query user from database to get UserId
+        var user = _context.Users.FirstOrDefault(u => u.Email == email);
+        if (user == null)
+        {
+            throw new ApplicationException($"User not found for email: {email}");
+        }
+
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Email, email),
+        new Claim(ClaimTypes.Role, role),
+        new Claim("UserId", user.UserId.ToString()), // Add UserId claim
+    };
+
+        var token = new JwtSecurityToken(
+            issuer: jwtSettings["Issuer"],
+            audience: jwtSettings["Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["ExpirationInMinutes"])),
+            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+
+    [HttpGet("signin-google")]
+    public IActionResult SignInWithGoogle()
+    {
+        var redirectUrl = Url.Action("GoogleResponse", "Auth", null, Request.Scheme);
+        var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
     }
 }

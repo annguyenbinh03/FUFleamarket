@@ -33,7 +33,7 @@ namespace Repository
             {
                 return null;
             }
-            _dbcontext.Promotions.Remove(promotionModel);
+            promotionModel.IsDeleted = true;
             await _dbcontext.SaveChangesAsync();
             return promotionModel;
         }
@@ -60,6 +60,7 @@ namespace Repository
             existingPromotion.Period = promotionDto.Period;
             existingPromotion.ProductQuantity = promotionDto.ProductQuantity;
             existingPromotion.Price = promotionDto.Price;
+            existingPromotion.IsDeleted = promotionDto.IsDeleted;
 
             await _dbcontext.SaveChangesAsync();
             return existingPromotion;

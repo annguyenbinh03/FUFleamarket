@@ -3,6 +3,8 @@ using BusinessObjects.Mappers;
 using BusinessObjects.PromotionOrderDto;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
@@ -12,20 +14,40 @@ namespace WebAPI.Controllers
     {
         private readonly IPromotionOrderRepository _promoOrderRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IPromotionRepository _promotionRepo;
 
-        public PromotionOrderController(IPromotionOrderRepository promoOrederRepo, IUserRepository userRepo)
+        public PromotionOrderController(IPromotionOrderRepository promoOrederRepo, IUserRepository userRepo, IPromotionRepository promotionRepo)
         {
             _promoOrderRepo = promoOrederRepo;
             _userRepo = userRepo;
+            _promotionRepo = promotionRepo;
         }
-        [HttpGet]
+        [HttpGet("InformationPromotionOrder")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetAll()
         {
-            var PromoOrder = await _promoOrderRepo.GetAllAsync();
-            var PromoOrderDto = PromoOrder.Select(x => x.ToPromotionOrderDTO());
-            return Ok(PromoOrderDto);
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("Invalid UserId format.");
+            }
+            var promoOrders = await _promoOrderRepo.GetAllByUserIdAsync(userId);
+            if (promoOrders == null || !promoOrders.Any())
+            {
+                return NotFound("No promotion orders found for the current user.");
+            }
+
+            var promoOrderDtos = promoOrders.Select(x => x.ToPromotionOrderDTO());
+            return Ok(promoOrderDtos);
         }
-        [HttpGet("{id:int}")]
+
+        [HttpGet("InformationPromotionOrderById(Admin){id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
             var PromoOrder = await _promoOrderRepo.GetByIdAsync(id);
@@ -35,21 +57,44 @@ namespace WebAPI.Controllers
             }
             return Ok(PromoOrder.ToPromotionOrderDTO());
         }
-        [HttpPost("{userId:int}")]
-        public async Task<IActionResult> Create([FromRoute] int userId, CreatePromotionOrderRequestDto createDto)
-        {
-            if (!await _userRepo.UserExists(userId))
+
+        [HttpPost("CreatePromotionOrder")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> Create([FromBody] CreatePromotionOrderRequestDto createDto)
+        {            
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (userIdClaim == null)
             {
-                return BadRequest("User does not exist");
+                return Unauthorized("UserId claim is missing.");
             }
 
-            if (!await _promoOrderRepo.PromotionExists(createDto.PromotionId))
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                return BadRequest($"Promotion with ID {createDto.PromotionId} does not exist");
+                return Unauthorized("Invalid UserId format.");
             }
-            var PromoOrderModel = createDto.ToPromotionOrderFromCreate(userId);
-            await _promoOrderRepo.CreateAsync(PromoOrderModel);
-            return CreatedAtAction(nameof(GetById), new { id = PromoOrderModel.PromoOrderId }, PromoOrderModel.ToPromotionOrderDTO());
+
+            if (!await _userRepo.UserExists(userId))
+            {
+                return BadRequest("User does not exist.");
+            }
+
+            var promotion = await _promotionRepo.GetByIdAsync(createDto.PromotionId);
+            if (promotion == null)
+            {
+                return BadRequest($"Promotion with ID {createDto.PromotionId} does not exist.");
+            }
+
+            var startDate = DateTime.UtcNow;
+            var endDate = startDate.AddDays(promotion.Period * createDto.ProductQuantity);
+
+            var price = promotion.Price * createDto.ProductQuantity;
+
+            var promoOrderModel = createDto.ToPromotionOrderFromCreate(userId, startDate, endDate, price);
+            await _promoOrderRepo.CreateAsync(promoOrderModel);
+
+            var promoOrderDTO = promoOrderModel.ToPromotionOrderDTO();
+
+            return CreatedAtAction(nameof(GetById), new { id = promoOrderModel.PromoOrderId }, promoOrderDTO);
         }
     }
 }

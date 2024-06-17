@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             return userId;
         }
 
-        [HttpGet("listproductimage")]
+        [HttpGet("ListProductImages")]
         public async Task<IActionResult> GetAll()
         {
             if (!ModelState.IsValid)
@@ -48,10 +48,25 @@ namespace WebAPI.Controllers
             return Ok(productImagesDTO);
         }
 
+        [HttpGet("ListProductImagesForSellers")]
+        [Authorize]
+        public async Task<IActionResult> GetProductImagesForSeller()
+        {
+            var userId = GetLoggedInUserId(); // Lấy ID của người dùng đang đăng nhập
+
+            var productImages = await _productImageRepo.GetAllBySellerIdAsync(userId); // Lấy ảnh sản phẩm của người bán
+            if (productImages == null || !productImages.Any())
+            {
+                return NotFound("No product images found for this seller.");
+            }
+
+            var productImagesDTO = productImages.Select(pi => pi.ToProductImageDto()).ToList(); // Chuyển đổi sang DTO
+            return Ok(productImagesDTO); // Trả về danh sách ảnh sản phẩm
+        }
 
 
 
-        [HttpGet("searchproductimage/{productId:int}")]
+        [HttpGet("SearchProductImages/{productId:int}")]
         public async Task<IActionResult> GetById1(int productId)
         {
             var productImages = await _productImageRepo.GetAllByProductIdAsync(productId);
@@ -66,7 +81,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("searchproductimagesforsellers/{productId:int}")]
+        [HttpGet("SearchProductImagesForSellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> GetById(int productId)
         {
@@ -82,7 +97,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("createproductimagesforsellers/{productId:int}")]
+        [HttpPost("CreateProductImagesForSellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Create([FromRoute] int productId, [FromBody] CreateProductImageDTO productImageDTO)
         {
@@ -105,7 +120,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpPut("updateproductimagesforsellers/{productId:int}/{imageName}")]
+        [HttpPut("UpdateProductImagesForSellers/{productId:int}/{imageName}")]
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] int productId, [FromRoute] string imageName, [FromBody] UpdateProductImageRequestDTO updateDto)
         {
@@ -125,7 +140,7 @@ namespace WebAPI.Controllers
             return Ok("Product image updated successfully");
         }
 
-        [HttpDelete("deleteproductimagesforsellers/{productId:int}/{imageName}")]
+        [HttpDelete("DeleteProductImagesForSellers/{productId:int}/{imageName}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int productId, [FromRoute] string imageName)
         {
