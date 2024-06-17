@@ -10,30 +10,19 @@ namespace BusinessObjects.Models;
 public partial class Message
 {
     [Key]
-    [Column("messageId")]
-    public int MessageId { get; set; }
+    [Column("chatRoomId")]
+    public int ChatRoomId { get; set; }
 
     [Column("senderId")]
     public int SenderId { get; set; }
 
-    [Column("receiverId")]
-    public int ReceiverId { get; set; }
-
     [Column("messageText")]
-    [StringLength(255)]
+    [StringLength(500)]
     public string MessageText { get; set; } = null!;
 
-    [Column("time", TypeName = "datetime")]
-    public DateTime? Time { get; set; }
+    [Column("createdDate", TypeName = "datetime")]
+    public DateTime CreatedDate { get; set; }
 
     [Column("isRead")]
     public bool? IsRead { get; set; }
-
-    [ForeignKey("ReceiverId")]
-    [InverseProperty("MessageReceivers")]
-    public virtual User Receiver { get; set; } = null!;
-
-    [ForeignKey("SenderId")]
-    [InverseProperty("MessageSenders")]
-    public virtual User Sender { get; set; } = null!;
 }

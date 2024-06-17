@@ -49,11 +49,11 @@ public partial class User
     [InverseProperty("User")]
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
-    [InverseProperty("Receiver")]
-    public virtual ICollection<Message> MessageReceivers { get; set; } = new List<Message>();
+    [InverseProperty("User1Navigation")]
+    public virtual ICollection<ChatRoom> ChatRoomUser1Navigations { get; set; } = new List<ChatRoom>();
 
-    [InverseProperty("Sender")]
-    public virtual ICollection<Message> MessageSenders { get; set; } = new List<Message>();
+    [InverseProperty("User2Navigation")]
+    public virtual ICollection<ChatRoom> ChatRoomUser2Navigations { get; set; } = new List<ChatRoom>();
 
     [InverseProperty("Buyer")]
     public virtual ICollection<Order> OrderBuyers { get; set; } = new List<Order>();

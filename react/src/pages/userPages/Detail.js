@@ -6,13 +6,14 @@ import Footer from "../../Footer";
 
 function Detail() {
   const { productId } = useParams();
-  const [product, setProduct] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductByProductIdAPI(productId);
-        setProduct(response.product);
+        setData(response);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -30,14 +31,14 @@ function Detail() {
         <div className="container bg-white py-4 d-flex">
           <div className="col-lg-8 col-md-8">
             <div className="d-flex justify-content-center">
-              {product && product.images && product.images.length > 0 ? (
+              {data && data?.product?.images && data?.product?.images.length > 0 ? (
                 <div
                   id="carouselExampleIndicators"
                   className="carousel slide w-90"
                   data-bs-ride="carousel"
                 >
                   <div className="carousel-indicators">
-                    {product.images.map((image, index) => (
+                    {data.product.images.map((image, index) => (
                       <button
                         key={index}
                         type="button"
@@ -49,7 +50,7 @@ function Detail() {
                     ))}
                   </div>
                   <div className="carousel-inner">
-                    {product.images.map((image, index) => (
+                    {data.product.images.map((image, index) => (
                       <div
                         key={index}
                         className={`carousel-item ${
@@ -102,11 +103,11 @@ function Detail() {
             </div>
             <div className="px-5 mt-2">
               <div className="product_name">
-                {product ? product.productName : "Sản phẩm không tồn tại"}
+                {data?.product ? data?.product?.productName : "Sản phẩm không tồn tại"}
               </div>
               <div className="price_wistlist d-flex justify-content-between">
                 <p className="price_wistlist_left">
-                  ${product ? product.price : ""}
+                  ${data?.product ? data?.product?.price : ""}
                 </p>
                 <button className="btn price_wistlist_right rounded-pill">
                   Lưu tin
@@ -115,8 +116,8 @@ function Detail() {
               </div>
               <div className="product_description">
                 <p>
-                  {product
-                    ? product.description
+                  {data?.product
+                    ? data?.product.description
                     : "Cửa Mình thanh lý tủ lạnh máy giặt đang sử dụng hoạt động tốt ạ tủ lạnh từ 90l đến 500l Giá tủ lạnh từ 1tr2 chở lên Máy giặt từ 1tr5 chở lên Máy giặt từ 7kg đến 15kg Bảo hành lâu dài uy tín miễn phí vận chuyển"}
                 </p>
               </div>
@@ -131,7 +132,7 @@ function Detail() {
                     />
                   </div>
                   <div className="seller_address_right">
-                   {product?.seller?.addresses?.[0]?.specificAddress || "Người này chưa tiết lộ thông tin về địa chỉ"}
+                   {data?.product?.seller?.addresses?.[0]?.specificAddress || "Người này chưa tiết lộ thông tin về địa chỉ"}
                   </div>
                 </div>
               </div>
@@ -174,15 +175,15 @@ function Detail() {
                   className="shop_avartar col-lg-2"
                   style={{
                     backgroundImage: `url(${
-                      product && product.seller
-                        ? product.seller.avarta
+                      data?.product && data?.product?.seller
+                        ? data?.product?.seller?.avarta
                         : "https://cdn.chotot.com/G-1Z5ZbUlOQ2uJVjMhxxCver9aggaeYCn5ViRzXSzJY/preset:uac/plain/5880693cc1e7c23bec7c83355df078f1-731e14cfed11748e400f5a652062afa74f966b5d.jpg"
                     })`,
                   }}
                 ></div>
                 <div className="shopname col-lg-10 fw-bold ms-2">
-                  {product && product.seller
-                    ? product.seller.fullName
+                  {data?.product && data?.product?.seller
+                    ? data?.product?.seller?.fullName
                     : "Shop của best yasuo viet nam"}
                   <div className="product__details__rating">
                     <i className="fa fa-star"></i>
@@ -201,17 +202,20 @@ function Detail() {
                     className="show_phone_button_icon"
                     src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
                   />
-                  {product && product.seller ? product.seller.phoneNumber : "096595 ***"}
+                  {data?.product && data?.product.seller ? data?.product.seller.phoneNumber : "096595 ***"}
                 </span>
                 <span>BẤM ĐỂ HIỆN SỐ</span>
               </div>
             </div>
 
-            <button className="chat_button w-100 d-flex justify-content-between align-items-center px-3 mt-2">
+            <button className="chat_button w-100  px-3 mt-2">
+              <Link className="d-flex justify-content-between align-items-center" 
+                to={`/chat`} state={{receiverId: data?.sellerId, receiverName:data?.product?.seller.fullName }}  >
               <span>
                 <i className="fa fa-comments-o" aria-hidden="true"></i>
               </span>
               <span>CHAT VỚI NGƯỜI BÁN</span>
+              </Link>
             </button>
 
             <button className="chat_button  w-100  px-3 mt-2">

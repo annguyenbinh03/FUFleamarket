@@ -31,16 +31,6 @@ CREATE TABLE [dbo].[Address](
 )
 
 
-CREATE TABLE [dbo].[Message]( 
- 	[messageId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	[senderId]  INT NOT NULL,
-	[receiverId] INT NOT NULL,
-	[messageText] NVARCHAR(255) NOT NULL,
-	[time] DATETIME,
-	[isRead] BIT, 
-	CONSTRAINT FK_Message_User_sender FOREIGN KEY ([senderId]) REFERENCES [dbo].[User] ([userId]),
-	CONSTRAINT FK_Message_User_receiver FOREIGN KEY ([receiverId]) REFERENCES [dbo].[User] ([userId])
-)
 
 CREATE TABLE [dbo].[Category](
 	[categoryId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -126,6 +116,21 @@ CREATE TABLE [dbo].[Feedback](
 	CONSTRAINT FK_Feedback_Order FOREIGN KEY ([orderId]) REFERENCES [dbo].[Order] ([orderId])
 )
 
+CREATE TABLE [dbo].[ChatRoom](
+	[chatRoomId]  INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+	[user1] INT NOT NULL,
+	[user2] INT NOT NULL,
+	CONSTRAINT FK_ChatRoom_User1 FOREIGN KEY ([user1]) REFERENCES [dbo].[User] ([userId]),
+	CONSTRAINT FK_ChatRoom_User2 FOREIGN KEY ([user2]) REFERENCES [dbo].[User] ([userId])
+)
+
+CREATE TABLE [dbo].[Message](
+	[chatRoomId]  INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+	[senderId] INT NOT NULL,
+	[messageText] NVARCHAR(500) NOT NULL,
+	[createdDate] DATETIME NOT NULL,
+	[isRead] BIT 
+)
 
 GO	
 INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta], [createdDate])
@@ -163,21 +168,6 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Message] ([senderId], [receiverId], [messageText], [time], [isRead])
-VALUES
-    (1, 2, 'Hello! How are you?', GETDATE(), 1),
-    (2, 1, 'Hi! Im doing well, thanks.', GETDATE(), 1),
-    (1, 2, 'Thats great to hear!', GETDATE(), 1),
-    (2, 1, 'Yes, Ive been having a good day.', GETDATE(), 0),
-    (1, 3, 'Hey! Long time no see.', GETDATE(), 0),
-    (3, 1, 'Yeah, its been a while. How have you been?', GETDATE(), 0),
-    (1, 3, 'Ive been busy with work, but otherwise, Im good.', GETDATE(), 0),
-    (3, 1, 'Glad to hear that. We should catch up soon.', GETDATE(), 0),
-    (2, 3, 'Hey, do you have any plans for the weekend?', GETDATE(), 0),
-    (3, 2, 'Not yet. What do you have in mind?', GETDATE(), 0);
-GO
-
-GO
 INSERT INTO [dbo].[Category] ([name])
 VALUES
     (N'Đồ điện tử'),
@@ -192,16 +182,16 @@ GO
 GO
 INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate])
 VALUES
-    ('iPhone 13', 999.99, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01' ),
-    ('Laptop HP Spectre x360', 1299.99, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE() ),
-    ('Smart TV Samsung QLED', 1499.99, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE()),
-    ('Mens Dress Shirt', 49.99, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE()),
-    ('Womens Summer Dress', 39.99, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE()),
-    ('Sports Shoes Nike Air Max', 129.99, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, GETDATE()),
-    ('Kitchen Appliances Set', 299.99, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE()),
-    ('Kids Building Blocks Set', 29.99, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, GETDATE()),
-    ('Harry Potte V.1+2', 19.99, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, GETDATE()),
-    ('Fitness Equipment Set', 199.99, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE());
+    ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01' ),
+    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE() ),
+    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE()),
+    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE()),
+    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE()),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, GETDATE()),
+    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE()),
+    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, GETDATE()),
+    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, GETDATE()),
+    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE());
 GO
 
 

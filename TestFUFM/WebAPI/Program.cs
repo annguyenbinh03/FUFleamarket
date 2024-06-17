@@ -1,4 +1,3 @@
-using BusinessObjects.Models;
 using BusinessObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +10,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Service.DataServices;
+using Service.Hubs;
 
 public class Program
 {
@@ -19,6 +20,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Cấu hình dịch vụ
+        builder.Services.AddSignalR();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -105,11 +107,25 @@ public class Program
         builder.Services.AddScoped<IAddressRepository, AddressRepository>();
         builder.Services.AddScoped<IPromotionOrderRepository, PromotionOrderRepository>();
         builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
-        builder.Services.AddScoped<IMessageRepository, MessageRepository>();
         builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
         builder.Services.AddScoped<IProductReposity, ProductReposity>();
+        builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
+        builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+
+
+
+        builder.Services.AddCors(opt =>
+        {
+            opt.AddPolicy("reactApp", builder =>
+            {
+                builder.WithOrigins("http://localhost")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+            });
+        });
+        builder.Services.AddSingleton<SharedDb>();
 
         var app = builder.Build();
 
@@ -120,15 +136,17 @@ public class Program
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
         }
 		//show useCros with CorsPolicy
-        app.UseCors( builder =>
-        {
-            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-        } );
+        //app.UseCors( builder =>
+        //{
+        //    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials(); ;
+        //} );
         // Cấu hình middleware và routing
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
+        app.MapHub<ChatHub>("/Chat");
+        app.UseCors("reactApp");
 
         app.Run();
     }

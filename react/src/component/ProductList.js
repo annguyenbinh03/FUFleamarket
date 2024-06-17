@@ -4,6 +4,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function ProductList({ products }) {
+  
+  const formatPrice = (value) => {
+    return value.toLocaleString('vi-VN');
+  };
+
   return (
     <div className="row featured__filter">
       {products?.map((product) => (
@@ -32,7 +37,7 @@ function ProductList({ products }) {
               <h6>
                 <Link to={`/detail/${product.productId}`}>{product.productName}</Link>
               </h6>
-              <h5>${product.price.toFixed(2)}</h5>
+              <h5>${ formatPrice(product.price)}</h5>
               <div className="featured__item__text__footer d-flex justify-content-between">
                 <div className="d-flex align-items-center">
                   <img

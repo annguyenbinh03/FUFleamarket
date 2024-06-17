@@ -43,8 +43,9 @@ const Login = () => {
       const roles = response?.data?.role;
       const fullName = response?.data?.fullName;
       const avarta = response?.data?.avarta;
-      setAuth({ email, roles, fullName, avarta, accessToken });
-      localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken }));
+      const id = response?.data?.id;
+      setAuth({ email, roles, fullName, avarta, accessToken, id });
+      localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id }));
       setEmail("");
       setPwd("");
       if(roles.includes(2)){

@@ -1,15 +1,16 @@
 ﻿using BusinessObjects.Models;
-using BusinessObjects.MessageDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Repository.Interfaces
 {
-    public interface IMessageRepository
+    public interface IChatRoomRepository
     {
-        Task CreateAMessageAsync(int chatRoom,int userId,string msg);
-    }   
+        Task<int> CreateAChatRoom(int userId, int receiverId);
+        Task<int?> FindChatRoom(int userId, int receiverId);
+    }
 }

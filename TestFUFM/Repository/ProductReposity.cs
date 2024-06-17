@@ -75,7 +75,7 @@ namespace Repository
 
         public async Task<dynamic> AdminGetAllAsync(QueryObject query)
         {
-            var products = _context.Products
+            var products = await _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
@@ -93,8 +93,8 @@ namespace Repository
                         avarta = p.Seller.Avarta,
                         fullName = p.Seller.FullName,
                     }            
-                });
-            return products.ToList();
+                }).ToListAsync();
+            return products;
         }
 
 

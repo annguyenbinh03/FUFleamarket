@@ -140,6 +140,7 @@ body {
 .header .username {
   display: inline-block;
   line-height: 50px;
+  min-width: 108px;
     max-width: 170px;
     white-space: nowrap;
     overflow: hidden;
@@ -1101,6 +1102,32 @@ ul {
   background-position: center;
   backdrop-filter: blur(10px);
 }
+
+
+
+/*---------------------
+  Chat
+-----------------------*/
+
+.chat{
+  
+}
+
+.chat .receiverLogo{
+  width: 120px;
+  border-radius: 20px;
+}
+
+.chat .chat-messsages-container{
+  height: 43em;
+  overflow-y: scroll;
+}
+
+.chat .chat-messsages-container .chat-messsages{
+  border-radius: 20px;
+}
+
+
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 

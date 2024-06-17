@@ -13,6 +13,11 @@ function FeaturedProducts() {
     setProducts(await getProductAPI());
   };
 
+  const formatPrice = (value) => {
+    return value.toLocaleString('vi-VN');
+  };
+
+
   return (
     <div className="row featured__filter">
       {products?.map((product) => (
@@ -40,10 +45,10 @@ function FeaturedProducts() {
             <div className="featured__item__text">
               <h6>
                 <LinkRouter to={`/detail/${product.productId}`}>
-                  {product.productName}
+                  { product.productName}
                 </LinkRouter>
               </h6>
-              <h5>${product.price.toFixed(2)}</h5>
+              <h5>{ formatPrice(product.price)} vnd</h5>
               <div className="featured__item__text__footer">
                 <div>
                   <img

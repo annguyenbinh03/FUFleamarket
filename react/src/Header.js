@@ -228,7 +228,8 @@ const Header = () => {
             <i className="fa fa-bell" aria-hidden="true"></i>
           </button>
           <button className="btn fs-5 text-white">
-            <i className="fa fa-comments-o" aria-hidden="true"></i>
+           
+            <Link to="/chat"> <i className="fa fa-comments-o" aria-hidden="true"></i> </Link>
           </button>
           <button className="btn fs-5 text-white">
             <i className="fa fa-heart" aria-hidden="true"></i>

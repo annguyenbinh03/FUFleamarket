@@ -25,13 +25,8 @@ window.addEventListener('load', function () {
     }
 });
 
-var setBgElements = document.querySelectorAll('.set-bg');
-setBgElements.forEach(function (element) {
-    var bg = element.getAttribute('data-setbg');
-    if (bg) {
-        element.style.backgroundImage = 'url(' + bg + ')';
-    }
-});
+////Chat
+
 
 /*---------------------
   Upload Product Begin

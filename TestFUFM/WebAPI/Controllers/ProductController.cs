@@ -1,5 +1,4 @@
-﻿using BusinessObjects.Models;
-using BusinessObjects;
+﻿using BusinessObjects;
 using BusinessObjects.Helpers;
 using BusinessObjects.Mappers;
 using BusinessObjects.ProductDto;
@@ -101,7 +100,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
-            return Ok( new { product = productDTO, address });
+            return Ok( new { product = productDTO, address, sellerId =  product.SellerId });
         }
 
         [HttpGet("getmyproducts")]
