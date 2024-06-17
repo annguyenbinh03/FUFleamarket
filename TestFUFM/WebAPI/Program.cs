@@ -18,6 +18,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        var configuration = builder.Configuration;
+
         // Cấu hình dịch vụ
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -89,7 +91,22 @@ public class Program
         });
 
         // Cấu hình middleware xác thực Google
-        
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    var googleSettings = configuration.GetSection("Google");
+    options.ClientId = googleSettings["ClientId"];
+    options.ClientSecret = googleSettings["ClientSecret"];
+    options.Scope.Add("profile");
+    options.Scope.Add("email");
+    options.ClaimActions.MapJsonKey("picture", "picture", "url");
+
+});
 
         // Cấu hình DbContext
         builder.Services.AddDbContext<FufleaMarketContext>(options =>
