@@ -19,5 +19,8 @@ namespace Repository.Interfaces
         Task<Product> GetProductByIdAsync(int productId);
 
         Task<List<ProductImage>> GetALLAsync();
+
+        Task<List<ProductImage>> GetAllBySellerIdAsync(int sellerId);
+
     }
 }

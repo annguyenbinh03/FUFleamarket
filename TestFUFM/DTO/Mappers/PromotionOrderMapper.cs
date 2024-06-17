@@ -16,26 +16,27 @@ namespace BusinessObjects.Mappers
             return new PromotionOrderDTO
             {
                 PromoOrderId = model.PromoOrderId,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
+                StartDate = model.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndDate = model.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 UserId = model.UserId,
                 Price = model.Price,
                 ProductQuantity = model.ProductQuantity,
                 PromotionId = model.PromotionId,
             };
         }
-        public static PromotionOrder ToPromotionOrderFromCreate(this CreatePromotionOrderRequestDto PromotionOrderDto, int UserId)
+        
+        public static PromotionOrder ToPromotionOrderFromCreate(this CreatePromotionOrderRequestDto dto, int userId, DateTime startDate, DateTime endDate, decimal price)
         {
             return new PromotionOrder
-            {   
-                StartDate = PromotionOrderDto.StartDate,
-                EndDate = PromotionOrderDto.EndDate,
-                Price = PromotionOrderDto.Price,
-                ProductQuantity = PromotionOrderDto.ProductQuantity,
-                PromotionId = PromotionOrderDto.PromotionId,
-                UserId = UserId,
+            {
+                UserId = userId,
+                PromotionId = dto.PromotionId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Price = price, 
+                ProductQuantity = dto.ProductQuantity
             };
         }
-        
+
     }
 }

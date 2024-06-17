@@ -104,5 +104,14 @@ namespace Repository
         {
             return await _PIcontext.ProductImages.ToListAsync();
         }
+
+        public async Task<List<ProductImage>> GetAllBySellerIdAsync(int sellerId)
+        {
+            return await _PIcontext.ProductImages
+                .Include(pi => pi.Product)
+                .Where(pi => pi.Product.SellerId == sellerId)
+                .ToListAsync();
+        }
+
     }
 }

@@ -17,5 +17,6 @@ namespace BusinessObjects.PromotionDto
         public int Period { get; set; }
         public int ProductQuantity { get; set; }
         public decimal Price { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
