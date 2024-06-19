@@ -6,17 +6,91 @@ import Profile from "./../Screens/HomeScreen/profile";
 import PostManager from "../Screens/HomeScreen/postManager";
 import Message from "./../Screens/HomeScreen/message";
 import PostProduct from "./../Screens/HomeScreen/postProduct";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Trang chủ" component={Home} />
-      <Tab.Screen name="Quản lý tin" component={PostManager} />
-      <Tab.Screen name="Đăng tin" component={PostProduct} />
-      <Tab.Screen name="Tin nhắn" component={Message} />
-      <Tab.Screen name="Hồ sơ" component={Profile} />
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: "#f5f5f5",
+        },
+        tabBarShowLabel: true,
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+        tabBarActiveTintColor: "#007bff",
+        tabBarInactiveTintColor: "#999999",
+      }}
+    >
+      <Tab.Screen
+        name="Trang chủ"
+        component={Home}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="home"
+              size={24}
+              color={focused ? "#007bff" : "#999999"}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Quản lý tin"
+        component={PostManager}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="clipboard-list"
+              size={24}
+              color={focused ? "#007bff" : "#999999"}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Đăng tin"
+        component={PostProduct}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="plus-circle"
+              size={24}
+              color={focused ? "#007bff" : "#999999"}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Tin nhắn"
+        component={Message}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="message-text"
+              size={24}
+              color={focused ? "#007bff" : "#999999"}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Hồ sơ"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name="account"
+              size={24}
+              color={focused ? "#007bff" : "#999999"}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
