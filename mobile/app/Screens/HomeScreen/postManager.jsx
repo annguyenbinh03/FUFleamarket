@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
 
-const PostProduct = () => {
+const PostManager = () => {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Trang chợ</Text>
@@ -10,4 +10,4 @@ const PostProduct = () => {
   );
 };
 
-export default PostProduct;
+export default PostManager;

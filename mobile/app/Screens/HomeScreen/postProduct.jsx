@@ -6,16 +6,17 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { Dimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { images } from "../../../constants";
 import SearchInput from "../../../components/SearchInput";
 import { Picker } from "@react-native-picker/picker";
+import ImagePicker from "react-native-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 
 const PostProduct = () => {
   const navigation = useNavigation();
@@ -25,32 +26,30 @@ const PostProduct = () => {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("1");
   const [isNew, setIsNew] = useState(false);
+
+  const [imageUri, setImageUri] = useState(null);
+
+  const handleImagePicker = () => {
+    launchImageLibrary({ mediaType: "photo" }, (response) => {
+      if (response.assets && response.assets.length > 0) {
+        setImageUri(response.assets[0].uri);
+      }
+    });
+  };
+
   return (
-    <View>
-      <ScrollView style={styles.container}>
-        <StatusBar backgroundColor="#161622" style="light" />
+    <View style={styles.container}>
+      <StatusBar backgroundColor="#161622" style="light" />
+      <ScrollView style={styles.scrollView}>
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.logo}>
-            <Image source={images.logo} style={styles.logoImage} />
-            <View style={styles.searchContainer}>
-              <SearchInput style={styles.searcInput} />
-              <TouchableOpacity
-                style={styles.iconButton}
-                onPress={() => console.log("Bell")}
-              >
-                <FontAwesome5 name="bell" size={20} color="#111111" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.iconButton}
-                onPress={() => console.log("Message")}
-              >
-                <FontAwesome5 name="comments" size={20} color="#111111" />
-              </TouchableOpacity>
-            </View>
-          </View>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesome5 name="arrow-left" size={20} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Đăng tin</Text>
         </View>
 
+        {/* Content */}
         <View style={styles.content}>
           {/* Product Image Area */}
           <View style={styles.productImageArea}>
@@ -66,12 +65,21 @@ const PostProduct = () => {
                 <Text style={styles.uploaderTitle}>Tải ảnh lên</Text>
                 <Text style={styles.fileCompletedStatus}> </Text>
               </View>
-              <View style={styles.fileUploadBox}>
+              <TouchableOpacity
+                style={styles.fileUploadBox}
+                onPress={handleImagePicker}
+              >
                 <Text style={styles.boxTitle}>
                   <Text style={styles.fileInstruction}>Drag files here or</Text>
-                  <Text style={styles.fileBrowseButton}>browse</Text>
+                  <Text style={styles.fileBrowseButton}> browse</Text>
                 </Text>
-              </View>
+              </TouchableOpacity>
+              {imageUri && (
+                <Image
+                  source={{ uri: imageUri }}
+                  style={styles.uploadedImage}
+                />
+              )}
             </View>
           </View>
 
@@ -174,57 +182,109 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F8F8F8",
   },
+  scrollView: {
+    flex: 1,
+  },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between", // Align logo and icons
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     backgroundColor: "#DD0000",
-    width: "100%",
   },
-  logo: {
-    alignItems: "center",
-  },
-  logoImage: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  iconButton: {
-    marginLeft: 10, // Add space between icons
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff",
   },
   content: {
-    padding: 20,
+    padding: 16,
   },
-  // ... (rest of your existing styles)
-
-  // Reusable Styles
+  productImageArea: {
+    marginBottom: 20,
+  },
+  productImageTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  productImageInfo: {
+    marginBottom: 12,
+  },
+  productImageLink: {
+    color: "#DD0000",
+  },
+  fileUploader: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 16,
+  },
+  uploaderHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  uploaderTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  fileCompletedStatus: {
+    color: "#555",
+  },
+  fileUploadBox: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    padding: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  boxTitle: {
+    textAlign: "center",
+  },
+  fileInstruction: {
+    fontSize: 14,
+  },
+  fileBrowseButton: {
+    color: "#DD0000",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  productDetailArea: {
+    marginBottom: 20,
+  },
+  productDetailTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
   inputGroup: {
-    marginBottom: 15,
+    marginBottom: 16,
   },
   inputGroupLabel: {
+    fontSize: 14,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 8,
   },
   formSelect: {
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 5,
+    borderRadius: 8,
     padding: 10,
+    height: 48,
   },
   formControl: {
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 5,
+    borderRadius: 8,
     padding: 10,
-    height: 40,
+    height: 48,
   },
   textArea: {
-    height: 100,
+    height: 120,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -233,8 +293,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#FFA500",
-    padding: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 8,
     alignItems: "center",
     width: "48%",
   },
