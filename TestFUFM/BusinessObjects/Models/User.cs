@@ -46,6 +46,10 @@ public partial class User
     [Column("createdDate", TypeName = "datetime")]
     public DateTime CreatedDate { get; set; }
 
+    [Column("sub")]
+    [StringLength(100)]
+    public string? Sub { get; set; }
+
     [InverseProperty("User")]
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 

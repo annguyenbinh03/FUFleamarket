@@ -6,6 +6,9 @@ import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
 import axiosClient from './api/axiosClient'
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const UserDropdown = (authContainer) => {
   const auth = authContainer.auth;
@@ -19,10 +22,19 @@ const UserDropdown = (authContainer) => {
     navigate("/");
   };
 
-  const loginGoogle = async () => {
+  const loginGoogle = async (email, sub, name, avarta) => {
     try {
-      const response = axiosClient.get(`https://localhost:7057/Auth/signin-google`);
-      console.log(response);
+      if(!email.endsWith("@fpt.edu.vn")){
+          alert("Chỉ người dùng có email @fpt.edu.vn được phép đăng nhập.");
+          return;
+      }
+      const response = await axios.post(
+        "https://localhost:7057/Auth/loginGoogle",
+        JSON.stringify({ email, sub, name, avarta }),
+        {
+          headers: { "Content-Type": "application/json" },
+        });       
+        console.log(response);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -41,13 +53,12 @@ const UserDropdown = (authContainer) => {
         >
           {auth?.email ? (
             <>
-            <img
+              <img
                 className="userLogo mx-1 img-fluid"
                 src="https://cdn.chotot.com/uac2/27021569"
                 alt=""
               />
               <div className="fs-5 username px-1">{auth.fullName}</div>
-             
             </>
           ) : (
             <>
@@ -57,10 +68,11 @@ const UserDropdown = (authContainer) => {
                 alt=""
               />
               <span className="fs-5 username px-1">
-                <Link className="loginLink" to="/login">
+                <Link className="loginLink" >
                   Đăng nhập
                 </Link>
               </span>
+             
             </>
           )}
         </button>
@@ -112,10 +124,7 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link
-                    className="dropdown-item"
-                    onClick={ (e) => logout(e)}
-                  >
+                  <Link className="dropdown-item" onClick={(e) => logout(e)}>
                     Đăng xuất
                   </Link>
                 </div>
@@ -124,25 +133,21 @@ const UserDropdown = (authContainer) => {
           ) : (
             <>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" to="/login">
-                    Đăng nhập
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <button className="dropdown-item" onClick={() => loginGoogle()}>
-                    Đăng nhập Google
-                  </button>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" >
-                    Đăng ký
-                  </Link>
-                </div>
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  var credentialResponseDecoded = jwtDecode(
+                    credentialResponse.credential
+                  );
+                  // console.log(credentialResponseDecoded.name);
+                  // console.log(credentialResponseDecoded.email);
+                  // console.log(credentialResponseDecoded.picture);
+                  // console.log(credentialResponseDecoded.sub);
+                  loginGoogle(credentialResponseDecoded.email, credentialResponseDecoded.sub, credentialResponseDecoded.name, credentialResponseDecoded.picture);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
               </li>
             </>
           )}
