@@ -10,6 +10,7 @@ namespace Repository.Interfaces
 {
     public interface IMessageRepository
     {
-        Task CreateAMessageAsync(int chatRoom,int userId,string msg);
+        Task<Message> CreateAMessageAsync(int chatRoom,int receiverId, string msg);
+        Task<List<Message>?> GetRoomMessages(int chatRoom);
     }   
 }

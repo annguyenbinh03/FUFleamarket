@@ -18,7 +18,6 @@ namespace Service.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly ClaimsPrincipal _userClaim;
         private readonly SharedDb _shared;
         private IMessageRepository _messageRepo;
         private IChatRoomRepository _chatRoomRepository;
@@ -34,41 +33,44 @@ namespace Service.Hubs
         public async Task JoinChat(UserConnection conn)
         {
             await Clients.All.SendAsync("ReceiverMessage", "admin", $"{conn.UserName} has joined");
-
-  
         }
         public async Task JoinSpecificChatRoom(UserConnection conn)
         {
-
-
             //check chatroom
-            int? chatRoomId = await _chatRoomRepository.FindChatRoom( Int32.Parse(conn.UserId), Int32.Parse(conn.ReceiverId) );
-            if (chatRoomId == null)
+            int? chatRoomId = await _chatRoomRepository.FindChatRoom(conn.UserId, conn.ReceiverId );
+            if (chatRoomId == null || chatRoomId == 0)
             {
-                chatRoomId = await _chatRoomRepository.CreateAChatRoom(Int32.Parse(conn.UserId), Int32.Parse(conn.ReceiverId));
+                chatRoomId = await _chatRoomRepository.CreateAChatRoom(conn.UserId, conn.ReceiverId);
             }
             if (chatRoomId == null)
             {
                 chatRoomId = 1;
             }
-            Console.WriteLine(chatRoomId.ToString());
-            //conn.ChatRoom = chatRoomId.ToString();
+            conn.ChatRoom = chatRoomId.ToString();
 
             await Groups.AddToGroupAsync(Context.ConnectionId, conn.ChatRoom);
 
             _shared.Connections[Context.ConnectionId] = conn;
 
-            await Clients.Group(
-                conn.ChatRoom.ToString()).SendAsync("JoinSpecificChatRoom", "admin", $"{conn.UserName} has joined {conn.ChatRoom}"
-                );
+            var messages = await _messageRepo.GetRoomMessages( Int32.Parse( conn.ChatRoom));
+
+
+            await Clients.Group(conn.ChatRoom.ToString()).SendAsync("JoinSpecificChatRoom", messages);
+
         }
+
+
+        //await Clients.Group(conn.ChatRoom.ToString()).SendAsync("JoinSpecificChatRoom", "admin", $"{conn.UserName} has joined {conn.ChatRoom}" );
+
+
         public async Task SendMessage(string msg)
         {
             if (_shared.Connections.TryGetValue(Context.ConnectionId, out UserConnection conn))
             {
+                var message = await _messageRepo.CreateAMessageAsync(Int32.Parse(conn.ChatRoom), conn.ReceiverId, msg);
                 await Clients.Group(conn.ChatRoom.ToString())
-                    .SendAsync("ReceiveSpecificMessage", conn.UserId, msg);
-            //    await _messageRepo.CreateAMessageAsync(conn.ChatRoom, conn.UserId, msg);
+                    .SendAsync("ReceiveSpecificMessage", message);
+                
             }
         }
     }

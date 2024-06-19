@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.Mappers;
+using BusinessObjects.Models;
 using BusinessObjects.UserDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,32 @@ namespace WebAPI.Controllers
 
             var profileDto = profileOfUser.ToUserDTO();
             return Ok(new { profile = profileDto });
+        }
+
+        // Lấy danh sách người bán để chat
+        [HttpGet("getlistsellerforchat")]
+        public async Task<IActionResult> GetSellerForChat()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            List<User> users = await _userRepo.GetAllUserForChatAsync();
+            foreach (var user in users)
+            {
+                if (user.UserId.ToString() == userIdClaim.Value)
+                {
+                    users.Remove(user);
+                    break;
+                }
+            }
+            if (users == null || !users.Any())
+            {
+                return NotFound("No users found.");
+            }
+            return Ok(users);
         }
 
         // Lấy tất cả người dùng (chỉ admin)

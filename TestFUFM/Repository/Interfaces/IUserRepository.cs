@@ -11,6 +11,7 @@ namespace Repository.Interfaces
     public interface IUserRepository
     {
         public Task<List<User>> GetAllUserAsync();
+        public Task<List<User>> GetAllUserForChatAsync();
         public Task<User?> GetByIdAsync(int id);
         public Task<User> CreateAsync(User userMode);
         public Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto);

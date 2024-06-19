@@ -132,7 +132,7 @@ function Detail() {
                     />
                   </div>
                   <div className="seller_address_right">
-                   {data?.product?.seller?.addresses?.[0]?.specificAddress || "Người này chưa tiết lộ thông tin về địa chỉ"}
+                   {data?.address || "Người này chưa tiết lộ thông tin về địa chỉ"}
                   </div>
                 </div>
               </div>
@@ -210,7 +210,7 @@ function Detail() {
 
             <button className="chat_button w-100  px-3 mt-2">
               <Link className="d-flex justify-content-between align-items-center" 
-                to={`/chat`} state={{receiverId: data?.sellerId, receiverName:data?.product?.seller.fullName }}  >
+                to={`/chat`} state={{receiverId: data?.sellerId, receiverName: data?.product?.seller.fullName }}  >
               <span>
                 <i className="fa fa-comments-o" aria-hidden="true"></i>
               </span>

@@ -5,7 +5,7 @@ import MyPostButton from "./component/MyPostButton";
 import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
-
+import axiosClient from './api/axiosClient'
 
 const UserDropdown = (authContainer) => {
   const auth = authContainer.auth;
@@ -17,6 +17,15 @@ const UserDropdown = (authContainer) => {
     setAuth({});
     localStorage.removeItem('auth');
     navigate("/");
+  };
+
+  const loginGoogle = async () => {
+    try {
+      const response = axiosClient.get(`https://localhost:7057/Auth/signin-google`);
+      console.log(response);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
   };
 
   // console.log(auth);
@@ -119,6 +128,13 @@ const UserDropdown = (authContainer) => {
                   <Link className="dropdown-item" to="/login">
                     Đăng nhập
                   </Link>
+                </div>
+              </li>
+              <li>
+                <div className="d-flex justify-content-between align-items-center ps-3">
+                  <button className="dropdown-item" onClick={() => loginGoogle()}>
+                    Đăng nhập Google
+                  </button>
                 </div>
               </li>
               <li>

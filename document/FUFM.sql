@@ -125,8 +125,9 @@ CREATE TABLE [dbo].[ChatRoom](
 )
 
 CREATE TABLE [dbo].[Message](
-	[chatRoomId]  INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
-	[senderId] INT NOT NULL,
+	[messageId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[chatRoomId] INT NOT NULL, 
+	[receiverId] INT NOT NULL,
 	[messageText] NVARCHAR(500) NOT NULL,
 	[createdDate] DATETIME NOT NULL,
 	[isRead] BIT 
@@ -140,13 +141,13 @@ VALUES
     ('1', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 1, 0, 'https://zpsocial-f43-org.zadn.vn/310dc762c2792e277768.jpg', GETDATE()),
     ('admin', 'Admin name', 'admin', '0123456789', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.57236NGNujICB1CuE0X2MwAAAA?rs=1&pid=ImgDetMain', GETDATE()),
     ('1', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'https://th.bing.com/th/id/R.808636cc55f2ccceac3dab65f59e06a0?rik=rYlKMlOaLmfyUg&pid=ImgRaw&r=0', GETDATE()),
-    ('1', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 2, 1, 'https://demoda.vn/wp-content/uploads/2022/08/hinh-anh-avatar-nu-de-thuong.jpg', GETDATE()),
+    ('1', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 1, 1, 'https://demoda.vn/wp-content/uploads/2022/08/hinh-anh-avatar-nu-de-thuong.jpg', GETDATE()),
     ('1', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'https://th.bing.com/th/id/OIP.dRG04_HcB012wboIb8azKwHaHa?rs=1&pid=ImgDetMain', GETDATE()),
-    ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 2, 0, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
+    ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 1, 0, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
     ('1', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'https://th.bing.com/th/id/OIP.pAdUb6ZlM45prBGAjT__FAHaHW?rs=1&pid=ImgDetMain', GETDATE()),
     ('1', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'https://kynguyenlamdep.com/wp-content/uploads/2022/08/avatar-ff-ngau.jpg', GETDATE()),
-	 ('user', 'user name', 'user', '123124125125', 'Introduction 4', 0, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
-	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE());
+	 ('user', 'Kamisato', 'user', '123124125125', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE()),
+	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE());
 GO
 
 GO

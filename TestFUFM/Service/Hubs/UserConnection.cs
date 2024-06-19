@@ -8,10 +8,10 @@ namespace Service.Hubs
 {
     public class UserConnection
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public string ChatRoom { get; set;}
         public string UserName { get; set; } = string.Empty;
-        public string ReceiverId { get; set; }
+        public int ReceiverId { get; set; }
         public string ReceiverName { get; set; } = string.Empty;
     }
 }

@@ -1119,7 +1119,7 @@ ul {
 }
 
 .chat .chat-messsages-container{
-  height: 43em;
+  height: 52em;
   overflow-y: scroll;
 }
 
@@ -1127,6 +1127,10 @@ ul {
   border-radius: 20px;
 }
 
+.chat .mess-create-time{
+  font-size: 10px;
+    color: silver;
+}
 
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/

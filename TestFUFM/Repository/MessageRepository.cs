@@ -19,17 +19,33 @@ namespace Repository
             _dbcontext = dbcontext;
         }
 
-        public async Task CreateAMessageAsync(int chatRoom, int userId, string msg)
+        public async Task<Message> CreateAMessageAsync(int chatRoom, int receiverId, string msg)
         {
-            await _dbcontext.Messages.AddAsync(new Message
+            Message newMessage = new Message
             {
                 ChatRoomId = chatRoom,
-                SenderId = userId,
+                ReceiverId = receiverId,
                 MessageText = msg,
                 CreatedDate = DateTime.Now,
                 IsRead = false
-            });
+            };
+            await _dbcontext.Messages.AddAsync(newMessage);
             await _dbcontext.SaveChangesAsync();
+            return newMessage;
+        }
+
+        public async Task<List<Message>?> GetRoomMessages(int chatRoom)
+        {
+            var messages = await _dbcontext.Messages
+                .Where(x => x.ChatRoomId == chatRoom)
+                .Select(x => new Message
+                {
+                    MessageText = x.MessageText,
+                    ReceiverId = x.ReceiverId,
+                    CreatedDate = x.CreatedDate
+                })            
+                .ToListAsync();
+            return messages;
         }
     }
 }

@@ -56,6 +56,20 @@ namespace Repository
         
         }
 
+        public async Task<List<User>> GetAllUserForChatAsync()
+        {
+            return await _dbcontext.Users
+                .Where(x => x.RoleId == 1)
+                .Select(
+                    x => new User
+                    {
+                        UserId = x.UserId,
+                        FullName = x.FullName,
+                        Avarta = x.Avarta
+                    }
+                ).ToListAsync();
+        }
+
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _dbcontext.Users

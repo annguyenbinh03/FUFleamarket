@@ -10,11 +10,14 @@ namespace BusinessObjects.Models;
 public partial class Message
 {
     [Key]
+    [Column("messageId")]
+    public int MessageId { get; set; }
+
     [Column("chatRoomId")]
     public int ChatRoomId { get; set; }
 
-    [Column("senderId")]
-    public int SenderId { get; set; }
+    [Column("receiverId")]
+    public int ReceiverId { get; set; }
 
     [Column("messageText")]
     [StringLength(500)]
