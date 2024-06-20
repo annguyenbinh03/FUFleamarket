@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Service.DataServices;
 using Service.Hubs;
+using BusinessObjects.Models;
+using WebAPI.Util;
+using BusinessObjects.VNPay;
 
 public class Program
 {
@@ -129,7 +132,9 @@ public class Program
         builder.Services.AddScoped<IProductReposity, ProductReposity>();
         builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
         builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-
+        builder.Services.AddSingleton<VNPayHelper>();
+        // VNPay setting 
+        builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 
 
         builder.Services.AddCors(opt =>
