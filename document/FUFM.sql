@@ -85,6 +85,9 @@ CREATE TABLE [dbo].[PromotionOrder](
 	[price] MONEY NOT NULL, 
 	[productQuantity] INT NOT NULL,
 	[promotionId] INT NOT NULL,
+	[paymentMethod] NVACHAR(100) NOT NULL,
+	[transacsionCode] NVARCHAR(50) NOT NULL,
+	[status] BIT NOT NULL,
 	CONSTRAINT FK_PromotionOrder_Promotion FOREIGN KEY ([promotionId]) REFERENCES [dbo].[Promotion] ([promotionId]),
 	CONSTRAINT FK_PromotionOrder_User FOREIGN KEY ([userId]) REFERENCES [dbo].[User] ([userId])
 )
