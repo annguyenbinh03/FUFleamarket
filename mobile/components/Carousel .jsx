@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Image } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Image, TouchableOpacity, Dimensions } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+
+const { width } = Dimensions.get("window");
 
 const images = [
   "https://th.bing.com/th/id/OIP.HdQTzkVKUZbGYoL3wWp6FgHaD4?w=284&h=180&c=7&r=0&o=5&pid=1.7",
@@ -8,6 +11,7 @@ const images = [
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const flatListRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,12 +23,37 @@ const Carousel = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        index: currentIndex,
+        animated: true,
+      });
+    }
+  }, [currentIndex]);
+
+  const onImagePress = (index) => {
+    alert(`Sự kiện ${index + 1} chưa bắt đầu`);
+  };
+
   return (
     <View style={{ width: "100%", height: 200 }}>
-      <Image
-        source={{ uri: images[currentIndex] }}
-        style={{ width: "100%", height: "100%" }}
-        resizeMode="cover"
+      <FlatList
+        ref={flatListRef}
+        data={images}
+        horizontal={true}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => onImagePress(index)}>
+            <Image
+              source={{ uri: item }}
+              style={{ width, height: 200 }}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );

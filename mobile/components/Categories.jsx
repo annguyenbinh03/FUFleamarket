@@ -29,7 +29,8 @@ const Categories = () => {
 
   useEffect(() => {
     // fetch("http://10.0.2.2:7057/api/category")
-    fetch("http://192.168.110.7:7057/api/category")
+    // fetch("http://192.168.110.7:7057/api/category")
+    fetch("http://192.168.146.25:7057/api/category")
       .then((res) => res.json())
       .then((data) => {
         setCategories(data);

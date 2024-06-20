@@ -19,6 +19,10 @@ const thumbMeasure = (width - 48 - 32) / numColumns;
 const ProductItem = ({ item }) => {
   const navigation = useNavigation();
 
+  const formattedPrice = item.price
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -34,7 +38,7 @@ const ProductItem = ({ item }) => {
       </View>
 
       <Text style={styles.productTitle}>{item.productName}</Text>
-      <Text style={styles.productPrice}>Giá: ${item.price}</Text>
+      <Text style={styles.productPrice}>{formattedPrice} VNĐ</Text>
       <View style={styles.sellerInfo}>
         <Image
           source={{ uri: item.seller.avarta }} // Sử dụng avarta từ API
@@ -72,7 +76,8 @@ const ProductListContainer = () => {
 
   useEffect(() => {
     //fetch("http://192.168.110.7:8081/api/product/Listproduct")
-    fetch("http://192.168.110.7:7057/api/product/ListProduct")
+    // fetch("http://192.168.110.7:7057/api/product/ListProduct")
+    fetch("http://192.168.146.25:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {
         setProductList(data);
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: 14,
-    color: "#EE0000",
+    color: "#CC0000",
   },
   sellerInfo: {
     flexDirection: "row",
