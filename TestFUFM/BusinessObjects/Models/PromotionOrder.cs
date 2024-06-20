@@ -31,6 +31,17 @@ public partial class PromotionOrder
     [Column("promotionId")]
     public int PromotionId { get; set; }
 
+    [Column("paymentMethod")]
+    [StringLength(100)]
+    public string PaymentMethod { get; set; } = null!;
+
+    [Column("transacsionCode")]
+    [StringLength(50)]
+    public string TransacsionCode { get; set; } = null!;
+
+    [Column("status")]
+    public string?  Status { get; set; }
+
     [ForeignKey("PromotionId")]
     [InverseProperty("PromotionOrders")]
     public virtual Promotion Promotion { get; set; } = null!;

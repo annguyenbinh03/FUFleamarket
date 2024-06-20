@@ -37,12 +37,43 @@ namespace Repository
 
         public async Task<PromotionOrder?> GetByIdAsync(int id)
         {
-            return await _dbcontext.PromotionOrders.FindAsync(id);
+            var promotionOrder = await _dbcontext.PromotionOrders.FirstOrDefaultAsync(x => x.PromoOrderId == id);
+
+            if (promotionOrder == null)
+            {
+                return null;
+            }
+
+            return promotionOrder;
         }
+
 
         public async Task<bool> PromotionExists(int id)
         {
             return await _dbcontext.Promotions.AnyAsync(x => x.PromotionId == id);
         }
+        public async Task<PromotionOrder> UpdateAsync(PromotionOrder promotionOrderModel)
+        {
+            if (promotionOrderModel == null)
+                throw new ArgumentNullException(nameof(promotionOrderModel));
+
+            var existingOrder = await _dbcontext.PromotionOrders.FirstOrDefaultAsync(x => x.PromoOrderId == promotionOrderModel.PromotionId);
+            if (existingOrder == null)
+            {
+                throw new KeyNotFoundException($"No PromotionOrder found with ID {promotionOrderModel.PromotionId}");
+            }
+
+            existingOrder.Status = promotionOrderModel.Status;
+            existingOrder.EndDate = promotionOrderModel.EndDate;
+            existingOrder.StartDate = promotionOrderModel.StartDate;
+            existingOrder.Price = promotionOrderModel.Price;
+            existingOrder.ProductQuantity = promotionOrderModel.ProductQuantity;
+            existingOrder.PaymentMethod = promotionOrderModel.PaymentMethod;
+
+            await _dbcontext.SaveChangesAsync();
+
+            return existingOrder;
+        }
+
     }
 }
