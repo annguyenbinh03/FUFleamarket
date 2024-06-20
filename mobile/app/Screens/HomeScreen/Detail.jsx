@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, useRoute } from "react-native";
+import { View, Text } from "react-native";
+import { useRoute } from "@react-navigation/native";
 
 const Detail = () => {
   const route = useRoute();

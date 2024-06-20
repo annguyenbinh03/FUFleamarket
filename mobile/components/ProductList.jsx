@@ -97,6 +97,7 @@ const ProductListContainer = () => {
           numColumns={numColumns}
           renderItem={({ item, index }) => <ProductItem item={item} />}
           keyExtractor={(item) => item.productId.toString()}
+          contentContainerStyle={{ paddingBottom: 20 }}
         />
       </View>
     </View>
