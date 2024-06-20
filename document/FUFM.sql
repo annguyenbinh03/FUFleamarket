@@ -233,9 +233,9 @@ GO
 GO
 INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price], [isDeleted])
 VALUES
-    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100,0),
-    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 150 , 30, 500, 0),
-    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000, 0);
+    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 10000,0),
+    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 30 , 50, 40000, 0),
+    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 30, 100, 80000, 0);
 GO
 
 
