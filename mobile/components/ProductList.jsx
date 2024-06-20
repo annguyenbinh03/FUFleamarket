@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { getProductAPI } from "../app/api/product";
 
 const { width, height } = Dimensions.get("screen");
 const numColumns = 2;
@@ -70,8 +71,8 @@ const ProductListContainer = () => {
   // }
 
   useEffect(() => {
-    // fetch("http://10.0.2.2:5144/api/product/listproduct")
-    fetch("http://10.0.2.2:7057/api/product/ListProduct")
+    //fetch("http://192.168.110.7:8081/api/product/Listproduct")
+    fetch("http://192.168.110.7:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {
         setProductList(data);

@@ -2,11 +2,11 @@ import { View, Text } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./../Screens/HomeScreen/home";
-import Profile from "./../Screens/HomeScreen/profile";
-import PostManager from "../Screens/HomeScreen/postManager";
-import Message from "./../Screens/HomeScreen/message";
-import PostProduct from "./../Screens/HomeScreen/postProduct";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import PostManager from "../Screens/PostMangerScreen/postManager";
+import PostProduct from "../Screens/PostProductScreen/postProduct";
+import Message from "../Screens/MessageScreen/message";
+import Profile from "../Screens/ProfileScreen/profile";
 
 const Tab = createBottomTabNavigator();
 
