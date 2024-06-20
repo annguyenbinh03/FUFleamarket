@@ -33,7 +33,7 @@ const Chat = () => {
         .configureLogging(LogLevel.Information)
         .build();
       conn.on("JoinSpecificChatRoom", (listmessage) => {
-        setMessages((messages) => [...messages, ...listmessage]);
+        setMessages((messages) => [...listmessage]);
       });
 
       conn.on("ReceiveSpecificMessage", (message) => {

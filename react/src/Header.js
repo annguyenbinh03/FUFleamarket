@@ -5,7 +5,6 @@ import MyPostButton from "./component/MyPostButton";
 import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
-import axiosClient from './api/axiosClient'
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
@@ -22,7 +21,7 @@ const UserDropdown = (authContainer) => {
     navigate("/");
   };
 
-  const loginGoogle = async (email, sub, name, avarta) => {
+  const loginGoogle = async (email, sub, name, avartaLink) => {
     try {
       if(!email.endsWith("@fpt.edu.vn")){
           alert("Chỉ người dùng có email @fpt.edu.vn được phép đăng nhập.");
@@ -30,13 +29,19 @@ const UserDropdown = (authContainer) => {
       }
       const response = await axios.post(
         "https://localhost:7057/Auth/loginGoogle",
-        JSON.stringify({ email, sub, name, avarta }),
+        JSON.stringify({ email, sub, name, avartaLink }),
         {
           headers: { "Content-Type": "application/json" },
         });       
-        console.log(response);
+        const accessToken = response?.data?.token;
+        const roles = response?.data?.role;
+        const fullName = response?.data?.fullName;
+        const avarta = response?.data?.avarta;
+        const id = response?.data?.id;
+       setAuth({ email, roles, fullName, avarta, accessToken, id, sub });
+       localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id, sub }));
     } catch (error) {
-      console.error('Error fetching product:', error);
+      console.error('Error login Google:', error);
     }
   };
 

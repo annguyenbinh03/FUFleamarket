@@ -35,18 +35,22 @@ public class AuthController : ControllerBase
         User? user = null;
         if (existingUser == null) //not found, create
         {
+            if (data.email == null)
+            {
+                return NotFound();
+            }
             user = new User
             {
                 Email = data.email,
-                Avarta = data.avarta,
+                Avarta = data.avartaLink,
                 FullName = data.name,
                 RoleId = 1,
                 IsDeleted = false,
                 CreatedDate = DateTime.UtcNow,
                 Sub = data.sub
             };
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
         if (existingUser != null)
         {

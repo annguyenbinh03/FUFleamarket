@@ -12,6 +12,6 @@ namespace DTO.Helpers
         public string? email { get; set; }
         public string? sub { get; set; }
         public string? name { get; set; }
-        public string? avarta { get; set; }
+        public string? avartaLink { get; set; }
     }
 }
