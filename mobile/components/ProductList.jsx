@@ -71,7 +71,7 @@ const ProductListContainer = () => {
 
   useEffect(() => {
     // fetch("http://10.0.2.2:5144/api/product/listproduct")
-    fetch("  https://10.0.2.2.mockapi.io/api/v1/product")
+    fetch("http://10.0.2.2:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {
         setProductList(data);

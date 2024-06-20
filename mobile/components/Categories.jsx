@@ -31,7 +31,7 @@ const Categories = () => {
   };
 
   useEffect(() => {
-    fetch("http://10.0.2.2:5144/api/category")
+    fetch("http://10.0.2.2:7057/api/category")
       .then((res) => res.json())
       .then((data) => {
         setCategories(data);
