@@ -89,6 +89,13 @@ const UserDropdown = (authContainer) => {
               </div>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
+                  <Link to="" className="dropdown-item">
+                    Yêu cầu mua hàng
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="d-flex justify-content-between align-items-center ps-3">
                   <Link to="/buy-order" className="dropdown-item">
                     Đơn mua
                   </Link>
@@ -98,6 +105,18 @@ const UserDropdown = (authContainer) => {
                 <div className="d-flex justify-content-between align-items-center ps-3">
                   <Link to="/sell-order" className="dropdown-item">
                     Đơn bán
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="ps-3 pe-4 py-2 bg-body-secondary fw-bold">
+                  Dịch vụ trả phí
+                </div>
+              </li>
+              <li>
+                <div className="d-flex justify-content-between align-items-center ps-3">
+                  <Link to="/selling-package" className="dropdown-item">
+                    Gói bán hàng
                   </Link>
                 </div>
               </li>

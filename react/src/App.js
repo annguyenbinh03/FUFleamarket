@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy } from "react";
 import Loading from "./component/Loading";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/userPages/Register";
@@ -8,6 +8,8 @@ import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
+
+
 
 
 
@@ -22,6 +24,8 @@ const BuyOrder = lazy(() => import("./pages/userPages/BuyOrder"));
 const SellOrder = lazy(() => import("./pages/userPages/SellOrder"));
 const AdminProcessRequest = lazy(() => import("./pages/adminPages/AdminProcessRequest"));
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
+const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
+
 
 
 const ROLES = {
@@ -45,7 +49,9 @@ function App() {
             <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
             <Route path="/admin" element={<AdminProcessRequest />} />
             <Route path="/aboutUs" element={<AboutUs />} />
-            <Route path="/chat" element={<Chat/>} />
+          
+
+
 
             {/* protected */}
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin,ROLES.User]} />}>
@@ -53,6 +59,8 @@ function App() {
               <Route path="/my-posts" element={<MyPosts />} />
               <Route path="/upload-product" element={<PostProduct />} />
               <Route path="/create-order/:productId" element={<CreateOrder />} />
+              <Route path="/chat" element={<Chat/>} />
+              <Route path="/selling-package" element={<SellingPackage/>} />
              
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>

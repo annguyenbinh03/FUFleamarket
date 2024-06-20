@@ -85,7 +85,7 @@ CREATE TABLE [dbo].[PromotionOrder](
 	[price] MONEY NOT NULL, 
 	[productQuantity] INT NOT NULL,
 	[promotionId] INT NOT NULL,
-	[paymentMethod] NVACHAR(100) NOT NULL,
+	[paymentMethod] NVARCHAR(100) NOT NULL,
 	[transacsionCode] NVARCHAR(50) NOT NULL,
 	[status] BIT NOT NULL,
 	CONSTRAINT FK_PromotionOrder_Promotion FOREIGN KEY ([promotionId]) REFERENCES [dbo].[Promotion] ([promotionId]),
@@ -233,26 +233,11 @@ GO
 GO
 INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price], [isDeleted])
 VALUES
-    ('Cơ bản 1', 'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100,0),
-    ('Chuyên nghiệp 1 ', 'Dành cho người bán chuyên nghiệp', 150 , 30, 500, 0),
-    ('Gói VIP 1 ', 'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000, 0);
+    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 100,0),
+    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 150 , 30, 500, 0),
+    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 365, 100, 1000, 0);
 GO
 
-
-GO
-INSERT INTO [dbo].[PromotionOrder] ([startDate], [endDate], [userId], [price], [productQuantity], [promotionId])
-VALUES
-    ('2024-05-01', '2024-05-10', 1, 99.99, 10, 1),
-    ('2024-05-02', '2024-05-15', 2, 49.99, 30, 2),
-    ('2024-05-03', '2024-05-12', 3, 79.99, 100, 3),
-    ('2024-05-04', '2024-05-18', 4, 119.99, 10, 1),
-    ('2024-05-05', '2024-05-14', 5, 69.99, 30, 2),
-    ('2024-05-06', '2024-05-16', 1, 59.99, 100, 3),
-    ('2024-05-07', '2024-05-11', 2, 89.99, 10, 1),
-    ('2024-05-08', '2024-05-17', 3, 109.99, 2, 2),
-    ('2024-05-09', '2024-05-13', 4, 49.99, 1, 3),
-    ('2024-05-10', '2024-05-19', 5, 89.99, 1, 1);
-GO
 
 
 GO
