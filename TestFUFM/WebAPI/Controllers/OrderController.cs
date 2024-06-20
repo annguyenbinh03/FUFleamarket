@@ -47,7 +47,87 @@ namespace WebAPI.Controllers
 
             var soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
 
+            if (!soldOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
             var orders = soldOrders.Select(order => new
+            {
+                order = order.ToOrderShowProfileOfBuyerDTO(),
+                Product = new
+                {
+                    productId = order.Product.ProductId,
+                    productName = order.Product.ProductName,
+                    productPrice = order.Product.Price
+                }
+            }).ToList();
+
+            return Ok(orders);
+        }
+        [HttpGet("SoldStatus0")]
+        public async Task<IActionResult> GetSoldOrdersStatus0([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        {
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            var soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            var filteredOrders = soldOrders.Where(order => order.Status == 0);
+
+            if (!filteredOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
+            var orders = filteredOrders.Select(order => new
+            {
+                order = order.ToOrderShowProfileOfBuyerDTO(),
+                Product = new
+                {
+                    productId = order.Product.ProductId,
+                    productName = order.Product.ProductName,
+                    productPrice = order.Product.Price
+                }
+            }).ToList();
+
+            return Ok(orders);
+        }
+
+        [HttpGet("SoldStatus123")]
+        public async Task<IActionResult> GetSoldOrdersSatus123([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        {
+ 
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+            
+            var soldOrders = await _orderRepo.GetOrdersBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            var filteredOrders = soldOrders.Where(order => order.Status == 1 || order.Status == 2 || order.Status == 3);
+
+            if (!filteredOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
+            var orders = filteredOrders.Select(order => new
             {
                 order = order.ToOrderShowProfileOfBuyerDTO(),
                 Product = new
@@ -89,6 +169,12 @@ namespace WebAPI.Controllers
             bool sortByPrice = sortBy?.ToLower() == "price";
 
             var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            if (!boughtOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
             var orders = boughtOrders.Select(boughtOrder => new 
             {
                 order = boughtOrder.ToOrderShowProfileOfSellerDTO(),
@@ -102,6 +188,86 @@ namespace WebAPI.Controllers
 
             return Ok(orders);
         }
+
+        [HttpGet("BoughtStatus0")]
+        public async Task<IActionResult> GetBoughtOrdersStatus0([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        {
+            
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            
+            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            
+            var filteredOrders = boughtOrders.Where(order => order.Status == 0);
+
+            if (!filteredOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
+            var orders = filteredOrders.Select(boughtOrder => new
+            {
+                order = boughtOrder.ToOrderShowProfileOfSellerDTO(),
+                Product = new
+                {
+                    productId = boughtOrder.Product.ProductId,
+                    productName = boughtOrder.Product.ProductName,
+                    productPrice = boughtOrder.Product.Price
+                }
+            }).ToList();
+
+            return Ok(orders);
+        }
+
+        [HttpGet("BoughtStatus123")]
+        public async Task<IActionResult> GetBoughtOrdersStatus123([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        {
+
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            var filteredOrders = boughtOrders.Where(order => order.Status == 1 || order.Status == 2 || order.Status == 3);
+
+            if (!filteredOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
+            var orders = filteredOrders.Select(boughtOrder => new
+            {
+                order = boughtOrder.ToOrderShowProfileOfSellerDTO(),
+                Product = new
+                {
+                    productId = boughtOrder.Product.ProductId,
+                    productName = boughtOrder.Product.ProductName,
+                    productPrice = boughtOrder.Product.Price
+                }
+            }).ToList();
+
+            return Ok(orders);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByOrderId([FromRoute] int id)
         {

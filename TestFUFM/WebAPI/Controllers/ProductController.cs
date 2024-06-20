@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using BusinessObjects.Models;
 
 namespace WebAPI.Controllers
 {
