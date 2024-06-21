@@ -16,8 +16,8 @@ namespace BusinessObjects.Mappers
             return new PromotionOrderDTO
             {
                 PromoOrderId = model.PromoOrderId,
-                StartDate = model.StartDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                EndDate = model.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                StartDate = model.StartDate.ToString("yyyy-MM-dd"),
+                EndDate = model.EndDate.ToString("yyyy-MM-dd"),
                 UserId = model.UserId,
                 Price = model.Price,
                 ProductQuantity = model.ProductQuantity,

@@ -30,6 +30,7 @@ export const AuthProvider = ({children}) =>{
             console.log(loginInfo);
             getToken(loginInfo.email, loginInfo.sub, loginInfo.fullName, loginInfo.avarta );  
         }
+        return;
     },[])
     
     return (

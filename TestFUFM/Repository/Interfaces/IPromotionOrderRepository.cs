@@ -11,6 +11,7 @@ namespace Repository.Interfaces
     public interface IPromotionOrderRepository
     {
         Task<List<PromotionOrder>> GetAllAsync();
+        Task<List<PromotionOrder>> GetMyPromotionAsync(int userId);
         Task<PromotionOrder?> GetByIdAsync(int id);
         Task<PromotionOrder> CreateAsync(PromotionOrder PromotionOrderModel);
         Task<bool> PromotionExists(int id);

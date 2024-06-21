@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> LoginGoogle([FromBody] LoginGoogleData data)
     {
 
-        var existingUser = _context.Users.FirstOrDefault(u => u.Email == data.email);
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == data.email);
         User? user = null;
         if (existingUser == null) //not found, create
         {

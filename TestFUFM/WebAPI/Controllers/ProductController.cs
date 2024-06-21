@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using BusinessObjects.Models;
 
 namespace WebAPI.Controllers
 {
@@ -134,7 +133,7 @@ namespace WebAPI.Controllers
                 return Unauthorized("Invalid user ID format");
             }
            
-            int standardProductLimit = 5; 
+            int standardProductLimit = 3; 
             int totalProductLimit = standardProductLimit;
            
             var currentPromotionOrders = await _context.PromotionOrders

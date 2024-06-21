@@ -4,10 +4,12 @@ import { getMyProductsAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { Link } from "react-router-dom";
+import { getMyPackageAPI } from "../../api/packages";
 
 function MyPosts() {
   const [products, setProducts] = useState([]);
   const { auth } = useContext(AuthContext);
+  const [sellingPackages, setSellingPackages] = useState([]);
 
   const fetchProduct = async () => {
     try {
@@ -17,19 +19,28 @@ function MyPosts() {
       console.error("Error fetching product:", error);
     }
   };
+  const fetchMyPackage = async () => {
+    try {
+      var response = await getMyPackageAPI(auth.accessToken);
+      setSellingPackages(response);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
 
   useEffect(() => {
     fetchProduct();
+    fetchMyPackage();
   }, []);
 
   return (
     <div>
-           <Header />
+      <Header />
       <section className="mypost spad">
         <div className="container bg-white px-2">
           <div className="row">
-            <div className="shopview pt-4">
-              <div className="d-flex justify-content-center">
+            <div className="shopview pt-4 d-flex justify-content-between">
+              <div className="d-flex justify-content-center ps-4">
                 <div
                   className="shop_avartar col-lg-2"
                   style={{
@@ -47,6 +58,45 @@ function MyPosts() {
                     <span>(18 reviews)</span>
                   </div>
                 </div>
+              </div>
+              <div className="div pe-4 d-flex justify-content-center">
+                {sellingPackages?.[0]?.productQuantity ? ( 
+                  <div>
+                    <img
+                      src={require(`../../assets/img/selling-package/${sellingPackages?.[0]?.promotionId}.png`)}
+                      class="pe-2"
+                      alt="..."
+                      width={"60px"}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+
+                {!sellingPackages?.[0]?.productQuantity ||
+                sellingPackages?.[0]?.productQuantity === products?.length ? (
+                  <div className="my-auto fw-bold me-3 fs-5 text-danger">
+                    Số lượng sản phẩm:{" "}
+                    {Array.isArray(products) ? products.length : 0}/
+                    {sellingPackages
+                      ? sellingPackages?.[0]?.productQuantity
+                      : 3}
+                  </div>
+                ) : (
+                  <div className="my-auto fw-bold me-3 fs-5 ">
+                    Số lượng sản phẩm:{" "}
+                    {Array.isArray(products) ? products.length : 0}/
+                    {sellingPackages
+                      ? sellingPackages?.[0]?.productQuantity
+                      : 3}
+                  </div>
+                )}
+                <Link
+                  to="/my-selling-package"
+                  className="btn btn-warning rounded my-2"
+                >
+                  Quản lý gói bán hàng
+                </Link>
               </div>
             </div>
             <div className="postnav mt-3">
@@ -123,18 +173,18 @@ function MyPosts() {
                         alt=""
                       />
                       {product.status === 0 ? (
-                      <div className="btn btn-state btn-secondary mt-3">
-                        Đang chờ duyệt
-                      </div>
-                    ) : product.status === 1 ? (
-                      <div className="btn btn-state btn-success mt-3">
-                        Đã được duyệt
+                        <div className="btn btn-state btn-secondary mt-3">
+                          Đang chờ duyệt
                         </div>
-                    ) : (
-                      <div className="btn btn-state btn-danger mt-3">
-                        Từ chối duyệt
-                      </div>
-                    )}
+                      ) : product.status === 1 ? (
+                        <div className="btn btn-state btn-success mt-3">
+                          Đã được duyệt
+                        </div>
+                      ) : (
+                        <div className="btn btn-state btn-danger mt-3">
+                          Từ chối duyệt
+                        </div>
+                      )}
                     </div>
 
                     <div className="col-lg-8">
@@ -150,7 +200,7 @@ function MyPosts() {
                       </div>
                     </div>
                   </div>
-                  <div className="d-flex justify-content-end mt-1 ">                   
+                  <div className="d-flex justify-content-end mt-1 ">
                     <div className="post_button mt-3 text-end">
                       <button className="btn">
                         <i
@@ -180,7 +230,7 @@ function MyPosts() {
           ))}
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

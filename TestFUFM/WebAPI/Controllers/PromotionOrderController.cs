@@ -22,6 +22,29 @@ namespace WebAPI.Controllers
             _userRepo = userRepo;
             _promotionRepo = promotionRepo;
         }
+        [HttpGet("GetMyPackage")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetMyPackages()
+        {
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized("Invalid UserId format.");
+            }
+            var promoOrders = await _promoOrderRepo.GetMyPromotionAsync(userId);
+            if (promoOrders == null || !promoOrders.Any())
+            {
+                return NotFound("No promotion orders found for the current user.");
+            }
+            return Ok(promoOrders);
+        }
+
+
         [HttpGet("InformationPromotionOrder")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetAll()

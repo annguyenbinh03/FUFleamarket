@@ -47,6 +47,10 @@ namespace Repository
             return promotionOrder;
         }
 
+        public async Task<List<PromotionOrder>?> GetMyPromotionAsync(int userId)
+        {
+            return await _dbcontext.PromotionOrders.Where(po => po.UserId == userId).Include(x=>x.Promotion).ToListAsync();
+        }
 
         public async Task<bool> PromotionExists(int id)
         {

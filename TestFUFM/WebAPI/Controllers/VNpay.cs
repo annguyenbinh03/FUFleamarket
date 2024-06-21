@@ -72,13 +72,13 @@ namespace WebAPI.Controllers
             pay.AddRequestData("vnp_Amount",
                 amount); //số tiền cần thanh toán, công thức: số tiền * 100 - ví dụ 10.000 (mười nghìn đồng) --> 1000000
             pay.AddRequestData("vnp_BankCode",
-                "VNBANK"); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
+                ""); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
             pay.AddRequestData("vnp_CreateDate",
                 DateTime.Now.ToString("yyyyMMddHHmmss")); //ngày thanh toán theo định dạng yyyyMMddHHmmss
             pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
             pay.AddRequestData("vnp_IpAddr", clientIPAddress); //Địa chỉ IP của khách hàng thực hiện giao dịch
             pay.AddRequestData("vnp_Locale", "vn"); //Ngôn ngữ giao diện hiển thị - Tiếng Việt (vn), Tiếng Anh (en)
-            pay.AddRequestData("vnp_OrderInfo", infor); //Thông tin mô tả nội dung thanh toán
+            pay.AddRequestData("vnp_OrderInfo", infor); // thông tin user, promotionid
             pay.AddRequestData("vnp_OrderType",
                 "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
             pay.AddRequestData("vnp_ReturnUrl",
@@ -100,9 +100,9 @@ namespace WebAPI.Controllers
             var queryString = Request.QueryString.Value;
             var json = HttpUtility.ParseQueryString(queryString);
 
-            long orderId = Convert.ToInt64(json["vnp_TxnRef"]); // Mã hóa đơn
-            string orderInfo = json["vnp_OrderInfo"].ToString(); // Thông tin giao dịch
-            long vnpayTranId = Convert.ToInt64(json["vnp_TransactionNo"]); // Mã giao dịch tại hệ thống VNPAY
+            long orderId = Convert.ToInt64(json["vnp_TxnRef"]); // Giống mã gửi sang VNPAY khi gửi yêu cầu thanh toán
+            string orderInfo = json["vnp_OrderInfo"].ToString(); // thông tin user, promotionid
+            long vnpayTranId = Convert.ToInt64(json["vnp_TransactionNo"]); // Mã giao dịch ghi nhận tại hệ thống VNPAY. Ví dụ: 20170829153052
             string vnp_ResponseCode = json["vnp_ResponseCode"].ToString(); // Response code
             string vnp_SecureHash = json["vnp_SecureHash"].ToString(); // Hash của dữ liệu trả về
             int pos = queryString.IndexOf("&vnp_SecureHash");
@@ -115,27 +115,37 @@ namespace WebAPI.Controllers
 
             string[] parts = orderInfo.Split('/');
 
-            string userId = parts[0];
-            string promotionId = parts[1];
+            int userId = Int32.Parse( parts[0]);
+            int promotionId = Int32.Parse(parts[1]);
 
-            Promotion promotion = await _promotionRepo.GetByIdAsync(Int32.Parse(promotionId));
-            
+            Promotion? promotion = await _promotionRepo.GetByIdAsync(promotionId);
+
+            PromotionOrder newPromoOrder = new PromotionOrder
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(promotion.Period),
+                UserId = userId,
+                PaymentMethod = "VNPay",
+                TransactionCode = vnpayTranId.ToString(),
+                Price = promotion.Price,
+                ProductQuantity = promotion.ProductQuantity,
+                PromotionId = promotion.PromotionId
+            };
            
 
             if (vnp_ResponseCode == "00")
             {
-              //  po.Status = StatusPromotionOrderEnum.Completed.ToString();
+                newPromoOrder.Status = StatusPromotionOrderEnum.Completed.ToString();
                 
             }
             else
             {
-                // po.Status = StatusPromotionOrderEnum.Failed.ToString();
+                newPromoOrder.Status = StatusPromotionOrderEnum.Failed.ToString();
             }
-            // await _promotionOrder.UpdateAsync(po);
+             await _promotionOrder.CreateAsync(newPromoOrder);
             //StatusCode(200, new { error = false, status = po.Status, orderId = orderInfo, transactionId = vnpayTranId });
-            //return Redirect("http://localhost/");
+            return Redirect("http://localhost/my-selling-package");
 
-            return StatusCode(200, new { orderId, orderInfo, vnpayTranId, promotion });
         }
 
         private bool ValidateSignature(string rspraw, string inputHash, string secretKey)

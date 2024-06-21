@@ -8,7 +8,8 @@ import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
-import VNPay from "./pages/userPages/testPage";
+import MySellingPackage from "./pages/userPages/MySellingPackage";
+
 
 
 
@@ -50,7 +51,7 @@ function App() {
             <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
             <Route path="/admin" element={<AdminProcessRequest />} />
             <Route path="/aboutUs" element={<AboutUs />} />
-            <Route path="/vnpay/:amount/:infor" element={<VNPay />} />
+            <Route path="/my-selling-package" element={<MySellingPackage/>} />
 
 
 
@@ -62,6 +63,8 @@ function App() {
               <Route path="/create-order/:productId" element={<CreateOrder />} />
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />
+
+              
              
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>

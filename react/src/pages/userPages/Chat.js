@@ -81,7 +81,7 @@ const Chat = () => {
 
       <div className="container-fluid spad px-0 pb-4 chat">
         <div className="row mt-3 mx-0">
-          <div className="col-lg-2">
+          <div className="col-md-2 col-lg-2">
             {chatters?.map((chatter, key) => (
               <div>
                 {chatTarget?.fullName === chatter?.fullName ? (
@@ -131,7 +131,7 @@ const Chat = () => {
             ))}
             ;
           </div>
-          <div className="col-lg-8">
+          <div className="col-md-8 col-lg-8">
             <div className="chat-container">
               {!conn ? (
                 <div className="row px-5 pt-5">
@@ -152,7 +152,7 @@ const Chat = () => {
               )}
             </div>
           </div>
-          <div className="col-lg-2">
+          <div className="col-md-2 col-lg-2">
             <div className="container d-flex flex-column justify-content-between h-100">
               <div className="container d-flex flex-column justify-content-center align-items-center">
                 <img

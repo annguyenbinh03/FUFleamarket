@@ -35,12 +35,13 @@ public partial class PromotionOrder
     [StringLength(100)]
     public string PaymentMethod { get; set; } = null!;
 
-    [Column("transacsionCode")]
-    [StringLength(50)]
-    public string TransacsionCode { get; set; } = null!;
+    [Column("transactionCode")]
+    [StringLength(100)]
+    public string TransactionCode { get; set; } = null!;
 
     [Column("status")]
-    public string?  Status { get; set; }
+    [StringLength(10)]
+    public string Status { get; set; } = null!;
 
     [ForeignKey("PromotionId")]
     [InverseProperty("PromotionOrders")]

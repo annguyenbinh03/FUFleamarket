@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Service.DataServices;
 using Service.Hubs;
-using BusinessObjects.Models;
 using WebAPI.Util;
 using BusinessObjects.VNPay;
 

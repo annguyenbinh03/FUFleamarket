@@ -62,6 +62,7 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
         <div className="d-flex">
           <form
             className="mt-2"
+            style={{minWidth:"95%"}}
             onSubmit={(e) => {
               e.preventDefault();
               sendMessage(msg);

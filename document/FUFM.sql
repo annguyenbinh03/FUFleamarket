@@ -86,8 +86,8 @@ CREATE TABLE [dbo].[PromotionOrder](
 	[productQuantity] INT NOT NULL,
 	[promotionId] INT NOT NULL,
 	[paymentMethod] NVARCHAR(100) NOT NULL,
-	[transacsionCode] NVARCHAR(50) NOT NULL,
-	[status] BIT NOT NULL,
+	[transactionCode] NVARCHAR(100) NOT NULL,
+	[status] NVARCHAR(10) NOT NULL,
 	CONSTRAINT FK_PromotionOrder_Promotion FOREIGN KEY ([promotionId]) REFERENCES [dbo].[Promotion] ([promotionId]),
 	CONSTRAINT FK_PromotionOrder_User FOREIGN KEY ([userId]) REFERENCES [dbo].[User] ([userId])
 )
@@ -191,10 +191,10 @@ VALUES
     ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE()),
     ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE()),
     ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE()),
-    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 2, 6, 1, GETDATE()),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, GETDATE()),
     ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE()),
-    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 2, 7, 1, GETDATE()),
-    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 1, 2, 1, GETDATE()),
+    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, GETDATE()),
+    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, GETDATE()),
     ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE());
 GO
 
