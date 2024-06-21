@@ -18,7 +18,8 @@ namespace Repository.Interfaces
         public Task<User?> BanAccount(int id);
         public Task<User?> UnBanAccount(int id);
         public Task<bool> UserExists(int id);
+        public Task<bool> CheckUser(int id);
 
-        Task<User> GetProfileUser(int userId);
+        public Task<User> GetProfileUser(int userId);
     }
 }
