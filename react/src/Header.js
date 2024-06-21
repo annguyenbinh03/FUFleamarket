@@ -60,7 +60,7 @@ const UserDropdown = (authContainer) => {
             <>
               <img
                 className="userLogo mx-1 img-fluid"
-                src="https://cdn.chotot.com/uac2/27021569"
+                src={auth.avarta}
                 alt=""
               />
               <div className="fs-5 username px-1">{auth.fullName}</div>

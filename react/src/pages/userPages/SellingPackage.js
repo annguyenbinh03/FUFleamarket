@@ -4,6 +4,7 @@ import Header from "../../Header";
 import AuthContext from "../../context/AuthProvider";
 import sellingPackageBanner from "../../assets/img/selling-package/sellingPackageBanner.png";
 import { getPackagesAPI } from "../../api/packages";
+import { Link } from "react-router-dom";
 
 
 const SellingPackage = () => {
@@ -14,7 +15,6 @@ const SellingPackage = () => {
     try {
       var response = await getPackagesAPI(auth.accessToken);
       setSellingPackages(response);
-      console.log(response);
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -24,9 +24,15 @@ const SellingPackage = () => {
     fetchPackage();
   }, []);
 
+  const handleBuy = (userId,promotionId) =>{
+    window.open(`https://localhost:7057/api/VNPay/payment/${userId}/${promotionId}`);
+  }
+
+
   const formatPrice = (value) => {
     return value.toLocaleString('vi-VN');
   };
+
 
   return (
     <div>
@@ -44,6 +50,8 @@ const SellingPackage = () => {
               </div>
               <div className="text-start  px-5 mx-3 mt-2">
                 <li>10 lượt đăng bài</li>
+                <li>Quản lý kinh doanh và chi tiêu hiệu quả</li>
+                <li>Tiếp cận thêm liên hệ của nhóm khách hàng thụ động cần tư vấn</li>
               </div>
             </div>
             <div className="col-lg-6">
@@ -81,7 +89,20 @@ const SellingPackage = () => {
                     </div>
                     <div>{sPackage.productQuantity}</div>
                   </div>
-                  <button class="btn btn-dark w-100">Mua ngay</button>
+                  <div className="d-flex justify-content-start fw-bold my-3">
+                    <div>
+                      <span className="text-success">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                      </span>{" "}
+                      Duyệt tin nhanh dưới 5 phút
+                    </div>
+                  </div>
+                  <button 
+                  onClick={()=> handleBuy(auth.id, sPackage.promotionId)}
+                  class="btn btn-dark w-100"
+                  >
+                    Mua ngay
+                    </button>
                 </div>
               </div>
             ))}
@@ -105,7 +126,7 @@ const SellingPackage = () => {
                 </h2>
                 <div
                   id="panelsStayOpen-collapseOne"
-                  class="accordion-collapse collapse show"
+                  class="accordion-collapse collapse"
                 >
                   <div class="accordion-body">
                   Gói bán hàng được áp dụng cho cả tin đăng mới và tin bạn đã đăng trước đó, chỉ cần tin đăng này vẫn còn thời hạn hiển thị trên FUFM.

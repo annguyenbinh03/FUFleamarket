@@ -55,10 +55,6 @@ namespace Repository
           return await _dbcontext.Users.Include(add => add.Addresses).ToListAsync();
         
         }
-        public async Task<bool> CheckUser(int id)
-        {
-            return await _dbcontext.Users.AnyAsync(u => u.UserId == id);
-        }
         public async Task<List<User>> GetAllUserForChatAsync()
         {
             return await _dbcontext.Users
@@ -100,9 +96,9 @@ namespace Repository
             return existingUser;
         }
 
-        public Task<bool> UserExists(int id)
+        public async Task<bool> IsExistUser(int id)
         {
-            return _dbcontext.Users.AnyAsync(x => x.UserId == id);
+            return await _dbcontext.Users.AnyAsync(x => x.UserId == id);
         }
         public async Task<User> GetProfileUser(int userId)
         {

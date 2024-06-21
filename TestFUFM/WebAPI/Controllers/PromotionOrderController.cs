@@ -73,7 +73,7 @@ namespace WebAPI.Controllers
                 return Unauthorized("Invalid UserId format.");
             }
 
-            if (!await _userRepo.UserExists(userId))
+            if (!await _userRepo.IsExistUser(userId))
             {
                 return BadRequest("User does not exist.");
             }

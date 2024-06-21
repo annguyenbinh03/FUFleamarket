@@ -8,6 +8,7 @@ import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
+import VNPay from "./pages/userPages/testPage";
 
 
 
@@ -49,7 +50,7 @@ function App() {
             <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
             <Route path="/admin" element={<AdminProcessRequest />} />
             <Route path="/aboutUs" element={<AboutUs />} />
-          
+            <Route path="/vnpay/:amount/:infor" element={<VNPay />} />
 
 
 

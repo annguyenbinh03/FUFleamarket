@@ -9,6 +9,7 @@ using BusinessObjects.VNPay;
 using Repository.Interfaces;
 using WebAPI.Util;
 using BusinessObjects.Models.Enum;
+using Newtonsoft.Json.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -18,32 +19,45 @@ namespace WebAPI.Controllers
     {
         private readonly VNPaySettings _vnPaySettings;
         private readonly IPromotionOrderRepository _promotionOrder;
+        private readonly IPromotionRepository _promotionRepo;
+        private readonly IUserRepository _userRepo;
 
         public VNPayController(IOptions<VNPaySettings> vnPaySettings, IPromotionOrderRepository promotionOrder,
-            IPromotionRepository promotionRepository)
+            IPromotionRepository promotionRepository, IUserRepository userRepository)
         {
             _vnPaySettings = vnPaySettings.Value;
             _promotionOrder = promotionOrder;
+            _promotionRepo = promotionRepository;
+            _userRepo = userRepository;
         }
 
 
-        [HttpGet("payment/{amount}/{infor}")]
-        public ActionResult Payment(string amount, string infor)
+        [HttpGet("payment/{userId:int}/{promotionId:int}")]
+        public async Task<ActionResult> Payment(int userId, int promotionId)
         {
             string orderInfo = DateTime.Now.ToString("ddHHmmssyyyy");
-            try
+            orderInfo = userId.ToString() + orderInfo;
+
+            Promotion? promo = await _promotionRepo.GetByIdAsync(promotionId);
+            bool isExistUser = await _userRepo.IsExistUser(userId);
+            if (!isExistUser)
             {
-                Task<PromotionOrder> po = _promotionOrder.GetByIdAsync(int.Parse(infor));
-                if (po == null)
-                {
-                    return StatusCode(500,
-                        new { message = $"An error occurred while processing your request." });
-                }
+                return Redirect("Người dùng k tồn tại");
             }
-            catch (Exception e)
+            int amountInt = 0;
+            if (promo != null)
+            {
+                amountInt = Convert.ToInt32(promo.Price);
+            }
+            else
             {
                 return Redirect("đường dẫn nếu phản hồi ko hợp lệ");
             }
+            var amount = amountInt.ToString();
+
+
+            //infor user and promotion
+            string infor = userId.ToString() + "/" + promotionId.ToString();
 
 
             string hostName = System.Net.Dns.GetHostName();
@@ -58,7 +72,7 @@ namespace WebAPI.Controllers
             pay.AddRequestData("vnp_Amount",
                 amount); //số tiền cần thanh toán, công thức: số tiền * 100 - ví dụ 10.000 (mười nghìn đồng) --> 1000000
             pay.AddRequestData("vnp_BankCode",
-                ""); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
+                "VNBANK"); //Mã Ngân hàng thanh toán (tham khảo: https://sandbox.vnpayment.vn/apis/danh-sach-ngan-hang/), có thể để trống, người dùng có thể chọn trên cổng thanh toán VNPAY
             pay.AddRequestData("vnp_CreateDate",
                 DateTime.Now.ToString("yyyyMMddHHmmss")); //ngày thanh toán theo định dạng yyyyMMddHHmmss
             pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
@@ -99,37 +113,29 @@ namespace WebAPI.Controllers
                 return StatusCode(400, new { error = true, message = "Invalid signature or incorrect merchant code." });
             }
 
-            PromotionOrder po = null;
-            try
-            {
-                po = await _promotionOrder.GetByIdAsync(int.Parse(orderInfo));
-                po.Status = po.Status == null ? "" : po.Status.ToString();
-                if (po.Status.Equals(StatusPromotionOrderEnum.Completed.ToString()))
-                {
-                    return StatusCode(400, new { error = true, message = "Order ID have been paid." });
-                }
-            }
-            catch (Exception e)
-            {
-                return StatusCode(400, new { error = true, message = "Order ID retrieval failed.", details = e.Message });
-            }
+            string[] parts = orderInfo.Split('/');
 
-            if (po == null)
-            {
-                return StatusCode(400, new { error = true, message = "Order not found." });
-            }
+            string userId = parts[0];
+            string promotionId = parts[1];
+
+            Promotion promotion = await _promotionRepo.GetByIdAsync(Int32.Parse(promotionId));
+            
+           
 
             if (vnp_ResponseCode == "00")
             {
-                po.Status = StatusPromotionOrderEnum.Completed.ToString();
+              //  po.Status = StatusPromotionOrderEnum.Completed.ToString();
+                
             }
             else
             {
-                po.Status = StatusPromotionOrderEnum.Failed.ToString();
+                // po.Status = StatusPromotionOrderEnum.Failed.ToString();
             }
-            await _promotionOrder.UpdateAsync(po);
+            // await _promotionOrder.UpdateAsync(po);
+            //StatusCode(200, new { error = false, status = po.Status, orderId = orderInfo, transactionId = vnpayTranId });
+            //return Redirect("http://localhost/");
 
-            return StatusCode(200, new { error = false, status = po.Status, orderId = orderInfo, transactionId = vnpayTranId });
+            return StatusCode(200, new { orderId, orderInfo, vnpayTranId, promotion });
         }
 
         private bool ValidateSignature(string rspraw, string inputHash, string secretKey)

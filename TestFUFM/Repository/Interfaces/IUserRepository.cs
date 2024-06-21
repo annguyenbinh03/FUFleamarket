@@ -17,8 +17,7 @@ namespace Repository.Interfaces
         public Task<User?> UpdateAsync(int id, UpdateUserRequestDto userDto);
         public Task<User?> BanAccount(int id);
         public Task<User?> UnBanAccount(int id);
-        public Task<bool> UserExists(int id);
-        public Task<bool> CheckUser(int id);
+        public Task<bool> IsExistUser(int id);
 
         public Task<User> GetProfileUser(int userId);
     }
