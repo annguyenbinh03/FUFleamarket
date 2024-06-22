@@ -1,89 +1,121 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import AuthContext from "../../../context/AuthProvider";
 
-const Login = () => {
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const { setAuth } = useContext(AuthContext);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  useEffect(() => {
+    emailRef.current.focus();
+  }, []);
 
   const handleLogin = async () => {
     setIsLoading(true);
+    setErrorMessage("");
 
     try {
-      const response = await fetch(
-        "https://10.0.2.2:7057/api/LoginAdmin/login",
+      const response = await axios.post(
+        "http://192.168.146.25:7057/api/LoginAdmin/login",
+        { email, password },
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(response);
-        await AsyncStorage.setItem("userToken", data.token);
-        setAuth(data);
-        setIsLoading(false);
-        navigation.navigate("Home");
+      console.log("Response Data:", response.data);
+
+      const { token, role, fullName, avarta, id } = response.data;
+
+      if (role.includes(1)) {
+        // Adjust the role check based on your requirements
+        await AsyncStorage.setItem(
+          "auth",
+          JSON.stringify({
+            email,
+            role,
+            fullName,
+            avarta,
+            token,
+            id,
+          })
+        );
+        console.log("Navigating to TabNavigation");
+        navigation.replace("TabNavigation");
       } else {
-        setIsLoading(false);
-        Alert.alert("Lỗi đăng nhập", "Email hoặc mật khẩu không chính xác.");
+        Alert.alert(
+          "Không được phép",
+          "Bạn không có quyền truy cập vào ứng dụng này."
+        );
       }
     } catch (error) {
-      console.error("Lỗi khi đăng nhập:", error);
+      console.error("Login Error:", error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            setErrorMessage(
+              "Unauthorized: You are not allowed to access this resource."
+            );
+            break;
+          case 400:
+            setErrorMessage("Bad Request: Invalid email or password.");
+            break;
+          case 500:
+            setErrorMessage("Server Error: The server encountered an issue.");
+            break;
+          default:
+            setErrorMessage("Login failed");
+            break;
+        }
+      } else {
+        setErrorMessage("Lỗi kết nối mạng");
+      }
+    } finally {
       setIsLoading(false);
-      Alert.alert("Lỗi", "Kết nối mạng gặp vấn đề. Vui lòng thử lại sau.");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../../assets/images/logo.png")}
-        style={styles.logo}
-      />
-
       <Text style={styles.title}>Đăng nhập</Text>
-
       <TextInput
+        ref={emailRef}
         style={styles.input}
         placeholder="Email"
         onChangeText={setEmail}
         value={email}
+        autoCapitalize="none"
         keyboardType="email-address"
+        textContentType="emailAddress"
       />
-
       <TextInput
+        ref={passwordRef}
         style={styles.input}
         placeholder="Mật khẩu"
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
+        textContentType="password"
       />
+      {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
 
       {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          color="#FFA500"
-          style={styles.loading}
-        />
+        <ActivityIndicator size="large" color="#007bff" />
       ) : (
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Đăng nhập</Text>
@@ -92,46 +124,41 @@ const Login = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#3399CC",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#FFA500",
     marginBottom: 20,
   },
-  logo: {
-    width: 250,
-    height: 84,
-    marginBottom: 30,
-  },
   input: {
-    width: "80%",
-    height: 40,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ccc",
     padding: 10,
     marginBottom: 15,
-    borderRadius: 5,
+    width: "80%",
   },
   button: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#007bff",
     padding: 15,
-    borderRadius: 5,
     width: "80%",
+    borderRadius: 5,
     alignItems: "center",
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
   },
 });
 
-export default Login;
+export default LoginScreen;

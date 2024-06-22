@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigation from "./Navigations/TabNavigation";
 import Detail from "./Screens/HomeScreen/Detail";
 
+import LoginScreen from "./Screens/LoginScreen/Login";
+
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +14,8 @@ export default function APP() {
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer independent={true}>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen
             name="TabNavigation"
             component={TabNavigation}
