@@ -57,9 +57,7 @@ const Categories = () => {
             <TouchableOpacity
               style={styles.categoryItem}
               onPress={() =>
-                navigation.navigate("ProductList", {
-                  categoryId: item.categoryId,
-                })
+                navigation.push("ProductListByCategory", { category: item })
               }
             >
               <View>

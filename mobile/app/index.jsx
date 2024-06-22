@@ -6,6 +6,7 @@ import TabNavigation from "./Navigations/TabNavigation";
 import Detail from "./Screens/HomeScreen/Detail";
 
 import LoginScreen from "./Screens/LoginScreen/Login";
+import ProductListByCategoryScreen from "./Screens/ProductScreen/ProductListByCategoryScreen";
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -26,6 +27,15 @@ export default function APP() {
             component={Detail}
             options={{
               title: "Chi tiết sản phẩm",
+              headerStyle: styles.header,
+              headerTitleStyle: styles.headerTitle,
+            }}
+          />
+          <Stack.Screen
+            name="ProductListByCategory"
+            component={ProductListByCategoryScreen}
+            options={{
+              title: "Danh sách sản phẩm",
               headerStyle: styles.header,
               headerTitleStyle: styles.headerTitle,
             }}
