@@ -53,6 +53,11 @@ function CreateOrder() {
    // navigate('/', { replace: true });
   };
 
+  const formatPrice = (value) => {
+    return value.toLocaleString('vi-VN');
+  };
+
+
   return (
     <div>
          <Header />
@@ -148,28 +153,28 @@ function CreateOrder() {
                 <div className="carousel-inner">
                   <div className="carousel-item active">
                     <img
-                      src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                      src={product?.productImages}
                       className="d-block w-100"
                       alt="..."
                     />
                   </div>
                   <div className="carousel-item">
                     <img
-                      src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                      src={product?.productImages}
                       className="d-block w-100"
                       alt="..."
                     />
                   </div>
                   <div className="carousel-item">
                     <img
-                      src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                      src={product?.productImages}
                       className="d-block w-100"
                       alt="..."
                     />
                   </div>
                   <div className="carousel-item">
                     <img
-                      src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                      src={product?.productImages}
                       className="d-block w-100"
                       alt="..."
                     />
@@ -205,7 +210,7 @@ function CreateOrder() {
                 <>
                   <div className="product_name">{product.productName}</div>
                   <div>
-                    <p className="price_wistlist_left">$ {product.price}</p>
+                    <p className="price_wistlist_left">$ { formatPrice(product.price) }</p>
                   </div>
                   <div>
                     <p className="">{product.description}</p>

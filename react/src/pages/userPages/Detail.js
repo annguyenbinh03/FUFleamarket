@@ -24,6 +24,11 @@ function Detail() {
     }
   }, [productId]);
 
+  const formatPrice = (value) => {
+    return value.toLocaleString('vi-VN');
+  };
+
+
   return (
     <div>
          <Header />
@@ -95,7 +100,7 @@ function Detail() {
                   {" "}
                   <img
                     className="carousel-inner"
-                    src="https://th.bing.com/th?id=OIF.2m25a1%2fuZzRYolfaFpysYw&rs=1&pid=ImgDetMain"
+                    src={data?.product?.productImages}
                   alt="product photos"
                  />
                 </div>
@@ -107,7 +112,7 @@ function Detail() {
               </div>
               <div className="price_wistlist d-flex justify-content-between">
                 <p className="price_wistlist_left">
-                  ${data?.product ? data?.product?.price : ""}
+                  {data?.product ?  formatPrice(data?.product?.price)  : ""} đ
                 </p>
                 <button className="btn price_wistlist_right rounded-pill">
                   Lưu tin
@@ -118,7 +123,7 @@ function Detail() {
                 <p>
                   {data?.product
                     ? data?.product.description
-                    : "Cửa Mình thanh lý tủ lạnh máy giặt đang sử dụng hoạt động tốt ạ tủ lạnh từ 90l đến 500l Giá tủ lạnh từ 1tr2 chở lên Máy giặt từ 1tr5 chở lên Máy giặt từ 7kg đến 15kg Bảo hành lâu dài uy tín miễn phí vận chuyển"}
+                    : "Sản phẩm không có mô tả"}
                 </p>
               </div>
               <div className="seller_address">

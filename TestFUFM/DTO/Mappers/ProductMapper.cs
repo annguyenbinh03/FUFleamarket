@@ -27,7 +27,7 @@ namespace BusinessObjects.Mappers
                 Status = productModel.Status,
                 CreatedDate = productModel.CreatedDate.HasValue ? productModel.CreatedDate.Value.ToRelativeTime() : null,
                 Categories = productModel.Category != null ? new List<CategoryDTO> { productModel.Category.ToCategoryDTO() } : null,
-                ProductImages = productModel.ProductImages?.FirstOrDefault()?.ToProductImageDto()
+                ProductImages = productModel.ImageLink
             };
         }
 
@@ -43,7 +43,8 @@ namespace BusinessObjects.Mappers
                 SellerId = sellerId,
                 CategoryId = productDto.CategoryId,
                 Status = 0,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                ImageLink = productDto.ImageLink
             };
         }
 

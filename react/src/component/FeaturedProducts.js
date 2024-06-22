@@ -26,7 +26,7 @@ function FeaturedProducts() {
             <div
               className="featured__item__pic set-bg"
               style={{
-                backgroundImage: `url(${product?.productImages?.imageLink || "https://i.pinimg.com/originals/d9/b8/3a/d9b83aa1a08be3e46ebb47254db8cf75.jpg"})`,
+                backgroundImage: `url(${product?.productImages || "https://i.pinimg.com/originals/d9/b8/3a/d9b83aa1a08be3e46ebb47254db8cf75.jpg"})`,
               }}
             >
               <ul className="featured__item__pic__hover">

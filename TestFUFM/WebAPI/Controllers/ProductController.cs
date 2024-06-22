@@ -23,6 +23,17 @@ namespace WebAPI.Controllers
             _context = context;
         }
 
+        [HttpGet("admingetlistproducts")]
+        [Authorize]
+        public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var products = await _productRepo.AdminGetAllAsync(query);
+
+            return Ok(products);
+        }
 
         [HttpGet("ListProduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
@@ -36,7 +47,7 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
-        [HttpPut("Admin/AcceptProductRequest/{productId:int}")]
+        [HttpPut("adminacceptproductrequest/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
         {
@@ -51,7 +62,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("Admin/RejectProductRequest/{productId:int}")]
+        [HttpPut("adminrejectproductrequest/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
         {

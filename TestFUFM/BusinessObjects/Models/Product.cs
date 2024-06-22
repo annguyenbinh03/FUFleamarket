@@ -39,6 +39,10 @@ public partial class Product
     [Column("createdDate", TypeName = "datetime")]
     public DateTime? CreatedDate { get; set; }
 
+    [Column("imageLink")]
+    [StringLength(300)]
+    public string ImageLink { get; set; } = null!;
+
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
     public virtual Category Category { get; set; } = null!;

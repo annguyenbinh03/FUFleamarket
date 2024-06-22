@@ -47,6 +47,7 @@ CREATE TABLE [dbo].[Product](
 	[categoryId] INT NOT NULL,
 	[status] INT NOT NULL,
 	[createdDate] DATETIME NULL,
+	[imageLink] NVARCHAR(300) NOT NULL,
 	CONSTRAINT FK_Product_User FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Message_Category FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([categoryId])
 )
@@ -184,35 +185,35 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate])
+INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate], [imageLink])
 VALUES
-    ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01' ),
-    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE() ),
-    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE()),
-    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE()),
-    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE()),
-    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, GETDATE()),
-    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE()),
-    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, GETDATE()),
-    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, GETDATE()),
-    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE());
+    ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain' ),
+    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE(), 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain' ),
+    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE(),  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
+    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE() , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
+    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE() ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, GETDATE(), 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
+    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE(), 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
+    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, GETDATE(), 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
+    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, GETDATE(), 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
+    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE(),  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
 GO
 
 
-GO
-INSERT INTO [dbo].[ProductImage] ([productId], [imageName], [imageLink])
-VALUES
-    (1, 'Image 1', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain'),
-    (2, 'Image 2', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain'),
-    (3, 'Image 3', 'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
-    (4, 'Image 4', 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
-    (5, 'Image 5', 'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
-    (6, 'Image 6', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
-    (7, 'Image 7', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
-    (8, 'Image 8', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
-    (9, 'Image 9', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
-    (10, 'Image 10', 'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
-GO
+-- GO
+-- INSERT INTO [dbo].[ProductImage] ([productId], [imageName], [imageLink])
+-- VALUES
+    -- (1, 'Image 1', ),
+    -- (2, 'Image 2', ),
+    -- (3, 'Image 3',),
+    -- (4, 'Image 4', ),
+    -- (5, 'Image 5', ),
+    -- (6, 'Image 6', ),
+    -- (7, 'Image 7', ),
+    -- (8, 'Image 8', ),
+    -- (9, 'Image 9', ),
+    -- (10, 'Image 10',);
+-- GO
 
 
 GO

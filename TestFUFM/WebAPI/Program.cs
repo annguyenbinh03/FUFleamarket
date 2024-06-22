@@ -146,6 +146,7 @@ public class Program
                 .AllowCredentials();
             });
         });
+
         builder.Services.AddSingleton<SharedDb>();
 
         var app = builder.Build();

@@ -20,7 +20,7 @@ namespace BusinessObjects.ProductDto
         public int Status { get; set; }
         public string CreatedDate { get; set; }
         public List<CategoryDTO> Categories { get; set; }
-        public ProductImageDTO ProductImages { get; set; }
+        public string ProductImages { get; set; }
 
         public ProductDTO()
         {

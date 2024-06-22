@@ -33,6 +33,20 @@ function MyPosts() {
     fetchMyPackage();
   }, []);
 
+  const formatPrice = (value) => {
+    return value.toLocaleString('vi-VN');
+  };
+
+  function removeTimeFromISOString(isoString) {
+    const index = isoString.indexOf("T");
+    if (index !== -1) {
+      return isoString.slice(0, index);
+    }
+    return isoString;
+  }
+
+
+
   return (
     <div>
       <Header />
@@ -73,7 +87,7 @@ function MyPosts() {
                   <div></div>
                 )}
 
-                {!sellingPackages?.[0]?.productQuantity ||
+                { !sellingPackages?.[0]?.productQuantity &&
                 sellingPackages?.[0]?.productQuantity === products?.length ? (
                   <div className="my-auto fw-bold me-3 fs-5 text-danger">
                     Số lượng sản phẩm:{" "}
@@ -169,7 +183,7 @@ function MyPosts() {
                   <div className="row">
                     <div className="col-lg-3 w-25 product_image">
                       <img
-                        src="https://th.bing.com/th/id/OIP.W0Eid8HDx9_9G0SoUvWI4AHaE7?w=300&h=200&c=7&r=0&o=5&pid=1.7"
+                        src={product?.imageLink}
                         alt=""
                       />
                       {product.status === 0 ? (
@@ -188,15 +202,18 @@ function MyPosts() {
                     </div>
 
                     <div className="col-lg-8">
-                      <Link to={`/detail/${product.productId}`}>
-                        {product.productName}
+                      <Link className="fw-bold fs-5" style={{textDecoration:"none"}} to={`/detail/${product.productId}`}>
+                       {product.productName}
                       </Link>
-                      <div className="price">{product.price}</div>
+                      <div className="price">{formatPrice(product.price)} đ</div>
                       <div className="address">
                         Phường Dĩ An, Thành phố Dĩ An, Bình Dương
                       </div>
                       <div className="created_date">
-                        Ngày đăng tin: <span>{product.createdDate}</span>
+                        Ngày đăng tin: <span>{removeTimeFromISOString(product.createdDate)}</span>
+                      </div>
+                      <div className="created_date">
+                        Tình trạng sản phẩm: <span>{product.isNew === true ? "Mới" : "Cũ"}</span>
                       </div>
                     </div>
                   </div>
@@ -223,7 +240,7 @@ function MyPosts() {
 
                 {/* Advertisement */}
                 <div className="col-4 col-md-4 d-inline-block">
-                  quảng cáo blabla
+                  {product.description}
                 </div>
               </div>
             </div>

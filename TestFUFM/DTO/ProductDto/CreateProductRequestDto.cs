@@ -33,6 +33,9 @@ namespace BusinessObjects.ProductDto
         [Required(ErrorMessage = "Conditon is required.")]
         public bool IsNew { get; set; }
 
+        [Required(ErrorMessage = "Image is required.")]
+        public string ImageLink { get; set; }
+
     }
 
 
