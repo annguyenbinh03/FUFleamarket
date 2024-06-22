@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext({});
 
@@ -6,10 +7,14 @@ export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
 
   useEffect(() => {
-    const storedAuth = localStorage.getItem("auth");
-    if (storedAuth) {
-      setAuth(JSON.parse(storedAuth));
-    }
+    const loadStoredAuth = async () => {
+      const storedAuth = await AsyncStorage.getItem("auth");
+      if (storedAuth) {
+        setAuth(JSON.parse(storedAuth));
+      }
+    };
+
+    loadStoredAuth();
   }, []);
 
   return (

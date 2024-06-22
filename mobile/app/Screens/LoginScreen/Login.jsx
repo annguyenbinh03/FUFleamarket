@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   Text,
@@ -11,13 +11,15 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import AuthContext from "../../../context/AuthProvider";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
+  const { setAuth } = useContext(AuthContext);
+  const navigation = useNavigation(); // Sử dụng useNavigation ở đây để lấy navigation object
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -43,18 +45,10 @@ const LoginScreen = () => {
       const { token, role, fullName, avarta, id } = response.data;
 
       if (role.includes(1)) {
-        // Adjust the role check based on your requirements
-        await AsyncStorage.setItem(
-          "auth",
-          JSON.stringify({
-            email,
-            role,
-            fullName,
-            avarta,
-            token,
-            id,
-          })
-        );
+        const authData = { email, role, fullName, avarta, token, id };
+        await AsyncStorage.setItem("auth", JSON.stringify(authData));
+        setAuth(authData);
+
         console.log("Navigating to TabNavigation");
         navigation.replace("TabNavigation");
       } else {

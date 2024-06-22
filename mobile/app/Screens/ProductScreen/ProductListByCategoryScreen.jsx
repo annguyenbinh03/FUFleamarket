@@ -5,9 +5,10 @@ import {
   Image,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -18,6 +19,7 @@ export default function ProductListByCategoryScreen() {
   const { category } = route.params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
@@ -46,26 +48,33 @@ export default function ProductListByCategoryScreen() {
         data={products}
         keyExtractor={(item) => item.productId.toString()}
         renderItem={({ item }) => (
-          <View style={styles.productItem}>
-            <Image
-              source={{ uri: item.productImages.imageLink }}
-              style={styles.productImage}
-            />
-            <View styles={styles.productItem}>
-              <Text style={styles.productName}>{item.productName}</Text>
-              <Text style={styles.productPrice}>
-                {formatPrice(item.price)} VND
-              </Text>
-              <View style={styles.sellerInfo}>
-                <Image
-                  source={{ uri: item.seller.avarta }}
-                  style={styles.sellerAvatar}
-                />
-                <Text style={styles.sellerName}>{item.sellerName}</Text>
-                <Text style={styles.sellerName}>{item.createdDate}</Text>
+          <TouchableOpacity
+            style={styles.productItem}
+            onPress={() =>
+              navigation.navigate("Detail", { productId: item.productId })
+            }
+          >
+            <View style={styles.productItem}>
+              <Image
+                source={{ uri: item.productImages.imageLink }}
+                style={styles.productImage}
+              />
+              <View styles={styles.productItem}>
+                <Text style={styles.productName}>{item.productName}</Text>
+                <Text style={styles.productPrice}>
+                  {formatPrice(item.price)} VND
+                </Text>
+                <View style={styles.sellerInfo}>
+                  <Image
+                    source={{ uri: item.seller.avarta }}
+                    style={styles.sellerAvatar}
+                  />
+                  <Text style={styles.sellerName}>{item.sellerName}</Text>
+                  <Text style={styles.sellerName}>{item.createdDate}</Text>
+                </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
