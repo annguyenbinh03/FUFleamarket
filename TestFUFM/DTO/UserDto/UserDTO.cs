@@ -30,6 +30,14 @@ namespace BusinessObjects.UserDto
 
         public string? Avarta { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        public string? Sub { get; set; }
+
+        public double? BuyRating { get; set; }
+
+        public double? SellRating { get; set; }
+
         public List<AddressDTO>? Addresses { get; set; }
        
     }
