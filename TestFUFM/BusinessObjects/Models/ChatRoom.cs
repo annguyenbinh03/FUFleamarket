@@ -19,6 +19,9 @@ public partial class ChatRoom
     [Column("user2")]
     public int User2 { get; set; }
 
+    [InverseProperty("ChatRoom")]
+    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
     [ForeignKey("User1")]
     [InverseProperty("ChatRoomUser1Navigations")]
     public virtual User User1Navigation { get; set; } = null!;

@@ -122,12 +122,12 @@ namespace WebAPI.Controllers
 
             PromotionOrder newPromoOrder = new PromotionOrder
             {
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(promotion.Period),
-                UserId = userId,
-                PaymentMethod = "VNPay",
-                TransactionCode = vnpayTranId.ToString(),
-                Price = promotion.Price,
+                //StartDate = DateTime.Now,
+                //EndDate = DateTime.Now.AddDays(promotion.Period),
+                //UserId = userId,
+                //PaymentMethod = "VNPay",
+                //TransactionCode = vnpayTranId.ToString(),
+                //Price = promotion.Price,
               //  ProductQuantity = promotion.ProductQuantity,
                 PromotionId = promotion.PromotionId
             };

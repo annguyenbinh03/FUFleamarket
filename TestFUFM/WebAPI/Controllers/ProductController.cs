@@ -149,7 +149,7 @@ namespace WebAPI.Controllers
            
             var currentPromotionOrders = await _context.PromotionOrders
                 .Include(po => po.Promotion)
-                .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
+           //     .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
                 .ToListAsync();
           
             if (currentPromotionOrders != null && currentPromotionOrders.Any())

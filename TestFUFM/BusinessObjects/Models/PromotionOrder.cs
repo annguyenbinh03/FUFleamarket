@@ -13,31 +13,14 @@ public partial class PromotionOrder
     [Column("promoOrderId")]
     public int PromoOrderId { get; set; }
 
-    [Column("startDate", TypeName = "datetime")]
-    public DateTime StartDate { get; set; }
-
     [Column("endDate", TypeName = "datetime")]
     public DateTime EndDate { get; set; }
 
     [Column("userId")]
     public int UserId { get; set; }
 
-    [Column("price", TypeName = "money")]
-    public decimal Price { get; set; }
-
-    [Column("productQuantityLimit")]
-    public int ProductQuantityLimit { get; set; }
-
     [Column("promotionId")]
     public int PromotionId { get; set; }
-
-    [Column("paymentMethod")]
-    [StringLength(100)]
-    public string PaymentMethod { get; set; } = null!;
-
-    [Column("transactionCode")]
-    [StringLength(100)]
-    public string TransactionCode { get; set; } = null!;
 
     [Column("status")]
     [StringLength(10)]
@@ -46,6 +29,9 @@ public partial class PromotionOrder
     [ForeignKey("PromotionId")]
     [InverseProperty("PromotionOrders")]
     public virtual Promotion Promotion { get; set; } = null!;
+
+    [InverseProperty("PromoOrder")]
+    public virtual ICollection<PromotionTransaction> PromotionTransactions { get; set; } = new List<PromotionTransaction>();
 
     [ForeignKey("UserId")]
     [InverseProperty("PromotionOrders")]

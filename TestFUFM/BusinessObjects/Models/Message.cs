@@ -27,5 +27,9 @@ public partial class Message
     public DateTime CreatedDate { get; set; }
 
     [Column("isRead")]
-    public bool? IsRead { get; set; }
+    public bool IsRead { get; set; }
+
+    [ForeignKey("ChatRoomId")]
+    [InverseProperty("Messages")]
+    public virtual ChatRoom ChatRoom { get; set; } = null!;
 }

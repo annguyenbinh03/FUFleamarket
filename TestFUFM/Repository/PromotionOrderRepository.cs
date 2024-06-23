@@ -69,10 +69,10 @@ namespace Repository
 
             existingOrder.Status = promotionOrderModel.Status;
             existingOrder.EndDate = promotionOrderModel.EndDate;
-            existingOrder.StartDate = promotionOrderModel.StartDate;
-            existingOrder.Price = promotionOrderModel.Price;
+       //     existingOrder.StartDate = promotionOrderModel.StartDate;
+       //     existingOrder.Price = promotionOrderModel.Price;
            // existingOrder.ProductQuantity = promotionOrderModel.ProductQuantity;
-            existingOrder.PaymentMethod = promotionOrderModel.PaymentMethod;
+       //     existingOrder.PaymentMethod = promotionOrderModel.PaymentMethod;
 
             await _dbcontext.SaveChangesAsync();
 

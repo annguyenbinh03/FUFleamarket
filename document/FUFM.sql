@@ -80,23 +80,34 @@ CREATE TABLE [dbo].[Promotion](
 	[period] INT NOT NULL,
 	[productQuantityLimit] INT NOT NULL,
 	[price] MONEY NOT NULL,
-	[isDeleted] BIT NOT NULL,
+	[isDeleted] BIT NOT NULL
 )
 
 CREATE TABLE [dbo].[PromotionOrder](
 	[promoOrderId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[startDate] DATETIME NOT NULL,
 	[endDate] DATETIME NOT NULL,
 	[userId] INT NOT NULL,
-	[price] MONEY NOT NULL, 
-	[productQuantityLimit] INT NOT NULL,
 	[promotionId] INT NOT NULL,
-	[paymentMethod] NVARCHAR(100) NOT NULL,
-	[transactionCode] NVARCHAR(100) NOT NULL,
 	[status] NVARCHAR(10) NOT NULL,
 	CONSTRAINT FK_PromotionOrder_Promotion FOREIGN KEY ([promotionId]) REFERENCES [dbo].[Promotion] ([promotionId]),
 	CONSTRAINT FK_PromotionOrder_User FOREIGN KEY ([userId]) REFERENCES [dbo].[User] ([userId])
 )
+
+
+
+CREATE TABLE [dbo].[PromotionTransaction](
+	[promoTransactionId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	[startDate] DATETIME NOT NULL,
+	[endDate] DATETIME NOT NULL,
+	[promoOrderId] INT NOT NULL,
+	[price] MONEY NOT NULL, 
+	[paymentMethod] NVARCHAR(100) NOT NULL,
+	[transactionCode] NVARCHAR(100) NOT NULL,
+	[transactionStatus] NVARCHAR(10) NOT NULL,
+	CONSTRAINT FK_PromotionTransaction_PromotionOrder FOREIGN KEY ([promoOrderId]) REFERENCES [dbo].[PromotionOrder]([promoOrderId])
+) 
+
+
 
 CREATE TABLE [dbo].[Order](
 	[orderId]  INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
@@ -142,7 +153,8 @@ CREATE TABLE [dbo].[Message](
 	[receiverId] INT NOT NULL,
 	[messageText] NVARCHAR(500) NOT NULL,
 	[createdDate] DATETIME NOT NULL,
-	[isRead] BIT 
+	[isRead] BIT NOT NULL,
+	CONSTRAINT FK_Message_ChatRoom FOREIGN KEY ([chatRoomId]) REFERENCES [dbo].[ChatRoom]([chatRoomId])
 )
 
 GO	
