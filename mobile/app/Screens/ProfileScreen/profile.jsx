@@ -20,9 +20,6 @@ const Profile = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const navigation = useNavigation();
 
-  const navigateToSavedItems = () => {
-    navigation.navigate("SavedItemsScreen");
-  };
   const handleLogout = () => {
     AsyncStorage.removeItem("auth").then(() => {
       setAuth(null);
@@ -45,8 +42,10 @@ const Profile = () => {
       </View>
       <View style={styles.SaveItemsContainer}>
         <TouchableOpacity
-          onPress={navigateToSavedItems}
-          style={styles.savedItemsButton}
+          onPress={() => {
+            navigation.navigate("WishListScreen", { userId: auth.id });
+            console.log("User ID:", auth.id);
+          }}
         >
           <FontAwesome5
             name="heart"

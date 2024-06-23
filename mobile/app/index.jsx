@@ -8,6 +8,7 @@ import Detail from "./Screens/HomeScreen/Detail";
 import LoginScreen from "./Screens/LoginScreen/Login";
 import ProductListByCategoryScreen from "./Screens/ProductScreen/ProductListByCategoryScreen";
 import { AuthProvider } from "../context/AuthProvider";
+import WishListScreen from "./Screens/ProductScreen/WishListScreen";
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -18,7 +19,11 @@ export default function App() {
       <AuthProvider>
         <NavigationContainer independent={true}>
           <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="TabNavigation"
               component={TabNavigation}
@@ -38,6 +43,15 @@ export default function App() {
               component={ProductListByCategoryScreen}
               options={{
                 title: "Danh sách sản phẩm",
+                headerStyle: styles.header,
+                headerTitleStyle: styles.headerTitle,
+              }}
+            />
+            <Stack.Screen
+              name="WishListScreen"
+              component={WishListScreen}
+              options={{
+                title: "Danh sách sản phẩm đã lưu",
                 headerStyle: styles.header,
                 headerTitleStyle: styles.headerTitle,
               }}

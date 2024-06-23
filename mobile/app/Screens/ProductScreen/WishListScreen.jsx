@@ -1,51 +1,55 @@
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
-  FlatList,
-  Image,
   StyleSheet,
+  FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import formatPrice from "../../../utils/formatPrice";
 
-const formatPrice = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
-
-export default function ProductListByCategory() {
-  const route = useRoute();
-  const { category } = route.params;
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const WishListScreen = ({ route }) => {
+  const { userId } = route.params;
   const navigation = useNavigation();
+  console.log("Received User ID:", userId);
+
+  const [wishlistItems, setWishListItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchWishList = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.146.25:7057/api/Wishlist/user/${userId}`
+      );
+      setWishListItems(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetch("http://192.168.146.25:7057/api/product/ListProduct")
-      .then((res) => res.json())
-      .then((data) => {
-        const filteredProducts = data.filter(
-          (product) => product.categoryId === category.categoryId
-        );
-        setProducts(filteredProducts);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching products data:", err);
-        setLoading(false);
-      });
-  }, [category]);
+    fetchWishList();
+  }, [fetchWishList]);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#FF6600" />;
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#DD0000" />
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{category.name}</Text>
+      <Text style={styles.title}>Wish List</Text>
       <FlatList
-        data={products}
+        data={wishlistItems}
         keyExtractor={(item) => item.productId.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -59,18 +63,25 @@ export default function ProductListByCategory() {
                 source={{ uri: item.productImages.imageLink }}
                 style={styles.productImage}
               />
-              <View styles={styles.productItem}>
+              <View style={styles.productInfo}>
                 <Text style={styles.productName}>{item.productName}</Text>
                 <Text style={styles.productPrice}>
                   {formatPrice(item.price)} VND
                 </Text>
                 <View style={styles.sellerInfo}>
-                  <Image
-                    source={{ uri: item.seller.avarta }}
-                    style={styles.sellerAvatar}
-                  />
-                  <Text style={styles.sellerName}>{item.sellerName}</Text>
-                  <Text style={styles.sellerName}>{item.createdDate}</Text>
+                  {/* Check if seller and seller.avarta exist before rendering the image */}
+                  {item.seller && item.seller.avarta && (
+                    <Image
+                      source={{ uri: item.seller.avarta }}
+                      style={styles.sellerAvatar}
+                    />
+                  )}
+                  {item.seller && (
+                    <Text style={styles.sellerName}>{item.sellerName}</Text>
+                  )}
+                  {item.seller && (
+                    <Text style={styles.sellerName}>{item.createdDate}</Text>
+                  )}
                 </View>
               </View>
             </View>
@@ -79,13 +90,17 @@ export default function ProductListByCategory() {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
     gap: 10,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 25,
@@ -99,7 +114,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     gap: 10,
   },
-  productInfo: {},
+  productInfo: {
+    flex: 1,
+  },
   productImage: {
     width: 100,
     height: 100,
@@ -131,3 +148,5 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
+
+export default WishListScreen;

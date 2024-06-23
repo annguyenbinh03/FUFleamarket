@@ -11,6 +11,7 @@ import {
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import ChatButton from "../../../components/ChatButton";
 // import Stars from "react-native-stars-view";
 
 const formatPrice = (price) => {
@@ -74,20 +75,13 @@ const Detail = () => {
       <Text style={styles.productPrice}>
         Giá: {formatPrice(product.price)} VNĐ
       </Text>
+      <Text style={styles.productDescription}>
+        Tình trạng: {product.isNew ? "Mới" : "cũ"}
+      </Text>
       <Text style={styles.productDescription}>{product.description}</Text>
       <SellerInfo seller={product.seller} address={product.address} />
       <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={styles.chatButton}
-          onPress={() => {
-            // Xử lý khi nhấn vào nút chat
-          }}
-        >
-          <View style={styles.buttonContent}>
-            <FontAwesome5 name="comments" size={20} color="#fff" />
-            <Text style={styles.buttonText}>CHAT VỚI NGƯỜI BÁN</Text>
-          </View>
-        </TouchableOpacity>
+        <ChatButton style={product.seller.phoneNumber} />
         <TouchableOpacity
           style={styles.orderButton}
           onPress={() => {

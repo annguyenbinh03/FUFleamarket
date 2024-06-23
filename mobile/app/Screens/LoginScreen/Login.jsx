@@ -48,7 +48,7 @@ const LoginScreen = () => {
         const authData = { email, role, fullName, avarta, token, id };
         await AsyncStorage.setItem("auth", JSON.stringify(authData));
         setAuth(authData);
-
+        console.log("Auth data:", authData);
         console.log("Navigating to TabNavigation");
         navigation.replace("TabNavigation");
       } else {
