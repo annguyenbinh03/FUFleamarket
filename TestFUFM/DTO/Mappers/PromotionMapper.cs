@@ -19,7 +19,7 @@ namespace BusinessObjects.Mappers
                 Name = model.Name,
                 Description = model.Description,
                 Period = model.Period,
-                ProductQuantity = model.ProductQuantity,
+               ProductQuantity = model.ProductQuantityLimit,
                 Price = model.Price,
                 IsDeleted = model.IsDeleted,
             };
@@ -31,7 +31,7 @@ namespace BusinessObjects.Mappers
                 Name = CreateModel.Name,
                 Description = CreateModel.Description,
                 Period = CreateModel.Period,
-                ProductQuantity = CreateModel.ProductQuantity,
+              //  ProductQuantity = CreateModel.ProductQuantityLimit,
                 Price = CreateModel.Price,
             };
         }

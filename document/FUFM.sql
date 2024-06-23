@@ -20,7 +20,9 @@ CREATE TABLE [dbo].[User](
 	[isDeleted] BIT NOT NULL,
 	[avarta] NVARCHAR(500) NULL,
 	[createdDate] DATETIME NOT NULL,
-	[sub] NVARCHAR(100) NULL
+	[sub] NVARCHAR(100) NULL,
+	[buyRating] FLOAT DEFAULT 0,
+	[sellRating] FLOAT DEFAULT 0
 )
 
 CREATE TABLE [dbo].[Address](
@@ -35,7 +37,9 @@ CREATE TABLE [dbo].[Address](
 CREATE TABLE [dbo].[Category](
 	[categoryId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[name] NVARCHAR(50) NOT NULL,
-)
+	[imageLink] NVARCHAR(300) NULL,
+	[iconLink] NVARCHAR(300) NULL
+) 
 
 CREATE TABLE [dbo].[Product](
 	[productId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
@@ -48,6 +52,7 @@ CREATE TABLE [dbo].[Product](
 	[status] INT NOT NULL,
 	[createdDate] DATETIME NULL,
 	[imageLink] NVARCHAR(300) NOT NULL,
+	[storedQuantity] INT NOT NULL DEFAULT 0,
 	CONSTRAINT FK_Product_User FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Message_Category FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([categoryId])
 )
@@ -73,7 +78,7 @@ CREATE TABLE [dbo].[Promotion](
 	[name] NVARCHAR(50) NOT NULL,
 	[description] NVARCHAR(300) NOT NULL,
 	[period] INT NOT NULL,
-	[productQuantity] INT NOT NULL,
+	[productQuantityLimit] INT NOT NULL,
 	[price] MONEY NOT NULL,
 	[isDeleted] BIT NOT NULL,
 )
@@ -84,7 +89,7 @@ CREATE TABLE [dbo].[PromotionOrder](
 	[endDate] DATETIME NOT NULL,
 	[userId] INT NOT NULL,
 	[price] MONEY NOT NULL, 
-	[productQuantity] INT NOT NULL,
+	[productQuantityLimit] INT NOT NULL,
 	[promotionId] INT NOT NULL,
 	[paymentMethod] NVARCHAR(100) NOT NULL,
 	[transactionCode] NVARCHAR(100) NOT NULL,
@@ -117,6 +122,9 @@ CREATE TABLE [dbo].[Feedback](
 	[content] NVARCHAR(250) NOT NULL,
 	[rating] INT NOT NULL,
 	[orderId]  INT NOT NULL, 
+	[type] NVARCHAR(10) NOT NULL,
+	[raterId] INT NOT NULL,
+	[ratedId] INT NOT NULL,
 	CONSTRAINT FK_Feedback_Order FOREIGN KEY ([orderId]) REFERENCES [dbo].[Order] ([orderId])
 )
 
@@ -151,7 +159,8 @@ VALUES
     ('1', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'https://th.bing.com/th/id/OIP.pAdUb6ZlM45prBGAjT__FAHaHW?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'https://kynguyenlamdep.com/wp-content/uploads/2022/08/avatar-ff-ngau.jpg', GETDATE(), NULL),
 	 ('user', 'Kamisato', 'user', '123124125125', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
-	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL);
+	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
+	 ('1', 'Ho Minh Quyen (k17 HCM)', 'quyenhmse170471@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocIZPZqtyowDwjLOKMnFu3ufaspn7e8N7xL1-3pZhMh40JQtPbQs=s96-c', '2024-06-22 10:04:32.537', '116447998121690404343');
 GO
 
 GO
@@ -188,15 +197,15 @@ GO
 INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate], [imageLink])
 VALUES
     ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain' ),
-    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,GETDATE(), 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain' ),
-    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, GETDATE(),  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
-    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, GETDATE() , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
-    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, GETDATE() ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
-    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, GETDATE(), 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
-    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, GETDATE(), 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
-    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, GETDATE(), 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
-    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, GETDATE(), 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
-    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, GETDATE(),  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
+    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,'2024-06-04', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain' ),
+    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-14',  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
+    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, '2024-06-15' , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
+    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-07' ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, '2024-06-16', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
+    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
+    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, '2024-06-22', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
+    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, '2024-06-24', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
+    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-25',  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
 GO
 
 
@@ -232,7 +241,7 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantity], [price], [isDeleted])
+INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantityLimit], [price], [isDeleted])
 VALUES
     (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 10000,0),
     (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 30 , 50, 40000, 0),
@@ -259,11 +268,12 @@ GO
 
 
 GO
-INSERT INTO [dbo].[Feedback] ([content], [rating], [orderId])
+INSERT INTO [dbo].[Feedback] ([content], [rating], [orderId], [raterId],[ratedId], [type] )
 VALUES
-    ('Great product, fast shipping!', 5, 1),
-    ('The item arrived damaged. Disappointed.', 2, 2),
-    ('Excellent customer service. Highly recommended!', 5, 3),
-    ('Average quality. Expected better.', 3, 4),
-    ('The product exceeded my expectations. Very satisfied!', 4, 5);
+    ('Great product, fast shipping!', 5, 1, 1, 2, 'RateBuyer'),
+    ('The item arrived damaged. Disappointed.', 3, 2, 2, 3, 'RateSeller'),
+    ('Excellent customer service. Highly recommended!', 5, 3, 3, 4, 'RateBuyer'),
+    ('Average quality. Expected better.', 3, 4, 2, 1, 'RateSeller'),
+    ('The product exceeded my expectations. Very satisfied!', 4, 5, 3, 1 , 'RateSeller');
 GO
+

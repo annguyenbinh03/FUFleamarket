@@ -43,6 +43,9 @@ public partial class Product
     [StringLength(300)]
     public string ImageLink { get; set; } = null!;
 
+    [Column("storedQuantity")]
+    public int StoredQuantity { get; set; }
+
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
     public virtual Category Category { get; set; } = null!;

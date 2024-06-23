@@ -154,11 +154,11 @@ namespace WebAPI.Controllers
           
             if (currentPromotionOrders != null && currentPromotionOrders.Any())
             {
-                var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
+             //   var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
 
-                int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
+            //    int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
 
-                totalProductLimit = standardProductLimit + additionalProductLimit;
+             //   totalProductLimit = standardProductLimit + additionalProductLimit;
             }
 
             var currentProductCount = await _context.Products.CountAsync(p => p.SellerId == sellerId);

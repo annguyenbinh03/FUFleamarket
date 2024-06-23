@@ -20,7 +20,7 @@ namespace BusinessObjects.Mappers
                 EndDate = model.EndDate.ToString("yyyy-MM-dd"),
                 UserId = model.UserId,
                 Price = model.Price,
-                ProductQuantity = model.ProductQuantity,
+              //  ProductQuantity = model.ProductQuantity,
                 PromotionId = model.PromotionId,
             };
         }
@@ -34,7 +34,7 @@ namespace BusinessObjects.Mappers
                 StartDate = startDate,
                 EndDate = endDate,
                 Price = price, 
-                ProductQuantity = dto.ProductQuantity
+               // ProductQuantity = dto.ProductQuantity
             };
         }
 

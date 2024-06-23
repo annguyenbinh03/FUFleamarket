@@ -23,6 +23,16 @@ public partial class Feedback
     [Column("orderId")]
     public int OrderId { get; set; }
 
+    [Column("type")]
+    [StringLength(10)]
+    public string Type { get; set; } = null!;
+
+    [Column("raterId")]
+    public int RaterId { get; set; }
+
+    [Column("ratedId")]
+    public int RatedId { get; set; }
+
     [ForeignKey("OrderId")]
     [InverseProperty("Feedbacks")]
     public virtual Order Order { get; set; } = null!;

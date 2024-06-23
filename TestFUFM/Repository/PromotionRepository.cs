@@ -58,7 +58,7 @@ namespace Repository
             existingPromotion.Name = promotionDto.Name;
             existingPromotion.Description = promotionDto.Description;
             existingPromotion.Period = promotionDto.Period;
-            existingPromotion.ProductQuantity = promotionDto.ProductQuantity;
+          //  existingPromotion.ProductQuantity = promotionDto.ProductQuantity;
             existingPromotion.Price = promotionDto.Price;
             existingPromotion.IsDeleted = promotionDto.IsDeleted;
 

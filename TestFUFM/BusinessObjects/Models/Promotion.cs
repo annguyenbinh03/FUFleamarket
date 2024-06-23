@@ -24,8 +24,8 @@ public partial class Promotion
     [Column("period")]
     public int Period { get; set; }
 
-    [Column("productQuantity")]
-    public int ProductQuantity { get; set; }
+    [Column("productQuantityLimit")]
+    public int ProductQuantityLimit { get; set; }
 
     [Column("price", TypeName = "money")]
     public decimal Price { get; set; }

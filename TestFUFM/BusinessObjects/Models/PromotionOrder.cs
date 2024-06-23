@@ -25,8 +25,8 @@ public partial class PromotionOrder
     [Column("price", TypeName = "money")]
     public decimal Price { get; set; }
 
-    [Column("productQuantity")]
-    public int ProductQuantity { get; set; }
+    [Column("productQuantityLimit")]
+    public int ProductQuantityLimit { get; set; }
 
     [Column("promotionId")]
     public int PromotionId { get; set; }

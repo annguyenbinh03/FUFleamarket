@@ -50,6 +50,12 @@ public partial class User
     [StringLength(100)]
     public string? Sub { get; set; }
 
+    [Column("buyRating")]
+    public double? BuyRating { get; set; }
+
+    [Column("sellRating")]
+    public double? SellRating { get; set; }
+
     [InverseProperty("User")]
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 

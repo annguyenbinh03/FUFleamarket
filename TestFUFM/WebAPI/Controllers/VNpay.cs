@@ -128,7 +128,7 @@ namespace WebAPI.Controllers
                 PaymentMethod = "VNPay",
                 TransactionCode = vnpayTranId.ToString(),
                 Price = promotion.Price,
-                ProductQuantity = promotion.ProductQuantity,
+              //  ProductQuantity = promotion.ProductQuantity,
                 PromotionId = promotion.PromotionId
             };
            
