@@ -13,6 +13,10 @@ import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 // import Stars from "react-native-stars-view";
 
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
 const Detail = () => {
   const route = useRoute();
   const { productId } = route.params;
@@ -56,10 +60,6 @@ const Detail = () => {
     );
   }
 
-  const formattedPrice = product.price
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
   return (
     <ScrollView style={styles.container}>
       <Image
@@ -71,7 +71,9 @@ const Detail = () => {
         <Text style={{ marginLeft: 5 }}>Lưu tin</Text>
       </TouchableOpacity>
       <Text style={styles.productName}>{product.productName}</Text>
-      <Text style={styles.productPrice}>Giá: {formattedPrice} VNĐ</Text>
+      <Text style={styles.productPrice}>
+        Giá: {formatPrice(product.price)} VNĐ
+      </Text>
       <Text style={styles.productDescription}>{product.description}</Text>
       <SellerInfo seller={product.seller} address={product.address} />
       <View style={styles.buttonGroup}>

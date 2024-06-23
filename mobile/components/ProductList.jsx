@@ -41,7 +41,7 @@ const ProductItem = ({ item }) => {
       <Text style={styles.productPrice}>{formattedPrice} VNĐ</Text>
       <View style={styles.sellerInfo}>
         <Image
-          source={{ uri: item.seller.avarta }} // Sử dụng avarta từ API
+          source={{ uri: item.seller.avarta }}
           style={styles.sellerAvatar}
         />
         <Text style={styles.sellerName}>{item.createdDate}</Text>
