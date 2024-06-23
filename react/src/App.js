@@ -9,6 +9,7 @@ import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
 import MySellingPackage from "./pages/userPages/MySellingPackage";
+import BuyOrderRequest from "./pages/userPages/BuyOrderRequest";
 
 
 
@@ -52,6 +53,8 @@ function App() {
             <Route path="/admin" element={<AdminProcessRequest />} />
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/my-selling-package" element={<MySellingPackage/>} />
+            <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
+
 
 
 

@@ -50,7 +50,7 @@ function CreateOrder() {
     const order = { price, quantity, paymentMethod,receiverAddress,note, productId,orderDate };
     const response = await createOrderAPI(order, auth.accessToken);
     console.log(response);
-   // navigate('/', { replace: true });
+    navigate('/buy-order', { replace: true });
   };
 
   const formatPrice = (value) => {

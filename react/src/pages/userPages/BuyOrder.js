@@ -41,7 +41,7 @@ function BuyOrder() {
                       <div className="row">
                         <div className="col-lg-3 w-25 product_image">
                           <img
-                            src={`https://duhocminhkhang.com/wp-content/uploads/2020/01/T%E1%BB%95ng-h%E1%BB%A3p-h%C3%ACnh-%E1%BA%A3nh-g%C3%A1i-xinh-%C4%91eo-m%E1%BA%AFt-k%C3%ADnh-c%E1%BB%B1c-cute-10-1.jpg`}
+                            src={order.product.imageLink}
                             alt=""
                           />
                           {/* //order.productImage */}

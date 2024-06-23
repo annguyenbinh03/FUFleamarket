@@ -26,9 +26,9 @@ function PostProduct() {
     handleUploadImagesClick();
     if(imgUrl != null){
       var imageLink = imgUrl[0];
-      const product = { productName, price, description, categoryId, isNew, imageLink };
+     const product = { productName, price, description, categoryId, isNew, imageLink };
      const response = await createProductAPI(product, auth.accessToken);
-     navigate("/my-posts", { replace: true });
+       navigate("/my-posts", { replace: true });
     }
     // navigate('/', { replace: true });
   };

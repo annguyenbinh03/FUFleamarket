@@ -89,7 +89,7 @@ const UserDropdown = (authContainer) => {
               </div>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link to="" className="dropdown-item">
+                  <Link to="/buy-order-request" className="dropdown-item">
                     Yêu cầu mua hàng
                   </Link>
                 </div>

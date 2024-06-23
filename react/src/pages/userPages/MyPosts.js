@@ -87,8 +87,8 @@ function MyPosts() {
                   <div></div>
                 )}
 
-                { !sellingPackages?.[0]?.productQuantity &&
-                sellingPackages?.[0]?.productQuantity === products?.length ? (
+                { (sellingPackages?.[0]?.productQuantity &&
+                sellingPackages?.[0]?.productQuantity === products?.length ) || (!sellingPackages?.[0]?.productQuantity && 3 === products?.length) ? (
                   <div className="my-auto fw-bold me-3 fs-5 text-danger">
                     Số lượng sản phẩm:{" "}
                     {Array.isArray(products) ? products.length : 0}/

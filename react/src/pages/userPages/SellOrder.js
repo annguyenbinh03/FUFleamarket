@@ -57,16 +57,16 @@ function SellOrder() {
                     className="row mb-3 p-2 order"
                   >
                     <div className="col-12 border-bottom ps-2 py-2">
-                      <span className="fs-5">
-                        <i className="fa fa-home" aria-hidden="true"></i> Nơi
-                        bán
-                      </span>
+                    <span className="fs-5">
+                          <img style={{borderRadius:"20px"}} src={order.buyer.avarta} width={"30px"}/> {" "}
+                          {order.buyer.name}
+                        </span>
                     </div>
                     <div className="col-8 col-md-8 pt-3">
                       <div className="row">
                         <div className="col-lg-3 w-25 product_image">
                           <img
-                            src={`https://duhocminhkhang.com/wp-content/uploads/2020/01/T%E1%BB%95ng-h%E1%BB%A3p-h%C3%ACnh-%E1%BA%A3nh-g%C3%A1i-xinh-%C4%91eo-m%E1%BA%AFt-k%C3%ADnh-c%E1%BB%B1c-cute-10-1.jpg`}
+                            src= {order.product.imageLink}
                             alt=""
                           />
                           {/* //order.productImage */}

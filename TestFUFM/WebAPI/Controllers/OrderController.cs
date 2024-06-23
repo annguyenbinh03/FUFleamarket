@@ -30,6 +30,49 @@ namespace WebAPI.Controllers
             _userRepo = userRepo;
             _productRepo = productRepo;
         }
+
+        [HttpGet("soldRequest")]
+        public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+
+            bool sortByDate = sortBy?.ToLower() == "date";
+            bool sortByPrice = sortBy?.ToLower() == "price";
+
+            var soldOrders = await _orderRepo.GetMyOrdersRequestBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
+
+            if (!soldOrders.Any())
+            {
+                return NotFound("No bills.");
+            }
+
+            var orders = soldOrders.Select(order => new
+            {
+                order = order.ToOrderShowProfileOfBuyerDTO(),
+                Product = new
+                {
+                    productId = order.Product.ProductId,
+                    productName = order.Product.ProductName,
+                    productPrice = order.Product.Price,
+                    ImageLink = order.Product.ImageLink
+                },
+                Buyer = new
+                {
+                    avarta = order.Buyer.Avarta,
+                    name = order.Buyer.FullName
+                }
+            }).ToList();
+
+            return Ok(orders);
+        }
+
         [HttpGet("sold")]
         public async Task<IActionResult> GetSoldOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
         {
@@ -59,7 +102,13 @@ namespace WebAPI.Controllers
                 {
                     productId = order.Product.ProductId,
                     productName = order.Product.ProductName,
-                    productPrice = order.Product.Price
+                    productPrice = order.Product.Price,
+                    ImageLink = order.Product.ImageLink
+                },
+                Buyer = new
+                {
+                    avarta = order.Buyer.Avarta,
+                    name = order.Buyer.FullName
                 }
             }).ToList();
 
@@ -134,7 +183,13 @@ namespace WebAPI.Controllers
                 {
                     productId = order.Product.ProductId,
                     productName = order.Product.ProductName,
-                    productPrice = order.Product.Price
+                    productPrice = order.Product.Price,
+                 ImageLink = order.Product.ImageLink
+                },
+                Buyer = new
+                {
+                    avarta = order.Buyer.Avarta,
+                    name = order.Buyer.FullName
                 }
             }).ToList();
 
@@ -182,7 +237,8 @@ namespace WebAPI.Controllers
                 {
                   productId =  boughtOrder.Product.ProductId,
                   productName = boughtOrder.Product.ProductName,
-                  productPrice =  boughtOrder.Product.Price
+                  productPrice =  boughtOrder.Product.Price,
+                   ImageLink = boughtOrder.Product.ImageLink
                 }
             }).ToList();
 
@@ -261,7 +317,13 @@ namespace WebAPI.Controllers
                 {
                     productId = boughtOrder.Product.ProductId,
                     productName = boughtOrder.Product.ProductName,
-                    productPrice = boughtOrder.Product.Price
+                    productPrice = boughtOrder.Product.Price,
+                    ImageLink = boughtOrder.Product.ImageLink
+                },
+                Buyer = new
+                {
+                    avarta = boughtOrder.Buyer.Avarta,
+                    name = boughtOrder.Buyer.FullName
                 }
             }).ToList();
 

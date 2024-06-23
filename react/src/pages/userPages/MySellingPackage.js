@@ -149,6 +149,14 @@ const MySellingPackage = () => {
                 </div>
               </div>
             ))}
+            {sellingPackages ? (
+              <div></div>
+            ) : (
+                <div className="d-flex flex-column justify-content-center align-items-center" style={{height:"500px"}}>
+                    <div className="fs-3 fw-bold mb-3">Bạn chưa sở hữu bất kì gói bàn hàng nào</div>
+                    <Link className="btn btn-primary" to="/selling-package">Mua gói bán hàng ngay </Link>
+                </div>
+            )}
           </div>
         </div>
       </section>

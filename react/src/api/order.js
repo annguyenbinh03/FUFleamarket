@@ -5,7 +5,11 @@ const END_POINT = {
     BUY_ORDER : "order/bought",
     SELL_ORDER : "order/sold",
     ACCEPT_ORDER_REQUEST : "order/acceptOrderRequest",                  
-    DENY_ORDER_REQUEST : "order/denyOrderRequest",
+    DENY_ORDER_REQUEST : "order/denyOrderRequest", 
+    MY_ORDER_REQUEST : "order/soldRequest",
+    MY_SOLD_ORDER_HISTORY: "order/SoldStatus123"
+
+    
 }
 
 
@@ -33,8 +37,18 @@ export const getSellOrdersAPI = (token) => {
         Authorization: `Bearer ${token}`
       }
     };
-  return axiosClient.get(`${END_POINT.SELL_ORDER}`, config);
+  return axiosClient.get(`${END_POINT.MY_SOLD_ORDER_HISTORY}`, config);
 }
+
+export const getMySellOrdersRequestAPI = (token) => {
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  return axiosClient.get(`${END_POINT.MY_ORDER_REQUEST}`, config);
+}
+
 
 
 

@@ -72,6 +72,29 @@ namespace Repository
         {
             return await _context.Orders.AnyAsync(o => o.OrderId == orderId);
         }
+
+        public async Task<List<Order>> GetMyOrdersRequestBySellerIdAsync(int sellerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false)
+        {
+            IQueryable<Order> query = _context.Orders
+                        .Where(order => order.SellerId == sellerId && order.Status == 0)
+                        .Include(order => order.Product)
+                        .Include(order => order.Buyer) ;
+
+
+
+            if (sortByDate)
+            {
+                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+            }
+            else if (sortByPrice)
+            {
+                query = descending ? query.OrderByDescending(order => order.Price) : query.OrderBy(order => order.Price);
+            }
+
+            return await query.ToListAsync();
+        }
+
+
         public async Task<List<Order>> GetOrdersBySellerIdAsync(int sellerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false)
         {
             IQueryable<Order> query = _context.Orders
