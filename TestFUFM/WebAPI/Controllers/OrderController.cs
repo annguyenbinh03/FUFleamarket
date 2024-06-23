@@ -347,16 +347,22 @@ namespace WebAPI.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
-                return Unauthorized("Không tìm thấy claim user ID");
+                return Unauthorized("Claim user ID not found");
             }
 
             var userId = int.Parse(userIdClaim.Value);
 
-            // Fetch the product details to get the SellerId
+            // Fetch the product details to get the SellerId and StoredQuantity
             var product = await _productRepo.GetProductById(createDTO.ProductId);
             if (product == null)
             {
                 return BadRequest("ProductId does not exist");
+            }
+
+            // Check if requested quantity is valid
+            if (createDTO.Quantity <= 0 || createDTO.Quantity >= product.StoredQuantity)
+            {
+                return BadRequest("Invalid quantity requested");
             }
 
             // Set BuyerId as the logged-in user's UserId

@@ -21,5 +21,6 @@ namespace BusinessObjects.OrderDto
         public int Quantity { get; set; }
         public string ReceiverAddress { get; set; } = null!;
 
+        public DateTime? DeliveryDate { get; set; } 
     }
 }

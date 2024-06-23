@@ -22,7 +22,8 @@ namespace BusinessObjects.Mappers
                 ProductId = order.ProductId,
                 Quantity = order.Quantity,
                 Status = order.Status,
-                ReceiverAddress = order.ReceiverAddress
+                ReceiverAddress = order.ReceiverAddress,
+                DeliveryDate = order.DeliveryDate
             };
         }
 
@@ -37,7 +38,8 @@ namespace BusinessObjects.Mappers
             Note = dto.Note,
             ProductId = dto.ProductId,
             Quantity = dto.Quantity,
-            ReceiverAddress = dto.ReceiverAddress
+            ReceiverAddress = dto.ReceiverAddress,
+            DeliveryDate = dto.DeliveryDate
         };
 
         public static OrderShowProfileDTO ToOrderShowProfileOfSellerDTO(this BusinessObjects.Models.Order order)
@@ -53,7 +55,8 @@ namespace BusinessObjects.Mappers
                 ProductId = order.ProductId,
                 Quantity = order.Quantity,
                 Status = order.Status,
-                ReceiverAddress = order.ReceiverAddress
+                ReceiverAddress = order.ReceiverAddress,
+                DeliveryDate = order.DeliveryDate
             };
         }
         public static OrderShowProfileDTO ToOrderShowProfileOfBuyerDTO(this BusinessObjects.Models.Order order)
@@ -69,7 +72,8 @@ namespace BusinessObjects.Mappers
                 ProductId = order.ProductId,
                 Quantity = order.Quantity,
                 Status = order.Status,
-                ReceiverAddress = order.ReceiverAddress
+                ReceiverAddress = order.ReceiverAddress,
+                DeliveryDate = order.DeliveryDate
             };
         }
     }

@@ -24,7 +24,8 @@ namespace Api.orderDto
         public int ProductId { get; set; } 
         public int Quantity { get; set; }
         public string ReceiverAddress { get; set; } = null!;
-
+        [Column("deliveryDate", TypeName = "datetime")]
+        public DateTime? DeliveryDate { get; set; }
 
     }
 }

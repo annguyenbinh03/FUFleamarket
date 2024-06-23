@@ -206,18 +206,18 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate], [imageLink])
+INSERT INTO [dbo].[Product] ([productName], [price], [isNew], [description], [sellerId], [categoryId], [status], [createdDate], [imageLink], [storedQuantity])
 VALUES
-    ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain' ),
-    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,'2024-06-04', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain' ),
-    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-14',  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0'),
-    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, '2024-06-15' , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain'),
-    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-07' ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain'),
-    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, '2024-06-16', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain'),
-    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0'),
-    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, '2024-06-22', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0'),
-    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, '2024-06-24', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg'),
-    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-25',  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain');
+    ('iPhone 13', 10000000, 1, 'The latest iPhone model with advanced features.', 1, 1, 1, '2024-06-01', 'https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain', 10 ),
+    ('Laptop HP Spectre x360', 16500000, 0, 'A versatile and powerful laptop for professionals.', 2, 1, 1,'2024-06-04', 'https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain', 5 ),
+    ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-14',  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0', 7),
+    ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, '2024-06-15' , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain', 4),
+    ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-07' ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain', 8),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, '2024-06-16', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain', 9),
+    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0', 15),
+    ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, '2024-06-22', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0', 30),
+    ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, '2024-06-24', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg', 30),
+    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-25',  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain', 12);
 GO
 
 
