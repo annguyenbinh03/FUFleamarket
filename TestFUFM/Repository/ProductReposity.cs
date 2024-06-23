@@ -90,6 +90,7 @@ namespace Repository
                     description = p.Description,
                     status = p.Status,
                     categoryName = p.Category.Name,
+                    StoredQuantity = p.StoredQuantity,
                     seller = new
                     {
                         avarta = p.Seller.Avarta,
@@ -243,7 +244,24 @@ namespace Repository
         {
             return await _context.Products.Where(x => x.SellerId == userId).ToListAsync();
         }
+        public async Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+            if (product == null)
+            {
+                return null;
+            }
 
-     
+            product.StoredQuantity += quantityChange;
+
+            if (product.StoredQuantity < 0)
+            {
+                return null;
+            }
+
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
     }
 }

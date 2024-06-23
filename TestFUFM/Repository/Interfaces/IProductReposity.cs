@@ -39,7 +39,8 @@ namespace Repository.Interfaces
 
         Task<string?> getSellerAddress(int sellerId);
 
-     
+        Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange);
+
     }
 
 }

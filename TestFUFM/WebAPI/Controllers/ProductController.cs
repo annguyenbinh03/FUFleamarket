@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             return Ok(products);
         }
 
-        [HttpGet("ListProduct")]
+        [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
@@ -76,9 +76,9 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
         }
-       
 
-        [HttpGet("GetProductById/{id:int}")]
+
+        [HttpGet("getproductbyid/{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -101,7 +101,7 @@ namespace WebAPI.Controllers
             return Ok( new { product = productDTO, address, sellerId =  product.SellerId });
         }
 
-        [HttpGet("GetMyProducts")]
+        [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetMyProducts()
         {
@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("CreateProductForSellers")]
+        [HttpPost("createproductforsellers")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Create([FromBody] CreateProductRequestDto productDto)
         {
@@ -186,8 +186,46 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
         }
 
+        [HttpPut("editstoredquantity/{productId:int}")]
+        [Authorize]
+        public async Task<IActionResult> EditStorageQuantity([FromRoute] int productId, [FromBody] int quantityChange)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        [HttpPut("UpdateProductForSellers/{productId:int}")]
+            var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
+
+            if (productId > maxProductId)
+            {
+                return BadRequest("Product ID exceeds the maximum available ID. Please enter a valid Product ID.");
+            }
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (!int.TryParse(userIdClaim, out var sellerId))
+            {
+                return Unauthorized("Invalid user ID format");
+            }
+
+            var existingProduct = await _productRepo.GetByIdProductAsync(productId);
+            if (existingProduct == null)
+            {
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
+            }
+
+            if (existingProduct.SellerId != sellerId)
+            {
+                return Unauthorized("This is not your product, please enter your product ID.");
+            }
+
+            var updatedProduct = await _productRepo.UpdateStoredQuantityAsync(productId, quantityChange);
+            if (updatedProduct == null)
+            {
+                return BadRequest("Failed to update the stored quantity.");
+            }
+
+            return Ok(updatedProduct.ToProductDto());
+        }
+
+        [HttpPut("updateproductforsellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Update([FromRoute] int productId, [FromBody] UpdateProductRequestDto updateDto)
         {
@@ -242,7 +280,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpDelete("DeleteProductForSellers/{productId:int}")]
+        [HttpDelete("deleteproductforsellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int productId)
         {
@@ -284,7 +322,7 @@ namespace WebAPI.Controllers
             return Ok(updatedProduct);
         }
 
-        [HttpGet("Admin/Pending")]
+        [HttpGet("admin/pending")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPendingProducts()
         {
@@ -296,7 +334,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("Admin/Confirmed")]
+        [HttpGet("admin/confirmed")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetConfirmedProducts()
         {
@@ -307,7 +345,7 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
-        [HttpGet("Admin/Deleted")]
+        [HttpGet("admin/deleted")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDeletedProducts()
         {

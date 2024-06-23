@@ -21,6 +21,7 @@ namespace BusinessObjects.ProductDto
         public string CreatedDate { get; set; }
         public List<CategoryDTO> Categories { get; set; }
         public string ProductImages { get; set; }
+        public int StoredQuantity { get; set; }
 
         public ProductDTO()
         {

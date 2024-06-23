@@ -36,6 +36,9 @@ namespace BusinessObjects.ProductDto
         [Required(ErrorMessage = "Image is required.")]
         public string ImageLink { get; set; }
 
+        [Required(ErrorMessage = "StoredQuantity is required.")]
+        public int StoredQuantity { get; set; }
+
     }
 
 
