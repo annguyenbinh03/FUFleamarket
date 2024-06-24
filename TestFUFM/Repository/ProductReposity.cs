@@ -95,7 +95,7 @@ namespace Repository
                     {
                         avarta = p.Seller.Avarta,
                         fullName = p.Seller.FullName,
-                    }            
+                    }
                 }).ToListAsync();
             return products;
         }
@@ -263,5 +263,33 @@ namespace Repository
             return product;
         }
 
+        public async Task<bool> UpdateProductQuantityAsync(int productId, int orderQuantity)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null)
+                return false; // Handle case where product is not found
+
+            // Check if there is enough quantity to fulfill the order
+            if (orderQuantity > product.StoredQuantity)
+                return false; // Not enough quantity
+
+            // Subtract the order quantity from the stored quantity
+            product.StoredQuantity -= orderQuantity;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // Example: _logger.LogError(ex, "Error updating product quantity for product {ProductId}", productId);
+                return false;
+            }
+        }
+
+    
     }
 }

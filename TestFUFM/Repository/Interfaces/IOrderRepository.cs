@@ -22,5 +22,6 @@ namespace Repository.Interfaces
 
         Task<bool> AcceptOrderAsync(int userId,int productId);
         Task<bool> DenyOrderAsync(int userId, int productId);
+        Task<Order> GetOrderByProductIdAsync(int userId, int productId);
     }
 }

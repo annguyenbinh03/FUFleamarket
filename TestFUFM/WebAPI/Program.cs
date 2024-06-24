@@ -131,7 +131,7 @@ public class Program
         builder.Services.AddScoped<IProductReposity, ProductReposity>();
         builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
         builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-        builder.Services.AddScoped<IPromotionTransactionRepository, PromotionTransactionRepository>();
+        //builder.Services.AddScoped<IPromotionTransactionRepository, PromotionTransactionRepository>();
         builder.Services.AddSingleton<VNPayHelper>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));

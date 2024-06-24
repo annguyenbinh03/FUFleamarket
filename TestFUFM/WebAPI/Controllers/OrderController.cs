@@ -403,18 +403,34 @@ namespace WebAPI.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
-                return Unauthorized("Không tìm thấy claim user ID");
+                return Unauthorized("Claim user ID not found");
             }
 
             var userId = int.Parse(userIdClaim.Value);
 
-
+            // Call the repository method to accept the order
             bool result = await _orderRepo.AcceptOrderAsync(userId, productId);
-            if (result)
+
+            if (!result)
             {
-                return Ok();
-            }        
-            return BadRequest();
+                return BadRequest("Failed to accept the order request");
+            }
+
+            // Get the order details to know the quantity
+            var order = await _orderRepo.GetOrderByProductIdAsync(userId, productId);
+            if (order == null)
+            {
+                return BadRequest("Order not found");
+            }
+
+            // Update storedQuantity for the product after accepting the order
+            bool updateResult = await _productRepo.UpdateProductQuantityAsync(productId, order.Quantity);
+            if (!updateResult)
+            {
+                return BadRequest("Failed to update product quantity");
+            }
+
+            return Ok("Order request accepted and product quantity updated");
         }
         [HttpPut]
         [Route("denyOrderRequest/{productId}")]
