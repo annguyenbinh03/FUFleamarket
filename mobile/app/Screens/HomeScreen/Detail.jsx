@@ -25,7 +25,7 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
 
   const handleSaveProduct = () => {
-    console.log("Save product:", product);
+    console.log("WishList product:", product);
   };
 
   useEffect(() => {
@@ -212,18 +212,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: "left",
   },
   productPrice: {
     fontSize: 18,
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: "left",
     color: "#CC0000",
   },
   productDescription: {
     fontSize: 16,
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: "left",
   },
   sellerInfoContainer: {
     marginTop: 20,

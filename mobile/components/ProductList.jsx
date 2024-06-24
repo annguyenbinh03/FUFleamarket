@@ -51,6 +51,7 @@ const ProductItem = ({ item }) => {
           style={styles.sellerAvatar}
         />
         <Text style={styles.sellerName}>{item.createdDate}</Text>
+        <Text style={styles.sellerName}>{item.storedQuatity}</Text>
         <Text style={styles.sellerName}> - </Text>
         <Text style={styles.sellerName}>{item.address}</Text>
       </View>
@@ -86,6 +87,13 @@ const ProductListContainer = () => {
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {
+        // Sort data by createdDate
+        data.sort((a, b) => {
+          const aDays = parseInt(a.createdDate.split(" ")[0]);
+          const bDays = parseInt(b.createdDate.split(" ")[0]);
+          // return bDays - aDays; //mới nhất trước -> nhưng mà in ra trước bị đẩy xuống dưới -> thấy cũ nhấ trước
+          return aDays - bDays; // ngược lại
+        });
         setProductList(data);
         setLoading(false);
       })

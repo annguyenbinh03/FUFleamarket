@@ -6,9 +6,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  Picker, // Import Picker component
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  sortProductsByDate,
+  sortProductsByPrice,
+} from "../../../utils/filterProduct";
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -20,6 +25,8 @@ export default function ProductListByCategory() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const [dateSortOrder, setDateSortOrder] = useState("desc"); // Default to descending
+  const [priceSortOrder, setPriceSortOrder] = useState("desc"); // Default to descending
 
   useEffect(() => {
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
@@ -28,14 +35,31 @@ export default function ProductListByCategory() {
         const filteredProducts = data.filter(
           (product) => product.categoryId === category.categoryId
         );
-        setProducts(filteredProducts);
+
+        let sortedProducts = filteredProducts; // Start with unfiltered data
+
+        // Sort by price first
+        if (priceSortOrder === "asc") {
+          sortedProducts = sortProductsByPrice(sortedProducts, true);
+        } else {
+          sortedProducts = sortProductsByPrice(sortedProducts, false);
+        }
+
+        // Sort by date (applied after price sorting)
+        if (dateSortOrder === "asc") {
+          sortedProducts = sortProductsByDate(sortedProducts, true);
+        } else {
+          sortedProducts = sortProductsByDate(sortedProducts, false);
+        }
+
+        setProducts(sortedProducts);
         setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching products data:", err);
         setLoading(false);
       });
-  }, [category]);
+  }, [category, dateSortOrder, priceSortOrder]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6600" />;
@@ -44,6 +68,30 @@ export default function ProductListByCategory() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{category.name}</Text>
+      <View style={styles.sortContainer}>
+        <View style={styles.sortContainerItem}>
+          <Text style={styles.sortTitle}>Sắp xếp theo ngày:</Text>
+          <Picker
+            selectedValue={dateSortOrder}
+            onValueChange={(value) => setDateSortOrder(value)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Mới nhất" value="desc" />
+            <Picker.Item label="Cũ nhất" value="asc" />
+          </Picker>
+        </View>
+        <View style={styles.sortContainerItem}>
+          <Text style={styles.sortTitle}>Sắp xếp theo giá:</Text>
+          <Picker
+            selectedValue={priceSortOrder}
+            onValueChange={(value) => setPriceSortOrder(value)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Giá thấp nhất" value="asc" />
+            <Picker.Item label="Giá cao nhất" value="desc" />
+          </Picker>
+        </View>
+      </View>
       <FlatList
         data={products}
         keyExtractor={(item) => item.productId.toString()}
@@ -56,7 +104,13 @@ export default function ProductListByCategory() {
           >
             <View style={styles.productItem}>
               <Image
-                source={{ uri: item.productImages.imageLink }}
+                source={
+                  item.productImages && item.productImages.imageLink
+                    ? { uri: item.productImages.imageLink }
+                    : {
+                        uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                      }
+                }
                 style={styles.productImage}
               />
               <View styles={styles.productItem}>
@@ -129,5 +183,20 @@ const styles = StyleSheet.create({
   sellerName: {
     fontSize: 10,
     color: "#555",
+  },
+  sortContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  sortContainerItem: {
+    marginRight: 20,
+  },
+  sortTitle: {
+    fontSize: 16,
+  },
+  picker: {
+    height: 30,
+    width: 100,
   },
 });
