@@ -1,16 +1,14 @@
-import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigation from "./Navigations/TabNavigation";
 import Detail from "./Screens/HomeScreen/Detail";
-
 import LoginScreen from "./Screens/LoginScreen/Login";
 import ProductListByCategoryScreen from "./Screens/ProductScreen/ProductListByCategoryScreen";
 import { AuthProvider } from "../context/AuthProvider";
 import WishListScreen from "./Screens/ProductScreen/WishListScreen";
 
-// Create the stack navigator
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -62,6 +60,7 @@ export default function App() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#DD0000",

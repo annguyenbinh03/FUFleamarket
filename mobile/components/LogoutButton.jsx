@@ -1,10 +1,22 @@
-import React from "react";
+// components/LogoutButton.js
+import React, { useContext } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import AuthContext from "../context/AuthProvider";
+import { useNavigation } from "@react-navigation/native";
 
-const LogoutButton = ({ onPress }) => {
+const LogoutButton = () => {
+  const { logout } = useContext(AuthContext);
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        logout();
+        navigation.navigate("Login");
+      }}
+    >
       <FontAwesome5
         name="sign-out-alt"
         size={20}

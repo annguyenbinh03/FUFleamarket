@@ -32,7 +32,13 @@ const ProductItem = ({ item }) => {
     >
       <View style={styles.productItemPicContainer}>
         <Image
-          source={{ uri: item.productImages.imageLink }}
+          source={
+            item.productImages && item.productImages.imageLink
+              ? { uri: item.productImages.imageLink }
+              : {
+                  uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                }
+          }
           style={styles.productItemPic}
         />
       </View>

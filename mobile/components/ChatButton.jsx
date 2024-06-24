@@ -32,7 +32,7 @@ const ChatButton = ({ phoneNumber }) => {
     </TouchableOpacity>
   );
 };
-
+export default ChatButton;
 const styles = StyleSheet.create({
   chatButton: {
     backgroundColor: "#1E90FF",
@@ -52,5 +52,3 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-
-export default ChatButton;

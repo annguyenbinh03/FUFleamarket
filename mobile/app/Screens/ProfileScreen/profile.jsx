@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../../../context/AuthProvider";
@@ -19,6 +20,24 @@ const thumbMeasure = (width - 48 - 32) / 3;
 const Profile = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
+
+  useEffect(() => {
+    // Fetch auth data from AsyncStorage on component mount
+    const fetchAuthData = async () => {
+      try {
+        const storedAuth = await AsyncStorage.getItem("auth");
+        if (storedAuth) {
+          setAuth(JSON.parse(storedAuth));
+        }
+        setIsLoading(false); // Set loading to false after fetching
+      } catch (error) {
+        console.error("Error fetching auth data:", error);
+        setIsLoading(false);
+      }
+    };
+    fetchAuthData();
+  }, []);
 
   const handleLogout = () => {
     AsyncStorage.removeItem("auth").then(() => {
@@ -26,6 +45,23 @@ const Profile = () => {
       navigation.navigate("LoginScreen");
     });
   };
+
+  // Conditional rendering based on loading and auth state
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#DD0000" />
+      </View>
+    );
+  }
+
+  if (!auth) {
+    return (
+      <View style={styles.container}>
+        <Text>You are not logged in.</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -36,7 +72,14 @@ const Profile = () => {
         <Text style={styles.headerTitle}>Quản lý tin</Text>
       </View>
       <View style={styles.profileContainer}>
-        <Image source={{ uri: auth.avarta }} style={styles.avatar} />
+        <Image
+          source={
+            auth.avarta
+              ? { uri: auth.avarta }
+              : require("../../../assets/images/empty.png")
+          }
+          style={styles.avatar}
+        />
         <Text style={styles.name}>{auth.fullName}</Text>
         <Text style={styles.email}>{auth.email}</Text>
       </View>

@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ChatButton from "../../../components/ChatButton";
-// import Stars from "react-native-stars-view";
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -64,7 +64,13 @@ const Detail = () => {
   return (
     <ScrollView style={styles.container}>
       <Image
-        source={{ uri: product.productImages.imageLink }}
+        source={
+          product.productImages && product.productImages.imageLink
+            ? { uri: product.productImages.imageLink }
+            : {
+                uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+              }
+        }
         style={styles.productImage}
       />
       <TouchableOpacity onPress={handleSaveProduct} style={styles.saveButton}>
@@ -81,7 +87,7 @@ const Detail = () => {
       <Text style={styles.productDescription}>{product.description}</Text>
       <SellerInfo seller={product.seller} address={product.address} />
       <View style={styles.buttonGroup}>
-        <ChatButton style={product.seller.phoneNumber} />
+        <ChatButton phoneNumber={product.seller.phoneNumber} />
         <TouchableOpacity
           style={styles.orderButton}
           onPress={() => {
@@ -102,17 +108,6 @@ const SellerInfo = ({ seller, address }) => (
   <View style={styles.sellerInfoContainer}>
     <Image source={{ uri: seller.avarta }} style={styles.sellerAvatar} />
     <View style={styles.sellerDetails}>
-      {/* <Stars
-        default={4}
-        count={5}
-        half={true}
-        starSize={50}
-        fullStar={<Text style={[styles.starStyle]}>★</Text>}
-        emptyStar={
-          <Text style={[styles.starStyle, styles.emptyStarStyle]}>☆</Text>
-        }
-        halfStar={<Text style={[styles.starStyle]}>★</Text>}
-      /> */}
       <Text style={styles.sellerName}>{seller.fullName}</Text>
       <Text style={styles.sellerPhoneNumber}>SĐT: {seller.phoneNumber}</Text>
     </View>
@@ -342,13 +337,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     marginLeft: 5,
-  },
-  starStyle: {
-    fontSize: 25,
-    color: "#FFD700", // Màu vàng
-  },
-  emptyStarStyle: {
-    color: "#CCCCCC", // Màu xám
   },
 });
 

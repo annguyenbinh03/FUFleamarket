@@ -12,14 +12,15 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../../context/AuthProvider";
+import LogoutButton from "../../../components/LogoutButton";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setAuth } = useContext(AuthContext);
-  const navigation = useNavigation(); // Sử dụng useNavigation ở đây để lấy navigation object
+  const { auth, setAuth } = useContext(AuthContext);
+  const navigation = useNavigation();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -115,6 +116,7 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
       )}
+      {auth ? <LogoutButton /> : null}
     </View>
   );
 };
