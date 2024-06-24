@@ -14,7 +14,6 @@ using Service.DataServices;
 using Service.Hubs;
 using WebAPI.Util;
 using BusinessObjects.VNPay;
-using Repository.Implementations;
 
 public class Program
 {

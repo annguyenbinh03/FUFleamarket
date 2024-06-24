@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpPut("updatecategorybyadmin}")]
+        [HttpPut("updatecategorybyadmin")]
         [Authorize(Roles = "Admin")] // Chỉ admin mới được cập nhật category
         public async Task<IActionResult> Update( [FromBody] UpdateCategory categoryDTO)
         {
