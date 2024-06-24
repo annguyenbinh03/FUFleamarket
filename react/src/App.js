@@ -50,11 +50,11 @@ function App() {
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/search-product" element={<SearchProduct />} />
             <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
-            <Route path="/admin" element={<AdminProcessRequest />} />
+           
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/my-selling-package" element={<MySellingPackage/>} />
             <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
-
+            <Route path="*" element={<div>404 Not Found</div>}/>
 
 
 
@@ -73,7 +73,8 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>
               <Route path="/buy-order" element={<BuyOrder />} />
             </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />} >
+            <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin]} />} >
+             <Route path="/admin" element={<AdminProcessRequest />} />
               <Route path="/users" element={<Users />} />
             </Route>
         </Routes>

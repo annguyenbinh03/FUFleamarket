@@ -69,7 +69,7 @@ function BuyOrderRequest() {
                 <div className="col-lg-3">
                   <div className="fs-4">Bộ lọc</div>
                   <select
-                    class="form-select form-select-lg mb-3"
+                    className="form-select form-select-lg mb-3"
                     aria-label="Large select example"
                   >
                     <option selected>Mới nhất</option>
@@ -78,7 +78,7 @@ function BuyOrderRequest() {
                   </select>
                   <div className="fs-4">Theo sản phẩm</div>
                   <select
-                    class="form-select form-select-lg mb-3"
+                    className="form-select form-select-lg mb-3"
                     aria-label="Large select example"
                   >
                     <option selected>Tất cả</option>

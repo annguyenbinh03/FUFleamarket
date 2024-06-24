@@ -1,13 +1,10 @@
-import { React,  useContext } from "react";
+import { React, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import MyPostButton from "./component/MyPostButton";
 import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 
 const UserDropdown = (authContainer) => {
   const auth = authContainer.auth;
@@ -17,70 +14,53 @@ const UserDropdown = (authContainer) => {
   const logout = (e) => {
     e.preventDefault();
     setAuth({});
-    localStorage.removeItem('auth');
+    localStorage.removeItem("auth");
+    const logged = false;
+    setAuth({ logged });
     navigate("/");
-  };
-
-  const loginGoogle = async (email, sub, name, avartaLink) => {
-    try {
-      if(!email.endsWith("@fpt.edu.vn")){
-          alert("Chỉ người dùng có email @fpt.edu.vn được phép đăng nhập.");
-          return;
-      }
-      const response = await axios.post(
-        "https://localhost:7057/Auth/loginGoogle",
-        JSON.stringify({ email, sub, name, avartaLink }),
-        {
-          headers: { "Content-Type": "application/json" },
-        });       
-        const accessToken = response?.data?.token;
-        const roles = response?.data?.role;
-        const fullName = response?.data?.fullName;
-        const avarta = response?.data?.avarta;
-        const id = response?.data?.id;
-       setAuth({ email, roles, fullName, avarta, accessToken, id, sub });
-       localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id, sub }));
-    } catch (error) {
-      console.error('Error login Google:', error);
-    }
   };
 
   // console.log(auth);
   return (
     <span>
       <div className="btn-group user-dropdown" style={{ width: "180px" }}>
-        <button
-          className="btn btn-secondary d-flex align-items-center dropdown-toggle bg-transparent "
-          type="button"
-          data-bs-toggle="dropdown"
-          data-bs-auto-close="true"
-          aria-expanded="false"
-        >
-          {auth?.email ? (
-            <>
+        {auth?.email ? (
+          <>
+            <button
+              className="btn btn-secondary d-flex align-items-center dropdown-toggle bg-transparent "
+              type="button"
+              data-bs-toggle="dropdown"
+              data-bs-auto-close="true"
+              aria-expanded="false"
+            >
               <img
                 className="userLogo mx-1 img-fluid"
                 src={auth.avarta}
                 alt=""
               />
               <div className="fs-5 username px-1">{auth.fullName}</div>
-            </>
-          ) : (
-            <>
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              className="btn btn-secondary d-flex align-items-center bg-transparent"
+              style={{border:"none"}}
+              to="/login"
+            >
               <img
                 className="userLogo mx-1 img-fluid"
                 src="https://th.bing.com/th/id/R.7ea4af7d8401d2b43ee841bfa2abe89d?rik=xidyUKdveUKULQ&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-download-icons-logos-emojis-users-2240.png&ehk=2%2bOqgdMZqFkKaBclc%2fPL9B86vLju3iBGiFmH64kXaTM%3d&risl=&pid=ImgRaw&r=0"
                 alt=""
               />
               <span className="fs-5 username px-1">
-                <Link className="loginLink" >
+                <div  className="loginLink">
                   Đăng nhập
-                </Link>
+                </div>
               </span>
-             
-            </>
-          )}
-        </button>
+            </Link>
+          </>
+        )}
         <ul style={{ padding: 0 }} className="dropdown-menu">
           {auth.email ? (
             <>
@@ -155,25 +135,7 @@ const UserDropdown = (authContainer) => {
               </li>
             </>
           ) : (
-            <>
-              <li>
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  var credentialResponseDecoded = jwtDecode(
-                    credentialResponse.credential
-                  );
-                  // console.log(credentialResponseDecoded.name);
-                  // console.log(credentialResponseDecoded.email);
-                  // console.log(credentialResponseDecoded.picture);
-                  // console.log(credentialResponseDecoded.sub);
-                  loginGoogle(credentialResponseDecoded.email, credentialResponseDecoded.sub, credentialResponseDecoded.name, credentialResponseDecoded.picture);
-                }}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-              />
-              </li>
-            </>
+            <></>
           )}
         </ul>
       </div>
@@ -189,16 +151,17 @@ const Header = () => {
       <header className="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
         <div className="logo p-2">
           <Link to="/">
-            <img className="img-fluid" src={`../assets/img/logo.png`}  alt="logo" />
+            <img
+              className="img-fluid"
+              src={`../assets/img/logo.png`}
+              alt="logo"
+            />
           </Link>
         </div>
 
         {/* Menu danh mục */}
         <div className="dropdown ">
-          <button
-            type="button"
-            className="btn dropdown-toggle text-white fs-5"
-          >
+          <button type="button" className="btn dropdown-toggle text-white fs-5">
             <i className="fa fa-list" aria-hidden="true"></i>
             <span> Danh mục </span>
           </button>
@@ -273,8 +236,10 @@ const Header = () => {
             <i className="fa fa-bell" aria-hidden="true"></i>
           </button>
           <button className="btn fs-5 text-white">
-           
-            <Link to="/chat"> <i className="fa fa-comments-o" aria-hidden="true"></i> </Link>
+            <Link to="/chat">
+              {" "}
+              <i className="fa fa-comments-o" aria-hidden="true"></i>{" "}
+            </Link>
           </button>
           <button className="btn fs-5 text-white">
             <i className="fa fa-heart" aria-hidden="true"></i>

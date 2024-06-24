@@ -1161,10 +1161,12 @@ ul {
 @media only screen and (max-width: 479px) {
 }
 
+
+
 .register {
   width: 100%;
   max-width: 460px;
-  min-height: 400px;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -1174,65 +1176,8 @@ ul {
   border-radius: 5%;
 }
 
-.register form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  flex-grow: 1;
-  padding-bottom: 1rem;
-}
-
-.register .input-group-text {
-  min-width: 55px;
-  text-align: center;
-}
-.register .input-group-text i {
-  width: 20px;
-}
-
-.register .instructions {
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
-  background: #000;
-  color: #fff;
-  padding: 0.25rem;
-  position: relative;
-  bottom: -10px;
-}
-
-.register .instructions > svg {
-  margin-right: 0.25rem;
-}
-
-.register .offscreen {
-  position: absolute;
-  left: -9999px;
-}
-
-.register .hide {
-  display: none;
-}
-
-.register .valid {
-  color: limegreen;
-  margin-left: 0.25rem;
-}
-
-.register .invalid {
-  color: red;
-  margin-left: 0.25rem;
-}
-
-.register .errmsg {
-  background-color: lightpink;
-  color: firebrick;
-  font-weight: bold;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.register .line {
-  display: inline-block;
+.S9gUrf-YoZ4jf{
+  scale: 1.5;
 }
 
 /*---------------------

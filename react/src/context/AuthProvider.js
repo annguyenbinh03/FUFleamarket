@@ -18,17 +18,20 @@ export const AuthProvider = ({children}) =>{
             const fullName = response?.data?.fullName;
             const avarta = response?.data?.avarta;
             const id = response?.data?.id;
-           setAuth({ email, roles, fullName, avarta, accessToken, id, sub });
-           localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id, sub }));
+            const logged = true;
+           setAuth({ email, roles, fullName, avarta, accessToken, id, sub, logged });
+           localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id, sub, logged }));
     }
 
     useEffect( ()=>{
         const storedAuth = localStorage.getItem('auth');
         if(storedAuth != null){
             var loginInfo = JSON.parse(storedAuth)
-            // setAuth(JSON.parse(storedAuth));   
-            console.log(loginInfo);
-            getToken(loginInfo.email, loginInfo.sub, loginInfo.fullName, loginInfo.avarta );  
+            setAuth(JSON.parse(storedAuth));   
+            getToken(loginInfo.email, loginInfo.sub, loginInfo.fullName, loginInfo.avarta, loginInfo );  
+        }else{
+            var logged = false;
+            setAuth({logged});
         }
         return;
     },[])
