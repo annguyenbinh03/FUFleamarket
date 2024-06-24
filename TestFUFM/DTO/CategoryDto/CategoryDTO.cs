@@ -14,7 +14,11 @@ namespace BusinessObjects.CategoryDto
         public int CategoryId { get; set; }
         public string Name { get; set; } = null!;
 
-     
+
+        public string? ImageLink { get; set; }
+
+        public string? IconLink { get; set; }
+
 
     }
 }

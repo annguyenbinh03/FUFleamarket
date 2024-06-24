@@ -65,25 +65,25 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpPut("updatecategorybyadmin/{id:int}")]
+        [HttpPut("updatecategorybyadmin}")]
         [Authorize(Roles = "Admin")] // Chỉ admin mới được cập nhật category
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategory categoryDTO)
+        public async Task<IActionResult> Update( [FromBody] UpdateCategory categoryDTO)
         {
             if (!User.IsInRole("Admin"))
             {
                 return Forbid("You do not have permission to update a category. This action is restricted to admins only.");
             }
 
-            if (id != categoryDTO.CategoryId)
-            {
-                return BadRequest("Category ID mismatch");
-            }
-            var maxCategoryId = await _categoryRepo.GetALLAsync().ContinueWith(task => task.Result.Max(c => c.CategoryId));
+            //if (id != categoryDTO.CategoryId)
+            //{
+            //    return BadRequest("Category ID mismatch");
+            //}
+            //var maxCategoryId = await _categoryRepo.GetALLAsync().ContinueWith(task => task.Result.Max(c => c.CategoryId));
 
-            if (id > maxCategoryId)
-            {
-                return BadRequest("Category ID exceeds the maximum available ID. Please enter a valid Category ID.");
-            }
+            //if (id > maxCategoryId)
+            //{
+            //    return BadRequest("Category ID exceeds the maximum available ID. Please enter a valid Category ID.");
+            //}
             if (await _categoryRepo.IsCategoryNameExistsAsync(categoryDTO.Name))
             {
                 return BadRequest("Category name already exists.");

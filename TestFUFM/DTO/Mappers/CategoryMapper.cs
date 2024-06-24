@@ -15,7 +15,9 @@ namespace BusinessObjects.Mappers
                 return new CategoryDTO
                 {
                     CategoryId = model.CategoryId,
-                    Name = model.Name
+                    Name = model.Name,
+                    ImageLink = model.ImageLink,
+                    IconLink = model.IconLink
                 };
             }
 
@@ -24,6 +26,8 @@ namespace BusinessObjects.Mappers
                 return new Category
                 {
                     Name = categoryDTO.Name,
+                    ImageLink = categoryDTO.ImageLink,
+                    IconLink = categoryDTO.IconLink
                     // Không cần UserId nếu không liên quan đến Product
                 };
             }
@@ -32,7 +36,9 @@ namespace BusinessObjects.Mappers
                 return new Category
                 {
                     CategoryId = categoryDTO.CategoryId,
-                    Name = categoryDTO.Name
+                    Name = categoryDTO.Name,
+                    ImageLink = categoryDTO.ImageLink,
+                    IconLink = categoryDTO.IconLink
                 };
             }
         }
