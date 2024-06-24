@@ -108,11 +108,11 @@ namespace WebAPI.Controllers
             }
 
             var startDate = DateTime.UtcNow;
-            var endDate = startDate.AddDays(promotion.Period * createDto.ProductQuantity);
+            var endDate = startDate.AddDays(promotion.Period);
 
-            var price = promotion.Price * createDto.ProductQuantity;
+            var price = promotion.Price;
 
-            var promoOrderModel = createDto.ToPromotionOrderFromCreate(userId, startDate, endDate, price);
+            var promoOrderModel = createDto.ToPromotionOrderFromCreate(userId, endDate);
             await _promoOrderRepo.CreateAsync(promoOrderModel);
 
             var promoOrderDTO = promoOrderModel.ToPromotionOrderDTO();

@@ -9,6 +9,8 @@ namespace BusinessObjects.PromotionOrderDto
     public class CreatePromotionOrderRequestDto
     {
         public int PromotionId { get; set; }
-        public int ProductQuantity { get; set; }
+        //public int ProductQuantity { get; set; }
+
+        public string Status { get; set; } = null!;
     }
 }
