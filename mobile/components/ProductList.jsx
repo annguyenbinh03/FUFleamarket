@@ -10,9 +10,8 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getProductAPI } from "../app/api/product";
 
-const { width, height } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
 const numColumns = 2;
 const thumbMeasure = (width - 48 - 32) / numColumns;
 
@@ -62,37 +61,15 @@ const ProductItem = ({ item }) => {
 const ProductListContainer = () => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
-
-  // useEffect(() => {
-  //   getProductAPI()
-  //     .then((repoonse) => {
-  //       console.log(repoonse);
-  //       setProductList(repoonse.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching product data:", err);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // if (loading) {
-  //   return <ActivityIndicator size="large" color="#0000ff" />;
-  // }
 
   useEffect(() => {
-    //fetch("http://192.168.110.7:8081/api/product/Listproduct")
-    // fetch("http://10.0.2.2:8081/api/product/ListProduct")
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {
-        // Sort data by createdDate
         data.sort((a, b) => {
           const aDays = parseInt(a.createdDate.split(" ")[0]);
           const bDays = parseInt(b.createdDate.split(" ")[0]);
-          // return bDays - aDays; //mới nhất trước -> nhưng mà in ra trước bị đẩy xuống dưới -> thấy cũ nhấ trước
-          return aDays - bDays; // ngược lại
+          return aDays - bDays;
         });
         setProductList(data);
         setLoading(false);
@@ -110,13 +87,15 @@ const ProductListContainer = () => {
   return (
     <View style={styles.productListContainerBig}>
       <Text style={styles.productListTitle}>Danh sách sản phẩm</Text>
-      <View style={styles.productListContainer}>
+      <View style={styles.productListWrapper}>
         <FlatList
           data={productList}
           numColumns={numColumns}
-          renderItem={({ item, index }) => <ProductItem item={item} />}
+          renderItem={({ item }) => <ProductItem item={item} />}
           keyExtractor={(item) => item.productId.toString()}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={styles.productListContainer}
+          scrollEnabled={false}
+          columnWrapperStyle={styles.columnWrapper}
         />
       </View>
     </View>
@@ -126,21 +105,28 @@ const ProductListContainer = () => {
 const styles = StyleSheet.create({
   productListContainerBig: {
     padding: 5,
+    alignItems: "center",
+  },
+  productListWrapper: {
+    width: "100%",
+    alignItems: "center",
   },
   productListContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    paddingBottom: 20,
   },
   productListTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
-    textAlign: "left", // Căn trái
+    alignSelf: "flex-start",
+  },
+  columnWrapper: {
+    justifyContent: "space-around",
   },
   productItem: {
-    width: thumbMeasure - 0, // Điều chỉnh width để phù hợp với khoảng cách
-    margin: 5, // Giảm margin để tạo khoảng cách phù hợp
-    padding: 20,
+    width: thumbMeasure,
+    margin: 5,
+    padding: 10,
     borderRadius: 8,
     backgroundColor: "#fff",
     shadowColor: "#000",
@@ -154,8 +140,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   productItemPic: {
-    width: thumbMeasure - 16,
-    height: thumbMeasure - 16,
+    width: thumbMeasure - 20,
+    height: thumbMeasure - 20,
     borderRadius: 8,
   },
   productTitle: {
