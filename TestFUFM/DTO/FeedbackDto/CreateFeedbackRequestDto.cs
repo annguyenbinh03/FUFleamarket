@@ -15,7 +15,7 @@ namespace BusinessObjects.FeedbackDto
         public int Rating { get; set; }
 
         public int OrderId { get; set;}
-
-        
+        public int RatedId { get; set; }
+        public string Type { get; set; }
     }
 }

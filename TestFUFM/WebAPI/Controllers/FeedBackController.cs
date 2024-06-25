@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.FeedbackDto;
 using BusinessObjects.Mappers;
+using BusinessObjects.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 namespace WebAPI.Controllers
@@ -36,9 +37,39 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFeedback([FromBody] CreateFeedbackRequestDto feedbackDto)
         {
-            var feedbackModel = feedbackDto.ToCreateFeedbackDTO();
+            if (!await _orderRepo.OrderExistsAsync(feedbackDto.OrderId))
+            {
+                return NotFound("OrderID not found");
+            }
+
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("UserId claim not found");
+            }
+
+            var feedbackModel = new Feedback
+            {
+                Content = feedbackDto.Content,
+                Rating = feedbackDto.Rating,
+                OrderId = feedbackDto.OrderId,
+                RaterId = int.Parse(userIdClaim.Value), // Convert UserId claim to int
+                RatedId = feedbackDto.RatedId,
+                Type = feedbackDto.Type
+            };
+
             await _feedbackRepo.CreateFeedbackAsync(feedbackModel);
-            return CreatedAtAction(nameof(GetFeedbackId), new { id = feedbackModel.OrderId}, feedbackModel.ToFeedBackDTO());
+
+            if (feedbackDto.Type.Equals("rateBuyer", StringComparison.OrdinalIgnoreCase))
+            {
+                await _orderRepo.UpdateBuyerRatingAsync(feedbackDto.RatedId, feedbackDto.Rating);
+            }
+            else if (feedbackDto.Type.Equals("rateSeller", StringComparison.OrdinalIgnoreCase))
+            {
+                await _orderRepo.UpdateSellerRatingAsync(feedbackDto.RatedId, feedbackDto.Rating);
+            }
+
+            return CreatedAtAction(nameof(GetFeedbackId), new { id = feedbackModel.FeedbackId }, feedbackModel.ToFeedBackDTO());
         }
         [HttpPut]
         [Route("{id}")]

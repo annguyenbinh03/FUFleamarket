@@ -184,5 +184,27 @@ namespace Repository
             return await _context.Orders
                          .FirstOrDefaultAsync(o => o.BuyerId == userId && o.ProductId == productId);
         }
+
+        public async Task UpdateBuyerRatingAsync(int buyerId, int rating)
+        {
+            var buyer = await _context.Users.FindAsync(buyerId);
+            if (buyer != null)
+            {
+                buyer.BuyRating = rating;
+                _context.Users.Update(buyer);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateSellerRatingAsync(int sellerId, int rating)
+        {
+            var seller = await _context.Users.FindAsync(sellerId);
+            if (seller != null)
+            {
+                seller.SellRating = rating;
+                _context.Users.Update(seller);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
