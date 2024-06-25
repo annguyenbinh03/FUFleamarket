@@ -79,15 +79,15 @@ const Login = () => {
     <div>
       <Header />
       <div className="d-flex justify-content-center" style={{minHeight:"700px"}}>
-        <section className="register bg-primary-subtle p-5">
-          <div>
-            <div className="text-center fs-1 fw-bold">Đăng nhập</div>
+        <section className="register bg-danger pt-5 pb-1" style={{boxShadow:"0px 0px 10px black"}}>
+          <div className="px-4">
+            <div className="text-center fs-1 text-white fw-bold">Đăng nhập</div>
             <img
               className="img-fluid my-5"
               src={`../assets/img/logo.png`}
               alt="logo"
             />
-            <div className="d-flex justify-content-center mt-4">
+            <div className="d-flex justify-content-center mt-5">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
                   console.log(credentialResponse);

@@ -111,7 +111,7 @@ function Detail() {
                 {data?.product ? data?.product?.productName : "Sản phẩm không tồn tại"}
               </div>
               <div className="price_wistlist d-flex justify-content-between">
-                <p className="price_wistlist_left">
+                <p className="price_wistlist_left fs-5">
                   {data?.product ?  formatPrice(data?.product?.price)  : ""} đ
                 </p>
                 <button className="btn price_wistlist_right rounded-pill">

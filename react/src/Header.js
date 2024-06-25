@@ -95,8 +95,8 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link to="/selling-package" className="dropdown-item">
-                    Gói bán hàng
+                  <Link to="/my-selling-package" className="dropdown-item">
+                    Quản lý gói bán hàng
                   </Link>
                 </div>
               </li>
@@ -149,7 +149,7 @@ const Header = () => {
   return (
     <div>
       <header className="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
-        <div className="logo p-2">
+        <div className="logo p-2  hidden-md">
           <Link to="/">
             <img
               className="img-fluid"
@@ -236,7 +236,7 @@ const Header = () => {
             <i className="fa fa-bell" aria-hidden="true"></i>
           </button>
           <button className="btn fs-5 text-white">
-            <Link to="/chat">
+            <Link className="text-white" to="/chat">
               {" "}
               <i className="fa fa-comments-o" aria-hidden="true"></i>{" "}
             </Link>

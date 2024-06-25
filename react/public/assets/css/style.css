@@ -124,13 +124,14 @@ body {
   border-color: #cd1818;
 }
 
+
+.header .search-bar{
+  width: 40%;
+}
+
 .logo {
   display: block;
   width: 150px;
-}
-
-.w-40 {
-  width: 40%;
 }
 
 .header button {
@@ -616,7 +617,7 @@ ul {
 .price_wistlist_left {
   color: #cd1818;
   font-weight: 700;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 0px;
 }
 .price_wistlist_right {
@@ -807,6 +808,10 @@ ul {
 .file-uploader .input-group span {
   width: 190px;
 }
+
+.upload-product .input-group-text{
+  min-width: 170px;
+} 
 
 /*---------------------
   My Post
@@ -1133,6 +1138,8 @@ ul {
 }
 
 
+
+
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
 @media only screen and (min-width: 1200px) {
@@ -1144,16 +1151,35 @@ ul {
 /* Medium Device = 1200px */
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .hidden-md{
+    display: none;
+  }
+  .header .search-bar{
+    width: 30%;
+  }
+  
 }
 
 /* Tablet Device = 768px */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+  .hidden-md{
+    display: none;
+  }
+  .header .search-bar{
+    width: 30%;
+  }
 }
 
 /* Wide Mobile = 480px */
 
 @media only screen and (max-width: 767px) {
+  .hidden-md{
+    display: none;
+  }
+  .header .search-bar{
+    width: 30%;
+  }
 }
 
 /* Small Device = 320px */

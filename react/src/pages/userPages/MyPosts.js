@@ -34,7 +34,7 @@ function MyPosts() {
   }, []);
 
   const formatPrice = (value) => {
-    return value.toLocaleString('vi-VN');
+    return value.toLocaleString("vi-VN");
   };
 
   function removeTimeFromISOString(isoString) {
@@ -44,8 +44,6 @@ function MyPosts() {
     }
     return isoString;
   }
-
-
 
   return (
     <div>
@@ -74,7 +72,7 @@ function MyPosts() {
                 </div>
               </div>
               <div className="div pe-4 d-flex justify-content-center">
-                {sellingPackages?.[0]?.productQuantity ? ( 
+                {sellingPackages?.[0]?.productQuantity ? (
                   <div>
                     <img
                       src={require(`../../assets/img/selling-package/${sellingPackages?.[0]?.promotionId}.png`)}
@@ -87,10 +85,12 @@ function MyPosts() {
                   <div></div>
                 )}
 
-                { (sellingPackages?.[0]?.productQuantity &&
-                sellingPackages?.[0]?.productQuantity === products?.length ) || (!sellingPackages?.[0]?.productQuantity && 3 === products?.length) ? (
+                {(sellingPackages?.[0]?.productQuantity &&
+                  sellingPackages?.[0]?.productQuantity === products?.length) ||
+                (!sellingPackages?.[0]?.productQuantity &&
+                  3 === products?.length) ? (
                   <div className="my-auto fw-bold me-3 fs-5 text-danger">
-                    Số lượng sản phẩm:{" "}
+                    Số lượng bài đăng:{" "}
                     {Array.isArray(products) ? products.length : 0}/
                     {sellingPackages
                       ? sellingPackages?.[0]?.productQuantity
@@ -98,7 +98,7 @@ function MyPosts() {
                   </div>
                 ) : (
                   <div className="my-auto fw-bold me-3 fs-5 ">
-                    Số lượng sản phẩm:{" "}
+                     Số lượng bài đăng:{" "}
                     {Array.isArray(products) ? products.length : 0}/
                     {sellingPackages
                       ? sellingPackages?.[0]?.productQuantity
@@ -182,10 +182,7 @@ function MyPosts() {
                 <div className="col-8 col-md-8">
                   <div className="row">
                     <div className="col-lg-3 w-25 product_image">
-                      <img
-                        src={product?.imageLink}
-                        alt=""
-                      />
+                      <img src={product?.imageLink} alt="" />
                       {product.status === 0 ? (
                         <div className="btn btn-state btn-secondary mt-3">
                           Đang chờ duyệt
@@ -202,18 +199,56 @@ function MyPosts() {
                     </div>
 
                     <div className="col-lg-8">
-                      <Link className="fw-bold fs-5" style={{textDecoration:"none"}} to={`/detail/${product.productId}`}>
-                       {product.productName}
+                      <Link
+                        className="fw-bold fs-5"
+                        style={{ textDecoration: "none" }}
+                        to={`/detail/${product.productId}`}
+                      >
+                        {product.productName}
                       </Link>
-                      <div className="price">{formatPrice(product.price)} đ</div>
+                      <div className="price">
+                        {formatPrice(product.price)} đ
+                      </div>
                       <div className="address">
                         Phường Dĩ An, Thành phố Dĩ An, Bình Dương
                       </div>
                       <div className="created_date">
-                        Ngày đăng tin: <span>{removeTimeFromISOString(product.createdDate)}</span>
+                        Ngày đăng tin:{" "}
+                        <span>
+                          {removeTimeFromISOString(product.createdDate)}
+                        </span>
                       </div>
                       <div className="created_date">
-                        Tình trạng sản phẩm: <span>{product.isNew === true ? "Mới" : "Cũ"}</span>
+                        Tình trạng sản phẩm:{" "}
+                        <span>{product.isNew === true ? "Mới" : "Cũ"}</span>
+                      </div>
+                      <div className="created_date">
+                        {product.storedQuantity > 10 ? (
+                          <>
+                            Số lượng sản phẩm:{" "}
+                            <span className="badge text-bg-success">
+                              {product.storedQuantity}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            {product.storedQuantity > 2 ? (
+                              <>
+                                Số lượng sản phẩm:{" "}
+                                <span className="badge text-bg-warning">
+                                  {product.storedQuantity}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                Số lượng sản phẩm:{" "}
+                                <span className="badge text-bg-danger">
+                                  {product.storedQuantity}
+                                </span>
+                              </>
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

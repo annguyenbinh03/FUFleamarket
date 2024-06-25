@@ -40,13 +40,13 @@ export const getSellOrdersAPI = (token) => {
   return axiosClient.get(`${END_POINT.MY_SOLD_ORDER_HISTORY}`, config);
 }
 
-export const getMySellOrdersRequestAPI = (token) => {
+export const getMySellOrdersRequestAPI = (token,sortBy) => {
   const config = {
       headers: {
         Authorization: `Bearer ${token}`
       }
     };
-  return axiosClient.get(`${END_POINT.MY_ORDER_REQUEST}`, config);
+  return axiosClient.get(`${END_POINT.MY_ORDER_REQUEST}?sortBy=${sortBy}&descending=true`, config);
 }
 
 

@@ -213,15 +213,19 @@ function CreateOrder() {
                     <p className="price_wistlist_left">$ { formatPrice(product.price) }</p>
                   </div>
                   <div>
-                    <p className="">{product.description}</p>
-                  </div>
-                  <div>
                     {product.isNew ? (
-                      <p>Tình trạng mới</p>
+                      <div>Tình trạng: mới</div>
                     ) : (
-                      <p>Tình trạng đã qua sử dụng</p>
+                      <div>Tình trạng: đã qua sử dụng</div>
                     )}
                   </div>
+                  <div>
+                    Số lượng trong kho: {product.storedQuantity}
+                  </div>
+                  <div>
+                    <p className="">{product.description}</p>
+                  </div>
+                 
                 </>
               ) : (
                 <div>Đang tải thông tin sản phẩm...</div>
@@ -238,7 +242,7 @@ function CreateOrder() {
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                   />
-                  <label className="ms-2">Giá (vnd)</label>
+                  <label className="ms-2">Giá mong muốn (vnd)</label>
                 </div>
                 <div className="form-floating mb-3">
                   <input

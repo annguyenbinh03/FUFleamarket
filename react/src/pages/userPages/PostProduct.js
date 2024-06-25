@@ -1,4 +1,4 @@
-import { React, useContext, useRef, useState } from "react";
+import { React, useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { createProductAPI } from "../../api/product";
 import Header from "../../Header";
@@ -14,37 +14,39 @@ function PostProduct() {
 
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
+  const [storedQuantity, setStoredQuantity] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("1");
   const [isNew, setIsNew] = useState(false);
   const [img, setImg] = useState("");
-  const [imgUrl, setImgUrl] = useState([]);
   const inputRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleUploadImagesClick();
-    if(imgUrl != null){
-      var imageLink = imgUrl[0];
-     const product = { productName, price, description, categoryId, isNew, imageLink };
-     const response = await createProductAPI(product, auth.accessToken);
-       navigate("/my-posts", { replace: true });
+    var urlImg = await handleUploadImagesClick();
+    console.log("check link ảnh");
+    console.log(urlImg);
+    if(urlImg != ""){
+      var imageLink = urlImg;
+     const product = { productName, price, description, categoryId, isNew, imageLink, storedQuantity };
+      const response = await createProductAPI(product, auth.accessToken);
+      navigate("/my-posts", { replace: true });
     }
     // navigate('/', { replace: true });
   };
 
-  const handleUploadImagesClick = () => {
+  const handleUploadImagesClick = async () => {
     if (img !== null) {
       const imgRef = ref(imageDb, `productImages/${v4()}`);
-      uploadBytes(imgRef, img).then((value) => {
-        getDownloadURL(value.ref).then((url) => {
-          setImgUrl((data) => [...data, url]);
-        });
-      });
+      const value = await uploadBytes(imgRef, img);
+      const url = await getDownloadURL(value.ref);
+      return url;
     } else{
       alert("Ảnh đại diện sản phẩm phải được đăng tải");
-    }
+      return "";
+     }
   };
+
   const handleImageClick = () => {
     inputRef.current.click();
   };
@@ -92,6 +94,8 @@ function PostProduct() {
                         ref={inputRef}
                         onChange={(e) => handleImageChange(e)}
                         style={{ display: "none" }}
+                        alt="click here to upload image"
+                        accept="image/*"
                       />
                     </div>
                   </div>
@@ -150,6 +154,17 @@ function PostProduct() {
                   placeholder="Giá (vnd)"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
+              <div className="input-group mb-3">
+                <span className="input-group-text">Số lượng sản phẩm</span>
+                <input
+                  required
+                  type="number"
+                  className="form-control"
+                  placeholder="Số lượng sản phẩm"
+                  value={storedQuantity}
+                  onChange={(e) => setStoredQuantity(e.target.value)}
                 />
               </div>
               <div className="input-group mb-3">

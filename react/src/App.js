@@ -9,7 +9,7 @@ import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
 import MySellingPackage from "./pages/userPages/MySellingPackage";
-import BuyOrderRequest from "./pages/userPages/BuyOrderRequest";
+
 
 
 
@@ -28,7 +28,7 @@ const SellOrder = lazy(() => import("./pages/userPages/SellOrder"));
 const AdminProcessRequest = lazy(() => import("./pages/adminPages/AdminProcessRequest"));
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
 const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
-
+const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
 
 
 const ROLES = {
@@ -40,7 +40,6 @@ const ROLES = {
 function App() {
   return (
       <Suspense fallback={<Loading />}>
-        {/* <Header /> */}
         <Routes>
           {/* public routes  */}
             <Route path="/" element={<Home />} />

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function SearchButton() {
   return (
-    <form className="w-40 px-3" action=""> 
+    <form className="search-bar px-3" action=""> 
       <div className="input-group text-white">
         <input 
           type="text" 
