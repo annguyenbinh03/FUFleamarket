@@ -83,7 +83,7 @@ const ProductListContainer = () => {
 
   useEffect(() => {
     //fetch("http://192.168.110.7:8081/api/product/Listproduct")
-    // fetch("http://192.168.110.7:7057/api/product/ListProduct")
+    // fetch("http://10.0.2.2:8081/api/product/ListProduct")
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
       .then((res) => res.json())
       .then((data) => {

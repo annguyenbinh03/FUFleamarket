@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TabNavigation from "./Navigations/TabNavigation";
 import Detail from "./Screens/HomeScreen/Detail";
 import LoginScreen from "./Screens/LoginScreen/Login";
@@ -13,51 +14,53 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={{ flex: 1 }}>
-      <AuthProvider>
-        <NavigationContainer independent={true}>
-          <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="TabNavigation"
-              component={TabNavigation}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Detail"
-              component={Detail}
-              options={{
-                title: "Chi tiết sản phẩm",
-                headerStyle: styles.header,
-                headerTitleStyle: styles.headerTitle,
-              }}
-            />
-            <Stack.Screen
-              name="ProductListByCategory"
-              component={ProductListByCategoryScreen}
-              options={{
-                title: "Danh sách sản phẩm",
-                headerStyle: styles.header,
-                headerTitleStyle: styles.headerTitle,
-              }}
-            />
-            <Stack.Screen
-              name="WishListScreen"
-              component={WishListScreen}
-              options={{
-                title: "Danh sách sản phẩm đã lưu",
-                headerStyle: styles.header,
-                headerTitleStyle: styles.headerTitle,
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </AuthProvider>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <AuthProvider>
+          <NavigationContainer independent={true}>
+            <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="TabNavigation"
+                component={TabNavigation}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Detail"
+                component={Detail}
+                options={{
+                  title: "Chi tiết sản phẩm",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="ProductListByCategory"
+                component={ProductListByCategoryScreen}
+                options={{
+                  title: "Danh sách sản phẩm",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="WishListScreen"
+                component={WishListScreen}
+                options={{
+                  title: "Danh sách sản phẩm đã lưu",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AuthProvider>
+      </View>
+    </GestureHandlerRootView>
   );
 }
 

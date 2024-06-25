@@ -12,6 +12,7 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../../../context/AuthProvider";
 import { useNavigation } from "@react-navigation/native";
 import LogoutButton from "../../../components/LogoutButton";
+import WishListButton from "../../../components/WishListButton"; // Import WishListButton
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
@@ -69,7 +70,7 @@ const Profile = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Quản lý tin</Text>
+        <Text style={styles.headerTitle}>Hồ sơ</Text>
       </View>
       <View style={styles.profileContainer}>
         <Image
@@ -83,21 +84,8 @@ const Profile = () => {
         <Text style={styles.name}>{auth.fullName}</Text>
         <Text style={styles.email}>{auth.email}</Text>
       </View>
-      <View style={styles.SaveItemsContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("WishListScreen", { userId: auth.id });
-            console.log("User ID:", auth.id);
-          }}
-        >
-          <FontAwesome5
-            name="heart"
-            size={20}
-            color="#DD0000"
-            style={styles.icon}
-          />
-          <Text style={styles.savedText}>Tin đã lưu</Text>
-        </TouchableOpacity>
+      <View style={styles.savedItemsContainer}>
+        <WishListButton />
       </View>
       <View style={styles.logoutContainer}>
         <LogoutButton onPress={handleLogout} />
@@ -110,6 +98,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f8f9fa" },
   header: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -127,7 +116,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: thumbMeasure,
     height: thumbMeasure,
-    borderRadius: 50,
+    borderRadius: 100,
     backgroundColor: "#ccc",
   },
   name: {
@@ -139,32 +128,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#555",
   },
-  SaveItemsContainer: {
+  savedItemsContainer: {
     borderTopWidth: 1,
     borderTopColor: "#ddd",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    flexDirection: "row",
-  },
-  savedItemsButton: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  savedText: {
-    fontSize: 16,
-    color: "#000000",
-    marginLeft: 5,
-  },
-  icon: {
-    marginLeft: 0,
   },
   logoutContainer: {
     borderTopWidth: 1,
     borderTopColor: "#ddd",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    flexDirection: "row",
-    marginTop: 10,
   },
 });
 

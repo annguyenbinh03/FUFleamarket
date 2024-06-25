@@ -1,33 +1,29 @@
 import React, { useContext } from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import AuthContext from "../context/AuthProvider";
-import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import AuthContext from "../context/AuthProvider";
+import { images } from "../constants/images";
 
-const LogoutButton = () => {
-  const { logout } = useContext(AuthContext);
+const WishListButton = () => {
+  const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
 
-  const handleLogout = async () => {
-    await logout();
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "Login" }],
-      })
-    );
-  };
-
   return (
-    <TouchableOpacity style={styles.button} onPress={handleLogout}>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        navigation.navigate("WishListScreen", { userId: auth.id });
+        console.log("User ID:", auth.id);
+      }}
+    >
       <FontAwesome5
-        name="sign-out-alt"
+        name="heart"
         size={20}
         color="#DD0000"
         style={styles.icon}
       />
-      <Text style={styles.buttonText}>Đăng xuất</Text>
+      <Text style={styles.buttonText}>Tin đã lưu</Text>
     </TouchableOpacity>
   );
 };
@@ -49,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogoutButton;
+export default WishListButton;

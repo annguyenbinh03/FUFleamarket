@@ -1,5 +1,6 @@
 {
   "expo": {
+    "sdkVersion": "51.0.0",
     "name": "fufm",
     "slug": "fufm",
     "version": "1.0.0",
@@ -24,7 +25,14 @@
       "package": "com.jsm.sora"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "web": {
+        "build": {
+          "babel": {
+            "include": ["crypto-browserify"]
+          }
+        }
+      }
     },
     "plugins": ["expo-router", "expo-font"]
   }

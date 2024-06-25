@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
-  Picker, // Import Picker component
+  Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
@@ -14,10 +14,8 @@ import {
   sortProductsByDate,
   sortProductsByPrice,
 } from "../../../utils/filterProduct";
-
-const formatPrice = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
+import formatPrice from "../../../utils/formatPrice";
+import { Picker } from "@react-native-picker/picker";
 
 export default function ProductListByCategory() {
   const route = useRoute();
@@ -27,6 +25,8 @@ export default function ProductListByCategory() {
   const navigation = useNavigation();
   const [dateSortOrder, setDateSortOrder] = useState("desc"); // Default to descending
   const [priceSortOrder, setPriceSortOrder] = useState("desc"); // Default to descending
+  const [selectedDateSortOrder, setSelectedDateSortOrder] = useState("desc");
+  const [selectedPriceSortOrder, setSelectedPriceSortOrder] = useState("desc");
 
   useEffect(() => {
     fetch("http://192.168.146.25:7057/api/product/ListProduct")
@@ -61,6 +61,11 @@ export default function ProductListByCategory() {
       });
   }, [category, dateSortOrder, priceSortOrder]);
 
+  const applySorting = () => {
+    setDateSortOrder(selectedDateSortOrder);
+    setPriceSortOrder(selectedPriceSortOrder);
+  };
+
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6600" />;
   }
@@ -72,8 +77,8 @@ export default function ProductListByCategory() {
         <View style={styles.sortContainerItem}>
           <Text style={styles.sortTitle}>Sắp xếp theo ngày:</Text>
           <Picker
-            selectedValue={dateSortOrder}
-            onValueChange={(value) => setDateSortOrder(value)}
+            selectedValue={selectedDateSortOrder}
+            onValueChange={(value) => setSelectedDateSortOrder(value)}
             style={styles.picker}
           >
             <Picker.Item label="Mới nhất" value="desc" />
@@ -83,14 +88,15 @@ export default function ProductListByCategory() {
         <View style={styles.sortContainerItem}>
           <Text style={styles.sortTitle}>Sắp xếp theo giá:</Text>
           <Picker
-            selectedValue={priceSortOrder}
-            onValueChange={(value) => setPriceSortOrder(value)}
+            selectedValue={selectedPriceSortOrder}
+            onValueChange={(value) => setSelectedPriceSortOrder(value)}
             style={styles.picker}
           >
             <Picker.Item label="Giá thấp nhất" value="asc" />
             <Picker.Item label="Giá cao nhất" value="desc" />
           </Picker>
         </View>
+        <Button title="Áp dụng" onPress={applySorting} />
       </View>
       <FlatList
         data={products}

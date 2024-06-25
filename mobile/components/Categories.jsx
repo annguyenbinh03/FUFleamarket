@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { images } from "../constants";
+import { Picker } from "@react-native-picker/picker";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);

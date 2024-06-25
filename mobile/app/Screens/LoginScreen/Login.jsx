@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../../context/AuthProvider";
 import LogoutButton from "../../../components/LogoutButton";
+import LoginGoogle from "./LoginGoogle";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -26,11 +28,33 @@ const LoginScreen = () => {
 
   useEffect(() => {
     emailRef.current.focus();
+    checkExistingAuth();
   }, []);
+
+  const checkExistingAuth = async () => {
+    const existingAuth = await AsyncStorage.getItem("auth");
+    if (existingAuth) {
+      const authData = JSON.parse(existingAuth);
+      setAuth(authData);
+      navigation.navigate("TabNavigation");
+    }
+  };
 
   const handleLogin = async () => {
     setIsLoading(true);
     setErrorMessage("");
+
+    if (!email.endsWith("@fpt.edu.vn")) {
+      setErrorMessage("Bạn phải đăng nhập bằng email @fpt.edu.vn");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length === 0) {
+      setErrorMessage("Bạn phải nhập mật khẩu");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -41,17 +65,10 @@ const LoginScreen = () => {
         }
       );
 
-      console.log("Response Data:", response.data);
-
       const { token, role, fullName, avarta, id } = response.data;
 
       if (role.includes(1)) {
-        const authData = { email, role, fullName, avarta, token, id };
-        await AsyncStorage.setItem("auth", JSON.stringify(authData));
-        setAuth(authData);
-        console.log("Auth data:", authData);
-        console.log("Navigating to TabNavigation");
-        navigation.replace("TabNavigation");
+        handleSuccessfulLogin({ email, role, fullName, avarta, token, id });
       } else {
         Alert.alert(
           "Không được phép",
@@ -60,38 +77,53 @@ const LoginScreen = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-            setErrorMessage(
-              "Unauthorized: You are not allowed to access this resource."
-            );
-            break;
-          case 400:
-            setErrorMessage("Bad Request: Invalid email or password.");
-            break;
-          case 500:
-            setErrorMessage("Server Error: The server encountered an issue.");
-            break;
-          default:
-            setErrorMessage("Login failed");
-            break;
-        }
-      } else {
-        setErrorMessage("Lỗi kết nối mạng");
-      }
+      handleLoginError(error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSuccessfulLogin = async (userData) => {
+    const authData = { ...userData };
+    await AsyncStorage.setItem("auth", JSON.stringify(authData));
+    setAuth(authData);
+    navigation.navigate("TabNavigation");
+  };
+
+  const handleLoginError = (error) => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          setErrorMessage(
+            "Unauthorized: You are not allowed to access this resource."
+          );
+          break;
+        case 400:
+          setErrorMessage("Bad Request: Invalid email or password.");
+          break;
+        case 500:
+          setErrorMessage("Server Error: The server encountered an issue.");
+          break;
+        default:
+          setErrorMessage("Login failed");
+          break;
+      }
+    } else {
+      setErrorMessage("Lỗi kết nối mạng");
+    }
+  };
+
   return (
     <View style={styles.container}>
+      <Image
+        source={require("../../../assets/images/logo.png")}
+        style={styles.logo}
+      />
       <Text style={styles.title}>Đăng nhập</Text>
       <TextInput
         ref={emailRef}
         style={styles.input}
-        placeholder="Email"
+        placeholder="Email @fpt.edu.vn"
         onChangeText={setEmail}
         value={email}
         autoCapitalize="none"
@@ -108,7 +140,6 @@ const LoginScreen = () => {
         textContentType="password"
       />
       {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-
       {isLoading ? (
         <ActivityIndicator size="large" color="#007bff" />
       ) : (
@@ -116,17 +147,24 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Đăng nhập</Text>
         </TouchableOpacity>
       )}
+      <LoginGoogle />
       {auth ? <LogoutButton /> : null}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: "#FFA07A",
+  },
+  logo: {
+    width: 250,
+    height: 80,
+    padding: 20,
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -139,6 +177,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     width: "80%",
+    backgroundColor: "white",
   },
   button: {
     backgroundColor: "#007bff",
@@ -146,10 +185,12 @@ const styles = StyleSheet.create({
     width: "80%",
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 15,
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 18,
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   error: {
     color: "red",

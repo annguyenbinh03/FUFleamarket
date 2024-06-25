@@ -11,6 +11,8 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../../../utils/formatPrice";
+import { images } from "../../../constants";
+import Empty from "../../../components/Empty";
 
 const WishListScreen = ({ route }) => {
   const { userId } = route.params;
@@ -18,6 +20,7 @@ const WishListScreen = ({ route }) => {
   console.log("Received User ID:", userId);
 
   const [wishlistItems, setWishListItems] = useState([]);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchWishList = useCallback(async () => {
@@ -29,6 +32,7 @@ const WishListScreen = ({ route }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching wishlist:", error);
+      setError(true); // Set error to true if 404 or other error
       setLoading(false);
     }
   }, []);
@@ -43,6 +47,10 @@ const WishListScreen = ({ route }) => {
         <ActivityIndicator size="large" color="#DD0000" />
       </View>
     );
+  }
+
+  if (error || wishlistItems.length === 0) {
+    return <Empty />;
   }
 
   return (
@@ -60,7 +68,13 @@ const WishListScreen = ({ route }) => {
           >
             <View style={styles.productItem}>
               <Image
-                source={{ uri: item.productImages.imageLink }}
+                source={
+                  item.productImages && item.productImages.imageLink
+                    ? { uri: item.productImages.imageLink }
+                    : {
+                        uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                      }
+                }
                 style={styles.productImage}
               />
               <View style={styles.productInfo}>

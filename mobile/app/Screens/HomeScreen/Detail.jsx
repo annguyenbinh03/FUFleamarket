@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  Linking,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ChatButton from "../../../components/ChatButton";
+import WishListAddButton from "../../../components/WishListAddButton";
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -23,10 +23,6 @@ const Detail = () => {
   const { productId } = route.params;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const handleSaveProduct = () => {
-    console.log("WishList product:", product);
-  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -73,16 +69,13 @@ const Detail = () => {
         }
         style={styles.productImage}
       />
-      <TouchableOpacity onPress={handleSaveProduct} style={styles.saveButton}>
-        <FontAwesome5 name="heart" size={20} color="#DD0000" />
-        <Text style={{ marginLeft: 5 }}>Lưu tin</Text>
-      </TouchableOpacity>
+      <WishListAddButton productId={productId} />
       <Text style={styles.productName}>{product.productName}</Text>
       <Text style={styles.productPrice}>
         Giá: {formatPrice(product.price)} VNĐ
       </Text>
       <Text style={styles.productDescription}>
-        Tình trạng: {product.isNew ? "Mới" : "cũ"}
+        Tình trạng: {product.isNew ? "Mới" : "Đã sử dụng"}
       </Text>
       <Text style={styles.productDescription}>{product.description}</Text>
       <SellerInfo seller={product.seller} address={product.address} />
@@ -195,18 +188,6 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: 20,
     borderRadius: 10,
-  },
-  saveButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-end",
-    marginTop: -30,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#DD0000",
   },
   productName: {
     fontSize: 24,
