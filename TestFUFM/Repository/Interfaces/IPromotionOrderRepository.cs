@@ -17,5 +17,7 @@ namespace Repository.Interfaces
         Task<bool> PromotionExists(int id);
         Task<IEnumerable<PromotionOrder>> GetAllByUserIdAsync(int userId);
         Task<PromotionOrder> UpdateAsync(PromotionOrder PromotionOrderModel);
+
+        Task<PromotionOrder?> GetByUserIdAndPromotionIdAsync(int userId, int promotionId);
     }
 }

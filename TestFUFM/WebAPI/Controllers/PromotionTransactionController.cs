@@ -17,11 +17,13 @@ namespace WebAPI.Controllers
     {
         private readonly IPromotionTransactionRepository _promotionTransactionRepo;
         private readonly IPromotionOrderRepository _promotionOrderRepo;
+        private readonly IPromotionRepository _promotionRepo;
 
-        public PromotionTransactionController(IPromotionTransactionRepository promotionTransactionRepo, IPromotionOrderRepository promotionOrderRepo)
+        public PromotionTransactionController(IPromotionTransactionRepository promotionTransactionRepo, IPromotionOrderRepository promotionOrderRepo, IPromotionRepository promotionRepo)
         {
             _promotionTransactionRepo = promotionTransactionRepo;
             _promotionOrderRepo = promotionOrderRepo;
+            _promotionRepo = promotionRepo;
         }
 
         [HttpGet("getallpromotiontransaction")]
@@ -36,8 +38,39 @@ namespace WebAPI.Controllers
                 return NotFound("No promotion transactions found.");
             }
 
-            // Chuyển đổi từ entity sang DTO
-            var promotionTransactionDtos = promotionTransactions.Select(x => x.ToPromotionTransactionDTO()).ToList();
+            var promotionTransactionDtos = new List<DetailedPromotionTransactionDTO>();
+
+            foreach (var transaction in promotionTransactions)
+            {
+                var promotionOrder = await _promotionOrderRepo.GetByIdAsync(transaction.PromoOrderId);
+                if (promotionOrder != null)
+                {
+                    var promotion = await _promotionRepo.GetByIdAsync(promotionOrder.PromotionId);
+                    if (promotion != null)
+                    {
+                        var dto = new DetailedPromotionTransactionDTO
+                        {
+                            PromoTransactionId = transaction.PromoTransactionId,
+                            UserId = promotionOrder.UserId,
+                            StartDate = transaction.StartDate,
+                            EndDate = transaction.EndDate,
+                            PaymentMethod = transaction.PaymentMethod,
+                            TransactionCode = transaction.TransactionCode,
+                            TransactionStatus = transaction.TransactionStatus,
+                            Price = transaction.Price,
+                            PromoOrderId = transaction.PromoOrderId,
+                            PromotionName = promotion.Name,
+                            PromotionDescription = promotion.Description,
+                            PromotionPeriod = promotion.Period,
+                            PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
+                            PromotionPrice = promotion.Price,
+                            PromotionOrderStatus = promotionOrder.Status
+                        };
+                        promotionTransactionDtos.Add(dto);
+                    }
+                }
+            }
+
             return Ok(promotionTransactionDtos);
         }
 
@@ -72,8 +105,39 @@ namespace WebAPI.Controllers
                 return NotFound("No promotion transactions found for the current user.");
             }
 
-            // Chuyển đổi từ entity sang DTO
-            var promotionTransactionDtos = promotionTransactions.Select(x => x.ToPromotionTransactionDTO()).ToList();
+            // Tạo danh sách DTO bao gồm thông tin từ PromotionOrder và Promotion
+            var promotionTransactionDtos = new List<DetailedPromotionTransactionDTO>();
+
+            foreach (var transaction in promotionTransactions)
+            {
+                var promotionOrder = userPromotionOrders.FirstOrDefault(po => po.PromoOrderId == transaction.PromoOrderId);
+                if (promotionOrder != null)
+                {
+                    var promotion = await _promotionRepo.GetByIdAsync(promotionOrder.PromotionId);
+                    if (promotion != null)
+                    {
+                        var dto = new DetailedPromotionTransactionDTO
+                        {
+                            PromoTransactionId = transaction.PromoTransactionId,
+                            UserId = promotionOrder.UserId,
+                            StartDate = transaction.StartDate,
+                            EndDate = transaction.EndDate,
+                            PaymentMethod = transaction.PaymentMethod,
+                            TransactionCode = transaction.TransactionCode,
+                            TransactionStatus = transaction.TransactionStatus,
+                            Price = transaction.Price,
+                            PromoOrderId = transaction.PromoOrderId,
+                            PromotionName = promotion.Name,
+                            PromotionDescription = promotion.Description,
+                            PromotionPeriod = promotion.Period,
+                            PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
+                            PromotionPrice = promotion.Price,
+                            PromotionOrderStatus = promotionOrder.Status
+                        };
+                        promotionTransactionDtos.Add(dto);
+                    }
+                }
+            }
             return Ok(promotionTransactionDtos);
         }
 

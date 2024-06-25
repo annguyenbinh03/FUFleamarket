@@ -21,14 +21,16 @@ namespace WebAPI.Controllers
         private readonly IPromotionOrderRepository _promotionOrder;
         private readonly IPromotionRepository _promotionRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IPromotionTransactionRepository _promotionTransactionRepo;
 
         public VNPayController(IOptions<VNPaySettings> vnPaySettings, IPromotionOrderRepository promotionOrder,
-            IPromotionRepository promotionRepository, IUserRepository userRepository)
+            IPromotionRepository promotionRepository, IUserRepository userRepository, IPromotionTransactionRepository promotionTransactionRepo)
         {
             _vnPaySettings = vnPaySettings.Value;
             _promotionOrder = promotionOrder;
             _promotionRepo = promotionRepository;
             _userRepo = userRepository;
+            _promotionTransactionRepo = promotionTransactionRepo;
         }
 
 
@@ -115,40 +117,109 @@ namespace WebAPI.Controllers
 
             string[] parts = orderInfo.Split('/');
 
-            int userId = Int32.Parse( parts[0]);
+            int userId = Int32.Parse(parts[0]);
             int promotionId = Int32.Parse(parts[1]);
 
             Promotion? promotion = await _promotionRepo.GetByIdAsync(promotionId);
 
-            PromotionOrder newPromoOrder = new PromotionOrder
-            {
-                //StartDate = DateTime.Now,
-                //EndDate = DateTime.Now.AddDays(promotion.Period),
-                //UserId = userId,
-                //PaymentMethod = "VNPay",
-                //TransactionCode = vnpayTranId.ToString(),
-                //Price = promotion.Price,
-              //  ProductQuantity = promotion.ProductQuantity,
-                PromotionId = promotion.PromotionId
-            };
-           
+            PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);
 
-            if (vnp_ResponseCode == "00")
+            if (existingPromoOrder != null)
             {
-                newPromoOrder.Status = StatusPromotionOrderEnum.Completed.ToString();
-                
+                PromotionTransaction newPromoTransaction = new PromotionTransaction
+                {
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                    PaymentMethod = "VNPay",
+                    TransactionCode = vnpayTranId.ToString(),
+                    Price = promotion.Price,
+                    PromoOrderId = existingPromoOrder.PromoOrderId,
+                };
+
+                if (vnp_ResponseCode == "00")
+                {
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
+
+                    if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
+                    {
+                        existingPromoOrder.EndDate = existingPromoOrder.EndDate.AddDays(promotion.Period);
+                    }
+                    else if (existingPromoOrder.Status != StatusPromotionOrderEnum.Active.ToString())
+                    {
+                        existingPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
+                        existingPromoOrder.EndDate = DateTime.Now.AddDays(promotion.Period);
+                    }
+                }
+                else
+                {
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Failed.ToString();
+                }
+
+                await _promotionTransactionRepo.CreateAsync(newPromoTransaction);
+
+                // Kiểm tra nếu existingPromoOrder tồn tại trước khi cập nhật
+                if (existingPromoOrder != null)
+                {
+                    try
+                    {
+                        await _promotionOrder.UpdateAsync(existingPromoOrder);
+                    }
+                    catch (KeyNotFoundException ex)
+                    {
+                        // Xử lý lỗi khi không tìm thấy PromotionOrder với ID tương ứng
+                        Console.WriteLine(ex.Message);
+                        return StatusCode(404, new { error = true, message = "PromotionOrder not found" });
+                    }
+                }
             }
             else
             {
-                newPromoOrder.Status = StatusPromotionOrderEnum.Failed.ToString();
-            }
-             await _promotionOrder.CreateAsync(newPromoOrder);
-            //StatusCode(200, new { error = false, status = po.Status, orderId = orderInfo, transactionId = vnpayTranId });
-            return Redirect("http://localhost/my-selling-package");
+                PromotionOrder newPromoOrder = new PromotionOrder
+                {
+                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                    UserId = userId,
+                    PromotionId = promotion.PromotionId
+                };
 
+                if (vnp_ResponseCode == "00")
+                {
+                    newPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
+                }
+                else
+                {
+                    newPromoOrder.Status = StatusPromotionOrderEnum.Failed.ToString();
+                }
+
+                // Lưu PromotionOrder trước để có PromoOrderId hợp lệ
+                await _promotionOrder.CreateAsync(newPromoOrder);
+
+                PromotionTransaction newPromoTransaction = new PromotionTransaction
+                {
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                    PaymentMethod = "VNPay",
+                    TransactionCode = vnpayTranId.ToString(),
+                    Price = promotion.Price,
+                    PromoOrderId = newPromoOrder.PromoOrderId,
+                };
+
+                if (vnp_ResponseCode == "00")
+                {
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
+                }
+                else
+                {
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Failed.ToString();
+                }
+
+                await _promotionTransactionRepo.CreateAsync(newPromoTransaction);
+            }
+
+            return Redirect("http://localhost/my-selling-package");
         }
 
-        private bool ValidateSignature(string rspraw, string inputHash, string secretKey)
+
+            private bool ValidateSignature(string rspraw, string inputHash, string secretKey)
         {
             string myChecksum = VNPayHelper.HmacSHA512(secretKey, rspraw);
             return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);

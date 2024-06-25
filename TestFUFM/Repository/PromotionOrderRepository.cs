@@ -61,7 +61,7 @@ namespace Repository
             if (promotionOrderModel == null)
                 throw new ArgumentNullException(nameof(promotionOrderModel));
 
-            var existingOrder = await _dbcontext.PromotionOrders.FirstOrDefaultAsync(x => x.PromoOrderId == promotionOrderModel.PromotionId);
+            var existingOrder = await _dbcontext.PromotionOrders.FirstOrDefaultAsync(x => x.PromoOrderId == promotionOrderModel.PromoOrderId);
             if (existingOrder == null)
             {
                 throw new KeyNotFoundException($"No PromotionOrder found with ID {promotionOrderModel.PromotionId}");
@@ -78,6 +78,10 @@ namespace Repository
 
             return existingOrder;
         }
-
+        public async Task<PromotionOrder?> GetByUserIdAndPromotionIdAsync(int userId, int promotionId)
+        {
+            return await _dbcontext.PromotionOrders
+                .FirstOrDefaultAsync(po => po.UserId == userId && po.PromotionId == promotionId);
+        }
     }
 }

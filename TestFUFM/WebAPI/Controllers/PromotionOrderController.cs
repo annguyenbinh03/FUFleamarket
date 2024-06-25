@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using DTO.PromotionOrderDto;
 
 namespace WebAPI.Controllers
 {
@@ -65,8 +66,30 @@ namespace WebAPI.Controllers
                 return NotFound("No promotion orders found for the current user.");
             }
 
-            var promoOrderDtos = promoOrders.Select(x => x.ToPromotionOrderDTO());
-            return Ok(promoOrderDtos);
+            var detailedPromoOrderDtos = new List<DetailedPromotionOrderDTO>();
+
+            foreach (var promoOrder in promoOrders)
+            {
+                var promotion = await _promotionRepo.GetByIdAsync(promoOrder.PromotionId);
+                if (promotion != null)
+                {
+                    var dto = new DetailedPromotionOrderDTO
+                    {
+                        PromoOrderId = promoOrder.PromoOrderId,
+                        EndDate = promoOrder.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                        UserId = promoOrder.UserId,
+                        PromotionId = promoOrder.PromotionId,
+                        Status = promoOrder.Status,
+                        PromotionName = promotion.Name,
+                        PromotionDescription = promotion.Description,
+                        PromotionPeriod = promotion.Period,
+                        PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
+                        PromotionPrice = promotion.Price
+                    };
+                    detailedPromoOrderDtos.Add(dto);
+                }
+            }
+            return Ok(detailedPromoOrderDtos);
         }
 
         [HttpGet("InformationPromotionOrderById(Admin){id:int}")]

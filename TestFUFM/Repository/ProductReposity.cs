@@ -106,6 +106,8 @@ namespace Repository
             var products = _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
+                .Where(p => p.Status == 1)
+                .Where (p => p.StoredQuantity > 0)
                 .Include(p => p.Seller) // Include Seller
                 .AsQueryable();
 
