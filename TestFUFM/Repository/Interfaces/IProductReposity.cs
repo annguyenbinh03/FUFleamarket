@@ -34,6 +34,7 @@ namespace Repository.Interfaces
 
         Task<List<Product>> GetProductsByStatusAsync(int status);
         Task<Product?> GetProductByIdAsync(int productId);
+        Task<IEnumerable<Product>> GetInforProductBuyRequestAsync(string userId);
 
         Task<List<Product>> GetProductsByUserIdAsync(int userId);
 

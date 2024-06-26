@@ -140,6 +140,7 @@ namespace Repository
 
             return await products.ToListAsync();
         }
+       
 
         public async Task<Product?> GetByIdProductAsync(int id)
         {
@@ -292,6 +293,17 @@ namespace Repository
             }
         }
 
-    
+        public async Task<IEnumerable<Product>> GetInforProductBuyRequestAsync(string userId)
+        {
+            var user = await _context.Users.FindAsync(int.Parse(userId));
+            if (user == null)
+                return null;
+
+            var products = await _context.Products
+                .Where(p => p.SellerId == user.UserId)
+                .ToListAsync();
+
+            return products;
+        }
     }
 }
