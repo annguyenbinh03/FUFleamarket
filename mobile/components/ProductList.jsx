@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import formatPrice from "../utils/formatPrice";
 
 const { width } = Dimensions.get("screen");
 const numColumns = 2;
@@ -17,10 +18,6 @@ const thumbMeasure = (width - 48 - 32) / numColumns;
 
 const ProductItem = ({ item }) => {
   const navigation = useNavigation();
-
-  const formattedPrice = item.price
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   return (
     <TouchableOpacity
@@ -31,19 +28,13 @@ const ProductItem = ({ item }) => {
     >
       <View style={styles.productItemPicContainer}>
         <Image
-          source={
-            item.productImages && item.productImages.imageLink
-              ? { uri: item.productImages.imageLink }
-              : {
-                  uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-                }
-          }
+          source={{ uri: item.productImages }}
           style={styles.productItemPic}
         />
       </View>
 
       <Text style={styles.productTitle}>{item.productName}</Text>
-      <Text style={styles.productPrice}>{formattedPrice} VNĐ</Text>
+      <Text style={styles.productPrice}>{formatPrice(item.price)} VNĐ</Text>
       <View style={styles.sellerInfo}>
         <Image
           source={{ uri: item.seller.avarta }}

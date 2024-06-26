@@ -7,16 +7,16 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ChatButton from "../../../components/ChatButton";
 import WishListAddButton from "../../../components/WishListAddButton";
+import formatPrice from "../../../utils/formatPrice";
 
-const formatPrice = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
+const { width } = Dimensions.get("window");
 
 const Detail = () => {
   const route = useRoute();
@@ -59,39 +59,39 @@ const Detail = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Image
-        source={
-          product.productImages && product.productImages.imageLink
-            ? { uri: product.productImages.imageLink }
-            : {
-                uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-              }
-        }
-        style={styles.productImage}
-      />
-      <WishListAddButton productId={productId} />
-      <Text style={styles.productName}>{product.productName}</Text>
-      <Text style={styles.productPrice}>
-        Giá: {formatPrice(product.price)} VNĐ
-      </Text>
-      <Text style={styles.productDescription}>
-        Tình trạng: {product.isNew ? "Mới" : "Đã sử dụng"}
-      </Text>
-      <Text style={styles.productDescription}>{product.description}</Text>
-      <SellerInfo seller={product.seller} address={product.address} />
-      <View style={styles.buttonGroup}>
-        <ChatButton phoneNumber={product.seller.phoneNumber} />
-        <TouchableOpacity
-          style={styles.orderButton}
-          onPress={() => {
-            // Xử lý khi nhấn vào nút tạo hóa đơn
-          }}
-        >
-          <View style={styles.buttonContent}>
-            <FontAwesome5 name="plus-square" size={20} color="#fff" />
-            <Text style={styles.buttonText}>TẠO HÓA ĐƠN</Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.imageContainer}>
+        <Image
+          source={{ uri: product.productImages }}
+          style={styles.productImage}
+        />
+        <View style={styles.wishlistButtonContainer}>
+          <WishListAddButton productId={productId} />
+        </View>
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.productName}>{product.productName}</Text>
+        <Text style={styles.productPrice}>
+          {formatPrice(product.price)} VNĐ
+        </Text>
+        <Text style={styles.productStatus}>
+          Tình trạng: {product.isNew ? "Mới" : "Đã sử dụng"}
+        </Text>
+        <Text style={styles.productDescription}>{product.description}</Text>
+        <SellerInfo seller={product.seller} address={product.address} />
+        <View style={styles.buttonGroup}>
+          <ChatButton phoneNumber={product.seller.phoneNumber} />
+          <TouchableOpacity
+            style={styles.orderButton}
+            onPress={() => {
+              // Xử lý khi nhấn vào nút tạo hóa đơn
+            }}
+          >
+            <View style={styles.buttonContent}>
+              <FontAwesome5 name="plus-square" size={20} color="#fff" />
+              <Text style={styles.buttonText}>TẠO HÓA ĐƠN</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -99,63 +99,43 @@ const Detail = () => {
 
 const SellerInfo = ({ seller, address }) => (
   <View style={styles.sellerInfoContainer}>
-    <Image source={{ uri: seller.avarta }} style={styles.sellerAvatar} />
-    <View style={styles.sellerDetails}>
-      <Text style={styles.sellerName}>{seller.fullName}</Text>
-      <Text style={styles.sellerPhoneNumber}>SĐT: {seller.phoneNumber}</Text>
+    <View style={styles.sellerHeader}>
+      <Image source={{ uri: seller.avarta }} style={styles.sellerAvatar} />
+      <View style={styles.sellerDetails}>
+        <Text style={styles.sellerName}>{seller.fullName}</Text>
+        <Text style={styles.sellerPhoneNumber}>{seller.phoneNumber}</Text>
+      </View>
     </View>
     <View style={styles.sellerAddress}>
       <Text style={styles.khuVuc}>Khu Vực</Text>
       <View style={styles.sellerAddressFlex}>
-        <View style={styles.sellerAddressLeft}>
-          <Image
-            style={styles.locationIcon}
-            source={{
-              uri: "https://static.chotot.com/storage/icons/logos/ad-param/location.svg",
-            }}
-          />
-        </View>
-        <View style={styles.sellerAddressRight}>
-          <Text>
-            {address || "Người này chưa tiết lộ thông tin về địa chỉ"}
-          </Text>
-        </View>
+        <FontAwesome5 name="map-marker-alt" size={16} color="#666" />
+        <Text style={styles.addressText}>
+          {address || "Chưa cập nhật địa chỉ"}
+        </Text>
       </View>
     </View>
     <View style={styles.reportWrapper}>
       <View style={styles.reportWrapperText}>
-        <View style={styles.reportWrapperTextLeft}>
-          <Image
-            style={styles.safeTradeIcon}
-            source={{
-              uri: "https://static.chotot.com/storage/marketplace/shield-iconx4.png",
-            }}
-          />
-        </View>
-        <View style={styles.reportWrapperTextRight}>
-          <Text>
-            Tin đăng này đã được kiểm duyệt. Nếu gặp vấn đề, vui lòng báo cáo
-            tin đăng hoặc liên hệ CSKH để được trợ giúp.
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              // Xử lý sự kiện khi nhấn vào link "Xem thêm"
-            }}
-          >
-            <Text style={styles.readMoreLink}>Xem thêm ››</Text>
-          </TouchableOpacity>
-        </View>
+        <FontAwesome5
+          name="shield-alt"
+          size={16}
+          color="#4CAF50"
+          style={styles.safeTradeIcon}
+        />
+        <Text style={styles.reportText}>
+          Tin đăng này đã được kiểm duyệt. Nếu gặp vấn đề, vui lòng báo cáo tin
+          đăng hoặc liên hệ CSKH để được trợ giúp.
+        </Text>
       </View>
-      <View style={styles.reportWrapperButton}>
-        <TouchableOpacity
-          onPress={() => {
-            // Xử lý sự kiện khi nhấn vào nút "Báo tin không hợp lệ"
-          }}
-          style={styles.reportButton}
-        >
-          <Text style={styles.reportButtonText}>Báo tin không hợp lệ</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          // Xử lý sự kiện khi nhấn vào nút "Báo tin không hợp lệ"
+        }}
+        style={styles.reportButton}
+      >
+        <Text style={styles.reportButtonText}>Báo tin không hợp lệ</Text>
+      </TouchableOpacity>
     </View>
   </View>
 );
@@ -163,60 +143,79 @@ const SellerInfo = ({ seller, address }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f9fa",
   },
   loadingContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f0f0f0",
   },
   errorContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f0f0f0",
   },
   errorText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "red",
+    color: "#DC3545",
+  },
+  imageContainer: {
+    position: "relative",
+    width: "100%",
+    height: 300,
   },
   productImage: {
     width: "100%",
-    height: 300,
-    marginBottom: 20,
-    borderRadius: 10,
+    height: "100%",
+  },
+  wishlistButtonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  contentContainer: {
+    padding: 20,
   },
   productName: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    textAlign: "left",
+    color: "#333",
   },
   productPrice: {
-    fontSize: 18,
+    fontSize: 22,
+    fontWeight: "bold",
     marginBottom: 10,
-    textAlign: "left",
-    color: "#CC0000",
+    color: "#DC3545",
+  },
+  productStatus: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#666",
   },
   productDescription: {
     fontSize: 16,
     marginBottom: 20,
-    textAlign: "left",
+    color: "#333",
+    lineHeight: 24,
   },
   sellerInfoContainer: {
     marginTop: 20,
     borderTopWidth: 1,
-    borderTopColor: "#ccc",
-    paddingTop: 10,
+    borderTopColor: "#e0e0e0",
+    paddingTop: 20,
+  },
+  sellerHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
   },
   sellerAvatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
   },
   sellerDetails: {
     flex: 1,
@@ -224,6 +223,7 @@ const styles = StyleSheet.create({
   sellerName: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#333",
   },
   sellerPhoneNumber: {
     fontSize: 16,
@@ -235,76 +235,56 @@ const styles = StyleSheet.create({
   khuVuc: {
     fontWeight: "bold",
     marginBottom: 5,
+    color: "#333",
   },
   sellerAddressFlex: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
-  sellerAddressLeft: {
-    marginRight: 10,
-  },
-  sellerAddressRight: {
-    flex: 1,
-  },
-  locationIcon: {
-    width: 20,
-    height: 20,
+  addressText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: "#666",
   },
   reportWrapper: {
-    marginTop: 20,
     backgroundColor: "#f0f0f0",
     padding: 15,
     borderRadius: 10,
   },
   reportWrapperText: {
     flexDirection: "row",
-    marginBottom: 10,
-  },
-  reportWrapperTextLeft: {
-    marginRight: 10,
+    marginBottom: 15,
   },
   safeTradeIcon: {
-    width: 20,
-    height: 20,
+    marginRight: 10,
+    marginTop: 2,
   },
-  reportWrapperTextRight: {
+  reportText: {
     flex: 1,
-  },
-  readMoreLink: {
-    color: "blue",
-    textDecorationLine: "underline",
-  },
-  reportWrapperButton: {
-    flexDirection: "row",
-    justifyContent: "center",
+    fontSize: 14,
+    color: "#666",
+    lineHeight: 20,
   },
   reportButton: {
-    backgroundColor: "#DD0000",
+    backgroundColor: "#DC3545",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    alignSelf: "center",
   },
   reportButtonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 14,
   },
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 20,
-  },
-  chatButton: {
-    backgroundColor: "#1E90FF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    flex: 1,
-    marginRight: 10,
+    marginTop: 20,
   },
   orderButton: {
-    backgroundColor: "#009933",
-    paddingVertical: 10,
+    backgroundColor: "#28A745",
+    paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
     flex: 1,
@@ -317,7 +297,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    marginLeft: 5,
+    marginLeft: 8,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

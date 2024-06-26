@@ -10,6 +10,7 @@ import ProductListByCategoryScreen from "./Screens/ProductScreen/ProductListByCa
 import { AuthProvider } from "../context/AuthProvider";
 import WishListScreen from "./Screens/ProductScreen/WishListScreen";
 import AdminTabNavigation from "./Navigations/AdminTabNavigation";
+import UserDetailScreen from "./Screens/ProfileScreen/UserDetailScreen";
 
 console.log("AdminTabNavigation:", AdminTabNavigation);
 
@@ -61,6 +62,15 @@ export default function App() {
                 component={WishListScreen}
                 options={{
                   title: "Danh sách sản phẩm đã lưu",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="UserDetail"
+                component={UserDetailScreen}
+                options={{
+                  title: "Thông tin người dùng",
                   headerStyle: styles.header,
                   headerTitleStyle: styles.headerTitle,
                 }}
