@@ -43,7 +43,7 @@ CREATE TABLE [dbo].[Category](
 
 CREATE TABLE [dbo].[Product](
 	[productId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
-	[productName] NVARCHAR(50) NOT NULL,
+	[productName] NVARCHAR(100) NOT NULL,
 	[price] MONEY NOT NULL,
 	[isNew] BIT NOT NULL,
 	[description] NVARCHAR(2000) NOT NULL,
@@ -163,16 +163,17 @@ VALUES
     ('1', 'Dan Thu', 'ThuPNDSE170446@fpt.edu.vn', '1234567890', 'Introduction 1', 1, 0, 'https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg', GETDATE(), NULL),
     ('1', 'Quy duc', 'DucNQSE170473@fpt.edu.vn', '0987654321', 'Introduction 2', 1, 0, 'https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg', GETDATE(),  '101623189471350414244'),
     ('1', 'Khanh Hung', 'hunghkse170547@fpt.edu.vn', '9876543210', 'Introduction 3', 2, 0, 'https://zpsocial-f43-org.zadn.vn/310dc762c2792e277768.jpg', GETDATE(), '108936661322074721809'),
+	 ('1', 'Ho Minh Quyen (k17 HCM)', 'quyenhmse170471@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocIZPZqtyowDwjLOKMnFu3ufaspn7e8N7xL1-3pZhMh40JQtPbQs=s96-c', '2024-06-22 10:04:32.537', '116447998121690404343'),
+    ('1', 'Nguyen Binh An (k17 HCM)', 'annbse170470@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocJf7GEHpBuMAEqC5JIf-T4yp3clbt9iExMJY5Zo3_7kSbIP4gA=s96-c', '2024-06-25 08:43:25.623', '111768314629809688846'),
     ('admin', 'Admin name', 'admin', '0123456789', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.57236NGNujICB1CuE0X2MwAAAA?rs=1&pid=ImgDetMain', GETDATE(), NULL),
-    ('1', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'https://th.bing.com/th/id/R.808636cc55f2ccceac3dab65f59e06a0?rik=rYlKMlOaLmfyUg&pid=ImgRaw&r=0', GETDATE(), NULL),
+    ('1', 'Michael Davis', 'michaeldavis@example.com', '5432167890', 'Introduction 5', 1, 0, 'https://th.bing.com/th/id/R.808636cc55f2ccceac3dab65f59e06a0?rik=rYlKMlOaLmfyUg&pid=ImgRaw&r=0', GETDATE(), '111768314629809688846'),
     ('1', 'Olivia Wilson', 'oliviawilson@example.com', '9876540123', 'Introduction 6', 1, 1, 'https://demoda.vn/wp-content/uploads/2022/08/hinh-anh-avatar-nu-de-thuong.jpg', GETDATE(), NULL),
     ('1', 'James Taylor', 'jamestaylor@example.com', '3210987654', 'Introduction 7', 1, 1, 'https://th.bing.com/th/id/OIP.dRG04_HcB012wboIb8azKwHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 1, 0, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'https://th.bing.com/th/id/OIP.pAdUb6ZlM45prBGAjT__FAHaHW?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'https://kynguyenlamdep.com/wp-content/uploads/2022/08/avatar-ff-ngau.jpg', GETDATE(), NULL),
 	 ('user', 'Kamisato', 'user', '123124125125', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
-	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
-	 ('1', 'Ho Minh Quyen (k17 HCM)', 'quyenhmse170471@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocIZPZqtyowDwjLOKMnFu3ufaspn7e8N7xL1-3pZhMh40JQtPbQs=s96-c', '2024-06-22 10:04:32.537', '116447998121690404343');
+	 ('moderator', 'moderator name', 'moderator', '3523523523', 'Introduction 4', 2, 0, 'https://th.bing.com/th/id/OIP.i5cwEBkZmmuTgG6Jwcau5gHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL);
 GO
 
 GO
@@ -213,11 +214,12 @@ VALUES
     ('Smart TV Samsung QLED', 5540000, 1, 'Immerse yourself in a stunning visual experience.', 1, 1, 1, '2024-06-14',  'https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0', 7),
     ('Mens Dress Shirt', 200000, 0, 'A stylish and comfortable shirt for formal occasions.', 2, 6, 1, '2024-06-15' , 'https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain', 4),
     ('Womens Summer Dress', 227000, 1, 'Stay cool and fashionable in this lightweight dress.', 1, 6, 1, '2024-06-07' ,'https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain', 8),
-    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 3, 6, 1, '2024-06-16', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain', 9),
-    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 1, 4, 1, '2024-06-06', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0', 15),
+    ('Sports Shoes Nike Air Max', 1200000, 1, 'Experience exceptional comfort and performance.', 4, 6, 1, '2024-06-16', 'https://th.bing.com/th/id/OIP.kK_ooDuqNmDTYs9XA5zU4AHaFP?rs=1&pid=ImgDetMain', 9),
+    ('Kitchen Appliances Set', 13600000, 0, 'Equip your kitchen with these essential appliances.', 2, 4, 1, '2024-06-06', 'https://th.bing.com/th/id/R.47a07eadc054c89b3dc20facd41f1d22?rik=sERYlnIfL9VIMw&pid=ImgRaw&r=0', 15),
     ('Kids Building Blocks Set', 850000, 1, 'Spark creativity and imagination with this fun set.', 4, 7, 1, '2024-06-22', 'https://th.bing.com/th/id/R.6087c95facb1ec4641151fd12f61362f?rik=xtNZguyl3uCTMg&pid=ImgRaw&r=0', 30),
     ('Harry Potte V.1+2', 380000, 0, 'Get lost in the captivating story of this bestselling novel.', 5, 2, 1, '2024-06-24', 'https://www.worldatlas.com/r/w1200/upload/3b/05/33/shutterstock-466404632.jpg', 30),
-    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 2, 7, 1, '2024-06-25',  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain', 12);
+    ('Fitness Equipment Set', 2200000, 1, 'Stay fit and healthy with this complete equipment set.', 4, 7, 1, '2024-06-25',  'https://th.bing.com/th/id/OIP.WdjzJWQIExHX7rmoSf6DpQHaHl?rs=1&pid=ImgDetMain', 12),
+	(N'Áo phông áo thun nam cổ tròn 4 chiều cotton trơn thun lạnh nhiều màu', 55000, 1, N'Gồm những gam màu tươi mới giúp bạn dễ dàng phối nhiều loại trang phục khác nhau. Từng đường may tinh tế, chỉn chu, màu sắc đa dạng, tươi mát chắc chắn sẽ làm vừa lòng những chàng trai khó tính  nhất.', 5, 7, 1, '2024-06-27',  'https://img.lazcdn.com/g/p/9f6a4d316d084908129a7d1bd71faeb6.jpg_720x720q80.jpg_.webp', 5);
 GO
 
 

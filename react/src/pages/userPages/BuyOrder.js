@@ -32,10 +32,10 @@ function BuyOrder() {
                 {orders?.map((order) => (
                   <div key={order.order.orderId} className="row mb-3 p-2 order">
                     <div className="col-12 border-bottom ps-2 py-2">
-                      <span className="fs-5">
-                        <i className="fa fa-home" aria-hidden="true"></i> Nơi
-                        bán
-                      </span>
+                    <span className="fs-5">
+                          <img style={{borderRadius:"20px"}} src={order.order.seller.avarta} width={"30px"}/> {" "}
+                          {order.order.seller.fullName}
+                        </span>
                     </div>
                     <div className="col-8 col-md-8 pt-3">
                       <div className="row">
@@ -113,7 +113,7 @@ function BuyOrder() {
       </section>
       <Footer />
     </div>
-  );
+  )
 }
 
 export default BuyOrder;

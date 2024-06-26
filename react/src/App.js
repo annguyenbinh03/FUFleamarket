@@ -29,7 +29,7 @@ const AdminProcessRequest = lazy(() => import("./pages/adminPages/AdminProcessRe
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
 const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
 const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
-
+const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
 
 const ROLES = {
   'User': 1,
@@ -53,6 +53,7 @@ function App() {
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/my-selling-package" element={<MySellingPackage/>} />
             <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
+            <Route path="/shopprofile/:userId" element={<ShopProfile/>} />
             <Route path="*" element={<div>404 Not Found</div>}/>
 
 

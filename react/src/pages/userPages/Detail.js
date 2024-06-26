@@ -25,18 +25,19 @@ function Detail() {
   }, [productId]);
 
   const formatPrice = (value) => {
-    return value.toLocaleString('vi-VN');
+    return value.toLocaleString("vi-VN");
   };
-
 
   return (
     <div>
-         <Header />
+      <Header />
       <section className="product-details spad">
         <div className="container bg-white py-4 d-flex">
           <div className="col-lg-8 col-md-8">
             <div className="d-flex justify-content-center">
-              {data && data?.product?.images && data?.product?.images.length > 0 ? (
+              {data &&
+              data?.product?.images &&
+              data?.product?.images.length > 0 ? (
                 <div
                   id="carouselExampleIndicators"
                   className="carousel slide w-90"
@@ -101,18 +102,20 @@ function Detail() {
                   <img
                     className="carousel-inner"
                     src={data?.product?.productImages}
-                  alt="product photos"
-                 />
+                    alt="product photos"
+                  />
                 </div>
               )}
             </div>
             <div className="px-5 mt-2">
               <div className="product_name">
-                {data?.product ? data?.product?.productName : "Sản phẩm không tồn tại"}
+                {data?.product
+                  ? data?.product?.productName
+                  : "Sản phẩm không tồn tại"}
               </div>
               <div className="price_wistlist d-flex justify-content-between">
                 <p className="price_wistlist_left fs-5">
-                  {data?.product ?  formatPrice(data?.product?.price)  : ""} đ
+                  {data?.product ? formatPrice(data?.product?.price) : ""} đ
                 </p>
                 <button className="btn price_wistlist_right rounded-pill">
                   Lưu tin
@@ -137,7 +140,8 @@ function Detail() {
                     />
                   </div>
                   <div className="seller_address_right">
-                   {data?.address || "Người này chưa tiết lộ thông tin về địa chỉ"}
+                    {data?.address ||
+                      "Người này chưa tiết lộ thông tin về địa chỉ"}
                   </div>
                 </div>
               </div>
@@ -186,7 +190,10 @@ function Detail() {
                     })`,
                   }}
                 ></div>
-                <div className="shopname col-lg-10 fw-bold ms-2">
+                <div
+                  style={{ textDecoration: "none" }}
+                  className="shopname col-md-7 fw-bold ms-2 text-black"
+                >
                   {data?.product && data?.product?.seller
                     ? data?.product?.seller?.fullName
                     : "Shop của best yasuo viet nam"}
@@ -199,6 +206,15 @@ function Detail() {
                     <span>(18 reviews)</span>
                   </div>
                 </div>
+                <div className="col-md-3 col-lg-3 my-auto">
+                  <Link
+                    to={`/shopprofile/${data?.sellerId}`}
+                    className="badge text-bg-dark px-2 py-2"
+                    style={{textDecoration:"none"}}
+                  >
+                    <span >Xem trang</span>
+                  </Link>
+                </div>
               </div>
               <div className="show_phone_button  d-flex justify-content-between align-items-center p-3 mt-5">
                 <span>
@@ -207,28 +223,39 @@ function Detail() {
                     className="show_phone_button_icon"
                     src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
                   />
-                  {data?.product && data?.product.seller ? data?.product.seller.phoneNumber : "096595 ***"}
+                  {data?.product && data?.product.seller
+                    ? data?.product.seller.phoneNumber
+                    : "096595 ***"}
                 </span>
                 <span>BẤM ĐỂ HIỆN SỐ</span>
               </div>
             </div>
 
             <button className="chat_button w-100  px-3 mt-2">
-              <Link className="d-flex justify-content-between align-items-center" 
-                to={`/chat`} state={{receiverId: data?.sellerId, receiverName: data?.product?.seller.fullName }}  >
-              <span>
-                <i className="fa fa-comments-o" aria-hidden="true"></i>
-              </span>
-              <span>CHAT VỚI NGƯỜI BÁN</span>
+              <Link
+                className="d-flex justify-content-between align-items-center"
+                to={`/chat`}
+                state={{
+                  receiverId: data?.sellerId,
+                  receiverName: data?.product?.seller.fullName,
+                }}
+              >
+                <span>
+                  <i className="fa fa-comments-o" aria-hidden="true"></i>
+                </span>
+                <span>CHAT VỚI NGƯỜI BÁN</span>
               </Link>
             </button>
 
             <button className="chat_button  w-100  px-3 mt-2">
-              <Link className="d-flex justify-content-between align-items-center" to={`/create-order/${productId}`}>
+              <Link
+                className="d-flex justify-content-between align-items-center"
+                to={`/create-order/${productId}`}
+              >
                 <span>
                   <i className="fa fa-plus-square" aria-hidden="true"></i>
                 </span>
-                <span >TẠO HÓA ĐƠN</span>
+                <span>TẠO HÓA ĐƠN</span>
               </Link>
             </button>
 
@@ -256,7 +283,7 @@ function Detail() {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

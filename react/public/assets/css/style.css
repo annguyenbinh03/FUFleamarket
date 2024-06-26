@@ -38,6 +38,7 @@ body {
 .spad {
   padding-top: 70px;
   padding-bottom: 30px;
+  min-height:  850px;
 }
 
 /* Preloder */
@@ -361,6 +362,17 @@ body {
   text-align: left;
   padding-top: 15px;
 }
+
+.featured__item_product_name{
+-webkit-box-orient: vertical;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+min-height: 33px;
+max-height: 33px;
+overflow: hidden;
+}
+
+
 
 .featured__item__text h6 {
   margin-bottom: 10px;
@@ -903,9 +915,7 @@ ul {
 /*---------------------
   Buy Order
 -----------------------*/
-.buy_order {
-  min-height: 650px;
-}
+
 .buy_order .order {
   box-shadow: 0 0 5px silver;
 }

@@ -52,14 +52,14 @@ function MyPosts() {
         <div className="container bg-white px-2">
           <div className="row">
             <div className="shopview pt-4 d-flex justify-content-between">
-              <div className="d-flex justify-content-center ps-4">
+              <div className="d-flex justify-content-start ps-4 w-50">
                 <div
                   className="shop_avartar col-lg-2"
                   style={{
                     backgroundImage: `url(${auth.avarta})`,
                   }}
                 ></div>
-                <div className="shopname col-lg-10 fw-bold ms-2">
+                <div className="shopname col-md-8 col-lg-6 fw-bold ms-2">
                   {auth.fullName}
                   <div className="product__details__rating">
                     <i className="fa fa-star"></i>
@@ -70,8 +70,13 @@ function MyPosts() {
                     <span>(18 reviews)</span>
                   </div>
                 </div>
+                <div className="col-md-2 col-lg-4 my-auto">
+                  <Link  to={ auth?.id ?  `/shopprofile/${auth?.id}` : "/"}  className="btn btn btn-dark">
+                    <span>Xem trang</span>
+                  </Link>
+                </div>
               </div>
-              <div className="div pe-4 d-flex justify-content-center">
+              <div className="div pe-4 d-flex justify-content-end w-50">
                 {sellingPackages?.[0]?.productQuantity ? (
                   <div>
                     <img
@@ -98,7 +103,7 @@ function MyPosts() {
                   </div>
                 ) : (
                   <div className="my-auto fw-bold me-3 fs-5 ">
-                     Số lượng bài đăng:{" "}
+                    Số lượng bài đăng:{" "}
                     {Array.isArray(products) ? products.length : 0}/
                     {sellingPackages
                       ? sellingPackages?.[0]?.productQuantity
@@ -225,25 +230,22 @@ function MyPosts() {
                       <div className="created_date">
                         {product.storedQuantity > 10 ? (
                           <>
-                            Số lượng sản phẩm:{" "}
                             <span className="badge text-bg-success">
-                              {product.storedQuantity}
+                              Số lượng sản phẩm: {product.storedQuantity}
                             </span>
                           </>
                         ) : (
                           <>
                             {product.storedQuantity > 2 ? (
                               <>
-                                Số lượng sản phẩm:{" "}
                                 <span className="badge text-bg-warning">
-                                  {product.storedQuantity}
+                                  Số lượng sản phẩm: {product.storedQuantity}
                                 </span>
                               </>
                             ) : (
                               <>
-                                Số lượng sản phẩm:{" "}
                                 <span className="badge text-bg-danger">
-                                  {product.storedQuantity}
+                                  Số lượng sản phẩm: {product.storedQuantity}
                                 </span>
                               </>
                             )}

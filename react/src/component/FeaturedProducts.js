@@ -44,7 +44,7 @@ function FeaturedProducts() {
             </div>
             <div className="featured__item__text">
               <h6>
-                <LinkRouter to={`/detail/${product.productId}`}>
+                <LinkRouter className="featured__item_product_name" to={`/detail/${product.productId}`}>
                   { product.productName}
                 </LinkRouter>
               </h6>
@@ -59,7 +59,7 @@ function FeaturedProducts() {
                   />
                 </div>
                 <div>
-                  <span>15 giờ trước</span>
+                  <span>{product.createdDate}</span>
                 </div>
                 <div>   -  </div>
                 <div>

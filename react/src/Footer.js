@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Footer() {
     return (
         <div>
-            <footer className="footer spad">
+            <footer className="footer">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-4 col-md-4 col-sm-6">
