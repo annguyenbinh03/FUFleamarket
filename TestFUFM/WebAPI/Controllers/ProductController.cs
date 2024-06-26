@@ -34,6 +34,68 @@ namespace WebAPI.Controllers
 
             return Ok(products);
         }
+        [HttpGet("ShopProfile")]
+        public async Task<IActionResult> ShopProfile([FromQuery] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid ID.");
+            }
+            var userWithDetails = await _context.Users
+                .Include(u => u.Addresses)
+                .Include(u => u.Products)
+                    .ThenInclude(p => p.Category)
+                .Include(u => u.Products)
+                    .ThenInclude(p => p.ProductImages)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+            if (userWithDetails == null)
+            {
+                return NotFound("User not found.");
+            }
+            var result = new
+            {
+                User = new
+                {
+                    userWithDetails.UserId,
+                    userWithDetails.FullName,
+                    userWithDetails.Email,
+                    userWithDetails.PhoneNumber,
+                    userWithDetails.Introduction,
+                    userWithDetails.Avarta,
+                    userWithDetails.CreatedDate,
+                    userWithDetails.BuyRating,
+                    userWithDetails.SellRating,
+                    Addresses = userWithDetails.Addresses.Select(a => new
+                    {
+                        a.AddressId,
+                        a.SpecificAddress
+                    })
+                },
+                Products = userWithDetails.Products.Select(p => new
+                {
+                    p.ProductId,
+                    p.ProductName,
+                    p.Price,
+                    p.IsNew,
+                    p.Description,
+                    p.CategoryId,
+                    p.Status,
+                    p.CreatedDate,
+                    p.ImageLink,
+                    p.StoredQuantity,
+
+                    ProductImages = p.ProductImages.Select(pi => new
+                    {
+                        pi.ProductId,
+                        pi.ImageName,
+                        pi.ImageLink
+                    })
+                })
+            };
+
+            return Ok(result);
+        }
+
 
         [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
@@ -46,32 +108,6 @@ namespace WebAPI.Controllers
 
             return Ok(productDtos);
         }
-
-        [HttpGet("GetInforProductBuyRequest")]
-        [Authorize]
-        public async Task<IActionResult> GetInforProductBuyRequest()
-        {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
-            if (userIdClaim == null)
-                return Unauthorized("Claim user ID not found");
-
-            var userId = userIdClaim.Value;
-            var result = await _productRepo.GetInforProductBuyRequestAsync(userId);
-
-            if (result == null)
-                return NotFound("No products found");
-
-            var response = result.Select(product => new
-            {
-                ProductId = product.ProductId,
-                ProductName = product.ProductName,
-                WaitingOrderNumber = _context.Orders.Count(o => o.ProductId == product.ProductId && o.Status == 0),
-                ImageLink = product.ImageLink
-            });
-
-            return Ok(response);
-        }
-
 
         [HttpPut("adminacceptproductrequest/{productId:int}")]
         [Authorize]
@@ -124,7 +160,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
-            return Ok( new { product = productDTO, address, sellerId =  product.SellerId });
+            return Ok(new { product = productDTO, address, sellerId = product.SellerId });
         }
 
         [HttpGet("getmyproducts")]
@@ -164,27 +200,27 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("CategoryId is required.");
             }
-           
+
             if (!int.TryParse(User.FindFirstValue("UserId"), out var sellerId))
             {
                 return Unauthorized("Invalid user ID format");
             }
-           
-            int standardProductLimit = 3; 
+
+            int standardProductLimit = 3;
             int totalProductLimit = standardProductLimit;
-           
+
             var currentPromotionOrders = await _context.PromotionOrders
                 .Include(po => po.Promotion)
-           //     .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
+                //     .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
                 .ToListAsync();
-          
+
             if (currentPromotionOrders != null && currentPromotionOrders.Any())
             {
-             //   var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
+                //   var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
 
-            //    int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
+                //    int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
 
-             //   totalProductLimit = standardProductLimit + additionalProductLimit;
+                //   totalProductLimit = standardProductLimit + additionalProductLimit;
             }
 
             var currentProductCount = await _context.Products.CountAsync(p => p.SellerId == sellerId);
@@ -312,7 +348,7 @@ namespace WebAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-           
+
             var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
 
             if (productId > maxProductId)
