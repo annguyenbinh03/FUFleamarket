@@ -271,14 +271,18 @@ namespace Repository
             var product = await _context.Products.FindAsync(productId);
 
             if (product == null)
+            {
                 return false; // Handle case where product is not found
+            }
 
             // Check if there is enough quantity to fulfill the order
             if (orderQuantity > product.StoredQuantity)
+            {
                 return false; // Not enough quantity
+            }
 
             // Subtract the order quantity from the stored quantity
-            product.StoredQuantity -= orderQuantity;
+            product.StoredQuantity = product.StoredQuantity - orderQuantity;
 
             try
             {

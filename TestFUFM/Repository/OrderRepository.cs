@@ -136,14 +136,14 @@ namespace Repository
 
         }
 
-        public async Task<bool> AcceptOrderAsync(int userId, int productId)
+        public async Task<bool> AcceptOrderAsync(int userId, int orderId)
         {
             try
             {
-                var order = await _context.Orders.FirstOrDefaultAsync(o => o.BuyerId == userId && o.ProductId == productId);
+                var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId && o.SellerId == userId);
                 if (order == null)
                 {
-                    return false; // Order not found
+                    return false; // Order not found or the user is not the seller
                 }
 
                 // Update the order status or other fields as needed
@@ -155,18 +155,18 @@ namespace Repository
             catch (Exception ex)
             {
                 // Log the exception
-                // Example: _logger.LogError(ex, "Error accepting order for user {UserId} and product {ProductId}", userId, productId);
+                // Example: _logger.LogError(ex, "Error accepting order {OrderId} for seller {UserId}", orderId, userId);
                 return false;
             }
         }
-        public async Task<bool> DenyOrderAsync(int userId, int productId)
+        public async Task<bool> DenyOrderAsync(int userId, int orderId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return false;
             }
-            var order = await _context.Orders.FindAsync(productId);
+            var order = await _context.Orders.FindAsync(orderId);
             if (userId == order?.SellerId)
             {
                 order.Status = 2;

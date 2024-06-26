@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("soldRequest")]
-        public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] int? productId, [FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
@@ -42,7 +42,6 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-
             bool sortByDate = sortBy?.ToLower() == "date";
             bool sortByPrice = sortBy?.ToLower() == "price";
 
@@ -50,24 +49,46 @@ namespace WebAPI.Controllers
 
             if (!soldOrders.Any())
             {
-                return NotFound("No bills.");
+                return NotFound("No orders found for the user.");
+            }
+
+            // Apply productId filter if productId parameter is provided
+            if (productId.HasValue)
+            {
+                soldOrders = soldOrders.Where(order => order.Product.ProductId == productId).ToList();
+
+                if (!soldOrders.Any())
+                {
+                    return NotFound($"No orders found for the product with ID {productId}.");
+                }
+            }
+
+            // Apply status filter (status = 0)
+            soldOrders = soldOrders.Where(order => order.Status == 0).ToList();
+
+            if (!soldOrders.Any())
+            {
+                return NotFound("No orders found with status = 0.");
             }
 
             var orders = soldOrders.Select(order => new
             {
-                order = order.ToOrderShowProfileOfBuyerDTO(),
+                Order = order.ToOrderShowProfileOfBuyerDTO(),
                 Product = new
                 {
-                    productId = order.Product.ProductId,
-                    productName = order.Product.ProductName,
-                    productPrice = order.Product.Price,
+                    ProductId = order.Product.ProductId,
+                    ProductName = order.Product.ProductName,
+                    Price = order.Product.Price,
                     ImageLink = order.Product.ImageLink
+                    // Add more properties as needed
                 },
                 Buyer = new
                 {
-                    avarta = order.Buyer.Avarta,
-                    name = order.Buyer.FullName
-                }
+                    Avarta = order.Buyer.Avarta,
+                    FullName = order.Buyer.FullName
+                    // Add more properties as needed
+                },
+                // Add more properties from Order model as needed
             }).ToList();
 
             return Ok(orders);
@@ -397,8 +418,8 @@ namespace WebAPI.Controllers
             return NoContent();
         }
         [HttpPut]
-        [Route("acceptOrderRequest/{productId}")]
-        public async Task<IActionResult> AcceptOrderRequset([FromRoute] int productId)
+        [Route("acceptOrderRequest/{orderId}")]
+        public async Task<IActionResult> AcceptOrderRequset([FromRoute] int orderId)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
@@ -408,23 +429,47 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            // Call the repository method to accept the order
-            bool result = await _orderRepo.AcceptOrderAsync(userId, productId);
-
-            if (!result)
-            {
-                return BadRequest("Failed to accept the order request");
-            }
-
-            // Get the order details to know the quantity
-            var order = await _orderRepo.GetOrderByProductIdAsync(userId, productId);
+            // Get the order details to know the status and quantity
+            var order = await _orderRepo.GetByOrderIdAsync(orderId);
             if (order == null)
             {
                 return BadRequest("Order not found");
             }
 
-            // Update storedQuantity for the product after accepting the order
-            bool updateResult = await _productRepo.UpdateProductQuantityAsync(productId, order.Quantity);
+            // Check if the order status is 0
+            if (order.Status != 0)
+            {
+                return BadRequest("Only orders with status 0 can reduce the store quantity");
+            }
+
+            // Check if the logged-in user is the seller of the product
+            if (order.SellerId != userId)
+            {
+                return BadRequest("Only the seller can accept the order request");
+            }
+
+            // Get the product details to update the storedQuantity
+            var product = await _productRepo.GetProductById(order.ProductId);
+            if (product == null)
+            {
+                return BadRequest("Product not found");
+            }
+
+            // Check if the ordered quantity is less than or equal to the stored quantity
+            if (order.Quantity > product.StoredQuantity)
+            {
+                return BadRequest("Ordered quantity exceeds the stored quantity");
+            }
+
+            // Call the repository method to accept the order
+            bool result = await _orderRepo.AcceptOrderAsync(userId, orderId);
+            if (!result)
+            {
+                return BadRequest("Failed to accept the order request");
+            }
+
+            // Reduce the storedQuantity by the order quantity
+            bool updateResult = await _productRepo.UpdateProductQuantityAsync(product.ProductId, order.Quantity);
             if (!updateResult)
             {
                 return BadRequest("Failed to update product quantity");

@@ -95,7 +95,30 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+        [HttpGet("GetInforProductBuyRequest")]
+        [Authorize]
+        public async Task<IActionResult> GetInforProductBuyRequest()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+                return Unauthorized("Claim user ID not found");
 
+            var userId = userIdClaim.Value;
+            var result = await _productRepo.GetInforProductBuyRequestAsync(userId);
+
+            if (result == null)
+                return NotFound("No products found");
+
+            var response = result.Select(product => new
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                WaitingOrderNumber = _context.Orders.Count(o => o.ProductId == product.ProductId && o.Status == 0),
+                ImageLink = product.ImageLink
+            });
+
+            return Ok(response);
+        }
 
         [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
