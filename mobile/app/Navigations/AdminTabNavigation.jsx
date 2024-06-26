@@ -1,16 +1,15 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "./../Screens/HomeScreen/home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import PostProduct from "../Screens/PostProductScreen/postProduct";
-import Message from "../Screens/MessageScreen/message";
 import Profile from "../Screens/ProfileScreen/profile";
-import PostManager from "../Screens/PostMangerScreen/postManager";
+import Dashboard from "../AdminScreen/Dashboard";
+import AdminPostManager from "../AdminScreen/AdminPostManager";
+import UserManager from "../AdminScreen/UserManager";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigation() {
+const AdminTabNavigation = () => {
+  console.log("Rendering AdminTabNavigation");
   return (
     <Tab.Navigator
       screenOptions={{
@@ -27,12 +26,12 @@ export default function TabNavigation() {
       }}
     >
       <Tab.Screen
-        name="Trang chủ"
-        component={Home}
+        name="Dashboard"
+        component={Dashboard}
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="home"
+              name="view-dashboard"
               size={24}
               color={focused ? "#007bff" : "#999999"}
             />
@@ -40,12 +39,12 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Quản lý tin"
-        component={PostManager}
+        name="Quản lý đăng tin"
+        component={AdminPostManager}
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="clipboard-list"
+              name="post"
               size={24}
               color={focused ? "#007bff" : "#999999"}
             />
@@ -53,25 +52,12 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Đăng tin"
-        component={PostProduct}
+        name="Quản lý người dùng"
+        component={UserManager}
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
-              name="plus-circle"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Tin nhắn"
-        component={Message}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="message-text"
+              name="account-group"
               size={24}
               color={focused ? "#007bff" : "#999999"}
             />
@@ -93,4 +79,6 @@ export default function TabNavigation() {
       />
     </Tab.Navigator>
   );
-}
+};
+
+export default AdminTabNavigation;

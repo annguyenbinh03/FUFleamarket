@@ -13,7 +13,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../../context/AuthProvider";
-import LogoutButton from "../../../components/LogoutButton";
 import LoginGoogle from "./LoginGoogle";
 
 const LoginScreen = () => {
@@ -21,7 +20,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth, setUserRole } = useContext(AuthContext);
   const navigation = useNavigation();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -32,10 +31,26 @@ const LoginScreen = () => {
   }, []);
 
   const checkExistingAuth = async () => {
-    const existingAuth = await AsyncStorage.getItem("auth");
-    if (existingAuth) {
-      const authData = JSON.parse(existingAuth);
-      setAuth(authData);
+    try {
+      const existingAuth = await AsyncStorage.getItem("auth");
+      if (existingAuth) {
+        const authData = JSON.parse(existingAuth);
+        setAuth(authData);
+        setUserRole(authData.roleId);
+        navigateBasedOnRole(authData.roleId);
+      }
+    } catch (error) {
+      console.error("Error checking existing auth:", error);
+    }
+  };
+
+  const navigateBasedOnRole = (roleId) => {
+    if (roleId === 1) {
+      navigation.navigate("TabNavigation");
+    }
+    if (roleId == 2) {
+      navigation.navigate("AdminTabNavigation");
+    } else {
       navigation.navigate("TabNavigation");
     }
   };
@@ -65,10 +80,22 @@ const LoginScreen = () => {
         }
       );
 
+      console.log("Full API response:", response.data);
+
       const { token, role, fullName, avarta, id } = response.data;
 
-      if (role.includes(1)) {
-        handleSuccessfulLogin({ email, role, fullName, avarta, token, id });
+      const roleId = role[0]; // Lấy giá trị đầu tiên từ mảng role
+      console.log("Received roleId:", roleId);
+
+      if (roleId === 1 || roleId === 2) {
+        handleSuccessfulLogin({
+          email,
+          roleId,
+          fullName,
+          avarta,
+          token,
+          userId: id,
+        });
       } else {
         Alert.alert(
           "Không được phép",
@@ -84,28 +111,32 @@ const LoginScreen = () => {
   };
 
   const handleSuccessfulLogin = async (userData) => {
-    const authData = { ...userData };
-    await AsyncStorage.setItem("auth", JSON.stringify(authData));
-    setAuth(authData);
-    navigation.navigate("TabNavigation");
+    try {
+      const authData = { ...userData };
+      await AsyncStorage.setItem("auth", JSON.stringify(authData));
+      setAuth(authData);
+      setUserRole(userData.roleId);
+      navigateBasedOnRole(userData.roleId);
+    } catch (error) {
+      console.error("Error saving auth data:", error);
+      setErrorMessage("Đã xảy ra lỗi khi lưu thông tin đăng nhập");
+    }
   };
 
   const handleLoginError = (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          setErrorMessage(
-            "Unauthorized: You are not allowed to access this resource."
-          );
+          setErrorMessage("Unauthorized: Bạn không được phép truy cập!");
           break;
         case 400:
-          setErrorMessage("Bad Request: Invalid email or password.");
+          setErrorMessage("Bad Request: Email hoặc password không đúng!");
           break;
         case 500:
-          setErrorMessage("Server Error: The server encountered an issue.");
+          setErrorMessage("Server Error: Server đang gặp vấn đề!");
           break;
         default:
-          setErrorMessage("Login failed");
+          setErrorMessage("Đăng nhập thất bại!");
           break;
       }
     } else {
@@ -148,7 +179,6 @@ const LoginScreen = () => {
         </TouchableOpacity>
       )}
       <LoginGoogle />
-      {auth ? <LogoutButton /> : null}
     </View>
   );
 };
@@ -199,3 +229,5 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+// sau login phân quyền  thì nếu là moderator hoặc admin thì sẽ có một AdminNavigation và có các AdminTabNavigation gồm profile , Dashboard , AdminPostManager

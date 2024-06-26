@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../../../utils/formatPrice";
-import { images } from "../../../constants";
+import { formatDate } from "../../../utils/formatDate";
 import Empty from "../../../components/Empty";
 
 const WishListScreen = ({ route }) => {
@@ -19,7 +19,7 @@ const WishListScreen = ({ route }) => {
   const navigation = useNavigation();
   console.log("Received User ID:", userId);
 
-  const [wishlistItems, setWishListItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -28,18 +28,23 @@ const WishListScreen = ({ route }) => {
       const response = await axios.get(
         `http://192.168.146.25:7057/api/Wishlist/user/${userId}`
       );
-      setWishListItems(response.data);
+      console.log("Check API Response:", response.data);
+      setWishlistItems(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching wishlist:", error);
-      setError(true); // Set error to true if 404 or other error
+      console.error("Check Error fetching wishlist:", error);
+      setError(true);
       setLoading(false);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetchWishList();
   }, [fetchWishList]);
+
+  useEffect(() => {
+    console.log("Check Wishlist Items:", wishlistItems);
+  }, [wishlistItems]);
 
   if (loading) {
     return (
@@ -66,37 +71,21 @@ const WishListScreen = ({ route }) => {
               navigation.navigate("Detail", { productId: item.productId })
             }
           >
-            <View style={styles.productItem}>
-              <Image
-                source={
-                  item.productImages && item.productImages.imageLink
-                    ? { uri: item.productImages.imageLink }
-                    : {
-                        uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-                      }
-                }
-                style={styles.productImage}
-              />
-              <View style={styles.productInfo}>
-                <Text style={styles.productName}>{item.productName}</Text>
-                <Text style={styles.productPrice}>
-                  {formatPrice(item.price)} VND
+            <Image
+              source={{
+                uri: "https://th.bing.com/th/id/OIP.cbb6B9U2dodLdEToGb7XLAHaHa?w=178&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+              }}
+              style={styles.productImage}
+            />
+            <View style={styles.productInfo}>
+              <Text style={styles.productName}>{item.productName}</Text>
+              <Text style={styles.productPrice}>
+                {formatPrice(item.price)} VND
+              </Text>
+              <View style={styles.sellerInfo}>
+                <Text style={styles.createdDate}>
+                  {formatDate(item.createdDate)}
                 </Text>
-                <View style={styles.sellerInfo}>
-                  {/* Check if seller and seller.avarta exist before rendering the image */}
-                  {item.seller && item.seller.avarta && (
-                    <Image
-                      source={{ uri: item.seller.avarta }}
-                      style={styles.sellerAvatar}
-                    />
-                  )}
-                  {item.seller && (
-                    <Text style={styles.sellerName}>{item.sellerName}</Text>
-                  )}
-                  {item.seller && (
-                    <Text style={styles.sellerName}>{item.createdDate}</Text>
-                  )}
-                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -158,6 +147,10 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   sellerName: {
+    fontSize: 10,
+    color: "#555",
+  },
+  createdDate: {
     fontSize: 10,
     color: "#555",
   },

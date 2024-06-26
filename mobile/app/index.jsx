@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -9,10 +9,14 @@ import LoginScreen from "./Screens/LoginScreen/Login";
 import ProductListByCategoryScreen from "./Screens/ProductScreen/ProductListByCategoryScreen";
 import { AuthProvider } from "../context/AuthProvider";
 import WishListScreen from "./Screens/ProductScreen/WishListScreen";
+import AdminTabNavigation from "./Navigations/AdminTabNavigation";
+
+console.log("AdminTabNavigation:", AdminTabNavigation);
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  console.log("Rendering App component");
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -27,6 +31,11 @@ export default function App() {
               <Stack.Screen
                 name="TabNavigation"
                 component={TabNavigation}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AdminTabNavigation"
+                component={AdminTabNavigation}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
