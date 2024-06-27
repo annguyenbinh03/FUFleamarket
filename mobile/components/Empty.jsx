@@ -6,7 +6,7 @@ const Empty = () => {
   return (
     <View style={styles.emptyContainer}>
       <Image source={images.empty} style={styles.emptyImage} />
-      <Text style={styles.emptyText}>Danh sách trống!</Text>
+      <Text style={styles.emptyText}>Không có sản phẩm nào!</Text>
     </View>
   );
 };
