@@ -8,7 +8,7 @@ import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
-import MySellingPackage from "./pages/userPages/MySellingPackage";
+
 
 
 
@@ -30,6 +30,7 @@ const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
 const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
 const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
 const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
+const MySellingPackage = lazy(() => import("./pages/userPages/MySellingPackage"));
 
 const ROLES = {
   'User': 1,

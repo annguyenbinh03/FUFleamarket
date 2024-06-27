@@ -79,7 +79,8 @@ namespace WebAPI.Controllers
                     ProductId = order.Product.ProductId,
                     ProductName = order.Product.ProductName,
                     Price = order.Product.Price,
-                    ImageLink = order.Product.ImageLink
+                    ImageLink = order.Product.ImageLink,
+                    StoredQuantity = order.Product.StoredQuantity
                     // Add more properties as needed
                 },
                 Buyer = new
@@ -389,6 +390,7 @@ namespace WebAPI.Controllers
             // Set BuyerId as the logged-in user's UserId
             var buyerId = userId;
             var sellerId = product.SellerId; // Assuming the Product entity has a SellerId field
+            createDTO.OrderDate = DateTime.UtcNow;
 
             // Create the order model from the DTO
             var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);

@@ -37,7 +37,7 @@ function FeaturedProducts() {
                 </li>
                 <li>
                   <LinkRouter to={`/detail/${product.productId}`}>
-                    <i className="fa fa-shopping-cart"></i>
+                    <i className="fa fa-search"></i>
                   </LinkRouter>
                 </li>
               </ul>

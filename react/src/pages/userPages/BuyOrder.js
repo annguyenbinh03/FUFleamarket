@@ -32,18 +32,19 @@ function BuyOrder() {
                 {orders?.map((order) => (
                   <div key={order.order.orderId} className="row mb-3 p-2 order">
                     <div className="col-12 border-bottom ps-2 py-2">
-                    <span className="fs-5">
-                          <img style={{borderRadius:"20px"}} src={order.order.seller.avarta} width={"30px"}/> {" "}
-                          {order.order.seller.fullName}
-                        </span>
+                      <span className="fs-5">
+                        <img
+                          style={{ borderRadius: "20px" }}
+                          src={order.order.seller.avarta}
+                          width={"30px"}
+                        />{" "}
+                        {order.order.seller.fullName}
+                      </span>
                     </div>
                     <div className="col-8 col-md-8 pt-3">
                       <div className="row">
                         <div className="col-lg-3 w-25 product_image">
-                          <img
-                            src={order.product.imageLink}
-                            alt=""
-                          />
+                          <img src={order.product.imageLink} alt="" />
                           {/* //order.productImage */}
                         </div>
                         <div className="col-lg-8">
@@ -95,9 +96,13 @@ function BuyOrder() {
                         Ngày giao dịch: <span>{order.order?.orderDate}</span>
                       </div>
                       <div className="d-flex justify-content-center mt-2">
-                        <button className="btn btn-warning">
-                          Viết Feedback
-                        </button>
+                        {order.order?.status === 1 ? (
+                          <button className="btn btn-warning">
+                            Đánh giá người bán
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -105,15 +110,15 @@ function BuyOrder() {
               </div>
             ) : (
               <div className="not-found-text fs-3">
-                     Bạn vẫn chưa có đơn mua nào                             
-                  </div>
+                Bạn vẫn chưa có đơn mua nào
+              </div>
             )}
           </div>
         </div>
       </section>
       <Footer />
     </div>
-  )
+  );
 }
 
 export default BuyOrder;

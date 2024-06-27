@@ -8,32 +8,76 @@ import {
 } from "../../api/order";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import { getSellingProductForSlectOrderAPI } from "../../api/product";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/ReactToastify.css'
 
 function BuyOrderRequest() {
   const [orders, setOrder] = useState([]);
   const { auth } = useContext(AuthContext);
-  const [sortBy, setSortBy] = useState();
+  const [sortBy, setSortBy] = useState("date");
+  const [sortProductId, setSortProductId] = useState(null);
+  const [sellingProducts, setSellingPorudct] = useState([]);
 
   const fetchOrder = async () => {
     try {
-      var response = await getMySellOrdersRequestAPI(auth.accessToken, sortBy);
+      var response = await getMySellOrdersRequestAPI(
+        auth.accessToken,
+        sortBy,
+        sortProductId
+      );
       setOrder(response);
     } catch (error) {
       console.error("Error fetching order:", error);
     }
   };
+  const fetchSellingProduct = async () => {
+    try {
+      var response = await getSellingProductForSlectOrderAPI(auth.accessToken);
+      setSellingPorudct(response);
+    } catch (error) {
+      console.error("Error fetching SellingProduct:", error);
+    }
+  };
+
   useEffect(() => {
     console.log(sortBy);
-      fetchOrder();
-  }, [sortBy]);
+    fetchOrder();
+    fetchSellingProduct();
+  }, [sortBy, sortProductId]);
 
-  const handleAcceptOrder = async (productId) => {
-    try {
-      await acceptBuyRequestOrdersAPI(auth.accessToken, productId);
-      fetchOrder();
-    } catch (error) {
-      console.error("Error fetching order:", error);
+  const handleAcceptOrder = async (productId, orderQuantity, storageQuantity) => {
+    if(orderQuantity>storageQuantity ){
+      toast.error('Không đủ số lượng trong kho để bán!', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored"
+        });
+    }else{
+      try {
+        await acceptBuyRequestOrdersAPI(auth.accessToken, productId);
+        fetchOrder();
+        toast.success('Đã xác nhận đơn hàng!', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored"
+          });
+      } catch (error) {
+        console.error("Error fetching order:", error);
+      }
     }
+    
   };
 
   const handleDenyOrder = async (productId) => {
@@ -50,13 +94,34 @@ function BuyOrderRequest() {
   };
 
   function removeTimeFromISOString(isoString) {
-    const index = isoString.indexOf("T");
-    if (index !== -1) {
-      return isoString.slice(0, index);
-    }
+    // const index = isoString.indexOf("T");
+    // if (index !== -1) {
+    //   return isoString.slice(0, index);
+    // }
     return isoString;
   }
-
+  const showChoosingProduct = () => {
+    if (sortProductId !== null) {
+      const filteredProduct = sellingProducts.find(
+        (product) => product.productId === sortProductId
+      );
+      return filteredProduct ? (
+        <>
+          <img
+            style={{ maxWidth: "30px", maxHeight: "24px" }}
+            src={`${filteredProduct.imageLink}`}
+            alt="product"
+          />
+          {"   "}
+          {filteredProduct.productName} {"   "}
+        </>
+      ) : (
+        "Không tìm thấy sản phẩm"
+      );
+    } else {
+      return "Tất cả";
+    }
+  };
 
   return (
     <div>
@@ -65,32 +130,86 @@ function BuyOrderRequest() {
         <div className="container bg-white px-1 py-3">
           <div className="product_container px-4 py-2">
             <h3 className="mb-4 pb-2 fw-bold">Yêu cầu mua hàng</h3>
-            {orders?.length !== 0 ? (
-              <div className="row mb-3">
-                <div className="">
-                  <form className="d-flex justify-content-start align-items-center">
-                    <div className="my-auto me-2"> Ưu tiên xem </div>
-                    <div class="input-group w-50">
-                      <select  value={sortBy} onChange={(e) => setSortBy(e.target.value)}  className="form-select  w-25 rounded">
-                        <option value="date">
-                          Yêu cầu mới nhất
-                        </option>
-                        <option value="price">Giá đề xuất cao nhất</option>
-                        <option value="rating">Rating người mua cao nhất</option>
-                      </select>
-                      <label class="input-group-text ms-2 " for="inputGroupSelect01">
-                        Theo sản phẩm
-                      </label>
-                      <select id="inputGroupSelect01" className="form-select w-25">
-                        <option value="1" selected>
-                          Mới nhất
-                        </option>
-                        <option value="1">Giá cao nhất</option>
-                        <option value="2">Rating cao nhất</option>
-                      </select>
+            <div className="row mb-3">
+              <div className="">
+                <form className="d-flex justify-content-start align-items-center">
+                  <div className="my-auto me-2"> Ưu tiên xem </div>
+                  <div className="input-group w-75">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="form-select rounded"
+                      style={{ maxWidth: "25%" }}
+                    >
+                      <option value="date">Yêu cầu mới nhất</option>
+                      <option value="price">Giá đề xuất cao nhất</option>
+                      <option value="rating">Rating người mua cao nhất</option>
+                    </select>
+                    <label
+                      className="input-group-text ms-2 "
+                      htmlFor="inputGroupSelect01"
+                    >
+                      Theo sản phẩm
+                    </label>
+
+                    <div class="dropdown" style={{ width: "40%" }}>
+                      <button
+                        class="btn btn-secondary dropdown-toggle bg-white text-black w-100 text-left"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        id="inputGroupSelect01"
+                      >
+                        {showChoosingProduct()}
+                      </button>
+                      <ul class="dropdown-menu">
+                        {sellingProducts?.length > 0 ? (
+                          <>
+                            <li
+                              className="dropdown-item text-center"
+                              onClick={() => setSortProductId(null)}
+                            >
+                              <i class="fa fa-list-alt" aria-hidden="true"></i>{" "}
+                              Tất cả
+                            </li>
+                            {sellingProducts.map((product) => (
+                              <li
+                                className="dropdown-item"
+                                value="1"
+                                key={product.productId}
+                                onClick={() =>
+                                  setSortProductId(product.productId)
+                                }
+                              >
+                                <span class="badge text-bg-primary">
+                                  {" "}
+                                  {product.waitingOrderNumber}
+                                </span>
+                                {"  "}
+                                <img
+                                  style={{
+                                    maxWidth: "30px",
+                                    maxHeight: "24px",
+                                  }}
+                                  src={`${product.imageLink}`}
+                                  alt="product"
+                                />
+                                {"  "}
+                                {product.productName}
+                              </li>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            <li value="">Tất cả</li>
+                          </>
+                        )}
+                      </ul>
                     </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
+              </div>
+              { orders || orders?.length > 0 ? (
                 <div className="row ps-4 mt-4">
                   {orders?.map((order) => (
                     <div
@@ -103,8 +222,9 @@ function BuyOrderRequest() {
                             style={{ borderRadius: "20px" }}
                             src={order.buyer.avarta}
                             width={"30px"}
+                            alt="buyer avarta"
                           />{" "}
-                          {order.buyer.name}
+                          {order.buyer.fullName}
                         </span>
                       </div>
                       <div className="col-9 col-md-9 pt-3">
@@ -114,11 +234,14 @@ function BuyOrderRequest() {
                             {/* //order.productImage */}
                           </div>
                           <div className="col-lg-9">
-                            <a href="" className="name">
+                            <Link href="" className="name">
                               {order.product?.productName}
-                            </a>
+                            </Link>
                             <div className="price text-secondary">
-                              {formatPrice(order.product?.productPrice)} đ
+                              {order.product?.price
+                                ? formatPrice(order.product?.price)
+                                : ""}{" "}
+                              đ
                             </div>
                             <div className="address">
                               {order.order?.receiverAddress}
@@ -129,7 +252,7 @@ function BuyOrderRequest() {
                                   <button
                                     className="btn btn-info mx-3"
                                     onClick={() =>
-                                      handleAcceptOrder(order.order?.orderId)
+                                      handleAcceptOrder(order.order?.orderId, order.order?.quantity,order.product?.storedQuantity)
                                     }
                                   >
                                     Xác nhận đơn hàng
@@ -162,7 +285,13 @@ function BuyOrderRequest() {
                       </div>
                       <div className="col-3 col-md-3 pt-3 order_info">
                         <div>
-                          Số lượng: <span>{order.order?.quantity}</span>
+                          Số lượng muốn mua: <span>{order.order?.quantity}</span>  {" "}
+                          {order.product?.storedQuantity > order.order?.quantity ? (
+                            <span class="badge text-bg-success">kho: {order.product?.storedQuantity}</span>
+                          ) : (
+                            <span class="badge text-bg-danger">kho: {order.product?.storedQuantity}</span>
+                          ) }
+                          
                         </div>
                         <div className="fw-bold">
                           Giá mong muốn:{" "}
@@ -180,21 +309,16 @@ function BuyOrderRequest() {
                             {removeTimeFromISOString(order.order?.orderDate)}
                           </div>
                         </div>
-                        <div className="d-flex justify-content-center mt-2">
-                          <button className="btn btn-warning">
-                            Xem Feedback
-                          </button>
-                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            ) : (
-              <div className="not-found-text fs-3">
-                Bạn vẫn chưa có đơn bán nào
-              </div>
-            )}
+              ) : (
+                <div className="not-found-text fs-3">
+                  Bạn vẫn chưa có yêu cầu mua hàng nào
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>

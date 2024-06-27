@@ -7,6 +7,7 @@ export const AuthProvider = ({children}) =>{
     const [auth,setAuth] = useState({});
 
     const getToken = async (email, sub, name, avartaLink ) =>{
+        try {
         const response = await axios.post(
             "https://localhost:7057/Auth/loginGoogle",
             JSON.stringify({ email, sub, name, avartaLink }),
@@ -21,6 +22,9 @@ export const AuthProvider = ({children}) =>{
             const logged = true;
            setAuth({ email, roles, fullName, avarta, accessToken, id, sub, logged });
            localStorage.setItem('auth',JSON.stringify({ email, roles, fullName, avarta, accessToken, id, sub, logged }));
+        } catch (error) {
+            console.error("Login fail:", error);
+          }
     }
 
     useEffect( ()=>{

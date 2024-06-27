@@ -84,7 +84,7 @@ namespace Repository
 
             if (sortByDate)
             {
-                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderByDescending(order => order.OrderDate);
             }
             else if (sortByPrice)
             {
@@ -122,10 +122,10 @@ namespace Repository
                 .Where(order => order.BuyerId == buyerId)
                 .Include(order => order.Product)
                 .Include(order => order.Seller);
-
+            query.OrderByDescending(order => order.OrderDate);
             if (sortByDate)
             {
-                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderByDescending(order => order.OrderDate);
             }
             else if (sortByPrice)
             {

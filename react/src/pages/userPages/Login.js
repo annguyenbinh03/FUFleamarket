@@ -18,10 +18,10 @@ const Login = () => {
 
   const loginGoogle = async (email, sub, name, avartaLink) => {
     try {
-      if (!email.endsWith("@fpt.edu.vn")) {
-        alert("Chỉ người dùng có email @fpt.edu.vn được phép đăng nhập.");
-        return;
-      }
+      // if (!email.endsWith("@fpt.edu.vn")) {
+      //   alert("Chỉ người dùng có email @fpt.edu.vn được phép đăng nhập.");
+      //   return;
+      // }
       const response = await axios.post(
         "https://localhost:7057/Auth/loginGoogle",
         JSON.stringify({ email, sub, name, avartaLink }),

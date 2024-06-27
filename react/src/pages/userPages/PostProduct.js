@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { imageDb } from "../../FirebaseImage/Config";
+import { toast } from "react-toastify";
+import 'react-toastify/ReactToastify.css'
 
 function PostProduct() {
   const { auth } = useContext(AuthContext);
@@ -20,19 +22,52 @@ function PostProduct() {
   const [isNew, setIsNew] = useState(false);
   const [img, setImg] = useState("");
   const inputRef = useRef(null);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     var urlImg = await handleUploadImagesClick();
-    console.log("check link ảnh");
     console.log(urlImg);
-    if(urlImg != ""){
+    if(urlImg !== ""){
       var imageLink = urlImg;
      const product = { productName, price, description, categoryId, isNew, imageLink, storedQuantity };
       const response = await createProductAPI(product, auth.accessToken);
-      navigate("/my-posts", { replace: true });
+      if(response){
+        toast.info('Tạo sản phẩm hoàn tất, đang chờ xét duyệt!', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored"
+          });
+          navigate("/my-posts", { replace: true });
+      } else{
+        toast.error('Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!', {
+          position: "bottom-right",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored"
+          });
+      }
+    }else{
+      toast.error('Đăng sản phẩm thất bại, không tìm thấy ảnh!', {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored"
+        });
     }
-    // navigate('/', { replace: true });
   };
 
   const handleUploadImagesClick = async () => {
@@ -51,8 +86,9 @@ function PostProduct() {
     inputRef.current.click();
   };
   const handleImageChange = (event) => {
-    setImg(event.target.files[0]);
-    console.log(event.target.files[0]);
+    if(event.target.files[0]){
+      setImg(event.target.files[0]);
+    }
   };
 
   return (

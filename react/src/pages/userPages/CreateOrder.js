@@ -6,6 +6,8 @@ import { getUserProfileAPI } from "../../api/user";
 import { createOrderAPI } from "../../api/order";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import { toast } from "react-toastify";
+import 'react-toastify/ReactToastify.css'
 
 function CreateOrder() {
   const navigate = useNavigate();
@@ -50,12 +52,38 @@ function CreateOrder() {
     const order = { price, quantity, paymentMethod,receiverAddress,note, productId,orderDate };
     const response = await createOrderAPI(order, auth.accessToken);
     console.log(response);
+    toast.info('Đã tạo đơn hàng, đang chờ xác nhận từ người bán!', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+      });
     navigate('/buy-order', { replace: true });
   };
 
   const formatPrice = (value) => {
     return value.toLocaleString('vi-VN');
   };
+  const CheckQuantity = (value) =>{
+    if(value > product.storedQuantity){
+      toast.error('Số lượng muốn mua không được vượt quá số lượng trong kho!',{
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored"
+        });
+    }else{
+      setQuantity(value);
+    }
+  }
 
 
   return (
@@ -250,7 +278,7 @@ function CreateOrder() {
                     className="form-control"
                     required
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onChange={(e) => CheckQuantity(e.target.value)}
                   />
                   <label className="ms-2">Số lượng</label>
                 </div>

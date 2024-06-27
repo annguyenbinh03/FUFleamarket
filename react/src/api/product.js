@@ -8,7 +8,8 @@ const END_POINT = {
     CREATE_PRODUCT: "product/createproductforsellers",
     GET_MY_PRODUCTS: "product/getmyproducts",
     ACCEPT_CREATE_PRODUCT_REQUEST : "product/adminacceptproductrequest",
-    REJECT_CREATE_PRODUCT_REQUEST : "product/adminrejectproductrequest"
+    REJECT_CREATE_PRODUCT_REQUEST : "product/adminrejectproductrequest",
+    INFOR_PRODUCT_BUY_REQUEST : "product/GetInforProductBuyRequest"
 }
 
 
@@ -42,6 +43,17 @@ export const rejectCreateProductRequestAPI = (token, productId) => {
     };
 return axiosClient.put(`${END_POINT.REJECT_CREATE_PRODUCT_REQUEST}/${productId}`, null,config);
 }
+
+
+export const getSellingProductForSlectOrderAPI = (token) => {
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  return axiosClient.get(`${END_POINT.INFOR_PRODUCT_BUY_REQUEST}`, config);
+}
+
 
 
 

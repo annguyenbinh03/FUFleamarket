@@ -4,10 +4,12 @@ import Header from "../../Header";
 import AuthContext from "../../context/AuthProvider";
 import { getMyPackageAPI } from "../../api/packages";
 import { Link } from "react-router-dom";
+import { getUserPromoTransac } from "../../api/promotionOrder";
 const MySellingPackage = () => {
   const { auth } = useContext(AuthContext);
 
   const [sellingPackages, setSellingPackages] = useState([]);
+  const [transactionOrders, setTransactionOrders] = useState([]);
   const fetchMyPackage = async () => {
     try {
       var response = await getMyPackageAPI(auth.accessToken);
@@ -16,19 +18,53 @@ const MySellingPackage = () => {
       console.error("Error fetching product:", error);
     }
   };
+  const fetchPromoOrderTransactions = async () => {
+    try {
+      var response = await getUserPromoTransac(auth.accessToken);
+      setTransactionOrders(response);
+      console.log(transactionOrders);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
 
   useEffect(() => {
     fetchMyPackage();
+    fetchPromoOrderTransactions();
   }, []);
 
   const formatPrice = (value) => {
-    return value.toLocaleString("vi-VN");
+    if (value) {
+      return value.toLocaleString("vi-VN");
+    }
+    return value;
+  };
+
+  const handleBuy = (userId,promotionId) =>{
+    window.open(`https://localhost:7057/api/VNPay/payment/${userId}/${promotionId}`);
+  }
+
+  const dateConverter = (timeEnd) => {
+    const newStartDate = new Date();
+    const newEndDate = new Date(timeEnd);
+    const one_day = 1000 * 60 * 60 * 24;
+    let result;
+    result = Math.ceil(
+      (newEndDate.getTime() - newStartDate.getTime()) / one_day
+    );
+    console.log("date Converter result", result);
+    if (result < 0) {
+      return 0;
+    }
+    return result;
   };
 
   function removeTimeFromISOString(isoString) {
-    const index = isoString.indexOf("T");
-    if (index !== -1) {
-      return isoString.slice(0, index);
+    if (isoString) {
+      const index = isoString.indexOf("T");
+      if (index !== -1) {
+        return isoString.slice(0, index);
+      }
     }
     return isoString;
   }
@@ -40,14 +76,14 @@ const MySellingPackage = () => {
         <div className="container bg-white py-4">
           <div className=" p-1">
             <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
                   <Link to="/">Home</Link>
                 </li>
-                <li class="breadcrumb-item">
+                <li className="breadcrumb-item">
                   <Link to="/my-posts">Quản lý tin</Link>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">
+                <li className="breadcrumb-item active" aria-current="page">
                   Quản lý gói bán hàng
                 </li>
               </ol>
@@ -59,34 +95,45 @@ const MySellingPackage = () => {
           </div>
           <div className="row d-flex justify-content-around">
             {sellingPackages?.map((sPackage) => (
-              <div class="card col-lg-4 py-2">
+              <div className="card col-lg-3 py-2">
                 <img
                   src={require(`../../assets/img/selling-package/${sPackage.promotion.promotionId}.png`)}
-                  class="card-img-top"
+                  className="card-img-top"
                   alt="..."
                 />
-                <div class="card-body">
-                  <h5 class="card-title fw-bold">{sPackage.promotion.name}</h5>
-                  <p class="card-text" style={{ minHeight: "80px" }}>
+                <div className="card-body">
+                  <h5 className="card-title fw-bold">
+                    {sPackage.promotion.name}
+                  </h5>
+                  <p className="card-text" style={{ minHeight: "80px" }}>
                     {sPackage.promotion.description}
                   </p>
-                  <span class="badge text-bg-success">Đang hoạt động</span>
+                  <span className="badge text-bg-success">Đang hoạt động</span>
                   <div className="fs-5">
-                    <span className=""> Còn lại {sPackage.period} ngày</span>
+                    <span className="">
+                      {" "}
+                      Còn lại {dateConverter(sPackage.endDate)} ngày
+                    </span>
                   </div>
                   <div className="d-flex justify-content-between fw-bold my-3">
                     <div>
                       <span className="text-success">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
                       </span>{" "}
                       Lượt đăng sản phẩm
                     </div>
-                    <div>{sPackage.productQuantity}</div>
+                    <div>{sPackage.promotion.productQuantityLimit}</div>
                   </div>
                   <div className="d-flex justify-content-start fw-bold my-3">
                     <div>
                       <span className="text-success">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
                       </span>{" "}
                       Duyệt tin nhanh dưới 5 phút
                     </div>
@@ -94,69 +141,112 @@ const MySellingPackage = () => {
                   <div className="d-flex justify-content-between fw-bold my-3">
                     <div>
                       <span className="text-success">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                        <i
+                          className="fa fa-check-circle"
+                          aria-hidden="true"
+                        ></i>
                       </span>{" "}
                       Ngày hết hạn
                     </div>
                     <div>{removeTimeFromISOString(sPackage.endDate)}</div>
                   </div>
                   <button
-                    // onClick={() => handleBuy(auth.id, sPackage.promotionId)}
-                    class="btn btn-dark w-100"
+                   onClick={() => handleBuy(auth.id, sPackage.promotionId)}
+                    className="btn btn-dark w-100"
                   >
                     Gia hạn
                   </button>
-                  <div class="accordion  mt-2">
-                    <div class="accordion-item">
-                      <h2 class="accordion-header">
-                        <button
-                          class="accordion-button"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          data-bs-target="#collapseOne"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        >
-                          Thông tin giao dịch
-                        </button>
-                      </h2>
-                      <div
-                        id="collapseOne"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#accordionExample"
-                      >
-                        <div class="accordion-body">
-                        <div>
-                            <strong>Ngày mua gói: </strong>
-                            <span>{removeTimeFromISOString(sPackage.startDate)}</span>
-                          </div>
-                          <div>
-                            <strong>Phương thức thanh toán: </strong>
-                            <span>{sPackage.paymentMethod}</span>
-                          </div>
-                          <div>
-                            <strong>Mã giao dịch: </strong>
-                            <span>{sPackage.transactionCode}</span>
-                          </div>
-                          <div>
-                            <strong>Giá: </strong>
-                            <span>{formatPrice(sPackage.price)} đ</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
             {sellingPackages ? (
               <div></div>
             ) : (
-                <div className="d-flex flex-column justify-content-center align-items-center" style={{height:"500px"}}>
-                    <div className="fs-3 fw-bold mb-3">Bạn chưa sở hữu bất kì gói bàn hàng nào</div>
-                    <Link className="btn btn-primary" to="/selling-package">Mua gói bán hàng ngay </Link>
+              <div
+                className="d-flex flex-column justify-content-center align-items-center"
+                style={{ height: "500px" }}
+              >
+                <div className="fs-3 fw-bold mb-3">
+                  Bạn chưa sở hữu bất kì gói bàn hàng nào
                 </div>
+                <Link className="btn btn-primary" to="/selling-package">
+                  Mua gói bán hàng ngay{" "}
+                </Link>
+              </div>
             )}
+          </div>
+          <div className="row mt-4 p-3">
+            <div class="table-responsive bg-white p-2 border rounded-3">
+              <table class="table  ">
+                <thead>
+                  <tr>
+                    <th scope="col">Gói</th>
+                    <th className="text-center" scope="col">
+                      Thời lượng
+                    </th>
+                    <th className="text-center" scope="col">
+                      Giá
+                    </th>
+                    <th className="text-center" scope="col">
+                      Ngày bắt đầu
+                    </th>
+                    <th className="text-center" scope="col">
+                      Ngày kết thúc
+                    </th>
+                    <th className="text-center" scope="col">
+                      Phương thức thanh toán
+                    </th>
+                    <th className="text-center" scope="col">
+                      Mã giao dịch
+                    </th>
+                    <th className="text-center" scope="col">
+                      Trạng thái
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {transactionOrders?.map((order) => (
+                    <tr>
+                      <th scope="row" style={{ color: "#666666" }}>
+                        <img
+                          src={require(`../../assets/img/selling-package/${order.promotionId}.png`)}
+                          className="card-img-top"
+                          alt="promotion"
+                          style={{ maxWidth: "20px" }}
+                        />{" "}
+                        {order.promotionName}
+                      </th>
+                      <td className="text-center">
+                        {order.promotionPeriod} ngày
+                      </td>
+                      <td className="text-center">{formatPrice( order.price)} đ</td>
+                      <td className="text-center">
+                        {removeTimeFromISOString(order.startDate)}
+                      </td>
+                      <td className="text-center">
+                        {removeTimeFromISOString(order.endDate)}
+                      </td>
+                      <td className="text-center">{order.paymentMethod}</td>
+                      <td className="text-center">{order.transactionCode}</td>
+                      <td className="text-center">
+                        {" "}
+                        {order.transactionStatus === "Completed"
+                          ? "Thành công"
+                          : "Thất bại"}{" "}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {transactionOrders?.length > 0 ? (
+                <></>
+              ) : (
+                <div className="not-found-text fs-3">
+                  Bạn vẫn chưa có đơn bán nào
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>

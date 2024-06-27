@@ -26,6 +26,8 @@ namespace DTO.PromotionTransactionDto
 
         public string TransactionStatus { get; set; } = null!;
 
+        public int PromotionId { get; set; }
+
         public string PromotionName { get; set; } = null!;
 
         public string PromotionDescription { get; set; } = null!;

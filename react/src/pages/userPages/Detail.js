@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProductByProductIdAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import AuthContext from "../../context/AuthProvider";
 
 function Detail() {
   const { productId } = useParams();
   const [data, setData] = useState(null);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductByProductIdAPI(productId);
         setData(response);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -22,6 +23,13 @@ function Detail() {
     if (productId) {
       fetchProduct();
     }
+    const body = document.querySelector("#root");
+    body.scrollIntoView(
+      {
+        behavior: "smooth",
+      },
+      500
+    );
   }, [productId]);
 
   const formatPrice = (value) => {
@@ -97,10 +105,11 @@ function Detail() {
                   </button>
                 </div>
               ) : (
-                <div>
+                <div className="text-center">
                   {" "}
                   <img
                     className="carousel-inner"
+                    style={{ maxWidth: "75%" }}
                     src={data?.product?.productImages}
                     alt="product photos"
                   />
@@ -113,7 +122,7 @@ function Detail() {
                   ? data?.product?.productName
                   : "Sản phẩm không tồn tại"}
               </div>
-              <div className="price_wistlist d-flex justify-content-between">
+              <div className="price_wistlist d-flex justify-content-between mb-2">
                 <p className="price_wistlist_left fs-5">
                   {data?.product ? formatPrice(data?.product?.price) : ""} đ
                 </p>
@@ -210,9 +219,9 @@ function Detail() {
                   <Link
                     to={`/shopprofile/${data?.sellerId}`}
                     className="badge text-bg-dark px-2 py-2"
-                    style={{textDecoration:"none"}}
+                    style={{ textDecoration: "none" }}
                   >
-                    <span >Xem trang</span>
+                    <span>Xem trang</span>
                   </Link>
                 </div>
               </div>
@@ -231,33 +240,39 @@ function Detail() {
               </div>
             </div>
 
-            <button className="chat_button w-100  px-3 mt-2">
-              <Link
-                className="d-flex justify-content-between align-items-center"
-                to={`/chat`}
-                state={{
-                  receiverId: data?.sellerId,
-                  receiverName: data?.product?.seller.fullName,
-                }}
-              >
-                <span>
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                </span>
-                <span>CHAT VỚI NGƯỜI BÁN</span>
-              </Link>
-            </button>
+            {auth?.id === data?.sellerId ? (
+              <></>
+            ) : (
+              <>
+                <button className="chat_button w-100  px-3 mt-2">
+                  <Link
+                    className="d-flex justify-content-between align-items-center"
+                    to={`/chat`}
+                    state={{
+                      receiverId: data?.sellerId,
+                      receiverName: data?.product?.seller.fullName,
+                    }}
+                  >
+                    <span>
+                      <i className="fa fa-comments-o" aria-hidden="true"></i>
+                    </span>
+                    <span>CHAT VỚI NGƯỜI BÁN</span>
+                  </Link>
+                </button>
 
-            <button className="chat_button  w-100  px-3 mt-2">
-              <Link
-                className="d-flex justify-content-between align-items-center"
-                to={`/create-order/${productId}`}
-              >
-                <span>
-                  <i className="fa fa-plus-square" aria-hidden="true"></i>
-                </span>
-                <span>TẠO HÓA ĐƠN</span>
-              </Link>
-            </button>
+                <button className="chat_button  w-100  px-3 mt-2">
+                  <Link
+                    className="d-flex justify-content-between align-items-center"
+                    to={`/create-order/${productId}`}
+                  >
+                    <span>
+                      <i className="fa fa-plus-square" aria-hidden="true"></i>
+                    </span>
+                    <span>TẠO HÓA ĐƠN</span>
+                  </Link>
+                </button>
+              </>
+            )}
 
             <div className="safe_tip mt-5">
               <img

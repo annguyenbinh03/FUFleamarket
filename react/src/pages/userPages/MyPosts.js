@@ -34,7 +34,10 @@ function MyPosts() {
   }, []);
 
   const formatPrice = (value) => {
-    return value.toLocaleString("vi-VN");
+    if(value){
+      return value.toLocaleString("vi-VN");
+    }
+    return value;
   };
 
   function removeTimeFromISOString(isoString) {
@@ -90,15 +93,15 @@ function MyPosts() {
                   <div></div>
                 )}
 
-                {(sellingPackages?.[0]?.productQuantity &&
-                  sellingPackages?.[0]?.productQuantity === products?.length) ||
-                (!sellingPackages?.[0]?.productQuantity &&
+                {(sellingPackages?.[0]?.promotion.productQuantityLimit &&
+                  sellingPackages?.[0]?.promotion.productQuantityLimit === products?.length) ||
+                (!sellingPackages?.[0]?.promotion.productQuantityLimit &&
                   3 === products?.length) ? (
                   <div className="my-auto fw-bold me-3 fs-5 text-danger">
                     Số lượng bài đăng:{" "}
                     {Array.isArray(products) ? products.length : 0}/
                     {sellingPackages
-                      ? sellingPackages?.[0]?.productQuantity
+                      ? sellingPackages?.[0]?.promotion.productQuantityLimit
                       : 3}
                   </div>
                 ) : (
@@ -106,7 +109,7 @@ function MyPosts() {
                     Số lượng bài đăng:{" "}
                     {Array.isArray(products) ? products.length : 0}/
                     {sellingPackages
-                      ? sellingPackages?.[0]?.productQuantity
+                      ? sellingPackages?.[0]?.promotion.productQuantityLimit
                       : 3}
                   </div>
                 )}

@@ -57,18 +57,19 @@ function SellOrder() {
                     className="row mb-3 p-2 order"
                   >
                     <div className="col-12 border-bottom ps-2 py-2">
-                    <span className="fs-5">
-                          <img style={{borderRadius:"20px"}} src={order.buyer.avarta} width={"30px"}/> {" "}
-                          {order.buyer.name}
-                        </span>
+                      <span className="fs-5">
+                        <img
+                          style={{ borderRadius: "20px" }}
+                          src={order.buyer.avarta}
+                          width={"30px"}
+                        />{" "}
+                        {order.buyer.name}
+                      </span>
                     </div>
                     <div className="col-8 col-md-8 pt-3">
                       <div className="row">
                         <div className="col-lg-3 w-25 product_image">
-                          <img
-                            src= {order.product.imageLink}
-                            alt=""
-                          />
+                          <img src={order.product.imageLink} alt="" />
                           {/* //order.productImage */}
                         </div>
                         <div className="col-lg-8">
@@ -133,9 +134,13 @@ function SellOrder() {
                         Ngày giao dịch: <span>{order.order?.orderDate}</span>
                       </div>
                       <div className="d-flex justify-content-center mt-2">
-                        <button className="btn btn-warning">
-                          Xem Feedback
-                        </button>
+                        {order.order?.status === 1 ? (
+                          <button className="btn btn-warning">
+                           Đánh giá người mua
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>
