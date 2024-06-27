@@ -9,17 +9,19 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ChatButton from "../../../components/ChatButton";
 import WishListAddButton from "../../../components/WishListAddButton";
 import formatPrice from "../../../utils/formatPrice";
+import Empty from "../../../components/Empty";
 
 const { width } = Dimensions.get("window");
 
 const Detail = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const { productId } = route.params;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,11 +52,7 @@ const Detail = () => {
   }
 
   if (!product) {
-    return (
-      <View style={[styles.container, styles.errorContainer]}>
-        <Text style={styles.errorText}>Không tìm thấy sản phẩm</Text>
-      </View>
-    );
+    return <Empty />;
   }
 
   return (
@@ -83,7 +81,14 @@ const Detail = () => {
           <TouchableOpacity
             style={styles.orderButton}
             onPress={() => {
-              // Xử lý khi nhấn vào nút tạo hóa đơn
+              navigation.navigate("CreateOrder", {
+                productId: productId,
+                productName: product.productName,
+                productImage: product.productImages,
+                productPrice: product.price,
+                sellerName: product.seller.fullName,
+                sellerAvatar: product.seller.avarta,
+              });
             }}
           >
             <View style={styles.buttonContent}>

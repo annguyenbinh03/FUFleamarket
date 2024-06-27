@@ -11,6 +11,7 @@ import { AuthProvider } from "../context/AuthProvider";
 import WishListScreen from "./Screens/ProductScreen/WishListScreen";
 import AdminTabNavigation from "./Navigations/AdminTabNavigation";
 import UserDetailScreen from "./Screens/ProfileScreen/UserDetailScreen";
+import CreateOrder from "./Screens/OrderScreen/CreateOrder";
 
 console.log("AdminTabNavigation:", AdminTabNavigation);
 
@@ -71,6 +72,15 @@ export default function App() {
                 component={UserDetailScreen}
                 options={{
                   title: "Thông tin người dùng",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="CreateOrder"
+                component={CreateOrder}
+                options={{
+                  title: "Tạo hóa đơn mua hàng",
                   headerStyle: styles.header,
                   headerTitleStyle: styles.headerTitle,
                 }}
