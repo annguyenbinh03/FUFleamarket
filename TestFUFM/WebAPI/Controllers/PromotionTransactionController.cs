@@ -18,12 +18,14 @@ namespace WebAPI.Controllers
         private readonly IPromotionTransactionRepository _promotionTransactionRepo;
         private readonly IPromotionOrderRepository _promotionOrderRepo;
         private readonly IPromotionRepository _promotionRepo;
+        private readonly IUserRepository _userRepo;
 
-        public PromotionTransactionController(IPromotionTransactionRepository promotionTransactionRepo, IPromotionOrderRepository promotionOrderRepo, IPromotionRepository promotionRepo)
+        public PromotionTransactionController(IPromotionTransactionRepository promotionTransactionRepo, IPromotionOrderRepository promotionOrderRepo, IPromotionRepository promotionRepo, IUserRepository userRepo)
         {
             _promotionTransactionRepo = promotionTransactionRepo;
             _promotionOrderRepo = promotionOrderRepo;
             _promotionRepo = promotionRepo;
+            _userRepo = userRepo;
         }
 
         [HttpGet("getallpromotiontransaction")]
@@ -46,12 +48,17 @@ namespace WebAPI.Controllers
                 if (promotionOrder != null)
                 {
                     var promotion = await _promotionRepo.GetByIdAsync(promotionOrder.PromotionId);
-                    if (promotion != null)
+                    var user = await _userRepo.GetByIdAsync(promotionOrder.UserId); 
+                    if (promotion != null && user != null)
                     {
                         var dto = new DetailedPromotionTransactionDTO
                         {
                             PromoTransactionId = transaction.PromoTransactionId,
                             UserId = promotionOrder.UserId,
+                            FullName = user.FullName,
+                            Email = user.Email,
+                            Avarta = user.Avarta,
+                            CreatedDate = user.CreatedDate,
                             StartDate = transaction.StartDate,
                             EndDate = transaction.EndDate,
                             PaymentMethod = transaction.PaymentMethod,
@@ -64,7 +71,8 @@ namespace WebAPI.Controllers
                             PromotionPeriod = promotion.Period,
                             PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
                             PromotionPrice = promotion.Price,
-                            PromotionOrderStatus = promotionOrder.Status
+                            PromotionOrderStatus = promotionOrder.Status                            
+                            
                         };
                         promotionTransactionDtos.Add(dto);
                     }
@@ -73,6 +81,7 @@ namespace WebAPI.Controllers
 
             return Ok(promotionTransactionDtos);
         }
+
 
         [HttpGet("getallpromotiontransactionofuser")]
         [Authorize(Roles = "User,Admin")]
@@ -114,12 +123,18 @@ namespace WebAPI.Controllers
                 if (promotionOrder != null)
                 {
                     var promotion = await _promotionRepo.GetByIdAsync(promotionOrder.PromotionId);
+                    var user = await _userRepo.GetByIdAsync(promotionOrder.UserId);
+
                     if (promotion != null)
                     {
                         var dto = new DetailedPromotionTransactionDTO
                         {
                             PromoTransactionId = transaction.PromoTransactionId,
                             UserId = promotionOrder.UserId,
+                            FullName = user.FullName,
+                            Email = user.Email,
+                            Avarta = user.Avarta,
+                            CreatedDate = user.CreatedDate,
                             StartDate = transaction.StartDate,
                             EndDate = transaction.EndDate,
                             PaymentMethod = transaction.PaymentMethod,

@@ -12,6 +12,14 @@ namespace DTO.PromotionTransactionDto
 
         public int UserId { get; set; }
 
+        public string? FullName { get; set; }
+
+        public string? Avarta { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string Email { get; set; } = null!;
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -40,5 +48,6 @@ namespace DTO.PromotionTransactionDto
 
         public string PromotionOrderStatus { get; set; } = null!;
 
+        
     }
 }

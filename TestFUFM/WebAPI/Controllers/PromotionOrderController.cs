@@ -45,10 +45,52 @@ namespace WebAPI.Controllers
             return Ok(promoOrders);
         }
 
-
-        [HttpGet("InformationPromotionOrder")]
-        [Authorize(Roles = "User,Admin")]
+        [HttpGet("admin/informationallpromotionorder")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
+        {
+            var promoOrders = await _promoOrderRepo.GetAllAsync();
+            if (promoOrders == null || !promoOrders.Any())
+            {
+                return NotFound("No promotion orders found.");
+            }
+
+            var detailedPromoOrderDtos = new List<DetailedPromotionOrderDTO>();
+
+            foreach (var promoOrder in promoOrders)
+            {
+                var promotion = await _promotionRepo.GetByIdAsync(promoOrder.PromotionId);
+                var user = await _userRepo.GetByIdAsync(promoOrder.UserId);
+
+                if (promotion != null && user != null)
+                {
+                    var dto = new DetailedPromotionOrderDTO
+                    {
+                        PromoOrderId = promoOrder.PromoOrderId,
+                        EndDate = promoOrder.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                        UserId = promoOrder.UserId,
+                        FullName = user.FullName,
+                        Email = user.Email,
+                        Avarta = user.Avarta,
+                        CreatedDate = user.CreatedDate,
+                        PromotionId = promoOrder.PromotionId,
+                        Status = promoOrder.Status,
+                        PromotionName = promotion.Name,
+                        PromotionDescription = promotion.Description,
+                        PromotionPeriod = promotion.Period,
+                        PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
+                        PromotionPrice = promotion.Price
+                    };
+                    detailedPromoOrderDtos.Add(dto);
+                }
+            }
+            return Ok(detailedPromoOrderDtos);
+        }
+
+
+        [HttpGet("informationpromotionorderofuser")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetPromotionOrderOfUser()
         {
             var userIdClaim = User.FindFirstValue("UserId");
             if (userIdClaim == null)
@@ -71,6 +113,8 @@ namespace WebAPI.Controllers
             foreach (var promoOrder in promoOrders)
             {
                 var promotion = await _promotionRepo.GetByIdAsync(promoOrder.PromotionId);
+                var user = await _userRepo.GetByIdAsync(promoOrder.UserId);
+
                 if (promotion != null)
                 {
                     var dto = new DetailedPromotionOrderDTO
@@ -78,6 +122,10 @@ namespace WebAPI.Controllers
                         PromoOrderId = promoOrder.PromoOrderId,
                         EndDate = promoOrder.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
                         UserId = promoOrder.UserId,
+                        FullName = user.FullName,
+                        Email = user.Email,
+                        Avarta = user.Avarta,
+                        CreatedDate = user.CreatedDate,
                         PromotionId = promoOrder.PromotionId,
                         Status = promoOrder.Status,
                         PromotionName = promotion.Name,

@@ -14,6 +14,14 @@ namespace DTO.PromotionOrderDto
 
         public int UserId { get; set; }
 
+        public string? FullName { get; set; }
+
+        public string? Avarta { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public string Email { get; set; } = null!;
+
         public int PromotionId { get; set; }
 
         public string Status { get; set; } = null!;
