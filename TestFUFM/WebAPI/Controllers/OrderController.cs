@@ -12,6 +12,8 @@ using Repository.Interfaces;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using System.Security.Claims;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Controllers
 {
@@ -23,12 +25,14 @@ namespace WebAPI.Controllers
         private readonly IOrderRepository _orderRepo;
         private readonly IUserRepository _userRepo;
         private readonly IProductReposity _productRepo;
+        private readonly FufleaMarketContext _context;
 
-        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo)
+        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context)
         {
             _orderRepo = orderRepo;
             _userRepo = userRepo;
             _productRepo = productRepo;
+            _context = context;
         }
 
         [HttpGet("soldRequest")]
@@ -507,6 +511,61 @@ namespace WebAPI.Controllers
             }
             return NoContent();
         }
+        [HttpGet("admin/orders")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminGetAllOrders([FromQuery] int? status )
+        {
+           if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+           IQueryable<Order> query = _context.Orders.AsQueryable();
+            if(status.HasValue)
+            {
+                query = query.Where(o => o.Status == status.Value);
+            }
+            else
+            {
+                query = query.Where(o => o.Status == 0 || o.Status == 1 || o.Status ==2);
+            }
+
+            var result = await query.Select(order => new
+            {
+                OrderId = order.OrderId,
+                Price = order.Price,
+                PaymentMethod = order.PaymentMethod,
+                Status = order.Status,
+                Note = order.Note,
+                Quantity = order.Quantity,
+                DeliveryDate = order.DeliveryDate,
+                ReceiverAddress = order.ReceiverAddress,
+                Buyer = new
+                {
+                    BuyerID = order.BuyerId,
+                    FullName = order.Buyer.FullName,
+                    Avatar = order.Buyer.Avarta
+                },
+                Seller =  new
+                {
+                    SellerID = order.SellerId,
+                    Name = order.Seller.FullName,
+                    Avatar = order.Seller.Avarta
+                },
+                Product = new
+                {
+                    ProductId = order.Product.ProductId,
+                    ProductName = order.Product.ProductName,
+                    ImageLink = order.Product.ImageLink
+                }
+            }).ToListAsync();
+            if(!result.Any())
+            {
+                return BadRequest("No order here");
+            }
+
+            return Ok(result);
+        }
+
+
     }
 }
 
