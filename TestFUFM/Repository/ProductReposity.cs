@@ -43,7 +43,7 @@ namespace Repository
 
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
-            productModel.Status = 2;
+            productModel.Status = 3;
             productModel.CreatedDate = DateTime.Now;
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
@@ -62,6 +62,7 @@ namespace Repository
             return true;
         }
 
+
         public async Task<bool> RejectProductRequest(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -70,6 +71,21 @@ namespace Repository
                 return false;
             }
             product.Status = 2;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
+        public async Task<bool> DeleteProduct(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return false;
+            }
+            product.Status = 3;
+            product.IsNew = false;
+            product.CreatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
         }
@@ -247,7 +263,10 @@ namespace Repository
 
         public async Task<List<Product>?> GetProductByUserIdAsync(int userId)
         {
-            return await _context.Products.Where(x => x.SellerId == userId).ToListAsync();
+            return await _context.Products.Where(x => x.SellerId == userId)
+                .Include(p => p.Category)
+                .Include(p => p.Seller)
+                .ToListAsync();
         }
         public async Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange)
         {

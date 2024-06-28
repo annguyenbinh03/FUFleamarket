@@ -18,6 +18,8 @@ namespace Repository.Interfaces
         Task<bool> AcceptProductRequest(int productId);
         Task<bool> RejectProductRequest(int productId);
 
+        Task<bool> DeleteProduct(int productId);
+
         Task<Product?> GetByIdProductAsync(int id);
 
         Task<List<Product>?> GetProductByUserIdAsync(int userId);

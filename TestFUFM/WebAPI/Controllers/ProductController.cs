@@ -9,6 +9,8 @@ using Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using BusinessObjects.Models;
+using BusinessObjects.CategoryDto;
+using System.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -223,7 +225,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPut("adminacceptproductrequest/{productId:int}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
         {
             var result = await _productRepo.AcceptProductRequest(productId);
@@ -239,8 +241,24 @@ namespace WebAPI.Controllers
 
 
 
+        [HttpPut("admindeleteproduct/{productId:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminDeleteProduct([FromRoute] int productId)
+        {
+            var result = await _productRepo.DeleteProduct(productId);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
         [HttpPut("adminrejectproductrequest/{productId:int}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
         {
             var result = await _productRepo.RejectProductRequest(productId);
@@ -301,7 +319,32 @@ namespace WebAPI.Controllers
                 return BadRequest("You don't have any products yet");
             }
 
-            return Ok(products);
+            var filteredProducts = products.Where(p => p.Status == 0 || p.Status == 1 || p.Status == 2)
+                                  .Select(p => new
+                                  {
+                                      p.ProductId,
+                                      p.ProductName,
+                                      p.Price,
+                                      p.IsNew,
+                                      p.Status,
+                                      p.Description,
+                                      p.ImageLink,
+                                      p.StoredQuantity,
+                                      p.CreatedDate,
+                                      Seller = new
+                                      {
+                                          p.Seller.FullName,
+                                          p.Seller.PhoneNumber,
+                                          p.Seller.Avarta
+                                      },
+                                      Categories = p.Category != null ? new List<CategoryDTO> { p.Category.ToCategoryDTO() } : null,
+                                                 
+                                      Orders = new List<object>() // Assuming orders should be included, this is a placeholder
+                                  })
+                                  .ToList();
+
+            return Ok(filteredProducts);
+            
         }
 
 
@@ -502,9 +545,36 @@ namespace WebAPI.Controllers
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
 
-            var updatedProduct = deletedProduct.ToProductDto();
-            return Ok(updatedProduct);
+            //var updatedProduct = deletedProduct.ToProductDto();
+            //return Ok(updatedProduct);
+            return Ok("Successfully deleted product.");
         }
+
+
+
+        [HttpDelete("deleteproductforadmin/{productId:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAdmin([FromRoute] int productId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var existingProduct = await _productRepo.GetByIdProductAsync(productId);
+            if (existingProduct == null)
+            {
+                return NotFound("Product ID not found. Please enter a valid Product ID.");
+            }
+
+            var deletedProduct = await _productRepo.DeleteAsync(productId);
+            if (deletedProduct == null)
+            {
+                return BadRequest("Product deletion failed. Please try again.");
+            }
+
+            return Ok("Successfully deleted product.");
+        }
+
+
 
         [HttpGet("admin/pending")]
         [Authorize(Roles = "Admin")]
@@ -529,11 +599,24 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+
+        [HttpGet("admin/noconfirmed")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetNoConfirmedProducts()
+        {
+            var products = await _productRepo.GetProductsByStatusAsync(2);
+
+            var productDtos = products.Select(p => p.ToProductDto());
+
+            return Ok(productDtos);
+        }
+
+
         [HttpGet("admin/deleted")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDeletedProducts()
         {
-            var products = await _productRepo.GetProductsByStatusAsync(2);
+            var products = await _productRepo.GetProductsByStatusAsync(3);
 
             var productDtos = products.Select(p => p.ToProductDto());
 
