@@ -74,6 +74,12 @@ const Detail = () => {
         <Text style={styles.productStatus}>
           Tình trạng: {product.isNew ? "Mới" : "Đã sử dụng"}
         </Text>
+        <Text style={styles.productQuantity}>
+          Số lượng: {product.storedQuantity}
+        </Text>
+        <Text style={styles.productStatus}>
+          Ngày đăng: {product.createdDate}
+        </Text>
         <Text style={styles.productDescription}>{product.description}</Text>
         <SellerInfo seller={product.seller} address={product.address} />
         <View style={styles.buttonGroup}>
@@ -198,6 +204,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     color: "#666",
+    fontWeight: "bold",
+  },
+  productQuantity: {
+    borderRadius: 20,
+    borderColor: "green",
+    backgroundColor: "green",
+    color: "white",
+    borderWidth: 1,
+    borderStyle: "solid",
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    alignSelf: "flex-start",
+    textAlign: "left",
+    fontWeight: "bold",
+    fontSize: 14,
   },
   productDescription: {
     fontSize: 16,

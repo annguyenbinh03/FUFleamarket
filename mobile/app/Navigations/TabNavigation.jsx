@@ -1,12 +1,12 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { View, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./../Screens/HomeScreen/home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PostProduct from "../Screens/PostProductScreen/postProduct";
-import Message from "../Screens/MessageScreen/message";
 import Profile from "../Screens/ProfileScreen/profile";
 import PostManager from "../Screens/PostMangerScreen/postManager";
+import OrderManagerScreen from "../Screens/OrderScreen/OrderManagerScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,39 +16,36 @@ export default function TabNavigation() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#ffffff",
+          borderTopWidth: 1,
+          borderTopColor: "#e0e0e0",
+          height: 60,
+          paddingBottom: 5,
         },
         tabBarShowLabel: true,
         tabBarLabelStyle: {
           fontSize: 12,
+          fontWeight: "600",
         },
-        tabBarActiveTintColor: "#007bff",
+        tabBarActiveTintColor: "#FFA500",
         tabBarInactiveTintColor: "#999999",
       }}
     >
       <Tab.Screen
-        name="Trang chủ"
+        name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="home"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Quản lý tin"
+        name="PostManager"
         component={PostManager}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="clipboard-list"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="post" color={color} size={size} />
           ),
         }}
       />
@@ -56,38 +53,54 @@ export default function TabNavigation() {
         name="Đăng tin"
         component={PostProduct}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                height: 68,
+                width: 68,
+                borderRadius: 34,
+                backgroundColor: "#FFA500",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons name="plus" size={32} color="#FFFFFF" />
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: 10,
+                  marginTop: 2,
+                  fontWeight: "600",
+                }}
+              >
+                Đăng tin
+              </Text>
+            </View>
           ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
-        name="Tin nhắn"
-        component={Message}
+        name="OrderManager"
+        component={OrderManagerScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="message-text"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
+              name="clipboard-list"
+              color={color}
+              size={size}
             />
           ),
         }}
       />
       <Tab.Screen
-        name="Hồ sơ"
+        name="Profile"
         component={Profile}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="account"
-              size={24}
-              color={focused ? "#007bff" : "#999999"}
-            />
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
       />

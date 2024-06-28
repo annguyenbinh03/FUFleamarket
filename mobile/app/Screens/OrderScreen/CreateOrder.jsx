@@ -20,7 +20,7 @@ const CreateOrder = () => {
   const route = useRoute();
   const { productId } = route.params;
   const navigation = useNavigation();
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
@@ -30,27 +30,35 @@ const CreateOrder = () => {
   const [receiverAddress, setReceiverAddress] = useState("");
   const [note, setNote] = useState("");
   const [formattedPrice, setFormattedPrice] = useState("");
-  useEffect(() => {
-    const fetchProductData = async () => {
-      try {
-        const response = await axios.get(
-          `http://192.168.146.25:7057/api/product/GetProductById/${productId}`
-        );
-        setProduct(response.data.product);
-        setPrice(response.data.product.price.toString());
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-        Alert.alert(
-          "Lỗi",
-          "Không thể lấy thông tin sản phẩm. Vui lòng thử lại sau."
-        );
-        setLoading(false);
-      }
-    };
 
+  useEffect(() => {
     fetchProductData();
   }, [productId]);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.146.25:7057/api/product/GetProductById/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      setProduct(response.data.product);
+      setPrice(response.data.product.price.toString());
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+      checkTokenExpiration(error);
+      Alert.alert(
+        "Lỗi",
+        "Không thể lấy thông tin sản phẩm. Vui lòng thử lại sau."
+      );
+      setLoading(false);
+    }
+  };
+
   const handlePriceChange = (value) => {
     const unformattedValue = value.replace(/\./g, "");
     setPrice(unformattedValue);
@@ -81,17 +89,21 @@ const CreateOrder = () => {
   };
 
   const handleCreateOrder = async () => {
+    console.log("tạo đơn hàng");
+
     const numQuantity = parseInt(quantity);
     if (
       isNaN(numQuantity) ||
       numQuantity <= 0 ||
       numQuantity > product.storedQuantity
     ) {
+      console.log("Lỗi: Số lượng sai");
       Alert.alert("Lỗi", "Số lượng không hợp lệ. Vui lòng kiểm tra lại.");
       return;
     }
 
     if (!price || !paymentMethod || !receiverAddress) {
+      console.log("Lỗi: Thiếu thông tin bắt buộc");
       Alert.alert(
         "Lỗi",
         "Vui lòng điền đầy đủ thông tin bắt buộc (giá, phương thức thanh toán, địa điểm giao dịch)."
@@ -101,22 +113,54 @@ const CreateOrder = () => {
 
     try {
       setLoading(true);
-      // Ở đây bạn sẽ gọi API để tạo hóa đơn
-      // const response = await axios.post('your_api_endpoint', orderData);
+      const orderData = {
+        productId: productId,
+        quantity: numQuantity,
+        price: parseInt(price),
+        paymentMethod: paymentMethod,
+        receiverAddress: receiverAddress,
+        note: note,
+      };
+      console.log("Dữ liệu đơn hàng:", orderData);
 
-      // Giả lập việc gọi API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Gửi yêu cầu tạo đơn hàng");
+      const response = await axios.post(
+        "http://192.168.146.25:7057/api/order",
+        orderData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      console.log("server:", response.data);
 
       setLoading(false);
-      Alert.alert(
-        "Thông báo",
-        "Đã tạo đơn hàng, đang chờ xác nhận từ người bán!"
-      );
-      navigation.navigate("BuyOrder");
+      console.log("Tạo đơn hàng thành công may quá ");
+      Alert.alert("Thông báo", "Đã tạo đơn hàng thành công!", [
+        {
+          text: "OK",
+          onPress: () => {
+            console.log("Chuyển về Detail");
+            navigation.navigate("Detail", { productId: productId });
+          },
+        },
+      ]);
     } catch (error) {
       setLoading(false);
-      console.error("Error creating order:", error);
+      console.error("Lỗi tạo đơn hàng:", error);
+      console.log("lỗi:", error.response?.data);
+      checkTokenExpiration(error);
       Alert.alert("Lỗi", "Không thể tạo đơn hàng. Vui lòng thử lại sau.");
+    }
+  };
+
+  const checkTokenExpiration = (error) => {
+    if (error.response && error.response.status === 401) {
+      Alert.alert("Phiên đăng nhập hết hạn", "Vui lòng đăng nhập lại.");
+      logout();
+      navigation.navigate("Login");
     }
   };
 
@@ -167,12 +211,12 @@ const CreateOrder = () => {
         <TextInput
           style={styles.input}
           value={quantity}
-          onChangeText={setQuantity} // Chỉ cập nhật state, không kiểm tra ngay
-          onEndEditing={() => checkQuantity(quantity)} // Kiểm tra khi kết thúc chỉnh sửa
+          onChangeText={setQuantity}
+          onEndEditing={() => checkQuantity(quantity)}
           keyboardType="numeric"
           placeholder="Nhập số lượng"
-          returnKeyType="done" // Đặt kiểu phím return là "done"
-          onSubmitEditing={() => checkQuantity(quantity)} // Kiểm tra khi nhấn phím "done"
+          returnKeyType="done"
+          onSubmitEditing={() => checkQuantity(quantity)}
         />
 
         <Text style={styles.label}>Phương thức thanh toán:</Text>
@@ -226,6 +270,7 @@ const CreateOrder = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
