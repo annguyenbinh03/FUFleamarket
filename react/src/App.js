@@ -6,7 +6,6 @@ import Register from "./pages/userPages/Register";
 import Login from "./pages/userPages/Login";
 import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
-import Users from "./component/User";
 import Chat from "./pages/userPages/Chat";
 
 
@@ -25,12 +24,18 @@ const PostProduct = lazy(() => import("./pages/userPages/PostProduct"));
 const CreateOrder = lazy(() => import("./pages/userPages/CreateOrder"));
 const BuyOrder = lazy(() => import("./pages/userPages/BuyOrder"));
 const SellOrder = lazy(() => import("./pages/userPages/SellOrder"));
-const AdminProcessRequest = lazy(() => import("./pages/adminPages/AdminProcessRequest"));
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
 const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
 const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
 const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
 const MySellingPackage = lazy(() => import("./pages/userPages/MySellingPackage"));
+const AdminDoashboard = lazy(()=>import("./pages/adminPages/AdminDashboard") );
+const AdminProduct = lazy(() => import("./pages/adminPages/AdminProduct"));
+const AdminProductRequest = lazy(() => import("./pages/adminPages/AdminProductRequest"));
+const AdminUser = lazy(() => import("./pages/adminPages/AdminUsers"));
+const AdminSellingPackage = lazy(() => import("./pages/adminPages/AdminSellingPackage"));
+const AdminOrderProduct = lazy(() => import("./pages/adminPages/AdminOrderProduct"));
+const AdminOrderPackages = lazy(() => import("./pages/adminPages/AdminOrderPackages"));
 
 const ROLES = {
   'User': 1,
@@ -56,7 +61,7 @@ function App() {
             <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
             <Route path="/shopprofile/:userId" element={<ShopProfile/>} />
             <Route path="*" element={<div>404 Not Found</div>}/>
-
+           
 
 
             {/* protected */}
@@ -75,8 +80,13 @@ function App() {
               <Route path="/buy-order" element={<BuyOrder />} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin]} />} >
-             <Route path="/admin" element={<AdminProcessRequest />} />
-              <Route path="/users" element={<Users />} />
+              <Route path="/admin" element={<AdminDoashboard />} />
+              <Route path="/admin/product" element={<AdminProduct />} />
+              <Route path="/admin/product-requests" element={<AdminProductRequest />} />
+              <Route path="/admin/users" element={<AdminUser />} />
+              <Route path="/admin/selling-packages" element={<AdminSellingPackage />} />
+              <Route path="/admin/order-product" element={<AdminOrderProduct />} />
+              <Route path="/admin/order-packages" element={<AdminOrderPackages />} />
             </Route>
         </Routes>
         <ToastContainer />

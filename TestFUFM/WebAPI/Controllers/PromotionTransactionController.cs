@@ -66,6 +66,7 @@ namespace WebAPI.Controllers
                             TransactionStatus = transaction.TransactionStatus,
                             Price = transaction.Price,
                             PromoOrderId = transaction.PromoOrderId,
+                            PromotionId = promotion.PromotionId,
                             PromotionName = promotion.Name,
                             PromotionDescription = promotion.Description,
                             PromotionPeriod = promotion.Period,

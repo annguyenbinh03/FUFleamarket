@@ -14,7 +14,7 @@ public partial class Product
     public int ProductId { get; set; }
 
     [Column("productName")]
-    [StringLength(50)]
+    [StringLength(100)]
     public string ProductName { get; set; } = null!;
 
     [Column("price", TypeName = "money")]

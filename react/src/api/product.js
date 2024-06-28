@@ -3,13 +3,15 @@ import axiosClient from './axiosClient'
 const END_POINT = {
     PRODUCTS: "product",
     LIST_PRODUCT: "product/listproduct",
-    ADMIN_LIST_PRODUCT: "product/admingetlistproducts",
+  //  ADMIN_LIST_PRODUCT: "product/admingetlistproducts",
     GET_PRODUCT_BY_ID: "product/getproductbyid",
     CREATE_PRODUCT: "product/createproductforsellers",
     GET_MY_PRODUCTS: "product/getmyproducts",
     ACCEPT_CREATE_PRODUCT_REQUEST : "product/adminacceptproductrequest",
     REJECT_CREATE_PRODUCT_REQUEST : "product/adminrejectproductrequest",
-    INFOR_PRODUCT_BUY_REQUEST : "product/GetInforProductBuyRequest"
+    INFOR_PRODUCT_BUY_REQUEST : "product/GetInforProductBuyRequest",
+    ADMIN_PRODUCT_REQUEST : "product/adminliststatus0",
+    ADMIN_PRODUCT_S123 : "product/adminliststatus1,2,3"
 }
 
 
@@ -17,13 +19,25 @@ export const getProductAPI = () => {
   return axiosClient.get(`${END_POINT.LIST_PRODUCT}`);
 };
 
-export const getAdminProductAPI = (token ) => {
+export const getAdminProductS123API = (token, status ) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`
     }
   };
-  return axiosClient.get(`${END_POINT.ADMIN_LIST_PRODUCT}`,config);
+  if(status !== null){
+    return axiosClient.get(`${END_POINT.ADMIN_PRODUCT_S123}&status=${status}`,config);
+  }
+  return axiosClient.get(`${END_POINT.ADMIN_PRODUCT_S123}`,config);
+};
+
+export const getAdminProductRequestAPI = (token ) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.get(`${END_POINT.ADMIN_PRODUCT_REQUEST}`,config);
 };
 
 export const acceptCreateProductRequestAPI = (token, productId) => {

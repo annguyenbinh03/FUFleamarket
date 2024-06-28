@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   acceptCreateProductRequestAPI,
-  getAdminProductRequestAPI,
+  getAdminProductS123API,
   rejectCreateProductRequestAPI,
 } from "../../api/product";
 
@@ -10,13 +10,17 @@ import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
 import AuthContext from "../../context/AuthProvider";
 
-function AdminProductRequest() {
+function AdminProduct() {
   const [products, setProducts] = useState([]);
   const { auth } = useContext(AuthContext);
+  const [status, setStatus] = useState(null);
 
   const fetchData = async () => {
     try {
-      const productsData = await getAdminProductRequestAPI(auth.accessToken);
+      const productsData = await getAdminProductS123API(
+        auth.accessToken,
+        status
+      );
       setProducts(productsData);
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
@@ -58,10 +62,7 @@ function AdminProductRequest() {
         </nav>
         <div className="main-content w-87 pt-3 px-4">
           <h4 className="card-title">Sản phẩm</h4>
-          <p className="">
-            Danh mục các sản phẩm{" "}
-            <span className="text-primary">đang chờ duyệt</span>
-          </p>
+          <p className="">Danh mục tất các sản phẩm </p>
           <table className="product-table table text-center table-bordered mb-4">
             <thead className="bg-secondary">
               <tr>
@@ -79,14 +80,14 @@ function AdminProductRequest() {
               {products?.map((product) => (
                 <tr key={product.productId}>
                   <td>
-                    <div className="td-seller-content"> 
+                    <div className="td-seller-content">
                       <img
-                      className="rounded-3 me-2"
+                        className="rounded-3 me-2"
                         src={product?.seller?.avarta}
-                        style={{ maxWidth: "30px" }} alt="user"
+                        style={{ maxWidth: "30px" }}
+                        alt="user"
                       />
-                   <span> {product.seller.fullName}</span>
-                   
+                      <span> {product.seller.fullName}</span>
                     </div>
                   </td>
                   <td>
@@ -119,27 +120,23 @@ function AdminProductRequest() {
                     </button>
                   </td>
                   <td>
-                    {product.status === 0 ? (
+                    {product.status === 1 ? (
                       <div>
                         <button
-                          className="btn btn-success mx-2"
+                          className="btn btn-danger mx-2"
                           onClick={() =>
                             handleApproveProduct(product.productId)
                           }
                         >
-                          Duyệt
-                        </button>
-                        <button
-                          className="btn btn-danger mx-2"
-                          onClick={() => handleRejectProduct(product.productId)}
-                        >
-                          Loại bỏ
+                          Xóa sản phẩm
                         </button>
                       </div>
-                    ) : product.status === 1 ? (
-                      <div className="btn btn-success">Đã được duyệt</div>
+                    ) : product.status === 2 ? (
+                      <div className="btn btn-warning">
+                        Sản phẩm không được duyệt
+                      </div>
                     ) : (
-                      <div className="btn btn-danger">Đã loại bỏ</div>
+                      <div className="btn btn-warning">Sản phẩm đã bị xóa</div>
                     )}
                   </td>
                 </tr>
@@ -152,4 +149,4 @@ function AdminProductRequest() {
   );
 }
 
-export default AdminProductRequest;
+export default AdminProduct;

@@ -104,6 +104,7 @@ CREATE TABLE [dbo].[PromotionTransaction](
 	[paymentMethod] NVARCHAR(100) NOT NULL,
 	[transactionCode] NVARCHAR(100) NOT NULL,
 	[transactionStatus] NVARCHAR(10) NOT NULL,
+	[createdDate] DATETIME NOT NULL,
 	CONSTRAINT FK_PromotionTransaction_PromotionOrder FOREIGN KEY ([promoOrderId]) REFERENCES [dbo].[PromotionOrder]([promoOrderId])
 ) 
 
@@ -166,9 +167,9 @@ VALUES
 	 ('1', 'Ho Minh Quyen (k17 HCM)', 'quyenhmse170471@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocIZPZqtyowDwjLOKMnFu3ufaspn7e8N7xL1-3pZhMh40JQtPbQs=s96-c', '2024-06-22 10:04:32.537', '116447998121690404343'),
     ('1', 'Nguyen Binh An (k17 HCM)', 'annbse170470@fpt.edu.vn', NULL, NULL, 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocJf7GEHpBuMAEqC5JIf-T4yp3clbt9iExMJY5Zo3_7kSbIP4gA=s96-c', '2024-06-25 08:43:25.623', '111768314629809688846'),
     ('1', N'Nhi Võ', 'vonhi2147@gmail.com', '0123156753', 'Hello everyone, Im Nhi Vo', 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocKLh_cG-lNBnUpEFTFDxyT_AVTQZxxJqo48ebLx6E53WfkazA=s96-c', '2024-06-27 10:04:32.537', '113437302653011009665'),
-    ('1', N'Nhân MỸ', 'mynhan1102003@gmail.com', '9876540123', 'Hello everyone, Im Nhi Nhan My', 1, 1, 'https://lh3.googleusercontent.com/a/ACg8ocJZ-ch2D74Uxjjs5myl4ocHrnge3twiexdBCE4IEfp8b-f4LQ=s96-c', '2024-06-21 11:04:32.537', '109867747469885786511'),
-    ('1', N'Quý nguyễn', 'quyn5108@gmail.com', '3210987654', 'Hello everyone, Im Nhi Quy Nguyen', 1, 1, 'https://lh3.googleusercontent.com/a/ACg8ocJuLMmQJmPOPuHUsZds-x2ckp9PAZD-EMI5HSYzXHcON0dx3w=s96-c','2024-06-16 08:43:25.623', '111481152715467954553 '),
-    ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 1, 0, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
+    ('1', N'Nhân MỸ', 'mynhan1102003@gmail.com', '9876540123', 'Hello everyone, Im Nhi Nhan My', 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocJZ-ch2D74Uxjjs5myl4ocHrnge3twiexdBCE4IEfp8b-f4LQ=s96-c', '2024-06-21 11:04:32.537', '109867747469885786511'),
+    ('1', N'Quý nguyễn', 'quyn5108@gmail.com', '3210987654', 'Hello everyone, Im Nhi Quy Nguyen', 1, 0, 'https://lh3.googleusercontent.com/a/ACg8ocJuLMmQJmPOPuHUsZds-x2ckp9PAZD-EMI5HSYzXHcON0dx3w=s96-c','2024-06-16 08:43:25.623', '111481152715467954553 '),
+    ('1', 'Sophia Martinez', 'sophiamartinez@example.com', '4567890123', 'Introduction 8', 1, 1, 'https://th.bing.com/th/id/OIP.4SYRN4EfioJSetoM-ggnSAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Benjamin Anderson', 'benjaminanderson@example.com', '6789012345', 'IntrSoduction 9', 1, 1, 'https://th.bing.com/th/id/OIP.pAdUb6ZlM45prBGAjT__FAHaHW?rs=1&pid=ImgDetMain', GETDATE(), NULL),
     ('1', 'Ava Thomas', 'avathomas@example.com', '9876543210', 'Introduction 10', 2, 1, 'https://kynguyenlamdep.com/wp-content/uploads/2022/08/avatar-ff-ngau.jpg', GETDATE(), NULL),
 	 ('user', 'Kamisato', 'user', '123124125125', 'Introduction 4', 1, 0, 'https://th.bing.com/th/id/OIP.srNFFzORAaERcWvhwgPzVAHaHa?rs=1&pid=ImgDetMain', GETDATE(), NULL),

@@ -111,14 +111,14 @@ const AdminHeader = () => {
                 </div>
               </form>
             </div>
-            <div className="d-flex">
-              <div className="px-3">
+            <div className="d-flex align-items-center">
+              <div className="px-3 d-flex align-items-center">
                 <img
                   className="userLogo mx-1 img-fluid"
-                  src="https://cdn.chotot.com/uac2/27021569"
-                  alt=""
+                  src={auth?.avarta}
+                  alt=""  
                 />
-                <span className="fs-5 username text-white px-2">Best yasuo</span>
+                <span className="fs-5 username text-white px-2">{auth?.fullName}</span>
               </div>
               <div className="d-flex align-items-center">
                 <button className="btn fs-5 text-white px-4">
@@ -127,11 +127,8 @@ const AdminHeader = () => {
                 <button className="btn fs-5 text-white px-4">
                   <i className="fa fa-comments-o" aria-hidden="true"></i>
                 </button>
-                <button className="btn fs-5 text-white px-4">
-                  <i className="fa fa-heart" aria-hidden="true"></i>
-                </button>
                 <button className="btn fs-5 text-white px-4" onClick={(e)=> logout(e)}>
-                  <i class="fa fa-sign-in" aria-hidden="true"></i>
+                  <i className="fa fa-sign-in" aria-hidden="true"></i>
                 </button>
               </div>
             </div>

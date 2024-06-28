@@ -3,11 +3,12 @@ import axiosClient from './axiosClient'
 const END_POINT = {
     USERS : "user",
     CHATTERS : "user/getlistsellerforchat",
-    SHOP_PROFILE : "product/ShopProfile"
+    SHOP_PROFILE : "product/ShopProfile",
+    ADMIN_GET_ALL_PROFILE : "user/AllProfile(Admin)"
 }
 
 export const getAllUserAPI = () => {
-    return axiosClient.get(`${END_POINT.USERS}/AllProfile(Admin)`);
+    return axiosClient.get(`${END_POINT.ADMIN_GET_ALL_PROFILE}`);
 }
 
 export const getShopProfileAPI = (userId) => {

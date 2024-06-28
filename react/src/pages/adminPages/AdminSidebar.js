@@ -1,9 +1,11 @@
-import { useContext } from "react";
+import { useContext, useEffect} from "react";
 import AuthContext from "../../context/AuthProvider";
 import { Link } from "react-router-dom";
 
-const AdminSidebar = () => {
+function AdminSidebar(){
   const { auth } = useContext(AuthContext);
+  //1 dashboard, 2 manageUser, 3 manageProduct, 4 managePackage, 5 manageOrder, 6 managePolicy
+
 
   return (
     <aside className="sidebar">
@@ -24,14 +26,14 @@ const AdminSidebar = () => {
         </div>
       </div>
       <ul className="sidebar-nav">
-        <li className="sidebar-item active">
-          <Link to="/admin">Màn hình chính</Link>
+        <li className="sidebar-item ">
+          <Link to="/admin"  >Màn hình chính</Link>
         </li>
         <li className="sidebar-item ">
-        <Link to="/admin/users"> Quản lý người dùng</Link>
+        <Link to="/admin/users" > Quản lý người dùng</Link>
          
           </li>
-        <li className="sidebar-item">
+        <li className="sidebar-item ">
           <div
             className="sidebar-link collapsed has-dropdown d-flex justify-content-between"
             data-bs-toggle="collapse"
@@ -40,7 +42,7 @@ const AdminSidebar = () => {
             aria-controls="product"
           >
             <span>Quản lý sản phẩm</span>
-            <i class="fa fa-angle-down pe-3" aria-hidden="true"></i>
+            <i className="fa fa-angle-down pe-3" aria-hidden="true"></i>
           </div>
           <ul
             id="product"
@@ -48,32 +50,26 @@ const AdminSidebar = () => {
             data-bs-parent="#sidebar"
           >
             <li className="sidebar-item">
-              <Link href="#" className="sidebar-link">
+              <Link href="#" className="sidebar-link"  >
                 Danh mục sản phẩm
               </Link>
             </li>
             <li className="sidebar-item">
-              <Link to="/admin/product-requests" className="sidebar-link">
+              <Link to="/admin/product-requests" className="sidebar-link" >
                 Sản phẩm chờ duyệt
               </Link>
             </li>
             <li className="sidebar-item">
-              <Link to="/admin/product" className="sidebar-link">
+              <Link to="/admin/product" className="sidebar-link" >
                 Tất cả sản phẩm
               </Link>
             </li>
           </ul>
         </li>
-        <li className="sidebar-item">
-          <div
-            className="sidebar-link collapsed has-dropdown d-flex justify-content-between"
-            data-bs-toggle="collapse"
-            data-bs-target="#sellPackage"
-            aria-expanded="false"
-            aria-controls="sellPackage"
-          >
-            <span>Quản lý gói bán hàng</span>
-          </div>
+        <li className="sidebar-item ">  
+             <Link to="/admin/selling-packages" >
+             Quản lý gói bán hàng
+             </Link> 
         </li>
 
         <li className="sidebar-item">
@@ -85,7 +81,7 @@ const AdminSidebar = () => {
             aria-controls="order"
           >
             <span>Quản lý hóa đơn</span>
-            <i class="fa fa-angle-down pe-3" aria-hidden="true"></i>
+            <i className="fa fa-angle-down pe-3" aria-hidden="true"></i>
           </div>
           <ul
             id="order"
@@ -93,12 +89,12 @@ const AdminSidebar = () => {
             data-bs-parent="#sidebar"
           >
             <li className="sidebar-item">
-              <Link href="#" className="sidebar-link">
+              <Link to="/admin/order-product" className="sidebar-link">
                 Hóa đơn mua sản phẩm
               </Link>
             </li>
             <li className="sidebar-item">
-              <Link href="#" className="sidebar-link">
+              <Link to="/admin/order-packages" className="sidebar-link">
                 Hóa đơn gói bán hàng
               </Link>
             </li>

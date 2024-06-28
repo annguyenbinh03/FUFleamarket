@@ -1289,21 +1289,49 @@ ul {
 }
 
 
-.admin_page .product-table .td-description-content{
+.admin_page .product-table .td-description-content,
+.admin_page .product-table .td-product-name,
+.admin_page .product-table .td-seller-content {
   max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.admin_page .product-table .td-product-name{
-  max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+  display: flex;
+  align-items: center;
 }
 
-.admin_page .product-table .td-seller-content{
-  max-width: 200px;
+.admin_page .order-table .td-order-product,
+.admin_page .order-table .td-order-user,
+.admin_page .order-table .td-order-address,
+.admin_page .order-table .td-order-note {
+  max-width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+  display: flex;
+  align-items: center;
+}
+
+.admin_page .order-table .td-order-address,
+.admin_page .order-table .td-order-note {
+  max-width: 150px;
+}
+
+
+.admin_page .order-package-table .td-order-package{
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+  display: flex;
+  align-items: center;
+}
+
+.admin_page .order-package-table .td-order-seller{
+  max-width: 330px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

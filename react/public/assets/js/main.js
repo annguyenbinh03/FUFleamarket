@@ -24,6 +24,3 @@ window.addEventListener('load', function () {
         }, 200);
     }
 });
-
-////Chat
-

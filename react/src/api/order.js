@@ -7,9 +7,8 @@ const END_POINT = {
     ACCEPT_ORDER_REQUEST : "order/acceptOrderRequest",                  
     DENY_ORDER_REQUEST : "order/denyOrderRequest", 
     MY_ORDER_REQUEST : "order/soldRequest",
-    MY_SOLD_ORDER_HISTORY: "order/SoldStatus123"
-
-    
+    MY_SOLD_ORDER_HISTORY: "order/SoldStatus123",
+    ADMIN_GET_ALL_ORDER : "order/admin/orders" 
 }
 
 
@@ -74,6 +73,16 @@ export const denyBuyRequestOrdersAPI = (token, productId) => {
       };
   return axiosClient.put(`${END_POINT.DENY_ORDER_REQUEST}/${productId}`, null,config);
 }
+
+export const getAdminAllOrders = (token) => {
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+return axiosClient.get(`${END_POINT.ADMIN_GET_ALL_ORDER}`,config);
+}
+
 
 
 

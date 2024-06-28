@@ -37,6 +37,9 @@ public partial class PromotionTransaction
     [StringLength(10)]
     public string TransactionStatus { get; set; } = null!;
 
+    [Column("createdDate", TypeName = "datetime")]
+    public DateTime CreatedDate { get; set; }
+
     [ForeignKey("PromoOrderId")]
     [InverseProperty("PromotionTransactions")]
     public virtual PromotionOrder PromoOrder { get; set; } = null!;
