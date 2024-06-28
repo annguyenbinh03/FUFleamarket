@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using BusinessObjects.Models;
 
 namespace WebAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("admingetlistproducts")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
@@ -34,6 +35,90 @@ namespace WebAPI.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("adminliststatus0")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminListStatus0()
+        {
+            var products = await _context.Products
+                .Where(p => p.Status == 0)
+                .Select(p => new
+                {
+                    productId = p.ProductId,
+                    productName = p.ProductName,
+                    price = p.Price,
+                    isNew = p.IsNew,
+                    description = p.Description,
+                    status = p.Status,
+                    categoryName = p.Category.Name,
+                    LinkImage = p.ImageLink,
+                    StoredQuantity = p.StoredQuantity,
+                    seller = new
+                    {
+                        SellerID = p.Seller.UserId,
+                        avarta = p.Seller.Avarta,
+                        fullName = p.Seller.FullName,
+                    }
+                }).ToListAsync();
+
+            if (!products.Any())
+            {
+                return NotFound("There are currently no products pending approval.");
+            }
+
+            return Ok(products);
+        }
+
+
+        [HttpGet("adminliststatus1,2,3")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminGetAll([FromQuery] int? status)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            IQueryable<Product> query = _context.Products.AsQueryable();
+
+            if (status.HasValue)
+            {
+                query = query.Where(p => p.Status == status.Value);
+            }
+            else
+            {
+                query = query.Where(p => p.Status == 1 || p.Status == 2 || p.Status == 3);
+            }
+
+            var products = await query
+                .Select(p => new
+                {
+                    productId = p.ProductId,
+                    productName = p.ProductName,
+                    price = p.Price,
+                    isNew = p.IsNew,
+                    description = p.Description,
+                    status = p.Status,
+                    categoryName = p.Category.Name,
+                    LinkImage = p.ImageLink,
+                    StoredQuantity = p.StoredQuantity,
+                    seller = new
+                    {
+                        SellerID = p.Seller.UserId,
+                        avarta = p.Seller.Avarta,
+                        fullName = p.Seller.FullName,
+                    }
+                }).ToListAsync();
+
+            if (!products.Any())
+            {
+                return BadRequest("There are currently no products with the specified status.");
+            }
+
+            return Ok(products);
+        }
+
+
+
+
         [HttpGet("ShopProfile")]
         public async Task<IActionResult> ShopProfile([FromQuery] int id)
         {
@@ -95,6 +180,8 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+
+
         [HttpGet("GetInforProductBuyRequest")]
         [Authorize]
         public async Task<IActionResult> GetInforProductBuyRequest()
@@ -120,6 +207,7 @@ namespace WebAPI.Controllers
             return Ok(response);
         }
 
+
         [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
@@ -131,6 +219,8 @@ namespace WebAPI.Controllers
 
             return Ok(productDtos);
         }
+
+
 
         [HttpPut("adminacceptproductrequest/{productId:int}")]
         [Authorize]
@@ -147,6 +237,8 @@ namespace WebAPI.Controllers
             }
         }
 
+
+
         [HttpPut("adminrejectproductrequest/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
@@ -161,6 +253,7 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
         }
+
 
 
         [HttpGet("getproductbyid/{id:int}")]
@@ -186,6 +279,8 @@ namespace WebAPI.Controllers
             return Ok(new { product = productDTO, address, sellerId = product.SellerId });
         }
 
+
+
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetMyProducts()
@@ -208,6 +303,7 @@ namespace WebAPI.Controllers
 
             return Ok(products);
         }
+
 
 
         [HttpPost("createproductforsellers")]
@@ -271,6 +367,8 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
         }
 
+
+
         [HttpPut("editstoredquantity/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> EditStorageQuantity([FromRoute] int productId, [FromBody] int quantityChange)
@@ -309,6 +407,8 @@ namespace WebAPI.Controllers
 
             return Ok(updatedProduct.ToProductDto());
         }
+
+
 
         [HttpPut("updateproductforsellers/{productId:int}")]
         [Authorize]
@@ -361,7 +461,6 @@ namespace WebAPI.Controllers
 
             return Ok(productModel.ToProductDto());
         }
-
 
 
 

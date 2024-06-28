@@ -89,10 +89,12 @@ namespace Repository
                     isNew = p.IsNew,
                     description = p.Description,
                     status = p.Status,
+                    LinkImage = p.ImageLink,
                     categoryName = p.Category.Name,
                     StoredQuantity = p.StoredQuantity,
                     seller = new
                     {
+                        SellerId = p.Seller.UserId,
                         avarta = p.Seller.Avarta,
                         fullName = p.Seller.FullName,
                     }
