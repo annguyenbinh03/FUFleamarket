@@ -171,7 +171,7 @@ body {
   text-decoration: none;
 }
 
-.dropdown:hover .dropdown-menu {
+.header .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0; /* remove the gap so it doesn't close */
 }
@@ -1239,42 +1239,10 @@ ul {
   font-size: 12px;
 }
 
-.admin_page li{
-  width: 100%;
-}
-.admin_page .nav{
-  height: 100%
-}
-.admin_page .nav .nav{
-  background-color: rgb(255, 255, 255);
-}
-.admin_page .nav .nav li{
-  padding: 18px 0 18px 16px;
-}
-.admin_page .nav .nav li a{
-  color: #3e4b5b;
-  text-decoration: none;
-}
-
-.admin_page .nav .nav li:hover{
-  background-color: #dadada;
-}
-.admin_page .nav .nav .fa-home{
-  font-size: 20px;
-}
-
 .admin_page .nav .active{
   font-weight: bold;
 }
-.admin_page .main-content{
-  min-height: 850px;
-}
-.td-description-content{
-  max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+
 .admin_page table {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
@@ -1283,4 +1251,63 @@ ul {
 }
 .w-87{
   width: 86%;
+}
+
+.admin_page  .admin_main{
+  min-height: 100vh;
+} 
+
+.admin_main .main-content{
+  margin: 0;
+}
+
+.sidebar .sidebar-item{
+  padding: 20px 20px 20px 25px;
+}
+
+.sidebar .sidebar-item:hover{
+  background-color: #eeeeee;
+}
+.sidebar a{
+  transition: all 0.1s 0.1s ease;
+}
+
+.sidebar a:hover{
+  color: blue !important;
+}
+
+.sidebar .sidebar-nav .active {
+  background: linear-gradient(to right, #7cfbfb, rgba(0,0,0,0) 80%);
+}
+
+.sidebar .sidebar-nav a{
+  text-decoration: none;
+  color: black;
+}
+.sidebar .sidebar-nav .sidebar-item li:last-child{
+  padding-bottom: 0;
+}
+
+
+.admin_page .product-table .td-description-content{
+  max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.admin_page .product-table .td-product-name{
+  max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin_page .product-table .td-seller-content{
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+  display: flex;
+  align-items: center;
 }

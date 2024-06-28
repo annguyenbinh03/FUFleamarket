@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { acceptCreateProductRequestAPI, getAdminProductAPI, rejectCreateProductRequestAPI } from "../../api/product";
+import {
+  acceptCreateProductRequestAPI,
+  getAdminProductAPI,
+  rejectCreateProductRequestAPI,
+} from "../../api/product";
 
 import AdminHeader from "./AdminHeader";
-import AdminNavBar from "./AdminNavbar";
-import AdminFooter from "./AdminFooter";
+import AdminSidebar from "./AdminSidebar";
 import AuthContext from "../../context/AuthProvider";
 
-function AdminProcessRequest() {
+function AdminProductRequest() {
   const [products, setProducts] = useState([]);
   const { auth } = useContext(AuthContext);
 
@@ -26,8 +29,8 @@ function AdminProcessRequest() {
 
   const handleApproveProduct = async (productId) => {
     try {
-      await acceptCreateProductRequestAPI(auth.accessToken,productId);
-      fetchData(); 
+      await acceptCreateProductRequestAPI(auth.accessToken, productId);
+      fetchData();
     } catch (error) {
       console.error("Lỗi khi duyệt sản phẩm:", error);
     }
@@ -35,8 +38,8 @@ function AdminProcessRequest() {
 
   const handleRejectProduct = async (productId) => {
     try {
-      await rejectCreateProductRequestAPI(auth.accessToken,productId);
-      fetchData();  
+      await rejectCreateProductRequestAPI(auth.accessToken, productId);
+      fetchData();
     } catch (error) {
       console.error("Lỗi khi loại bỏ sản phẩm:", error);
     }
@@ -47,10 +50,10 @@ function AdminProcessRequest() {
       <nav className="navbar">
         <AdminHeader />
       </nav>
-      <div className="container-fluid d-flex justify-content-center p-0 pt-3 mt-5">
-        <nav className="sidebar w-13 p-0 bg-white">
+      <div className="admin_main container-fluid d-flex justify-content-center p-0 pt-3 mt-5">
+        <nav className="w-13 p-0 bg-white">
           <div className="col-lg-12 ">
-            <AdminNavBar />
+            <AdminSidebar />
           </div>
         </nav>
         <div className="main-content w-87 pt-3 px-4">
@@ -59,7 +62,7 @@ function AdminProcessRequest() {
             Danh mục các sản phẩm{" "}
             <span className="text-primary">đang chờ duyệt</span>
           </p>
-          <table className="table text-center table-bordered mb-4">
+          <table className="product-table table text-center table-bordered mb-4">
             <thead className="bg-secondary">
               <tr>
                 <th>Người bán</th>
@@ -75,8 +78,20 @@ function AdminProcessRequest() {
             <tbody>
               {products?.map((product) => (
                 <tr key={product.productId}>
-                  <td>{product.seller.fullName}</td>
-                  <td>{product.productName}</td>
+                  <td>
+                    <div className="td-seller-content"> 
+                      <img
+                      className="rounded-3 me-2"
+                        src={product?.seller?.avarta}
+                        style={{ maxWidth: "30px" }} alt="user"
+                      />
+                   <span> {product.seller.fullName}</span>
+                   
+                    </div>
+                  </td>
+                  <td>
+                    <div className="td-product-name">{product.productName}</div>
+                  </td>
                   <td>{product.status === 1 ? "Mới" : "Đã sử dụng"}</td>
                   <td>{product.price}</td>
                   <td>
@@ -86,12 +101,14 @@ function AdminProcessRequest() {
                   </td>
                   <td>{product.categoryName}</td>
                   <td>
-                    <Link
+                    <button
+                      onClick={() =>
+                        window.open(`../detail/${product.productId}`)
+                      }
                       className="btn btn-primary"
-                      to={`/detail/${product.productId}`}
                     >
                       Xem sản phẩm
-                    </Link>
+                    </button>
                   </td>
                   <td>
                     {product.status === 0 ? (
@@ -111,11 +128,11 @@ function AdminProcessRequest() {
                           Loại bỏ
                         </button>
                       </div>
-                    ) :  product.status === 1 ? 
+                    ) : product.status === 1 ? (
                       <div className="btn btn-success">Đã được duyệt</div>
-                    : 
-                    <div className="btn btn-danger">Đã loại bỏ</div>
-                     }
+                    ) : (
+                      <div className="btn btn-danger">Đã loại bỏ</div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -123,9 +140,8 @@ function AdminProcessRequest() {
           </table>
         </div>
       </div>
-      <AdminFooter />
     </div>
   );
 }
 
-export default AdminProcessRequest;
+export default AdminProductRequest;
