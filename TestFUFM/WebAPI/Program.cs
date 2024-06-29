@@ -14,6 +14,12 @@ using Service.DataServices;
 using Service.Hubs;
 using WebAPI.Util;
 using BusinessObjects.VNPay;
+using Service.CalculatePromotioTransactionMonthlyTotal;
+using Service.CalculateProductMonthlyTotal;
+using Service.CalculateProductMonthlyTotal.Interfaces;
+using Service.CalculateOrderMonthlyTotal.Interfaces;
+using Service.CalculateOrderMonthlyTotal;
+using Service.CalculatePromotioTransactionMonthlyTotal.Interfaces;
 
 public class Program
 {
@@ -132,6 +138,9 @@ public class Program
         builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
         builder.Services.AddScoped<IMessageRepository, MessageRepository>();
         builder.Services.AddScoped<IPromotionTransactionRepository, PromotionTransactionRepository>();
+        builder.Services.AddScoped<IPromotionTransactionService ,PromotionTransactionService>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddSingleton<VNPayHelper>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
