@@ -116,6 +116,7 @@ const PostManager = () => {
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Quản lý tin</Text>
+        <View style={{ width: 20 }} />
       </View>
 
       <View style={styles.tabContainer}>
@@ -165,15 +166,16 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     backgroundColor: "#DD0000",
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
-    marginLeft: 16,
   },
   tabContainer: {
     flexDirection: "row",

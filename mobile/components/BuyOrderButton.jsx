@@ -1,28 +1,23 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
-import AuthContext from "../context/AuthProvider";
 
-const WishListButton = () => {
-  const { auth } = useContext(AuthContext);
+const BuyOrderButton = () => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => {
-        navigation.navigate("WishListScreen", { userId: auth.id });
-        console.log("User ID:", auth.id);
-      }}
+      onPress={() => navigation.navigate("BuyOrder")}
     >
       <FontAwesome5
-        name="heart"
+        name="shopping-bag"
         size={20}
         color="#DD0000"
         style={styles.icon}
       />
-      <Text style={styles.buttonText}>Tin đã lưu</Text>
+      <Text style={styles.buttonText}>Đơn mua</Text>
     </TouchableOpacity>
   );
 };
@@ -48,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WishListButton;
+export default BuyOrderButton;

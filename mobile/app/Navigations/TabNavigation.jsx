@@ -32,7 +32,7 @@ export default function TabNavigation() {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Trang chủ"
         component={Home}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -41,7 +41,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="PostManager"
+        name="Quản lý tin"
         component={PostManager}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -83,7 +83,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="OrderManager"
+        name="Đơn hàng"
         component={OrderManagerScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -96,7 +96,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="Tài khoản"
         component={Profile}
         options={{
           tabBarIcon: ({ color, size }) => (

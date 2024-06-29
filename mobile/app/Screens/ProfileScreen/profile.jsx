@@ -15,6 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 import LogoutButton from "../../../components/LogoutButton";
 import WishListButton from "../../../components/WishListButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BuyOrderButton from "../../../components/BuyOrderButton";
+import SellOrderButton from "../../../components/SellOrderButton";
 
 const { width } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -94,6 +96,8 @@ const Profile = () => {
       </View>
       <View style={styles.buttonContainer}>
         <WishListButton />
+        <BuyOrderButton />
+        <SellOrderButton />
         <LogoutButton onPress={handleLogout} />
       </View>
     </ScrollView>
