@@ -128,8 +128,9 @@ namespace WebAPI.Controllers
             {
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
                 {
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                    StartDate = existingPromoOrder.EndDate,
+                    EndDate = existingPromoOrder.EndDate.AddDays(promotion.Period),
+                    CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
                     Price = promotion.Price,
@@ -197,6 +198,7 @@ namespace WebAPI.Controllers
                 {
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(promotion.Period),
+                    CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
                     Price = promotion.Price,

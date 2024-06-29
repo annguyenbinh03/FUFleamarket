@@ -34,6 +34,8 @@ namespace DTO.PromotionTransactionDto
 
         public string TransactionStatus { get; set; } = null!;
 
+        public DateTime TransactionCreatedDate { get; set; }
+
         public int PromotionId { get; set; }
 
         public string PromotionName { get; set; } = null!;

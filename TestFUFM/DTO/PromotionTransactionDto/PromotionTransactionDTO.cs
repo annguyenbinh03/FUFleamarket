@@ -25,5 +25,7 @@ namespace DTO.PromotionTransactionDto
         public string TransactionCode { get; set; } = null!;
 
         public string TransactionStatus { get; set; } = null!;
+
+        public DateTime TransactionCreatedDate { get; set; }
     }
 }

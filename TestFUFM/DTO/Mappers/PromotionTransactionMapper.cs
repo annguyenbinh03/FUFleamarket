@@ -18,6 +18,7 @@ namespace DTO.Mappers
                 PromoTransactionId = model.PromoTransactionId,
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
+                TransactionCreatedDate = model.CreatedDate,
                 PromoOrderId = model.PromoOrderId,
                 Price = model.Price,
                 PaymentMethod = model.PaymentMethod,
@@ -32,6 +33,7 @@ namespace DTO.Mappers
             {
                 StartDate = promotionTransactionDto.StartDate,
                 EndDate = promotionTransactionDto.EndDate,
+                CreatedDate = promotionTransactionDto.TransactionCreatedDate,
                 PromoOrderId = promotionOrderId,
                 Price = promotionTransactionDto.Price,
                 PaymentMethod = promotionTransactionDto.PaymentMethod,
