@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,43 +8,64 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  FlatList,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import ChatButton from "../../../components/ChatButton";
-import WishListAddButton from "../../../components/WishListAddButton";
 import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
 import { MaterialIcons } from "@expo/vector-icons";
+import { formatDate } from "../../../utils/formatDate";
 
 const { width } = Dimensions.get("window");
 
-const UserDetailScreen = ({ route }) => {
+const UserDetailScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const { userId } = route.params;
   const [userInfo, setUserInfo] = useState(null);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      console.log("userId:", userId);
       try {
         const response = await axios.get(
           `http://192.168.146.25:7057/api/product/ShopProfile?id=${userId}`
         );
         setUserInfo(response.data.user);
-        console.log("userInfo:", response.data.user);
-        setLoading(false);
+        setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching user info:", error);
+        // TODO: Handle error state
+      } finally {
         setLoading(false);
       }
     };
 
-    if (userId) {
-      fetchUserInfo();
-    }
+    fetchUserInfo();
   }, [userId]);
+
+  const renderProductItem = useCallback(
+    ({ item }) => {
+      const handlePressToDetail = () => {
+        navigation.navigate("Detail", { productId: item.productId });
+      };
+
+      return (
+        <TouchableOpacity
+          style={styles.productItem}
+          onPress={handlePressToDetail}
+        >
+          <Image source={{ uri: item.imageLink }} style={styles.productImage} />
+          <Text style={styles.productName}>{item.productName}</Text>
+          <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
+          <Text style={styles.description}>{item.description}</Text>
+        </TouchableOpacity>
+      );
+    },
+    [navigation]
+  );
 
   if (loading) {
     return (
@@ -57,13 +78,6 @@ const UserDetailScreen = ({ route }) => {
   if (!userInfo) {
     return <Empty />;
   }
-
-  console.log("Họ và tên:", userInfo.fullName);
-  console.log("Ảnh đại diện:", userInfo.avarta);
-  console.log("Số điện thoại:", userInfo.phoneNumber);
-  console.log("Địa chỉ:", userInfo.addresses?.[0]?.specificAddress);
-  console.log("Xếp hạng bán hàng:", userInfo.sellRating);
-  console.log("Giới thiệu:", userInfo.introduction);
 
   return (
     <ScrollView style={styles.container}>
@@ -79,26 +93,48 @@ const UserDetailScreen = ({ route }) => {
           />
         </View>
         <Text style={styles.name}>{userInfo.fullName}</Text>
-        <Text style={styles.createdDate}>
-          Thành viên từ: {userInfo.createdDate}
-        </Text>
       </View>
 
       <View style={styles.infoSection}>
         <Text style={styles.sectionTitle}>Thông tin</Text>
-        <InfoItem icon="phone" text={userInfo.phoneNumber || "Chưa cập nhật"} />
-        <InfoItem
-          icon="location-on"
-          text={userInfo.addresses?.[0]?.specificAddress || "Chưa cập nhật"}
-        />
-        <InfoItem
-          icon="star"
-          text={
-            userInfo.sellRating !== 0
-              ? userInfo.sellRating.toString()
-              : "Chưa có đánh giá"
-          }
-        />
+        <Text style={styles.createdDate}>
+          Thành viên từ: {formatDate(userInfo.createdDate)}
+        </Text>
+        <View style={styles.infoItem}>
+          <MaterialIcons
+            name="phone"
+            size={24}
+            color="#4A90E2"
+            style={styles.icon}
+          />
+          <Text style={styles.infoText}>
+            {userInfo.phoneNumber || "Chưa cập nhật"}
+          </Text>
+        </View>
+        <View style={styles.infoItem}>
+          <MaterialIcons
+            name="location-on"
+            size={24}
+            color="#4A90E2"
+            style={styles.icon}
+          />
+          <Text style={styles.infoText}>
+            {userInfo.addresses?.[0]?.specificAddress || "Chưa cập nhật"}
+          </Text>
+        </View>
+        <View style={styles.infoItem}>
+          <MaterialIcons
+            name="star"
+            size={24}
+            color="#4A90E2"
+            style={styles.icon}
+          />
+          <Text style={styles.infoText}>
+            {userInfo.sellRating !== 0
+              ? `${userInfo.sellRating.toFixed(1)} ⭐`
+              : "Chưa có đánh giá"}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.introductionSection}>
@@ -107,58 +143,89 @@ const UserDetailScreen = ({ route }) => {
           {userInfo.introduction || "Người dùng chưa thêm giới thiệu."}
         </Text>
       </View>
+
+      <View style={styles.productsSection}>
+        <Text style={styles.sectionTitle}>
+          Sản phẩm đang bán: {products.length}
+        </Text>
+
+        {products.length > 0 ? (
+          <FlatList
+            data={products}
+            renderItem={renderProductItem}
+            keyExtractor={(item) => item.productId.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.productList}
+          />
+        ) : (
+          <Text style={styles.noProductText}>Không có sản phẩm nào.</Text>
+        )}
+      </View>
     </ScrollView>
   );
 };
 
-const InfoItem = ({ icon, text }) => (
-  <View style={styles.infoItem}>
-    <MaterialIcons name={icon} size={24} color="#4A90E2" style={styles.icon} />
-    <Text style={styles.infoText}>{text}</Text>
-  </View>
-);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#F0F0F0",
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     backgroundColor: "#4A90E2",
     padding: 20,
     alignItems: "center",
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     elevation: 5,
   },
   avatar: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
   },
   name: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#FFFFFF",
     marginBottom: 5,
   },
   createdDate: {
-    fontSize: 14,
-    color: "#E0E0E0",
+    fontSize: 16,
+    color: "#333333",
+    flex: 1,
   },
   infoSection: {
     backgroundColor: "#FFFFFF",
     margin: 15,
-    borderRadius: 10,
-    padding: 15,
-    elevation: 2,
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
   },
   infoItem: {
     flexDirection: "row",
@@ -171,24 +238,75 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 16,
     color: "#333333",
+    flex: 1,
   },
   introductionSection: {
     backgroundColor: "#FFFFFF",
     margin: 15,
-    borderRadius: 10,
-    padding: 15,
-    elevation: 2,
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333333",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   introduction: {
     fontSize: 16,
     color: "#555555",
-    lineHeight: 22,
+    lineHeight: 24,
+  },
+  productsSection: {
+    margin: 15,
+  },
+  productList: {
+    justifyContent: "space-between",
+  },
+  productItem: {
+    width: (width - 45) / 2,
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 10,
+    marginLeft: 10,
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 3,
+  },
+  productImage: {
+    width: "100%",
+    height: 150,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  productPrice: {
+    fontSize: 14,
+    color: "#DD0000",
+    fontWeight: "bold",
+  },
+  description: {
+    fontSize: 12,
+    color: "#777",
+    marginTop: 5,
+  },
+  noProductText: {
+    fontSize: 16,
+    color: "#777",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

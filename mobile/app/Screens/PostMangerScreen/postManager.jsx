@@ -7,6 +7,8 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  ScrollView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -65,8 +67,9 @@ const PostManager = () => {
 
   const filteredProducts = products.filter((product) => {
     if (activeTab === "ĐANG HIỂN THỊ") return product.status === 1;
-    if (activeTab === "HẾT HẠN") return product.status === 2;
-    if (activeTab === "BỊ TỪ CHỐI") return product.status === 0;
+    if (activeTab === "ĐANG CHỜ DUYỆT") return product.status === 0;
+    if (activeTab === "BỊ TỪ CHỐI") return product.status === 2;
+    if (activeTab === "ĐÃ ẨN") return product.status === 3;
     return true;
   });
 
@@ -82,8 +85,10 @@ const PostManager = () => {
             {item.status === 0
               ? "Đang chờ duyệt"
               : item.status === 1
-                ? "Đã được duyệt"
-                : "Từ chối duyệt"}
+                ? "Đang hiển thị"
+                : item.status === 2
+                  ? "Bị từ chối"
+                  : "Đã ẩn"}
           </Text>
         </View>
       </View>
@@ -91,7 +96,7 @@ const PostManager = () => {
         <Text style={styles.productName}>{item.productName}</Text>
         <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
         <Text style={styles.productCreatedDate}>
-          Số lượng:{item.storedQuantity}
+          Số lượng: {item.storedQuantity}
         </Text>
         <Text style={styles.productCreatedDate}>
           Ngày đăng: {formatDate(item.createdDate)}
@@ -104,15 +109,16 @@ const PostManager = () => {
         <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="eye-slash" size={16} color="#fff" />
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.productActionButton}>
+        <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="share" size={16} color="#fff" />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#DD0000" barStyle="light-content" />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
@@ -121,34 +127,49 @@ const PostManager = () => {
         <View style={{ width: 20 }} />
       </View>
 
-      <View style={styles.tabContainer}>
-        {["ĐANG HIỂN THỊ", "HẾT HẠN", "BỊ TỪ CHỐI"].map((tab) => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tabButton, activeTab === tab && styles.activeTab]}
-            onPress={() => handleTabChange(tab)}
-          >
-            <Text style={styles.tabButtonText}>
-              {tab} (
-              {
-                products.filter((p) =>
-                  tab === "ĐANG HIỂN THỊ"
-                    ? p.status === 1
-                    : tab === "HẾT HẠN"
-                      ? p.status === 2
-                      : p.status === 0
-                ).length
-              }
-              )
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.tabContainer}
+      >
+        {["ĐANG HIỂN THỊ", "ĐANG CHỜ DUYỆT", "BỊ TỪ CHỐI", "ĐÃ ẨN"].map(
+          (tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={[styles.tabButton, activeTab === tab && styles.activeTab]}
+              onPress={() => handleTabChange(tab)}
+            >
+              <Text
+                style={[
+                  styles.tabButtonText,
+                  activeTab === tab && styles.activeTabText,
+                ]}
+              >
+                {tab} (
+                {
+                  products.filter((p) =>
+                    tab === "ĐANG HIỂN THỊ"
+                      ? p.status === 1
+                      : tab === "ĐANG CHỜ DUYỆT"
+                        ? p.status === 0
+                        : tab === "BỊ TỪ CHỐI"
+                          ? p.status === 2
+                          : p.status === 3
+                  ).length
+                }
+                )
+              </Text>
+            </TouchableOpacity>
+          )
+        )}
+      </ScrollView>
 
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
       ) : filteredProducts.length === 0 ? (
-        <Empty />
+        <View style={styles.emptyContainer}>
+          <Empty />
+        </View>
       ) : (
         <FlatList
           data={filteredProducts}
@@ -162,10 +183,7 @@ const PostManager = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F8F8",
-  },
+  container: { backgroundColor: "#F8F8F8" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -178,6 +196,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
+  },
+
+  container: {
+    backgroundColor: "#F8F8F8",
   },
   tabContainer: {
     flexDirection: "row",
@@ -256,6 +278,13 @@ const styles = StyleSheet.create({
   },
   loader: {
     flex: 1,
+    margin: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyContainer: {
+    flex: 1,
+    marginTop: 100,
     justifyContent: "center",
     alignItems: "center",
   },
