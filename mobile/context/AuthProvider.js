@@ -20,9 +20,13 @@ export const AuthProvider = ({ children }) => {
 
   const updateAuth = async (userData) => {
     try {
-      await AsyncStorage.setItem("auth", JSON.stringify(userData));
-      setAuth(userData);
-      setUserRole(userData.roleId);
+      const updatedAuth = {
+        ...auth,
+        ...userData,
+      };
+      await AsyncStorage.setItem("auth", JSON.stringify(updatedAuth));
+      setAuth(updatedAuth);
+      setUserRole(updatedAuth.roleId);
     } catch (error) {
       console.error("Error updating auth:", error);
     }
@@ -36,5 +40,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
 export default AuthContext;

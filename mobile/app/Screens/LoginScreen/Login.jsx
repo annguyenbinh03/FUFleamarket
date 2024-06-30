@@ -82,9 +82,10 @@ const LoginScreen = () => {
 
       console.log("Full API response:", response.data);
 
-      const { token, role, fullName, avarta, id } = response.data;
+      const { token, role, fullName, avarta, id, phoneNumber, address } =
+        response.data;
 
-      const roleId = role[0]; // Lấy giá trị đầu tiên từ mảng role
+      const roleId = role[0];
       console.log("Received roleId:", roleId);
 
       if (roleId === 1 || roleId === 2) {
@@ -95,6 +96,8 @@ const LoginScreen = () => {
           avarta,
           token,
           userId: id,
+          phoneNumber,
+          address,
         });
       } else {
         Alert.alert(
@@ -182,6 +185,7 @@ const LoginScreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

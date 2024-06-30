@@ -83,14 +83,15 @@ const PostProduct = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.146.25:7057/api/product/CreateProductForSellers",
+        "http://192.168.146.25:7057/api/product/createproductforsellers",
         {
           productName,
-          price: parseFloat(price),
+          price: formatPrice(price),
           description,
           categoryId,
           isNew,
           imageUrl: imageUri,
+          storedQuantity,
         },
         {
           headers: {

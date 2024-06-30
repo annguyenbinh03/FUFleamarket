@@ -14,6 +14,7 @@ import axios from "axios";
 import AuthContext from "../../../context/AuthProvider";
 import { formatDate } from "../../../utils/formatDate";
 import Empty from "../../../components/Empty";
+import formatPrice from "../../../utils/formatPrice";
 
 const PostManager = () => {
   const [products, setProducts] = useState([]);
@@ -88,8 +89,9 @@ const PostManager = () => {
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.productName}</Text>
-        <Text style={styles.productPrice}>
-          {item.price.toLocaleString("vi-VN")} đ
+        <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
+        <Text style={styles.productCreatedDate}>
+          Số lượng:{item.storedQuantity}
         </Text>
         <Text style={styles.productCreatedDate}>
           Ngày đăng: {formatDate(item.createdDate)}
@@ -102,9 +104,9 @@ const PostManager = () => {
         <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="eye-slash" size={16} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.productActionButton}>
+        {/* <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="share" size={16} color="#fff" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
