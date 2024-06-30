@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
 import {
@@ -8,61 +9,21 @@ import {
   Cell,
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
 } from "recharts";
+import {
+  getMonthlyPackageAPI,
+  getSummaryAPI,
+  getTopSellerAPI,
+  getTopSellingProductAPI,
+} from "../../api/doashboard";
 
 const pieData = [
   { name: "Gói Cơ bản", value: 5 },
   { name: "Gói Chuyên Nghiệp", value: 3 },
   { name: "Gói Pro", value: 2 },
-];
-
-const barData = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
 ];
 
 const COLORS = [
@@ -74,7 +35,67 @@ const COLORS = [
   "#FF4D4D",
 ];
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const { promotionName, totalPrice } = payload[0].payload;
+    return (
+      <div
+        className="custom-tooltip"
+        style={{
+          backgroundColor: "#fff",
+          border: "1px solid #ccc",
+          padding: "10px",
+        }}
+      >
+        <p className="label">{`Tên khuyến mãi: ${promotionName}`}</p>
+        <p className="intro">{`Giá trị: ${totalPrice.toLocaleString(
+          "vi-VN"
+        )} VND`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+const formatPrice = (value) => {
+  if(value){
+    return value.toLocaleString('vi-VN');
+  }
+  return value;
+
+};
+
+
 function AdminDoashboard() {
+  const [summary, setSummary] = useState();
+  const [topSellProduct, setTopSellProduct] = useState([]);
+  const [topSeller, setTopSeller] = useState([]);
+
+  const [sellingPakages, setSellingPakages] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const topSellProData = await getTopSellingProductAPI();
+      setTopSellProduct(topSellProData);
+
+      const sumaryData = await getSummaryAPI();
+      setSummary(sumaryData);
+
+      const topSellerDate = await getTopSellerAPI();
+      setTopSeller(topSellerDate);
+
+      const packageData = await getMonthlyPackageAPI();
+      setSellingPakages(packageData);
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className="admin_page">
       <nav className="navbar">
@@ -86,140 +107,139 @@ function AdminDoashboard() {
             <AdminSidebar />
           </div>
         </nav>
-        <div className="main-content w-87 pt-3 row px-4 d-flex justify-content-between ">
-          <div className="col-md-6 p-5 bg-white rounded-5">
-            <BarChart
-              width={500}
-              height={250}
-              data={barData}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar
-                dataKey="pv"
-                fill="#8884d8"
-                activeBar={<Rectangle fill="pink" stroke="blue" />}
+        <div className="doashboard-content m-0 w-87 pt-3 row px-4 d-flex justify-content-between ">
+          <div className="col-lg-4 p-2 news-info">
+            <div className="bg-gradient-danger p-4 rounded-3">
+              <img
+                src={require(`../../assets/img/doashboard/circle.png`)}
+                alt="decoration"
               />
-              <Bar
-                dataKey="uv"
-                fill="#82ca9d"
-                activeBar={<Rectangle fill="gold" stroke="purple" />}
-              />
-            </BarChart>
+              <div className="title">
+                Doanh thu trong tháng{" "}
+                <i class="fa fa-line-chart ms-2" aria-hidden="true"></i>{" "}
+              </div>
+              <div className="statistic mb-2">{formatPrice(summary?.totalRevenue)} đ</div>
+              <div> ㅤ</div>
+            </div>
           </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
+          <div className="col-lg-4 p-2 news-info">
+            <div className="bg-gradient-info p-4 rounded-3">
+              <img
+                src={require(`../../assets/img/doashboard/circle.png`)}
+                alt="decoration"
               />
-              <Tooltip />
-            </PieChart>
+              <div className="title">
+                Số lượng hóa đơn được tạo trong tháng
+                <i class="fa fa-bookmark ms-2" aria-hidden="true"></i>
+              </div>
+              <div className="statistic  mb-2">{summary?.totalOrderCount}</div>
+              <div>ㅤ </div>
+            </div>
           </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
+          <div className="col-lg-4 p-2 news-info">
+            <div className="bg-gradient-success p-4 rounded-3">
+              <img
+                src={require(`../../assets/img/doashboard/circle.png`)}
+                alt="decoration"
               />
-              <Tooltip />
-            </PieChart>
+              <div className="title">
+                Số lượng người dùng mới trong tháng
+                <i class="fa fa-user-plus ms-2  mb-2" aria-hidden="true"></i>
+              </div>
+              <div className="statistic">{summary?.totalUserCount}</div>
+              <div>ㅤ </div>
+            </div>
           </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
+          <div className="col-md-6 py-3 px-2 ">
+            <div className="py-4 ps-2 pe-4 bg-white rounded-5 ">
+              <div>
+                <div className="row mb-2">
+                  <div className="ms-4 fs-5 fw-bold">
+                    Các sản phẩm bán chạy trong tháng
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-center">
+                <BarChart width={800} height={300} data={topSellProduct}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="productName" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="quantity" name="Số lượng" fill="#82ca9d">
+                    {topSellProduct?.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </div>
+            </div>
           </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
+          <div className="col-md-6 py-3 px-2 ">
+            <div className="py-4 ps-2 pe-4 bg-white rounded-5 ">
+              <div>
+                <div className="row mb-2">
+                  <div className="ms-4 fs-5 fw-bold">
+                    Những người bán hàng tiêu biểu
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-center">
+                <BarChart width={800} height={300} data={topSeller}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="sellerName" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="totalOrders"
+                    name="Số lượng hóa đơn bán ra"
+                    fill="#82ca9d"
+                  >
+                    {topSeller?.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </div>
+            </div>
           </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
-          </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
-          </div>
-          <div className="col-md-6  p-5 bg-white rounded-5">
-            <PieChart width={500} height={250}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
+          <div className="col-md-6 py-3 px-2 ">
+            <div className="py-4 ps-2 pe-4 bg-white rounded-5 ">
+              <div>
+                <div className="row mb-2">
+                  <div className="ms-4 fs-5 fw-bold">Biểu đồ gói bán hàng</div>
+                </div>
+              </div>
+              <div className="d-flex justify-content-center">
+                <PieChart width={400} height={400}>
+                  <Pie
+                    dataKey="totalPrice"
+                    isAnimationActive={false}
+                    data={sellingPakages}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label={({ promotionName }) => promotionName} // Hiển thị tên khuyến mãi trên nhãn của biểu đồ tròn
+                  >
+                    {sellingPakages?.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />{" "}
+                  {/* Sử dụng CustomTooltip */}
+                </PieChart>
+              </div>
+            </div>
           </div>
         </div>
       </div>

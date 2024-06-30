@@ -10,6 +10,8 @@ namespace Service.CalculatePromotioTransactionMonthlyTotal
     {
         public int PromotionId { get; set; }
 
+        public string PromotionName { get; set; } = string.Empty;
+
         public int Year { get; set; }
 
         public int Month { get; set; }

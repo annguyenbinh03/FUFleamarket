@@ -1253,13 +1253,6 @@ ul {
   width: 86%;
 }
 
-.admin_page  .admin_main{
-  min-height: 100vh;
-} 
-
-.admin_main .main-content{
-  margin: 0;
-}
 
 .sidebar .sidebar-item{
   padding: 20px 20px 20px 25px;
@@ -1288,6 +1281,45 @@ ul {
   padding-bottom: 0;
 }
 
+.admin_page  .admin_main{
+  min-height: 100vh;
+} 
+
+.admin_main .main-content{
+  margin: 0;
+}
+
+.admin_page .doashboard-content .bg-gradient-danger{
+  background: linear-gradient(to right, #ffbf96, #fe7096) !important;
+}
+.admin_page .doashboard-content .bg-gradient-info{
+  background: linear-gradient(to right, #90caf9, #047edf 99%) !important;
+}
+.admin_page .doashboard-content .bg-gradient-success{
+  background: linear-gradient(to right, #84d9d2, #07cdae) !important;
+}
+
+
+.admin_page .doashboard-content .news-info{
+  position: relative;
+  min-height: 150px;
+}
+.admin_page .doashboard-content .news-info img{
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+.admin_page .doashboard-content .news-info .title{
+  color: white;
+  font-size: 1.18rem;
+}
+
+.admin_page .doashboard-content .news-info .statistic{
+  color: white;
+  font-size: 1.88rem;
+}
 
 .admin_page .product-table .td-description-content,
 .admin_page .product-table .td-product-name,

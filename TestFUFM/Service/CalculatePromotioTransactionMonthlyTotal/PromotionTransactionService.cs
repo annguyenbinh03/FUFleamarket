@@ -42,11 +42,13 @@ namespace Service.CalculatePromotioTransactionMonthlyTotal
         {
             var packageMonthlyData = await _context.PromotionTransactions
                 .Include(t => t.PromoOrder)
+                    .ThenInclude(po => po.Promotion) // Ensure Promotion is included
                 .Where(t => t.TransactionStatus == "Completed")
                 .GroupBy(t => new { t.PromoOrder.PromotionId, t.CreatedDate.Year, t.CreatedDate.Month })
                 .Select(g => new PackageMonthlyData
                 {
                     PromotionId = g.Key.PromotionId,
+                    PromotionName = g.Select(x => x.PromoOrder.Promotion.Name).FirstOrDefault(), // Get the Promotion name
                     Year = g.Key.Year,
                     Month = g.Key.Month,
                     TotalQuantity = g.Count(),

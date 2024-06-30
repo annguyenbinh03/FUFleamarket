@@ -16,7 +16,7 @@ function AdminSidebar(){
             <div className="d-flex flex-column px-3">
               <span className="fw-bold mb-1">{auth.fullName}</span>
               <span className="text-secondary text-small">
-                {auth?.roles?.[0] === 1 ? "Moderator" : "Admin"}
+                {auth?.roles?.[0] === 2 ? "Moderator" : "Admin"}
               </span>
             </div>
           </div>
