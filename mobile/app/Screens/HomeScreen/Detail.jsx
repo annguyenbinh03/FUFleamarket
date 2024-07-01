@@ -61,6 +61,7 @@ const Detail = () => {
 
   // Log thông tin sản phẩm
   console.log("Thông tin sản phẩm:", product);
+  console.log("Ảnh sản phảm: ", product.product.productImages);
 
   return (
     <ScrollView style={styles.container}>

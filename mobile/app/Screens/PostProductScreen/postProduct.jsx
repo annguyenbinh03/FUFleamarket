@@ -53,7 +53,9 @@ const PostProduct = () => {
   };
 
   const uploadImage = async () => {
+    console.log("Uploading image...");
     if (!imageUri) {
+      console.log("No image to upload.");
       return "";
     }
 
@@ -62,17 +64,18 @@ const PostProduct = () => {
       const blob = await response.blob();
       const imageName = `productImages/${Date.now()}-${Math.random().toString(36).substring(7)}`;
       const imageRef = ref(imageDb, imageName);
-
       await uploadBytes(imageRef, blob);
       const downloadURL = await getDownloadURL(imageRef);
       return downloadURL;
     } catch (error) {
-      console.error("Lỗi khi tải lên hình ảnh:", error);
+      console.error("Error uploading image:", error);
       return "";
     }
   };
 
   const handlePostProduct = async () => {
+    console.log("Posting product...");
+
     if (
       !productName ||
       !price ||
@@ -89,6 +92,7 @@ const PostProduct = () => {
     }
 
     const imageUrl = await uploadImage();
+
     if (!imageUrl) {
       Alert.alert("Lỗi", "Không thể tải lên hình ảnh. Vui lòng thử lại.");
       return;
@@ -116,15 +120,22 @@ const PostProduct = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         Alert.alert(
           "Thành công",
           "Sản phẩm đã được đăng và đang chờ admin duyệt."
         );
+        setProductName("");
+        setPrice("");
+        setDescription("");
+        setCategoryId(1);
+        setIsNew(true);
+        setImageUri(null);
+        setStoredQuantity("");
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Lỗi khi đăng sản phẩm:", error);
+      console.error("Error posting product:", error);
       Alert.alert("Lỗi", "Không thể đăng sản phẩm. Vui lòng thử lại sau.");
     }
   };

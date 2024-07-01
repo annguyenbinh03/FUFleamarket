@@ -65,7 +65,7 @@ const UserManager = () => {
           <TouchableOpacity
             style={styles.userItem}
             onPress={() =>
-              navigation.navigate("UserDetail", { userId: item.userId })
+              navigation.navigate("UserDetailScreen", { userId: item.userId })
             }
           >
             <Image source={{ uri: item.avarta }} style={styles.userAvatar} />

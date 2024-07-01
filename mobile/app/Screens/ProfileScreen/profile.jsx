@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../../../context/AuthProvider";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import LogoutButton from "../../../components/LogoutButton";
 import WishListButton from "../../../components/WishListButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,32 +24,54 @@ const thumbMeasure = (width - 48 - 32) / 3;
 const Profile = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAuthData = async () => {
       try {
+        console.log("Đang tải dữ liệu xác thực...");
         const storedAuth = await AsyncStorage.getItem("auth");
         if (storedAuth) {
-          setAuth(JSON.parse(storedAuth));
+          const parsedAuth = JSON.parse(storedAuth);
+          if (parsedAuth.token) {
+            setAuth(parsedAuth);
+            console.log("Đã lấy dữ liệu auth:", parsedAuth);
+          } else {
+            redirectToLogin();
+          }
+        } else {
+          redirectToLogin();
         }
-        setIsLoading(false);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu xác thực:", error);
-        setIsLoading(false);
+        redirectToLogin();
       }
     };
     fetchAuthData();
   }, []);
 
-  const handleLogout = () => {
-    AsyncStorage.removeItem("auth").then(() => {
-      setAuth(null);
-      navigation.navigate("LoginScreen");
-    });
+  const redirectToLogin = () => {
+    console.log("Chuyển hướng đến LoginScreen");
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "LoginScreen" }],
+      })
+    );
   };
 
-  if (isLoading) {
+  const handleLogout = async () => {
+    console.log("Đang thực hiện đăng xuất...");
+    try {
+      await AsyncStorage.removeItem("auth");
+      setAuth(null);
+      console.log("Đã đăng xuất thành công");
+      redirectToLogin();
+    } catch (error) {
+      console.error("Lỗi khi đăng xuất:", error);
+    }
+  };
+
+  if (!auth || !auth.token) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#DD0000" />
@@ -57,13 +79,7 @@ const Profile = () => {
     );
   }
 
-  if (!auth) {
-    return (
-      <View style={styles.container}>
-        <Text>Bạn chưa đăng nhập.</Text>
-      </View>
-    );
-  }
+  console.log("Hiển thị thông tin người dùng:", auth);
 
   return (
     <ScrollView style={styles.container}>
@@ -71,7 +87,7 @@ const Profile = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Hồ sơ</Text>
+        <Text style={styles.headerTitle}>Tài khoản</Text>
         <View style={{ width: 20 }} />
       </View>
       <View style={styles.profileContainer}>
@@ -84,7 +100,6 @@ const Profile = () => {
           style={styles.avatar}
         />
         <Text style={styles.name}>{auth.fullName}</Text>
-        <Text style={styles.email}>{auth.email}</Text>
       </View>
       <View style={styles.infoSection}>
         <InfoItem icon="envelope" text={auth.email} />
@@ -141,10 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginVertical: 10,
-  },
-  email: {
-    fontSize: 16,
-    color: "#555",
   },
   infoSection: {
     backgroundColor: "#fff",
