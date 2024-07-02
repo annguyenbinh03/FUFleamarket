@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { getProductAPI, getProductByCategoryAPI } from "../../api/product";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { getProductAPI, getProductByCategoryAPI, getSearchProductAPI } from "../../api/product";
 import Loading from "../../component/Loading";
 import ProductList from "../../component/ProductList";
 import Header from "../../Header";
 import Footer from "../../Footer";
 
 function SearchProduct() {
-  const { categoryIdParam } = useParams();
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const productName = queryParams.get('ProductName');
+  const { CategoryId,  } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,10 +19,15 @@ function SearchProduct() {
   const firstFetchData = async () => {
     try {
       setLoading(true);
-      if (categoryIdParam) {
-        const productsData = await getProductByCategoryAPI(categoryIdParam);
-        setProducts(productsData);
-      } else {
+      if(productName){
+        const productsData = await getSearchProductAPI(productName);
+           setProducts(productsData);
+      }
+      // if (CategoryId) {
+      //   const productsData = await getProductByCategoryAPI(CategoryId);
+      //   setProducts(productsData);
+      // } 
+      else {
         const productsData = await getProductAPI();
         setProducts(productsData);
       }
@@ -32,7 +40,7 @@ function SearchProduct() {
 
   useEffect(() => {
     firstFetchData();
-  }, [categoryIdParam]);
+  }, [CategoryId, productName]);
 
   return (
     <div>

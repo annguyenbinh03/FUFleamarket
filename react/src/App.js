@@ -54,7 +54,7 @@ function App() {
             <Route path="/detail/:productId" element={<Detail />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/search-product" element={<SearchProduct />} />
-            <Route path="/search-product/:categoryIdParam" element={<SearchProduct />}/>
+            <Route path="/search-product/:CategoryId" element={<SearchProduct />}/>
            
             <Route path="/aboutUs" element={<AboutUs />} />
             <Route path="/my-selling-package" element={<MySellingPackage/>} />

@@ -1,6 +1,7 @@
 import FeaturedProducts from "../../component/FeaturedProducts";
 import Header from "../../Header";
 import Footer from "../../Footer";
+import { Link } from "react-router-dom";
 function Home() {
   return (      
     <div>
@@ -95,7 +96,7 @@ function Home() {
             </div>
             <div className="categories_slider d-flex justify-content-between">
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/1">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -104,10 +105,10 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Đồ điện tử</h5>
-                </a>
+                </Link>
               </div>
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/2">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -116,10 +117,10 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Đồ dùng học tập</h5>
-                </a>
+                </Link>
               </div>
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/3">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -128,10 +129,10 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Điện lạnh</h5>
-                </a>
+                </Link>
               </div>
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/4">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -140,10 +141,10 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Đồ gia dụng, nội thất</h5>
-                </a>
+                </Link>
               </div>
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/5">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -152,11 +153,11 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Đồ ăn, thực phẩm</h5>
-                </a>
+                </Link>
               </div>
 
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/6">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -165,10 +166,10 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Thời trang</h5>
-                </a>
+                </Link>
               </div>
               <div className="categories_item">
-                <a href="aaa">
+                <Link to="/search-product/7">
                   <div className="image-container">
                     <img
                       className="img-fluid"
@@ -177,7 +178,7 @@ function Home() {
                     />
                   </div>
                   <h5 className="pt-2">Giải trí, thể thao, sở thích</h5>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

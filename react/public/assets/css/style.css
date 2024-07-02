@@ -139,6 +139,33 @@ body {
   border: none;
 }
 
+.header  .result-search-list{
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    box-sizing: 0px 0px 8px #ddd;
+    border: 10px;
+    padding: 0 10px 0 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+.header  .result-search-list a{
+  text-decoration: none;
+}
+
+.header  .top-search-items{
+  padding: 0px;
+}
+.header  .top-search-items button{
+  text-align: left;
+  padding: 8px;
+  background-color: white;
+}
+.header  .result-search-list button:hover{
+  background-color: rgb(239, 239, 239);
+}
+
 .header .username {
   display: inline-block;
   line-height: 50px;
@@ -404,7 +431,6 @@ overflow: hidden;
 .product {
   padding-top: 50px;
   padding-bottom: 0px;
-  min-height: 600px;
 }
 
 .sidebar__item {
@@ -1123,10 +1149,6 @@ ul {
 /*---------------------
   Chat
 -----------------------*/
-
-.chat{
-  
-}
 
 .chat .receiverLogo{
   width: 120px;

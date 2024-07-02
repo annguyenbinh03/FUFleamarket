@@ -18,6 +18,14 @@ const END_POINT = {
 export const getProductAPI = () => {
   return axiosClient.get(`${END_POINT.LIST_PRODUCT}`);
 };
+export const getSearchProductAPI = (productName) => {
+  if(productName){
+    return axiosClient.get(`${END_POINT.LIST_PRODUCT}?ProductName=${productName}`);
+  }else{
+    return axiosClient.get(`${END_POINT.LIST_PRODUCT}`);
+  }
+};
+
 
 export const getAdminProductS123API = (token, status ) => {
   const config = {
