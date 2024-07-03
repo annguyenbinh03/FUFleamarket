@@ -14,6 +14,9 @@ import axios from "axios";
 import AuthContext from "../../context/AuthProvider";
 import Empty from "../../components/Empty";
 import { MaterialIcons } from "@expo/vector-icons";
+import AdminProductManager from "./AdminProductManager";
+import AdminProductManagerButton from "../../components/AdminProductManagerButton";
+import formatPrice from "./../../utils/formatPrice";
 
 const ADMIN_PRODUCT_REQUEST =
   "http://192.168.146.25:7057/api/product/adminliststatus0";
@@ -42,11 +45,7 @@ const AdminPostManager = () => {
 
   useEffect(() => {
     fetchData();
-    const refreshInterval = setInterval(fetchData, 30000);
-
-    return () => clearInterval(refreshInterval);
   }, []);
-  console.log("refresh");
 
   const handleApproveProduct = async (productId) => {
     try {
@@ -95,7 +94,7 @@ const AdminPostManager = () => {
           <Text style={styles.productStatus}>
             {item.status === 1 ? "Mới" : "Đã qua sử dụng"}
           </Text>
-          <Text style={styles.productPrice}>{item.price} VND</Text>
+          <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
           <Text style={styles.productCategory}>{item.categoryName}</Text>
         </View>
       </View>
@@ -148,6 +147,11 @@ const AdminPostManager = () => {
         <Text style={styles.subtitle}>
           Danh sách sản phẩm <Text style={styles.pending}>chờ phê duyệt</Text>
         </Text>
+        <AdminProductManagerButton
+          to="AdminProductManager"
+          title="Quản lý sản phẩm"
+          style={styles.productManagerButton}
+        />
       </View>
       <FlatList
         data={pendingProducts}
@@ -237,7 +241,7 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#1E90FF",
+    color: "red",
   },
   productCategory: {
     fontSize: 14,
@@ -294,6 +298,9 @@ const styles = StyleSheet.create({
     color: "#F44336",
     textAlign: "center",
     fontWeight: "bold",
+  },
+  productManagerButton: {
+    marginTop: 10,
   },
 });
 

@@ -46,7 +46,6 @@ function BuyOrder() {
       setOrders(response.data);
     } catch (error) {
       console.log("Lỗi khi tải đơn hàng:", error);
-      Alert.alert("Lỗi", "Không thể tải đơn hàng. Vui lòng thử lại sau.");
     } finally {
       setIsLoading(false);
     }

@@ -14,6 +14,8 @@ import UserDetailScreen from "./Screens/ProfileScreen/UserDetailScreen";
 import CreateOrder from "./Screens/OrderScreen/CreateOrder";
 import SellOrder from "./Screens/OrderScreen/SellOrder";
 import BuyOrder from "./Screens/OrderScreen/BuyOrder";
+import AdminPostManager from "./AdminScreen/AdminPostManager";
+import AdminProductManager from "./AdminScreen/AdminProductManager";
 
 console.log("AdminTabNavigation:", AdminTabNavigation);
 
@@ -101,6 +103,15 @@ export default function App() {
                 component={BuyOrder}
                 options={{
                   title: "Đơn mua",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="AdminProductManager"
+                component={AdminProductManager}
+                options={{
+                  title: "Quản lý sản phẩm",
                   headerStyle: styles.header,
                   headerTitleStyle: styles.headerTitle,
                 }}
