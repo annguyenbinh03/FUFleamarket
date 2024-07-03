@@ -107,8 +107,8 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" to="#">
-                    Cài đặt tài khoản
+                  <Link className="dropdown-item" to={`/shopprofile/${auth?.id}`}>
+                   Xem trang cá nhân
                   </Link>
                 </div>
               </li>

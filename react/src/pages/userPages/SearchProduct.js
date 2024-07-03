@@ -10,7 +10,7 @@ function SearchProduct() {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
   const productName = queryParams.get('ProductName');
-  const { CategoryId,  } = useParams();
+  const { CategoryId  } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,14 +22,15 @@ function SearchProduct() {
       if(productName){
         const productsData = await getSearchProductAPI(productName);
            setProducts(productsData);
-      }
-      // if (CategoryId) {
-      //   const productsData = await getProductByCategoryAPI(CategoryId);
-      //   setProducts(productsData);
-      // } 
-      else {
-        const productsData = await getProductAPI();
-        setProducts(productsData);
+      }else{
+        if (CategoryId) {
+          const productsData = await getProductByCategoryAPI(CategoryId);
+          setProducts(productsData);
+        } 
+        else {
+          const productsData = await getProductAPI();
+          setProducts(productsData);
+        }
       }
     } catch (err) {
       setError(err.message);

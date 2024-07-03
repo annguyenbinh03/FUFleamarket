@@ -14,8 +14,6 @@ namespace BusinessObjects.UserDto
         public string? Password { get; set; }
         [StringLength(30)]
         public string? FullName { get; set; }
-        [StringLength(40)]
-        public string Email { get; set; } = null!;
         [StringLength(20)]
         public string? PhoneNumber { get; set; }
         [StringLength(300)]

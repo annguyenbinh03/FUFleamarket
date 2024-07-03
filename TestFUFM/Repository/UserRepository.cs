@@ -87,7 +87,6 @@ namespace Repository
             
             existingUser.Password = userDto.Password;
             existingUser.FullName = userDto.FullName;
-            existingUser.Email = userDto.Email;
             existingUser.PhoneNumber = userDto.PhoneNumber;
             existingUser.Introduction = userDto.Introduction;                        
             existingUser.Avarta = userDto.Avarta;
