@@ -2,9 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Profile from "../Screens/ProfileScreen/profile";
-import Dashboard from "../AdminScreen/Dashboard";
 import AdminPostManager from "../AdminScreen/AdminPostManager";
 import UserManager from "../AdminScreen/UserManager";
+import AdminDashboard from "../AdminScreen/AdminDashboard";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +27,7 @@ const AdminTabNavigation = () => {
     >
       <Tab.Screen
         name="Dashboard"
-        component={Dashboard}
+        component={AdminDashboard}
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons

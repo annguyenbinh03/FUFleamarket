@@ -183,7 +183,6 @@ const PostManager = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#F8F8F8" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
