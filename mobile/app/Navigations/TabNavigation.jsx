@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import PostProduct from "../Screens/PostProductScreen/postProduct";
 import Profile from "../Screens/ProfileScreen/profile";
 import PostManager from "../Screens/PostMangerScreen/postManager";
-import OrderManagerScreen from "../Screens/OrderScreen/OrderManagerScreen";
+import Chat from "../Screens/ChatScreen/Chat";
 
 const Tab = createBottomTabNavigator();
 
@@ -83,15 +83,11 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Đơn hàng"
-        component={OrderManagerScreen}
+        name="Trò chuyện"
+        component={Chat}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="clipboard-list"
-              color={color}
-              size={size}
-            />
+            <MaterialCommunityIcons name="message" color={color} size={size} />
           ),
         }}
       />

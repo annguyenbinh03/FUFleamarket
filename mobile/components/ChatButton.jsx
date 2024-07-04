@@ -1,30 +1,23 @@
 import React from "react";
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  Linking,
-  StyleSheet,
-} from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useNavigation } from "@react-navigation/native";
 
-const ChatButton = ({ phoneNumber }) => {
-  const handleSendSMS = async () => {
-    try {
-      const url = `sms:${phoneNumber}`;
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        console.log("Không hỗ trợ mở SMS");
-      }
-    } catch (error) {
-      console.log("Lỗi khi mở SMS:", error);
-    }
+const ChatButton = ({ seller }) => {
+  const navigation = useNavigation();
+
+  const handleChat = () => {
+    navigation.navigate("Chat", {
+      initialChat: {
+        fullName: seller.fullName,
+        avarta: seller.avarta,
+        userId: seller.userId,
+      },
+    });
   };
 
   return (
-    <TouchableOpacity style={styles.chatButton} onPress={handleSendSMS}>
+    <TouchableOpacity style={styles.chatButton} onPress={handleChat}>
       <View style={styles.buttonContent}>
         <FontAwesome5 name="comments" size={20} color="#fff" />
         <Text style={styles.buttonText}>CHAT VỚI NGƯỜI BÁN</Text>
@@ -32,7 +25,9 @@ const ChatButton = ({ phoneNumber }) => {
     </TouchableOpacity>
   );
 };
+
 export default ChatButton;
+
 const styles = StyleSheet.create({
   chatButton: {
     backgroundColor: "#1E90FF",
