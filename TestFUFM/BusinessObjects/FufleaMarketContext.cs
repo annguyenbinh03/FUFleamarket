@@ -22,6 +22,8 @@ public partial class FufleaMarketContext : DbContext
 
     public virtual DbSet<ChatRoom> ChatRooms { get; set; }
 
+    public virtual DbSet<Contact> Contacts { get; set; }
+
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
     public virtual DbSet<Message> Messages { get; set; }
@@ -38,6 +40,10 @@ public partial class FufleaMarketContext : DbContext
 
     public virtual DbSet<PromotionTransaction> PromotionTransactions { get; set; }
 
+    public virtual DbSet<TradingOrder> TradingOrders { get; set; }
+
+    public virtual DbSet<TradingOrderDetail> TradingOrderDetails { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -52,7 +58,7 @@ public partial class FufleaMarketContext : DbContext
     {
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__26A111ADA7F9D76A");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__26A111AD0EEB90AF");
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -61,12 +67,12 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D8C7B28916");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D8E437B992");
         });
 
         modelBuilder.Entity<ChatRoom>(entity =>
         {
-            entity.HasKey(e => e.ChatRoomId).HasName("PK__ChatRoom__CB58B49217DDB290");
+            entity.HasKey(e => e.ChatRoomId).HasName("PK__ChatRoom__CB58B4924B3A67ED");
 
             entity.HasOne(d => d.User1Navigation).WithMany(p => p.ChatRoomUser1Navigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -77,9 +83,22 @@ public partial class FufleaMarketContext : DbContext
                 .HasConstraintName("FK_ChatRoom_User2");
         });
 
+        modelBuilder.Entity<Contact>(entity =>
+        {
+            entity.HasKey(e => e.TradingOrderId).HasName("PK__Contact__EF3C7C7334B01F83");
+
+            entity.HasOne(d => d.User1Navigation).WithMany(p => p.ContactUser1Navigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Contact_User1");
+
+            entity.HasOne(d => d.User2Navigation).WithMany(p => p.ContactUser2Navigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Contact_User2");
+        });
+
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FD24445B3863");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FD2451F1FCCA");
 
             entity.HasOne(d => d.Order).WithMany(p => p.Feedbacks)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -88,7 +107,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B993DFC3B438");
+            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B99331290795");
 
             entity.HasOne(d => d.ChatRoom).WithMany(p => p.Messages)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -97,7 +116,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__0809335D959A8181");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__0809335D819EE62D");
 
             entity.HasOne(d => d.Buyer).WithMany(p => p.OrderBuyers)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -114,7 +133,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16ADD3A6ACA");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16AB6FB53A0");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -136,12 +155,12 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__99EB696ED1202D9A");
+            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__99EB696E11E9DF88");
         });
 
         modelBuilder.Entity<PromotionOrder>(entity =>
         {
-            entity.HasKey(e => e.PromoOrderId).HasName("PK__Promotio__BCD805E5A7B4187F");
+            entity.HasKey(e => e.PromoOrderId).HasName("PK__Promotio__BCD805E59B37590C");
 
             entity.HasOne(d => d.Promotion).WithMany(p => p.PromotionOrders)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -154,16 +173,38 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<PromotionTransaction>(entity =>
         {
-            entity.HasKey(e => e.PromoTransactionId).HasName("PK__Promotio__76BA6198380DDBA4");
+            entity.HasKey(e => e.PromoTransactionId).HasName("PK__Promotio__76BA6198C26BAAF5");
 
             entity.HasOne(d => d.PromoOrder).WithMany(p => p.PromotionTransactions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PromotionTransaction_PromotionOrder");
         });
 
+        modelBuilder.Entity<TradingOrder>(entity =>
+        {
+            entity.HasKey(e => e.TradingOrderId).HasName("PK__TradingO__EF3C7C73ECBC952A");
+
+            entity.HasOne(d => d.User1Navigation).WithMany(p => p.TradingOrderUser1Navigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TradingOrder_User1");
+
+            entity.HasOne(d => d.User2Navigation).WithMany(p => p.TradingOrderUser2Navigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TradingOrder_User2");
+        });
+
+        modelBuilder.Entity<TradingOrderDetail>(entity =>
+        {
+            entity.HasKey(e => e.TradingOrderDetailId).HasName("PK__TradingO__9B566A8189C71FE5");
+
+            entity.HasOne(d => d.TradingOrder).WithMany(p => p.TradingOrderDetails)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TradingOrderDetail_TradingOrder");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CFFA2ECC0E6");
+            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CFF4E995663");
 
             entity.Property(e => e.BuyRating).HasDefaultValue(0.0);
             entity.Property(e => e.SellRating).HasDefaultValue(0.0);

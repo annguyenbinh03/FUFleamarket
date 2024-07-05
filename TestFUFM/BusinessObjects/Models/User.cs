@@ -65,6 +65,12 @@ public partial class User
     [InverseProperty("User2Navigation")]
     public virtual ICollection<ChatRoom> ChatRoomUser2Navigations { get; set; } = new List<ChatRoom>();
 
+    [InverseProperty("User1Navigation")]
+    public virtual ICollection<Contact> ContactUser1Navigations { get; set; } = new List<Contact>();
+
+    [InverseProperty("User2Navigation")]
+    public virtual ICollection<Contact> ContactUser2Navigations { get; set; } = new List<Contact>();
+
     [InverseProperty("Buyer")]
     public virtual ICollection<Order> OrderBuyers { get; set; } = new List<Order>();
 
@@ -76,6 +82,12 @@ public partial class User
 
     [InverseProperty("User")]
     public virtual ICollection<PromotionOrder> PromotionOrders { get; set; } = new List<PromotionOrder>();
+
+    [InverseProperty("User1Navigation")]
+    public virtual ICollection<TradingOrder> TradingOrderUser1Navigations { get; set; } = new List<TradingOrder>();
+
+    [InverseProperty("User2Navigation")]
+    public virtual ICollection<TradingOrder> TradingOrderUser2Navigations { get; set; } = new List<TradingOrder>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Users")]

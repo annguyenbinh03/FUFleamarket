@@ -30,6 +30,10 @@ public partial class Promotion
     [Column("price", TypeName = "money")]
     public decimal Price { get; set; }
 
+    [Column("imageLink")]
+    [StringLength(300)]
+    public string ImageLink { get; set; } = null!;
+
     [Column("isDeleted")]
     public bool IsDeleted { get; set; }
 

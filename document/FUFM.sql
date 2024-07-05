@@ -80,6 +80,7 @@ CREATE TABLE [dbo].[Promotion](
 	[period] INT NOT NULL,
 	[productQuantityLimit] INT NOT NULL,
 	[price] MONEY NOT NULL,
+	[imageLink]  NVARCHAR(300) NOT NULL,
 	[isDeleted] BIT NOT NULL
 )
 
@@ -157,6 +158,39 @@ CREATE TABLE [dbo].[Message](
 	[isRead] BIT NOT NULL,
 	CONSTRAINT FK_Message_ChatRoom FOREIGN KEY ([chatRoomId]) REFERENCES [dbo].[ChatRoom]([chatRoomId])
 )
+
+
+CREATE TABLE [dbo].[TradingOrder](
+	[tradingOrderId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[user1] INT NOT NULL, 
+	[user2] INT NOT NULL,
+	[note] NVARCHAR(1000) NOT NULL,
+	[createdDate] DATETIME NOT NULL,
+	[status] BIT NOT NULL,
+	CONSTRAINT FK_TradingOrder_User1 FOREIGN KEY ([user1]) REFERENCES [dbo].[User]([userId]),
+    CONSTRAINT FK_TradingOrder_User2 FOREIGN KEY ([user2]) REFERENCES [dbo].[User]([userId])
+)
+
+CREATE TABLE [dbo].[TradingOrderDetail](
+	[tradingOrderDetailId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[productId] INT NOT NULL, 
+	[tradingOrderId] INT NOT NULL,
+	[ownerId] INT NOT NULL,
+	[quantity] INT NOT NULL,
+	[price] MONEY NOT NULL,
+	CONSTRAINT FK_TradingOrderDetail_TradingOrder FOREIGN KEY ([tradingOrderId]) REFERENCES [dbo].[TradingOrder]([tradingOrderId])
+)
+
+CREATE TABLE [dbo].[Contact](
+	[tradingOrderId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[user1] INT NOT NULL, 
+	[user2] INT NOT NULL,
+	[isActive] BIT NOT NULL,
+	CONSTRAINT FK_Contact_User1 FOREIGN KEY ([user1]) REFERENCES [dbo].[User]([userId]),
+	CONSTRAINT FK_Contact_User2 FOREIGN KEY ([user2]) REFERENCES [dbo].[User]([userId])
+)
+
+
 
 GO	
 INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta], [createdDate], [sub])
@@ -256,11 +290,11 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantityLimit], [price], [isDeleted])
+INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantityLimit], [price], [imageLink],[isDeleted])
 VALUES
-    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 10000,0),
-    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 30 , 50, 40000, 0),
-    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 30, 100, 80000, 0);
+    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 10000,'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F1.png?alt=media&token=b718f1f8-4ee3-49a7-96e2-c78a14bed850',0),
+    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 30 , 50, 40000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F2.png?alt=media&token=a00a427a-4e76-4f60-b6ce-22aa2feffc06',0),
+    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 30, 100, 80000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F3.png?alt=media&token=388b5c09-24e2-4e53-8985-f28bf8d4e970',0);
 GO
 
 
