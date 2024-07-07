@@ -142,6 +142,8 @@ public class Program
         builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddSingleton<VNPayHelper>();
+        builder.Services.AddScoped<ITradingOrderRepository, TradingOrderRepository>();
+        builder.Services.AddScoped<ITradingOrderDetailRepository, TradingOrderDetailRepository>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 
