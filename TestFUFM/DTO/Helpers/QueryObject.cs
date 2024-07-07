@@ -16,5 +16,7 @@ namespace BusinessObjects.Helpers
         // sreach name
         public string? ProductName { get; set; } = null;
 
+        public bool? DealType { get; set; }
+
     }
 }

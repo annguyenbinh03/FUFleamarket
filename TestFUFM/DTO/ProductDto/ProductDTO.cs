@@ -13,6 +13,7 @@ namespace BusinessObjects.ProductDto
         public string ProductName { get; set; } = null!;
         public decimal Price { get; set; }
         public bool IsNew { get; set; }
+        public bool DealType { get; set; }
         public string Description { get; set; } = null!;
         public ProfileUserDTO Seller { get; set; } 
         public int CategoryId { get; set; }

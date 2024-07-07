@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    public  interface IProductReposity
+    public interface IProductReposity
     {
         Task<List<Product>> GetALLAsync(QueryObject query);
 
-        Task<dynamic> AdminGetAllAsync(QueryObject query);
+        Task<List<Product>> AdminGetAllAsync(QueryObject query);
+
+        Task<List<Product>> GetProductsByDealTypeAsync(bool dealType);
         Task<bool> AcceptProductRequest(int productId);
+
         Task<bool> RejectProductRequest(int productId);
 
         Task<bool> DeleteProduct(int productId);
@@ -26,9 +29,11 @@ namespace Repository.Interfaces
 
         Task<Product> CreateAsync(Product productModel);
 
-        Task<Product?>  UpdateAsync(int sellerId, int productId, UpdateProductRequestDto productDto);
+        Task<Product?> UpdateAsync(int sellerId, int productId, UpdateProductRequestDto productDto);
 
         Task<Product?> DeleteAsync(int id);
+
+        Task<Product?> DeleteAdminAsync(int id);
 
         Task<bool> ProductExist(int id);
 
@@ -44,6 +49,7 @@ namespace Repository.Interfaces
 
         Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange);
         Task<bool> UpdateProductQuantityAsync(int productId, int orderQuantity);
+
     }
 
 }

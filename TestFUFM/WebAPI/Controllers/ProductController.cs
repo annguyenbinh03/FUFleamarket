@@ -26,6 +26,8 @@ namespace WebAPI.Controllers
             _context = context;
         }
 
+
+        // chỉnh lại admin có thể thấy hết các sp
         [HttpGet("admingetlistproducts")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
@@ -34,10 +36,12 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
 
             var products = await _productRepo.AdminGetAllAsync(query);
-
-            return Ok(products);
+            var productDtos = products.Select(p => p.ToProductDto());
+            return Ok(productDtos);
         }
 
+
+        // thêm thanh tìm kiếm về dealType 
         [HttpGet("adminliststatus0")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminListStatus0()
@@ -50,6 +54,7 @@ namespace WebAPI.Controllers
                     productName = p.ProductName,
                     price = p.Price,
                     isNew = p.IsNew,
+                    dealType = p.DealType,
                     description = p.Description,
                     status = p.Status,
                     categoryName = p.Category.Name,
@@ -72,7 +77,9 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("adminliststatus1,2,3")]
+
+        // thêm thanh tìm kiếm về dealType 
+        [HttpGet("adminliststatus1,2,3,4,5")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAll([FromQuery] int? status)
         {
@@ -87,7 +94,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                query = query.Where(p => p.Status == 1 || p.Status == 2 || p.Status == 3);
+                query = query.Where(p => p.Status == 1 || p.Status == 2 || p.Status == 3 || p.Status == 4 || p.Status == 5);
             }
 
             var products = await query
@@ -97,6 +104,7 @@ namespace WebAPI.Controllers
                     productName = p.ProductName,
                     price = p.Price,
                     isNew = p.IsNew,
+                    dealType = p.DealType,
                     description = p.Description,
                     status = p.Status,
                     categoryName = p.Category.Name,
@@ -120,7 +128,7 @@ namespace WebAPI.Controllers
 
 
 
-
+        // hàm này chưa có check status 
         [HttpGet("ShopProfile")]
         public async Task<IActionResult> ShopProfile([FromQuery] int id)
         {
@@ -131,9 +139,9 @@ namespace WebAPI.Controllers
             var userWithDetails = await _context.Users
                 .Include(u => u.Addresses)
                 .Include(u => u.Products)
-                    .ThenInclude(p => p.Category)
+                .ThenInclude(p => p.Category)
                 .Include(u => u.Products)
-                    .ThenInclude(p => p.ProductImages)
+                .ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(u => u.UserId == id);
             if (userWithDetails == null)
             {
@@ -164,6 +172,7 @@ namespace WebAPI.Controllers
                     p.ProductName,
                     p.Price,
                     p.IsNew,
+                    p.DealType,
                     p.Description,
                     p.CategoryId,
                     p.Status,
@@ -182,6 +191,7 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+
 
 
         [HttpGet("GetInforProductBuyRequest")]
@@ -210,6 +220,7 @@ namespace WebAPI.Controllers
         }
 
 
+        // thêm thanh tìm kiếm về dealType và chỉnh thêm trạng thái 3 đang bán hàng bình thường
         [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
@@ -222,9 +233,23 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+        [HttpGet("getProductsByDealType0")]
+        public async Task<IActionResult> GetProductsByDealTypeSale()
+        {
+            var products = await _productRepo.GetProductsByDealTypeAsync(false);
+            var productDtos = products.Select(p => p.ToProductDto());
+            return Ok(productDtos);
+        }
 
+        [HttpGet("getProductsByDealType1")]
+        public async Task<IActionResult> GetProductsByDealTypeExchange()
+        {
+            var products = await _productRepo.GetProductsByDealTypeAsync(true);
+            var productDtos = products.Select(p => p.ToProductDto());
+            return Ok(productDtos);
+        }
 
-        [HttpPut("adminacceptproductrequest/{productId:int}")]
+        [HttpPut("adminacceptproductrequest/{productId:int}")] //status 1
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
         {
@@ -241,7 +266,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpPut("admindeleteproduct/{productId:int}")]
+        [HttpPut("admindeleteproduct/{productId:int}")] //status 5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminDeleteProduct([FromRoute] int productId)
         {
@@ -257,7 +282,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPut("adminrejectproductrequest/{productId:int}")]
+        [HttpPut("adminrejectproductrequest/{productId:int}")] //status 2
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
         {
@@ -299,9 +324,10 @@ namespace WebAPI.Controllers
 
 
 
+        // chỉnh sửa trạng thái khi gọi đơn hàng của mình ra và thêm DealType
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> GetMyProducts()
+        public async Task<IActionResult> GetMyProducts([FromQuery] int? status, [FromQuery] bool? dealType)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -319,32 +345,48 @@ namespace WebAPI.Controllers
                 return BadRequest("You don't have any products yet");
             }
 
-            var filteredProducts = products.Where(p => p.Status == 0 || p.Status == 1 || p.Status == 2)
-                                  .Select(p => new
-                                  {
-                                      p.ProductId,
-                                      p.ProductName,
-                                      p.Price,
-                                      p.IsNew,
-                                      p.Status,
-                                      p.Description,
-                                      p.ImageLink,
-                                      p.StoredQuantity,
-                                      p.CreatedDate,
-                                      Seller = new
-                                      {
-                                          p.Seller.FullName,
-                                          p.Seller.PhoneNumber,
-                                          p.Seller.Avarta
-                                      },
-                                      Categories = p.Category != null ? new List<CategoryDTO> { p.Category.ToCategoryDTO() } : null,
-                                                 
-                                      Orders = new List<object>() // Assuming orders should be included, this is a placeholder
-                                  })
-                                  .ToList();
+
+            IQueryable<Product> query = products.AsQueryable();
+
+            if (status.HasValue)
+            {
+                query = query.Where(p => p.Status == status.Value);
+            }
+            else
+            {
+                query = query.Where(p => p.Status == 0 || p.Status == 1 || p.Status == 2 || p.Status == 3 || p.Status == 4);
+            }
+            if (dealType.HasValue)
+            {
+                query = query.Where(p => p.DealType == dealType.Value);
+            }
+            var filteredProducts = query.Select(p => new
+            {
+                p.ProductId,
+                p.ProductName,
+                p.Price,
+                p.IsNew,
+                p.DealType, // added
+                p.Status,
+                p.Description,
+                p.ImageLink,
+                p.StoredQuantity,
+                p.CreatedDate,
+                Seller = new
+                {
+                    p.Seller.FullName,
+                    p.Seller.PhoneNumber,
+                    p.Seller.Avarta
+                },
+                Categories = p.Category != null ? new List<CategoryDTO> { p.Category.ToCategoryDTO() } : null,
+
+                Orders = new List<object>() // Assuming orders should be included, this is a placeholder
+            })
+                .ToList();
+
 
             return Ok(filteredProducts);
-            
+
         }
 
 
@@ -507,6 +549,7 @@ namespace WebAPI.Controllers
 
 
 
+        // chỉnh sửa lại trạng thái xóa của seller là 4 == bị ẩn
         [HttpDelete("deleteproductforsellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int productId)
@@ -552,6 +595,7 @@ namespace WebAPI.Controllers
 
 
 
+        // hàm này ko cần  
         [HttpDelete("deleteproductforadmin/{productId:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAdmin([FromRoute] int productId)
@@ -565,7 +609,7 @@ namespace WebAPI.Controllers
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
 
-            var deletedProduct = await _productRepo.DeleteAsync(productId);
+            var deletedProduct = await _productRepo.DeleteAdminAsync(productId);
             if (deletedProduct == null)
             {
                 return BadRequest("Product deletion failed. Please try again.");
@@ -616,7 +660,7 @@ namespace WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDeletedProducts()
         {
-            var products = await _productRepo.GetProductsByStatusAsync(3);
+            var products = await _productRepo.GetProductsByStatusAsync(5);
 
             var productDtos = products.Select(p => p.ToProductDto());
 

@@ -23,6 +23,9 @@ public partial class Product
     [Column("isNew")]
     public bool IsNew { get; set; }
 
+    [Column("dealType")]
+    public bool DealType { get; set; }
+
     [Column("description")]
     [StringLength(2000)]
     public string Description { get; set; } = null!;

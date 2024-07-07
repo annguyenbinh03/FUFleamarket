@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Repository
 {
@@ -29,6 +30,28 @@ namespace Repository
             return productModel;
         }
 
+
+        public async Task<Product?> DeleteAdminAsync(int id)
+        {
+            var productModel = await _context.Products
+                            .Include(p => p.Seller)
+                            .Include(p => p.Category)
+                            .Include(p => p.ProductImages) // Bao gồm các hình ảnh sản phẩm
+                            .FirstOrDefaultAsync(x => x.ProductId == id);
+            if (productModel == null)
+            {
+                return null;
+            }
+
+            // Cập nhật trạng thái sản phẩm trước khi xóa
+            productModel.IsNew = false;
+            productModel.Status = 5;
+            productModel.CreatedDate = DateTime.Now;
+
+            await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
+            return productModel;
+        }
+
         public async Task<Product?> DeleteAsync(int id)
         {
             var productModel = await _context.Products
@@ -43,7 +66,7 @@ namespace Repository
 
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
-            productModel.Status = 3;
+            productModel.Status = 4;
             productModel.CreatedDate = DateTime.Now;
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
@@ -83,7 +106,7 @@ namespace Repository
             {
                 return false;
             }
-            product.Status = 3;
+            product.Status = 5;
             product.IsNew = false;
             product.CreatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
@@ -91,31 +114,45 @@ namespace Repository
         }
 
 
-        public async Task<dynamic> AdminGetAllAsync(QueryObject query)
+        public async Task<List<Product>> AdminGetAllAsync(QueryObject query)
         {
-            var products = await _context.Products
+            var products = _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
-                .Select(p => new
+                .AsQueryable();
+
+            if (query.CategoryId.HasValue)
+            {
+                products = products.Where(s => s.CategoryId == query.CategoryId);
+            }
+            // thêm chức năng search name
+            if (!string.IsNullOrWhiteSpace(query.ProductName))
+            {
+                products = products.Where(s => s.ProductName.Contains(query.ProductName));
+            }
+
+            if (query.Price.HasValue)
+            {
+                products = products.Where(s => s.Price == query.Price);
+            }
+            if (query.DealType.HasValue)
+            {
+                products = products.Where(s => s.DealType == query.DealType.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(query.SortBy) && query.SortBy.Equals("price", StringComparison.OrdinalIgnoreCase))
+            {
+                if (query.IsDecsending)
                 {
-                    productId = p.ProductId,
-                    productName = p.ProductName,
-                    price = p.Price,
-                    isNew = p.IsNew,
-                    description = p.Description,
-                    status = p.Status,
-                    LinkImage = p.ImageLink,
-                    categoryName = p.Category.Name,
-                    StoredQuantity = p.StoredQuantity,
-                    seller = new
-                    {
-                        SellerId = p.Seller.UserId,
-                        avarta = p.Seller.Avarta,
-                        fullName = p.Seller.FullName,
-                    }
-                }).ToListAsync();
-            return products;
+                    products = products.OrderByDescending(s => s.Price);
+                }
+                else
+                {
+                    products = products.OrderBy(s => s.Price);
+                }
+            }
+
+            return await products.ToListAsync();
         }
 
 
@@ -124,8 +161,8 @@ namespace Repository
             var products = _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
-                .Where(p => p.Status == 1)
-                .Where (p => p.StoredQuantity > 0)
+                .Where(p => p.Status == 1 || p.Status == 3) // thêm trạng thái 3: bình thường đang bán 
+                .Where(p => p.StoredQuantity > 0)
                 .Include(p => p.Seller) // Include Seller
                 .AsQueryable();
 
@@ -143,7 +180,10 @@ namespace Repository
             {
                 products = products.Where(s => s.Price == query.Price);
             }
-
+            if (query.DealType.HasValue)
+            {
+                products = products.Where(s => s.DealType == query.DealType.Value);
+            }
             if (!string.IsNullOrWhiteSpace(query.SortBy) && query.SortBy.Equals("price", StringComparison.OrdinalIgnoreCase))
             {
                 if (query.IsDecsending)
@@ -158,7 +198,18 @@ namespace Repository
 
             return await products.ToListAsync();
         }
-       
+        public async Task<List<Product>> GetProductsByDealTypeAsync(bool dealType)
+        {
+            var products = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .Include(p => p.Seller)
+                .Where(p => p.DealType == dealType && (p.Status == 1 || p.Status == 3))
+                .ToListAsync();
+
+            return await products;
+        }
+
 
         public async Task<Product?> GetByIdProductAsync(int id)
         {
