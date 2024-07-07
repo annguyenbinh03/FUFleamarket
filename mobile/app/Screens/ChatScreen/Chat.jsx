@@ -7,97 +7,70 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { HubConnectionBuilder } from "@microsoft/signalr";
+
+import ChatRoom from "./../../../components/ChatRoom";
+import { getChattersAPI } from "../../api/user_api";
 import AuthContext from "../../../context/AuthProvider";
-import ChatRoom from "../../../components/ChatRoom";
-
-const CHATTERS = "http://192.168.146.25:7057/api/user/getlistsellerforchat";
-
-const getChattersAPI = (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  return fetch(CHATTERS, {
-    method: "GET",
-    headers: config.headers,
-  }).then((response) => response.json());
-};
 
 const Chat = () => {
   const [chatters, setChatters] = useState([]);
-  const [conn, setConnection] = useState(null);
+  const [connection, setConnection] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [selectedChatter, setSelectedChatter] = useState(null);
   const { auth } = useContext(AuthContext);
-  const [chatTarget, setChatTarget] = useState(null);
 
   useEffect(() => {
-    const fetchChatters = async () => {
-      try {
-        console.log("Đang lấy danh sách người chat...");
-        const data = await getChattersAPI(auth.token);
-        setChatters(data);
-        console.log("Đã lấy được danh sách người chat");
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách người chat:", error);
-      }
-    };
     fetchChatters();
-  }, [auth.token]);
+  }, []);
 
-  const joinChatRoom = async (userid, receiverId, username) => {
+  const fetchChatters = async () => {
     try {
-      console.log("Đang kết nối đến phòng chat...");
-      const conn = new HubConnectionBuilder()
-        .withUrl("http://192.168.146.25:7057/Chat")
-        .configureLogging(LogLevel.Information)
+      const response = await getChattersAPI(auth.token);
+      setChatters(response.data);
+    } catch (error) {
+      console.error("Error fetching chatters:", error);
+    }
+  };
+
+  const connectToChatRoom = async (receiverId) => {
+    try {
+      const newConnection = new HubConnectionBuilder()
+        .withUrl("http://192.168.110.7:7057/Chat")
         .build();
 
-      conn.on("JoinSpecificChatRoom", (listmessage) => {
-        setMessages(listmessage);
-        console.log("Đã vào phòng chat");
-      });
-
-      conn.on("ReceiveSpecificMessage", (message) => {
+      newConnection.on("JoinSpecificChatRoom", setMessages);
+      newConnection.on("ReceiveSpecificMessage", (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
-        console.log("Đã nhận tin nhắn mới");
       });
 
-      await conn.start();
-      await conn.invoke("JoinSpecificChatRoom", {
-        userid,
+      await newConnection.start();
+      await newConnection.invoke("JoinSpecificChatRoom", {
+        userid: auth.userId,
         receiverId,
-        username,
+        username: auth.fullName,
       });
-      setConnection(conn);
-    } catch (e) {
-      console.log("Lỗi khi vào phòng chat:", e);
+
+      setConnection(newConnection);
+    } catch (error) {
+      console.error("Error connecting to chat room:", error);
     }
+  };
+
+  const handleChatterSelect = async (chatter) => {
+    if (connection) {
+      await connection.stop();
+    }
+    setMessages([]);
+    setSelectedChatter(chatter);
+    await connectToChatRoom(chatter.userId);
   };
 
   const sendMessage = async (message) => {
     try {
-      await conn.invoke("SendMessage", message);
-      console.log("Đã gửi tin nhắn");
-    } catch (e) {
-      console.log("Lỗi khi gửi tin nhắn:", e);
-    }
-  };
-
-  const changeChatter = async (fullName, avarta, receiverId) => {
-    try {
-      if (conn) {
-        await conn.stop();
-        setConnection(null);
-        setMessages([]);
-        console.log("Đã ngắt kết nối phòng chat cũ");
-      }
-      await joinChatRoom(auth.userId, receiverId, auth.fullName);
-      setChatTarget({ fullName, avarta, receiverId });
-      console.log("Đã chuyển sang chat với:", fullName);
-    } catch (e) {
-      console.log("Lỗi khi chuyển người chat:", e);
+      await connection.invoke("SendMessage", message);
+    } catch (error) {
+      console.error("Error sending message:", error);
     }
   };
 
@@ -105,9 +78,9 @@ const Chat = () => {
     <TouchableOpacity
       style={[
         styles.chatterItem,
-        chatTarget?.fullName === item.fullName && styles.selectedChatter,
+        selectedChatter?.userId === item.userId && styles.selectedChatter,
       ]}
-      onPress={() => changeChatter(item.fullName, item.avarta, item.userId)}
+      onPress={() => handleChatterSelect(item)}
     >
       <Image source={{ uri: item.avarta }} style={styles.avatar} />
       <Text style={styles.chatterName}>{item.fullName}</Text>
@@ -116,27 +89,25 @@ const Chat = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.chatterListContainer}>
-        <FlatList
-          data={chatters}
-          renderItem={renderChatter}
-          keyExtractor={(item) => item.userId.toString()}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        />
-      </View>
+      <FlatList
+        data={chatters}
+        renderItem={renderChatter}
+        keyExtractor={(item) => item.userId.toString()}
+        horizontal
+        style={styles.chatterList}
+      />
       <View style={styles.chatRoomContainer}>
-        {conn && chatTarget ? (
+        {selectedChatter ? (
           <ChatRoom
             messages={messages}
             sendMessage={sendMessage}
-            receiverAvarta={chatTarget.avarta}
+            receiver={selectedChatter}
             auth={auth}
           />
         ) : (
-          <View style={styles.noChatSelected}>
-            <Text>Hãy chọn người bạn muốn nhắn tin</Text>
-          </View>
+          <Text style={styles.noSelection}>
+            Chọn chatter để bắt đầu trò chuyện
+          </Text>
         )}
       </View>
     </View>
@@ -144,40 +115,18 @@ const Chat = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-  },
-  chatterListContainer: {
-    height: 100,
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
-  },
-  chatterItem: {
-    alignItems: "center",
-    padding: 10,
-    marginRight: 10,
-  },
-  selectedChatter: {
-    backgroundColor: "#e6e6e6",
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginBottom: 5,
-  },
-  chatterName: {
-    fontSize: 12,
-    textAlign: "center",
-  },
-  chatRoomContainer: {
-    flex: 1,
-  },
-  noChatSelected: {
+  container: { flex: 1 },
+  chatterList: { maxHeight: 100 },
+  chatterItem: { alignItems: "center", padding: 10, marginRight: 10 },
+  selectedChatter: { backgroundColor: "#e6e6e6" },
+  avatar: { width: 50, height: 50, borderRadius: 25, marginBottom: 5 },
+  chatterName: { fontSize: 12, textAlign: "center" },
+  chatRoomContainer: { flex: 1 },
+  noSelection: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    textAlign: "center",
   },
 });
 
