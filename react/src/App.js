@@ -7,7 +7,7 @@ import Login from "./pages/userPages/Login";
 import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Chat from "./pages/userPages/Chat";
-
+import 'react-toastify/ReactToastify.css'
 
 
 
@@ -20,8 +20,9 @@ const Detail = lazy(() => import("./pages/userPages/Detail"));
 const Home = lazy(() => import("./pages/userPages/Home"));
 const AboutUs = lazy(() => import("./pages/userPages/AboutUs"));
 const MyPosts = lazy(() => import("./pages/userPages/MyPosts"));
-const PostProduct = lazy(() => import("./pages/userPages/PostProduct"));
+const CreateProduct = lazy(() => import("./pages/userPages/CreateProduct"));
 const CreateOrder = lazy(() => import("./pages/userPages/CreateOrder"));
+const CreateTradingOrder = lazy(() => import("./pages/userPages/CreateTradingOrder"));
 const BuyOrder = lazy(() => import("./pages/userPages/BuyOrder"));
 const SellOrder = lazy(() => import("./pages/userPages/SellOrder"));
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
@@ -61,6 +62,7 @@ function App() {
             <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
             <Route path="/shopprofile/:userId" element={<ShopProfile/>} />
             <Route path="*" element={<div>404 Not Found</div>}/>
+            <Route path="/create-trading-order/:productId" element={<CreateTradingOrder />} />
            
 
 
@@ -68,7 +70,7 @@ function App() {
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin,ROLES.User]} />}>
               <Route path="/sell-order" element={<SellOrder />} />
               <Route path="/my-posts" element={<MyPosts />} />
-              <Route path="/upload-product" element={<PostProduct />} />
+              <Route path="/create-product" element={<CreateProduct />} />
               <Route path="/create-order/:productId" element={<CreateOrder />} />
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />

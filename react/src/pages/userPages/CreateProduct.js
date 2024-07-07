@@ -8,9 +8,9 @@ import { v4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { imageDb } from "../../FirebaseImage/Config";
 import { toast } from "react-toastify";
-import 'react-toastify/ReactToastify.css'
+import "react-toastify/ReactToastify.css";
 
-function PostProduct() {
+function CreateProduct() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,18 +22,25 @@ function PostProduct() {
   const [isNew, setIsNew] = useState(false);
   const [img, setImg] = useState("");
   const inputRef = useRef(null);
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     var urlImg = await handleUploadImagesClick();
     console.log(urlImg);
-    if(urlImg !== ""){
+    if (urlImg !== "") {
       var imageLink = urlImg;
-     const product = { productName, price, description, categoryId, isNew, imageLink, storedQuantity };
+      const product = {
+        productName,
+        price,
+        description,
+        categoryId,
+        isNew,
+        imageLink,
+        storedQuantity,
+      };
       const response = await createProductAPI(product, auth.accessToken);
-      if(response){
-        toast.info('Tạo sản phẩm hoàn tất, đang chờ xét duyệt!', {
+      if (response) {
+        toast.info("Tạo sản phẩm hoàn tất, đang chờ xét duyệt!", {
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -41,23 +48,26 @@ function PostProduct() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "colored"
-          });
-          navigate("/my-posts", { replace: true });
-      } else{
-        toast.error('Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!', {
-          position: "bottom-right",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored"
-          });
+          theme: "colored",
+        });
+        navigate("/my-posts", { replace: true });
+      } else {
+        toast.error(
+          "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
+          {
+            position: "bottom-right",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
       }
-    }else{
-      toast.error('Đăng sản phẩm thất bại, không tìm thấy ảnh!', {
+    } else {
+      toast.error("Đăng sản phẩm thất bại, không tìm thấy ảnh!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -65,8 +75,8 @@ function PostProduct() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored"
-        });
+        theme: "colored",
+      });
     }
   };
 
@@ -76,17 +86,17 @@ function PostProduct() {
       const value = await uploadBytes(imgRef, img);
       const url = await getDownloadURL(value.ref);
       return url;
-    } else{
+    } else {
       alert("Ảnh đại diện sản phẩm phải được đăng tải");
       return "";
-     }
+    }
   };
 
   const handleImageClick = () => {
     inputRef.current.click();
   };
   const handleImageChange = (event) => {
-    if(event.target.files[0]){
+    if (event.target.files[0]) {
       setImg(event.target.files[0]);
     }
   };
@@ -158,18 +168,42 @@ function PostProduct() {
                 <option value="7">Giải trí, thể thao, sở thích</option>
               </select>
               <div className="pt-4 pb-1 fw-bold">Thông tin chi tiết</div>
-              <div className="input-group mb-3">
-                <span className="input-group-text">Tình trạng sản phẩm </span>
-                <select
-                  required
-                  value={isNew}
-                  onChange={(e) => setIsNew(e.target.value)}
-                  className="form-select select"
-                >
-                  <option value="True">Mới</option>
-                  <option value="False">Cũ</option>
-                </select>
+
+              <div className="row">
+                <div className="col-md">
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      Tình trạng sản phẩm{" "}
+                    </span>
+                    <select
+                      required
+                      value={isNew}
+                      onChange={(e) => setIsNew(e.target.value)}
+                      className="form-select select"
+                    >
+                      <option value="True">Mới</option>
+                      <option value="False">Cũ</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-md">
+                <div className="input-group mb-3">
+                    <span className="input-group-text">
+                      Loại giao dịch{" "}
+                    </span>
+                    <select
+                      required
+                      value={isNew}
+                      onChange={(e) => setIsNew(e.target.value)}
+                      className="form-select select"
+                    >
+                      <option value="True">Buôn bán</option>
+                      <option value="False">Trao đổi</option>
+                    </select>
+                  </div>
+                </div>
               </div>
+
               <div className="input-group mb-3">
                 <span className="input-group-text">Tên sản phẩm</span>
                 <input
@@ -235,4 +269,4 @@ function PostProduct() {
   );
 }
 
-export default PostProduct;
+export default CreateProduct;

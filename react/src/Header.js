@@ -2,7 +2,6 @@ import { React, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import MyPostButton from "./component/MyPostButton";
-import UploadProductButton from "./component/UploadProductButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
 
@@ -45,7 +44,7 @@ const UserDropdown = (authContainer) => {
           <>
             <Link
               className="btn btn-secondary d-flex align-items-center bg-transparent"
-              style={{border:"none"}}
+              style={{ border: "none" }}
               to="/login"
             >
               <img
@@ -54,9 +53,7 @@ const UserDropdown = (authContainer) => {
                 alt=""
               />
               <span className="fs-5 username px-1">
-                <div  className="loginLink">
-                  Đăng nhập
-                </div>
+                <div className="loginLink">Đăng nhập</div>
               </span>
             </Link>
           </>
@@ -107,8 +104,11 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" to={`/shopprofile/${auth?.id}`}>
-                   Xem trang cá nhân
+                  <Link
+                    className="dropdown-item"
+                    to={`/shopprofile/${auth?.id}`}
+                  >
+                    Xem trang cá nhân
                   </Link>
                 </div>
               </li>
@@ -253,7 +253,12 @@ const Header = () => {
         <MyPostButton />
 
         {/* Nút đăng sản phẩm */}
-        <UploadProductButton />
+        <Link to="/create-product">
+          <button className="btn mx-2 text-white fs-5 upPostBtn">
+            <i className="fa fa-pencil-square-o" aria-hidden="true"></i>{" "}
+            <span className="hidden-md"> Đăng tin </span>
+          </button>
+        </Link>
       </header>
     </div>
   );

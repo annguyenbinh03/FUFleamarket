@@ -7,6 +7,7 @@ import { getPackagesAPI } from "../../api/packages";
 function AdminSellingPackage() {
   const { auth } = useContext(AuthContext);
   const [sellingPackages, setSellingPakages] = useState([]);
+  const [selectedPackage, setSelectedPackage] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -15,6 +16,10 @@ function AdminSellingPackage() {
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     }
+  };
+
+  const handleEditPackage = (choosenPackage) => {
+    setSelectedPackage(choosenPackage);
   };
 
   useEffect(() => {
@@ -39,7 +44,7 @@ function AdminSellingPackage() {
               <span className="">Danh mục tất cả gói bán hàng </span>
             </div>
             <div>
-                <button className="btn btn-success me-4">Tạo gói mới</button>
+              <button className="btn btn-success me-4">Tạo gói mới</button>
             </div>
           </div>
 
@@ -71,13 +76,72 @@ function AdminSellingPackage() {
                   <td>{sellingPakage?.price}</td>
                   <td>{sellingPakage?.productQuantity}</td>
                   <td>
-                    <button className="btn btn-warning me-2">Sửa gói</button>
+                    <button
+                      className="btn btn-warning me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#EditPackage"
+                      onClick={() => handleEditPackage(sellingPakage)}
+                    >
+                      Sửa gói
+                    </button>
                     <button className="btn btn-danger ms-2">Xóa gói</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <div
+            class="modal fade"
+            id="EditPackage"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Sửa thông tin gói
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  {selectedPackage && (
+                    <div className="row">
+                      <div className="col-md-4">
+                        <img
+                          className="rounded-3 me-2 w-100"
+                          src={require(`../../assets/img/selling-package/${selectedPackage?.promotionId}.png`)}
+                          alt="package"
+                        />
+                      </div>
+                      <div className="col-md-8">
+                        <h2>{selectedPackage.name}</h2>
+                        <p>{selectedPackage.description}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Đóng cửa sổ
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Lưu thay đổi
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

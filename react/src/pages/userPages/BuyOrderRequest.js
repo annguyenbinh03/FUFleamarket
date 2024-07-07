@@ -162,7 +162,7 @@ function BuyOrderRequest() {
                       >
                         {showChoosingProduct()}
                       </button>
-                      <ul class="dropdown-menu">
+                      <ul class="dropdown-menu" style={{width:"100%"}}>
                         {sellingProducts?.length > 0 ? (
                           <>
                             <li
@@ -201,7 +201,7 @@ function BuyOrderRequest() {
                           </>
                         ) : (
                           <>
-                            <li value="">Tất cả</li>
+                            <li className="text-center" value="">Tất cả</li>
                           </>
                         )}
                       </ul>
