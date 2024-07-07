@@ -72,7 +72,7 @@ export default function App() {
                 }}
               />
               <Stack.Screen
-                name="UserDetailScreen" // Tên của screen này phải trùng khớp
+                name="UserDetailScreen"
                 component={UserDetailScreen}
                 options={{
                   title: "Thông tin người dùng",

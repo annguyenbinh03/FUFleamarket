@@ -10,13 +10,12 @@ import {
   Dimensions,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import ChatButton from "../../../components/ChatButton";
 import WishListAddButton from "../../../components/WishListAddButton";
 import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
-import { MaterialIcons } from "@expo/vector-icons";
+import { getProductByIdAPI } from "../../../app/api/product";
 
 const { width } = Dimensions.get("window");
 
@@ -26,20 +25,19 @@ const Detail = () => {
   const { productId } = route.params;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `http://192.168.146.25:7057/api/product/GetProductById/${productId}`
-        );
+        setLoading(true);
+        const response = await getProductByIdAPI(productId);
         setProduct(response.data);
         setLoading(false);
-
-        // Log sellerId
-        console.log("sellerId:", response.data.sellerId);
+        console.log("Thông tin sản phẩm:", response.data);
       } catch (error) {
-        console.error("Error fetching product:", error);
+        console.error("Lỗi khi tải thông tin sản phẩm:", error);
+        setError("Đã xảy ra lỗi khi tải thông tin sản phẩm");
         setLoading(false);
       }
     };
@@ -55,13 +53,17 @@ const Detail = () => {
     );
   }
 
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
   if (!product) {
     return <Empty />;
   }
-
-  // Log thông tin sản phẩm
-  console.log("Thông tin sản phẩm:", product);
-  console.log("Ảnh sản phảm: ", product.product.productImages);
 
   return (
     <ScrollView style={styles.container}>
@@ -128,12 +130,6 @@ const SellerInfo = ({ seller, address, sellerId }) => {
   const navigateToUserDetail = () => {
     navigation.navigate("UserDetailScreen", { userId: sellerId });
   };
-
-  console.log("sellerId:", sellerId);
-  console.log("Thông tin người bán:", seller);
-  console.log("Tên người bán:", seller.fullName);
-  console.log("Số điện thoại người bán:", seller.phoneNumber);
-  console.log("Địa chỉ người bán:", address);
 
   return (
     <View style={styles.sellerInfoContainer}>

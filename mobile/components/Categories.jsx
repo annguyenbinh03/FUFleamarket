@@ -7,73 +7,88 @@ import {
   Image,
   StyleSheet,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { images } from "../constants";
-import { Picker } from "@react-native-picker/picker";
+import { getCategoriesAPI } from "../app/api/product";
+import Empty from "./Empty";
+
+const categoryImages = {
+  1: images.dodientu,
+  2: images.dodunghoctap,
+  3: images.dienlanh,
+  4: images.donoithat,
+  5: images.thucpham,
+  6: images.thoitrang,
+  7: images.giaitri,
+};
+
+const CategoryItem = ({ item, onPress }) => (
+  <TouchableOpacity style={styles.categoryItem} onPress={onPress}>
+    <View>
+      <Image
+        source={categoryImages[item.categoryId]}
+        style={styles.categoryPic}
+      />
+    </View>
+    <Text style={styles.categoryText}>{item.name}</Text>
+  </TouchableOpacity>
+);
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigation = useNavigation();
 
-  const categoryImages = {
-    1: images.dodientu,
-    2: images.dodunghoctap,
-    3: images.dienlanh,
-    4: images.donoithat,
-    5: images.thucpham,
-    6: images.thoitrang,
-    7: images.giaitri,
-  };
-
   useEffect(() => {
-    // fetch("http://10.0.2.2:7057/api/category")
-    // fetch("http://192.168.110.7:7057/api/category")
-    fetch("http://192.168.146.25:7057/api/category")
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data);
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await getCategoriesAPI();
+        console.log("Dữ liệu danh mục:", response.data);
+        setCategories(response.data);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching categories data:", err);
+      } catch (error) {
+        console.error("Lỗi API:", error);
+        setError("Đã xảy ra lỗi khi tải danh mục sản phẩm");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6600" />;
   }
 
+  if (error) {
+    return <Text>Lỗi: {error}</Text>;
+  }
+
   return (
     <View style={styles.categoriesContainerBig}>
       <Text style={styles.categoriesTitle}>Danh mục sản phẩm</Text>
-      <View style={styles.categoriesContainer}>
-        <FlatList
-          data={categories}
-          horizontal={true}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.categoryItem}
-              onPress={() =>
-                navigation.push("ProductListByCategory", { category: item })
-              }
-            >
-              <View>
-                <Image
-                  source={categoryImages[item.categoryId]}
-                  style={styles.categoryPic}
-                />
-              </View>
-
-              <Text style={styles.categoryText}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.categoryId.toString()}
-        />
-      </View>
+      {categories.length > 0 ? (
+        <View style={styles.categoriesContainer}>
+          <FlatList
+            data={categories}
+            horizontal={true}
+            renderItem={({ item }) => (
+              <CategoryItem
+                item={item}
+                onPress={() =>
+                  navigation.push("ProductListByCategory", { category: item })
+                }
+              />
+            )}
+            keyExtractor={(item) => item.categoryId.toString()}
+          />
+        </View>
+      ) : (
+        <Empty />
+      )}
     </View>
   );
 };
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#000", // Màu đen
+    color: "#000",
     textAlign: "center",
     numberOfLines: 1,
   },

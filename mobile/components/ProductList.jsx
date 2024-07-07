@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../utils/formatPrice";
+import { getProductAPI } from "../app/api/product";
+import Empty from "./Empty";
 
 const { width } = Dimensions.get("screen");
 const numColumns = 2;
@@ -52,47 +54,55 @@ const ProductItem = ({ item }) => {
 const ProductListContainer = () => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://192.168.146.25:7057/api/product/ListProduct")
-      .then((res) => res.json())
-      .then((data) => {
-        data.sort((a, b) => {
-          const aDays = parseInt(a.createdDate.split(" ")[0]);
-          const bDays = parseInt(b.createdDate.split(" ")[0]);
-          return aDays - bDays;
-        });
-        setProductList(data);
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await getProductAPI();
+        // console.log("Dữ liệu API:", response.data);
+        setProductList(response.data);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching product data:", err);
+      } catch (error) {
+        console.error("Lỗi API:", error);
+        setError("Đã xảy ra lỗi khi tải danh sách sản phẩm");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  if (error) {
+    return <Text>Lỗi: {error}</Text>;
+  }
+
   return (
     <View style={styles.productListContainerBig}>
       <Text style={styles.productListTitle}>Danh sách sản phẩm</Text>
-      <View style={styles.productListWrapper}>
-        <FlatList
-          data={productList}
-          numColumns={numColumns}
-          renderItem={({ item }) => <ProductItem item={item} />}
-          keyExtractor={(item) => item.productId.toString()}
-          contentContainerStyle={styles.productListContainer}
-          scrollEnabled={false}
-          columnWrapperStyle={styles.columnWrapper}
-        />
-      </View>
+      {productList.length > 0 ? (
+        <View style={styles.productListWrapper}>
+          <FlatList
+            data={productList}
+            numColumns={numColumns}
+            renderItem={({ item }) => <ProductItem item={item} />}
+            keyExtractor={(item) => item.productId.toString()}
+            contentContainerStyle={styles.productListContainer}
+            scrollEnabled={false}
+            columnWrapperStyle={styles.columnWrapper}
+          />
+        </View>
+      ) : (
+        <Empty />
+      )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   productListContainerBig: {
     padding: 5,

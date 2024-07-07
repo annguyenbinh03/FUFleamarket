@@ -14,7 +14,6 @@ import AuthContext from "../../../context/AuthProvider";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import LogoutButton from "../../../components/LogoutButton";
 import WishListButton from "../../../components/WishListButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import BuyOrderButton from "../../../components/BuyOrderButton";
 import SellOrderButton from "../../../components/SellOrderButton";
 
@@ -22,35 +21,22 @@ const { width } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
 
 const Profile = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchAuthData = async () => {
-      try {
-        console.log("Đang tải dữ liệu xác thực...");
-        const storedAuth = await AsyncStorage.getItem("auth");
-        if (storedAuth) {
-          const parsedAuth = JSON.parse(storedAuth);
-          if (parsedAuth.token) {
-            setAuth(parsedAuth);
-            console.log("Đã lấy dữ liệu auth:", parsedAuth);
-          } else {
-            redirectToLogin();
-          }
-        } else {
-          redirectToLogin();
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu xác thực:", error);
-        redirectToLogin();
-      }
-    };
-    fetchAuthData();
-  }, []);
+    if (!auth || !auth.token) {
+      console.log(
+        "Không tìm thấy thông tin xác thực, chuyển hướng đến màn hình đăng nhập"
+      );
+      redirectToLogin();
+    } else {
+      console.log("Auth:", auth);
+    }
+  }, [auth]);
 
   const redirectToLogin = () => {
-    console.log("Chuyển hướng đến LoginScreen");
+    console.log("Chuyển hướng đến màn hình đăng nhập");
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
@@ -60,15 +46,10 @@ const Profile = () => {
   };
 
   const handleLogout = async () => {
-    console.log("Đang thực hiện đăng xuất...");
-    try {
-      await AsyncStorage.removeItem("auth");
-      setAuth(null);
-      console.log("Đã đăng xuất thành công");
-      redirectToLogin();
-    } catch (error) {
-      console.error("Lỗi khi đăng xuất:", error);
-    }
+    console.log("Đang đăng xuất...");
+    await logout();
+    console.log("Đã đăng xuất thành công rồi");
+    redirectToLogin();
   };
 
   if (!auth || !auth.token) {

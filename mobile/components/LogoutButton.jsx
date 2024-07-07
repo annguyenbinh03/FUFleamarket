@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../context/AuthProvider";
-import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
 const LogoutButton = () => {
@@ -10,13 +9,15 @@ const LogoutButton = () => {
   const navigation = useNavigation();
 
   const handleLogout = async () => {
-    await logout();
-    navigation.dispatch(
-      CommonActions.reset({
+    try {
+      await logout();
+      navigation.reset({
         index: 0,
         routes: [{ name: "Login" }],
-      })
-    );
+      });
+    } catch (error) {
+      console.error("Lỗi khi đăng xuất:", error);
+    }
   };
 
   return (

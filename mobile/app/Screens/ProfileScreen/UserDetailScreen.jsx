@@ -16,6 +16,7 @@ import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
 import { MaterialIcons } from "@expo/vector-icons";
 import { formatDate } from "../../../utils/formatDate";
+import { getShopProfileAPI } from "../../api/user_api";
 
 const { width } = Dimensions.get("window");
 
@@ -30,14 +31,11 @@ const UserDetailScreen = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get(
-          `http://192.168.146.25:7057/api/product/ShopProfile?id=${userId}`
-        );
+        const response = await getShopProfileAPI;
         setUserInfo(response.data.user);
         setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching user info:", error);
-        // TODO: Handle error state
       } finally {
         setLoading(false);
       }

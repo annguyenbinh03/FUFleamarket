@@ -11,6 +11,7 @@ import {
 import { useRoute, useNavigation } from "@react-navigation/native";
 import formatPrice from "../../../utils/formatPrice";
 import { Picker } from "@react-native-picker/picker";
+import { getCategoriesAPI, getProductAPI } from "../../api/product";
 
 export default function ProductListByCategory() {
   const route = useRoute();
@@ -23,24 +24,24 @@ export default function ProductListByCategory() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://192.168.146.25:7057/api/product/ListProduct").then((res) =>
-        res.json()
-      ),
-      fetch("http://192.168.146.25:7057/api/category").then((res) =>
-        res.json()
-      ),
-    ])
-      .then(([productData, categoryData]) => {
-        setProducts(productData);
-        setCategories(categoryData);
-        filterProducts(productData, category.categoryId);
+    const fetchData = async () => {
+      try {
+        const [productResponse, categoryResponse] = await Promise.all([
+          getProductAPI(),
+          getCategoriesAPI(),
+        ]);
+
+        setProducts(productResponse.data);
+        setCategories(categoryResponse.data);
+        filterProducts(productResponse.data, category.categoryId);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Error fetching data:", err);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, [category]);
 
   const filterProducts = (products, categoryId) => {

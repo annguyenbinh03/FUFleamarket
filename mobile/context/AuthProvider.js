@@ -18,23 +18,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateAuth = async (userData) => {
-    try {
-      const updatedAuth = {
-        ...auth,
-        ...userData,
-      };
-      await AsyncStorage.setItem("auth", JSON.stringify(updatedAuth));
-      setAuth(updatedAuth);
-      setUserRole(updatedAuth.roleId);
-    } catch (error) {
-      console.error("Error updating auth:", error);
-    }
-  };
-
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, userRole, setUserRole, logout, updateAuth }}
+      value={{ auth, setAuth, userRole, setUserRole, logout }}
     >
       {children}
     </AuthContext.Provider>

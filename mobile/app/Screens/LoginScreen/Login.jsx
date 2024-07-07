@@ -9,11 +9,11 @@ import {
   ActivityIndicator,
   Image,
 } from "react-native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../../context/AuthProvider";
 import LoginGoogle from "./LoginGoogle";
+import { user_login } from "../../api/user_api";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -47,8 +47,7 @@ const LoginScreen = () => {
   const navigateBasedOnRole = (roleId) => {
     if (roleId === 1) {
       navigation.navigate("TabNavigation");
-    }
-    if (roleId == 2) {
+    } else if (roleId === 2) {
       navigation.navigate("AdminTabNavigation");
     } else {
       navigation.navigate("TabNavigation");
@@ -72,38 +71,35 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://192.168.146.25:7057/api/LoginAdmin/login",
-        { email, password },
-        {
-          headers: { "Content-Type": "application/json" },
+      const response = await user_login({ email, password });
+      console.log("Login response:", response);
+
+      if (response.data) {
+        const { token, role, fullName, avarta, id, phoneNumber, address } =
+          response.data;
+
+        const roleId = role[0];
+        console.log("Received roleId:", roleId);
+
+        if (roleId === 1 || roleId === 2) {
+          handleSuccessfulLogin({
+            email,
+            roleId,
+            fullName,
+            avarta,
+            token,
+            userId: id,
+            phoneNumber,
+            address,
+          });
+        } else {
+          Alert.alert(
+            "Không được phép",
+            "Bạn không có quyền truy cập vào ứng dụng này."
+          );
         }
-      );
-
-      console.log("Full API response:", response.data);
-
-      const { token, role, fullName, avarta, id, phoneNumber, address } =
-        response.data;
-
-      const roleId = role[0];
-      console.log("Received roleId:", roleId);
-
-      if (roleId === 1 || roleId === 2) {
-        handleSuccessfulLogin({
-          email,
-          roleId,
-          fullName,
-          avarta,
-          token,
-          userId: id,
-          phoneNumber,
-          address,
-        });
       } else {
-        Alert.alert(
-          "Không được phép",
-          "Bạn không có quyền truy cập vào ứng dụng này."
-        );
+        setErrorMessage("Invalid response from server");
       }
     } catch (error) {
       console.error("Login Error:", error);
@@ -233,5 +229,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-// sau login phân quyền  thì nếu là moderator hoặc admin thì sẽ có một AdminNavigation và có các AdminTabNavigation gồm profile , Dashboard , AdminPostManager

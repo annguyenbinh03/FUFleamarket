@@ -17,6 +17,7 @@ import AuthContext from "../../../context/AuthProvider";
 import axios from "axios";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { imageDb } from "../../FirebaseImage/Config";
+import { createProductAPI } from "../../api/product";
 
 const PostProduct = () => {
   const navigation = useNavigation();
@@ -74,7 +75,7 @@ const PostProduct = () => {
   };
 
   const handlePostProduct = async () => {
-    console.log("Posting product...");
+    console.log("Bắt đầu vào đăng sản phẩm");
 
     if (
       !productName ||
@@ -109,16 +110,7 @@ const PostProduct = () => {
     };
 
     try {
-      const response = await axios.post(
-        "http://192.168.146.25:7057/api/product/createproductforsellers",
-        productData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await createProductAPI(productData, auth.token);
 
       if (response.status === 200 || response.status === 201) {
         Alert.alert(

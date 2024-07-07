@@ -12,11 +12,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import axios from "axios";
 import AuthContext from "../../../context/AuthProvider";
 import { formatDate } from "../../../utils/formatDate";
 import Empty from "../../../components/Empty";
 import formatPrice from "../../../utils/formatPrice";
+import { getMyProductsAPI } from "../../api/product";
 
 const PostManager = () => {
   const [products, setProducts] = useState([]);
@@ -26,21 +26,13 @@ const PostManager = () => {
   const navigation = useNavigation();
 
   const fetchProduct = useCallback(async () => {
-    console.log("Đang gọi API để lấy sản phẩm...");
-    console.log("Token được sử dụng:", auth.token);
+    console.log("Token:", auth.token);
 
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        "http://192.168.146.25:7057/api/product/getmyproducts",
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await getMyProductsAPI();
 
-      console.log("Phản hồi từ API:", response.data);
+      console.log("response API:", response.data);
 
       if (response.status === 200 && Array.isArray(response.data)) {
         setProducts(response.data);
