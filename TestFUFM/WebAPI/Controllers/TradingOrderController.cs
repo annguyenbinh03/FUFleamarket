@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 using DTO.Mappers;
+using BusinessObjects.Models;
 
 namespace WebAPI.Controllers
 {
@@ -10,10 +11,14 @@ namespace WebAPI.Controllers
     public class TradingOrderController : ControllerBase
     {
         private readonly ITradingOrderRepository _tradingRepo;
+        private readonly IProductReposity _productRepo;
+        private readonly ITradingOrderDetailRepository _tradingOrderDetailRepo;
 
-        public TradingOrderController(ITradingOrderRepository tradingRepo)
+        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo)
         {
             _tradingRepo = tradingRepo;
+            _productRepo = productRepo;
+            _tradingOrderDetailRepo = tradingOrderDetailRepo;
         }
 
         // GET: api/TradingOrder
@@ -100,6 +105,69 @@ namespace WebAPI.Controllers
 
             return CreatedAtAction(nameof(GetTradingOrderById), new { id = tradingOrder.TradingOrderId }, tradingOrderDto);
         }
+
+        [HttpPost("createtradingordercombined")]
+        public async Task<IActionResult> Create([FromBody] CreateTradingOrderCombinedRequestDto createDto)
+        {
+            if (createDto == null || createDto.TradingOrder == null)
+            {
+                return BadRequest("Invalid input data.");
+            }
+        
+            // Tạo TradingOrder
+            var tradingOrder = new TradingOrder
+            {
+                User1 = createDto.TradingOrder.UserId1,
+                User2 = createDto.TradingOrder.UserId2,
+                Note = createDto.TradingOrder.Note,
+                CreatedDate = DateTime.Now,
+                Status = true // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
+            };
+
+            await _tradingRepo.CreateTradingOrderAsync(tradingOrder);
+
+            // Hàm tạo chi tiết đơn hàng
+            async Task CreateTradingOrderDetails(List<ProductDto> products, int userId)
+            {
+                foreach (var productDto in products)
+                {
+                    var product = await _productRepo.GetByIdProductAsync(productDto.ProductId);
+                    
+
+                    var tradingOrderDetail = new TradingOrderDetail
+                    {
+                        ProductId = productDto.ProductId,
+                        TradingOrderId = tradingOrder.TradingOrderId,
+                        Quantity = productDto.Quantity,
+                        Price = product.Price,
+                        OwnerId = product.SellerId,
+                    };
+
+                    await _tradingOrderDetailRepo.CreateAsync(tradingOrderDetail);
+                }
+            }
+
+            // Tạo chi tiết đơn hàng cho User1
+            await CreateTradingOrderDetails(createDto.User1Product, createDto.TradingOrder.UserId1);
+
+            // Tạo chi tiết đơn hàng cho User2
+            await CreateTradingOrderDetails(createDto.User2Product, createDto.TradingOrder.UserId2);
+
+            // Chuẩn bị phản hồi
+            var tradingOrderDto = new TradingOrderDTO
+            {
+                TradingOrderId = tradingOrder.TradingOrderId,
+                User1 = tradingOrder.User1,
+                User2 = tradingOrder.User2,
+                Note = tradingOrder.Note,
+                CreatedDate = tradingOrder.CreatedDate,
+                Status = tradingOrder.Status
+            };
+
+            // Trả về dữ liệu mà không bao gồm User1
+            return CreatedAtAction(nameof(GetTradingOrderById), new { id = tradingOrder.TradingOrderId }, tradingOrderDto);
+        }
+
 
 
         // PUT: api/TradingOrder/5
