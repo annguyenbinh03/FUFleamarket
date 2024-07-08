@@ -15,12 +15,9 @@ import axios from "axios";
 import Empty from "../../../components/Empty";
 import { formatDate } from "../../../utils/formatDate";
 import formatPrice from "../../../utils/formatPrice";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { useNavigation } from "@react-navigation/native";
 
-const END_POINT = {
-  BUY_ORDER: "order/bought",
-};
+import { useNavigation } from "@react-navigation/native";
+import { getBuyOrdersAPI } from "../../api/order";
 
 function BuyOrder() {
   const [orders, setOrders] = useState([]);
@@ -36,12 +33,7 @@ function BuyOrder() {
   const fetchOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `http://192.168.146.25:7057/api/${END_POINT.BUY_ORDER}`,
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        }
-      );
+      const response = await getBuyOrdersAPI(auth.token);
       console.log("Tải đơn hàng thành công:", response.data);
       setOrders(response.data);
     } catch (error) {

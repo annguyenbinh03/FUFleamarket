@@ -10,20 +10,16 @@ import {
   StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import AuthContext from "../../context/AuthProvider";
-import Empty from "../../components/Empty";
 import { MaterialIcons } from "@expo/vector-icons";
-import AdminProductManager from "./AdminProductManager";
 import AdminProductManagerButton from "../../components/AdminProductManagerButton";
 import formatPrice from "./../../utils/formatPrice";
-
-const ADMIN_PRODUCT_REQUEST =
-  "http://192.168.146.25:7057/api/product/adminliststatus0";
-const ACCEPT_CREATE_PRODUCT_REQUEST =
-  "http://192.168.146.25:7057/api/product/adminacceptproductrequest";
-const REJECT_CREATE_PRODUCT_REQUEST =
-  "http://192.168.146.25:7057/api/product/adminrejectproductrequest";
+import Empty from "../../components/Empty";
+import {
+  acceptCreateProductRequestAPI,
+  getAdminProductRequestAPI,
+  rejectCreateProductRequestAPI,
+} from "../api/product";
 
 const AdminPostManager = () => {
   const [products, setProducts] = useState([]);
@@ -32,14 +28,11 @@ const AdminPostManager = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(ADMIN_PRODUCT_REQUEST, {
-        headers: { Authorization: `Bearer ${auth.token}` },
-      });
+      const response = await getAdminProductRequestAPI(auth.token);
       setProducts(response.data);
       console.log("Lấy dữ liệu sản phẩm ok");
     } catch (error) {
       console.error("Lỗi API:", error);
-      return <Empty />;
     }
   };
 
@@ -50,30 +43,32 @@ const AdminPostManager = () => {
   const handleApproveProduct = async (productId) => {
     try {
       console.log(`Duyệt sản phẩm ID: ${productId}`);
-      await axios.put(`${ACCEPT_CREATE_PRODUCT_REQUEST}/${productId}`, null, {
-        headers: { Authorization: `Bearer ${auth.token}` },
-      });
+      await acceptCreateProductRequestAPI(auth.token, productId);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.productId !== productId)
       );
       console.log("Đã phê duyệt sản phẩm ok");
     } catch (error) {
-      console.error("Lỗi khi phê duyệt sản phẩm:", error);
+      console.error(
+        "Lỗi khi phê duyệt sản phẩm:",
+        error.response?.data || error.message
+      );
     }
   };
 
   const handleRejectProduct = async (productId) => {
     try {
       console.log(`Từ chối sản phẩm ID: ${productId}`);
-      await axios.put(`${REJECT_CREATE_PRODUCT_REQUEST}/${productId}`, null, {
-        headers: { Authorization: `Bearer ${auth.token}` },
-      });
+      await rejectCreateProductRequestAPI(auth.token, productId);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.productId !== productId)
       );
       console.log("Đã từ chối sản phẩm ok");
     } catch (error) {
-      console.error("Lỗi khi từ chối sản phẩm:", error);
+      console.error(
+        "Lỗi khi từ chối sản phẩm:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -158,6 +153,11 @@ const AdminPostManager = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.productId.toString()}
         contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Empty />
+          </View>
+        }
       />
     </SafeAreaView>
   );

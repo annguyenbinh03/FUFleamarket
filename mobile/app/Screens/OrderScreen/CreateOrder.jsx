@@ -15,6 +15,8 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../../../context/AuthProvider";
 import formatPrice from "../../../utils/formatPrice";
 import axios from "axios";
+import { getProductByIdAPI } from "../../api/product";
+import { createOrderAPI } from "../../api/order";
 
 const CreateOrder = () => {
   const route = useRoute();
@@ -37,14 +39,7 @@ const CreateOrder = () => {
 
   const fetchProductData = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.146.25:7057/api/product/GetProductById/${productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await getProductByIdAPI(productId);
       setProduct(response.data.product);
       setPrice(response.data.product.price.toString());
       setLoading(false);
@@ -124,16 +119,8 @@ const CreateOrder = () => {
       console.log("Dữ liệu đơn hàng:", orderData);
 
       console.log("Gửi yêu cầu tạo đơn hàng");
-      const response = await axios.post(
-        "http://192.168.146.25:7057/api/order",
-        orderData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+
+      const response = await createOrderAPI(orderData);
       console.log("server:", response.data);
 
       setLoading(false);

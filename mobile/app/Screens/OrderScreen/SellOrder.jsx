@@ -9,15 +9,13 @@ import {
   Alert,
 } from "react-native";
 import AuthContext from "../../../context/AuthProvider";
-import axios from "axios";
 import Empty from "../../../components/Empty";
 import { formatDate } from "../../../utils/formatDate";
-
-const END_POINT = {
-  MY_ORDER_REQUEST: "order/soldRequest",
-  ACCEPT_ORDER_REQUEST: "order/acceptOrderRequest",
-  DENY_ORDER_REQUEST: "order/denyOrderRequest",
-};
+import {
+  getSellOrdersAPI,
+  acceptBuyRequestOrdersAPI,
+  denyBuyRequestOrdersAPI,
+} from "../../api/order";
 
 function SellOrder() {
   const [orders, setOrders] = useState([]);
@@ -25,16 +23,11 @@ function SellOrder() {
 
   useEffect(() => {
     fetchOrders();
-  }, [auth]);
+  }, []);
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(
-        `http://192.168.146.25:7057/api/${END_POINT.MY_ORDER_REQUEST}`,
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        }
-      );
+      const response = await getSellOrdersAPI(auth.token);
       console.log("Tải đơn hàng thành công:", response.data);
       setOrders(response.data);
     } catch (error) {
@@ -44,16 +37,10 @@ function SellOrder() {
 
   const handleAcceptOrder = async (orderId) => {
     try {
-      const response = await axios.put(
-        `http://192.168.146.25:7057/api/${END_POINT.ACCEPT_ORDER_REQUEST}/${orderId}`,
-        null,
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        }
-      );
-      console.log("Chấp nhận đơn hàng thành công:", response.data);
-      fetchOrders();
+      await acceptBuyRequestOrdersAPI(auth.token, orderId);
+      console.log("Chấp nhận đơn hàng thành công");
       Alert.alert("Thông báo", "Đã chấp nhận đơn hàng!");
+      fetchOrders();
     } catch (error) {
       console.log("Lỗi khi chấp nhận đơn hàng:", error);
       Alert.alert("Lỗi", "Không thể chấp nhận đơn hàng. Vui lòng thử lại sau.");
@@ -62,16 +49,10 @@ function SellOrder() {
 
   const handleDenyOrder = async (orderId) => {
     try {
-      const response = await axios.put(
-        `http://192.168.146.25:7057/api/${END_POINT.DENY_ORDER_REQUEST}/${orderId}`,
-        null,
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        }
-      );
-      console.log("Từ chối đơn hàng thành công:", response.data);
-      fetchOrders();
+      await denyBuyRequestOrdersAPI(auth.token, orderId);
+      console.log("Từ chối đơn hàng thành công");
       Alert.alert("Thông báo", "Đã từ chối đơn hàng!");
+      fetchOrders();
     } catch (error) {
       console.log("Lỗi khi từ chối đơn hàng:", error);
       Alert.alert("Lỗi", "Không thể từ chối đơn hàng. Vui lòng thử lại sau.");
@@ -79,12 +60,16 @@ function SellOrder() {
   };
 
   const renderOrderItem = ({ item }) => {
-    // Assuming API response looks like this:
-    // response.data: [{ order: { ... }, product: { ... } }]
-    const order = item.order; // Assuming each order item has an 'order' object
-    const product = item.product; // Assuming each order item has a 'product' object
+    const order = item.order;
+    const product = item.product;
+    const buyer = item.buyer;
+
     return (
       <View style={styles.orderItem}>
+        <View style={styles.buyerInfo}>
+          <Image source={{ uri: buyer.avarta }} style={styles.avatar} />
+          <Text style={styles.buyerName}>{buyer.name}</Text>
+        </View>
         <View style={styles.productInfo}>
           <Image
             source={{ uri: product.imageLink }}
@@ -102,19 +87,19 @@ function SellOrder() {
               style={styles.acceptButton}
               onPress={() => handleAcceptOrder(order.orderId)}
             >
-              <Text>Chấp nhận</Text>
+              <Text style={styles.buttonText}>Chấp nhận</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.denyButton}
               onPress={() => handleDenyOrder(order.orderId)}
             >
-              <Text>Từ chối</Text>
+              <Text style={styles.buttonText}>Từ chối</Text>
             </TouchableOpacity>
           </View>
         )}
         {order.status === 1 && (
           <TouchableOpacity style={styles.rateButton}>
-            <Text>Đánh giá</Text>
+            <Text style={styles.buttonText}>Đánh giá người mua</Text>
           </TouchableOpacity>
         )}
         <View style={styles.orderDetails}>
@@ -137,9 +122,7 @@ function SellOrder() {
       <FlatList
         data={orders}
         renderItem={renderOrderItem}
-        keyExtractor={(item) =>
-          item.order.orderId.toString() + item.product.productId.toString()
-        }
+        keyExtractor={(item) => item.order.orderId.toString()}
       />
     </View>
   );
@@ -149,6 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: "#f8f9fa",
   },
   title: {
     fontSize: 20,
@@ -156,8 +140,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   orderItem: {
+    backgroundColor: "#ffffff",
     borderWidth: 1,
     borderColor: "#ddd",
+    borderRadius: 5,
     padding: 10,
     marginBottom: 10,
   },
@@ -171,6 +157,9 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginRight: 10,
+  },
+  buyerName: {
+    fontWeight: "bold",
   },
   productInfo: {
     flexDirection: "row",
@@ -187,20 +176,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   acceptButton: {
-    backgroundColor: "green",
-    padding: 5,
+    backgroundColor: "#28A745",
+    padding: 10,
     borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
   },
   denyButton: {
-    backgroundColor: "red",
-    padding: 5,
+    backgroundColor: "#DC3545",
+    padding: 10,
     borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
   },
   rateButton: {
-    backgroundColor: "orange",
-    padding: 5,
+    backgroundColor: "#FFC107",
+    padding: 10,
     borderRadius: 5,
     alignSelf: "center",
+  },
+  buttonText: {
+    color: "#ffffff",
+    textAlign: "center",
+    fontWeight: "bold",
   },
   orderDetails: {
     borderTopWidth: 1,

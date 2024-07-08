@@ -127,8 +127,12 @@ const PostProduct = () => {
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Error posting product:", error);
+      console.error("Lỗi khi đăng sản phẩm:", error);
+      if (error.response) {
+        console.error("Dữ liệu phản hồi:", error.response.data);
+      }
       Alert.alert("Lỗi", "Không thể đăng sản phẩm. Vui lòng thử lại sau.");
+      Alert.alert("Lỗi", `${error.response.data}`);
     }
   };
 

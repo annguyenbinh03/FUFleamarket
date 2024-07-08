@@ -10,13 +10,10 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import axios from "axios";
 import AuthContext from "../../context/AuthProvider";
 import Empty from "./../../components/Empty";
 import formatPrice from "./../../utils/formatPrice";
-
-const ADMIN_LIST_STATUS =
-  "http://192.168.146.25:7057/api/product/adminliststatus1,2,3";
+import { getAdminProductS123API } from "../api/product";
 
 const AdminProductManager = () => {
   const [products, setProducts] = useState([]);
@@ -36,9 +33,7 @@ const AdminProductManager = () => {
 
     try {
       setLoading(true);
-      const response = await axios.get(ADMIN_LIST_STATUS, {
-        headers: { Authorization: `Bearer ${auth.token}` },
-      });
+      const response = await getAdminProductS123API(auth.token, null);
       console.log("Dữ liệu nhận được:", response.data.length, "sản phẩm");
 
       let validProducts = response.data.filter(
@@ -65,6 +60,7 @@ const AdminProductManager = () => {
     console.log("Chuyển tab:", tabName);
     setActiveTab(tabName);
   };
+
   const filteredProducts = products.filter((product) => {
     if (activeTab === "ĐÃ DUYỆT") return product.status === 1;
     if (activeTab === "TỪ CHỐI") return product.status === 2;

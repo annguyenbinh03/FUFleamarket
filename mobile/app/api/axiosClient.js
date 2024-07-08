@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const axiosClient = axios.create({
-  baseURL: "http://192.168.0.112:7057/api/",
+  baseURL: "https://fufleamarketapi.azurewebsites.net/api/",
   timeout: 10000,
 });
 
