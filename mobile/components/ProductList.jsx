@@ -61,7 +61,7 @@ const ProductListContainer = () => {
       try {
         setLoading(true);
         const response = await getProductAPI();
-        // console.log("Dữ liệu API:", response.data);
+        console.log("Dữ liệu API:", response.data);
         setProductList(response.data);
         setLoading(false);
       } catch (error) {

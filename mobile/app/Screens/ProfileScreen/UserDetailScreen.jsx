@@ -11,10 +11,9 @@ import {
   FlatList,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { formatDate } from "../../../utils/formatDate";
 import { getShopProfileAPI } from "../../api/user_api";
 
@@ -31,7 +30,7 @@ const UserDetailScreen = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await getShopProfileAPI;
+        const response = await getShopProfileAPI(userId);
         setUserInfo(response.data.user);
         setProducts(response.data.products);
       } catch (error) {
@@ -95,51 +94,25 @@ const UserDetailScreen = () => {
 
       <View style={styles.infoSection}>
         <Text style={styles.sectionTitle}>Thông tin</Text>
-        <Text style={styles.createdDate}>
-          Thành viên từ: {formatDate(userInfo.createdDate)}
-        </Text>
-        <View style={styles.infoItem}>
-          <MaterialIcons
-            name="phone"
-            size={24}
-            color="#4A90E2"
-            style={styles.icon}
-          />
-          <Text style={styles.infoText}>
-            {userInfo.phoneNumber || "Chưa cập nhật"}
-          </Text>
-        </View>
-        <View style={styles.infoItem}>
-          <MaterialIcons
-            name="location-on"
-            size={24}
-            color="#4A90E2"
-            style={styles.icon}
-          />
-          <Text style={styles.infoText}>
-            {userInfo.addresses?.[0]?.specificAddress || "Chưa cập nhật"}
-          </Text>
-        </View>
-        <View style={styles.infoItem}>
-          <MaterialIcons
-            name="star"
-            size={24}
-            color="#4A90E2"
-            style={styles.icon}
-          />
-          <Text style={styles.infoText}>
-            {userInfo.sellRating !== 0
-              ? `${userInfo.sellRating.toFixed(1)} ⭐`
-              : "Chưa có đánh giá"}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.introductionSection}>
-        <Text style={styles.sectionTitle}>Giới thiệu</Text>
-        <Text style={styles.introduction}>
-          {userInfo.introduction || "Người dùng chưa thêm giới thiệu."}
-        </Text>
+        <InfoItem icon="envelope" text={userInfo.email} />
+        <InfoItem icon="phone" text={userInfo.phoneNumber || "Chưa cập nhật"} />
+        <InfoItem
+          icon="map-marker-alt"
+          text={userInfo.addresses?.[0]?.specificAddress || "Chưa cập nhật"}
+        />
+        <InfoItem
+          icon="info-circle"
+          text={userInfo.introduction || "Chưa cập nhật"}
+        />
+        <InfoItem
+          icon="calendar-check"
+          text={`Đã tham gia: ${formatDate(userInfo.createdDate)}`}
+        />
+        <InfoItem icon="star" text={`Đánh giá bán: ${userInfo.sellRating}`} />
+        <InfoItem
+          icon="shopping-bag"
+          text={`Đánh giá mua: ${userInfo.buyRating}`}
+        />
       </View>
 
       <View style={styles.productsSection}>
@@ -163,6 +136,12 @@ const UserDetailScreen = () => {
   );
 };
 
+const InfoItem = ({ icon, text }) => (
+  <View style={styles.infoItem}>
+    <FontAwesome5 name={icon} size={20} color="#4A90E2" style={styles.icon} />
+    <Text style={styles.infoText}>{text}</Text>
+  </View>
+);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -232,6 +211,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 15,
+    width: 20,
+    textAlign: "center",
   },
   infoText: {
     fontSize: 16,

@@ -9,16 +9,22 @@ import {
 } from "react-native";
 import axios from "axios";
 import { PieChart, BarChart } from "react-native-chart-kit";
+import {
+  getMonthlyPackageAPI,
+  getSummaryAPI,
+  getTopSellerAPI,
+  getTopSellingProductAPI,
+} from "../api/admin";
 
 const { width } = Dimensions.get("screen");
 
-const TOP_SELLING_PRODUCT =
-  "http://192.168.146.25:7057/api/DashBoard/topsellingproducts";
-const DASHBOARD_SUMMARY =
-  "http://192.168.146.25:7057/api/DashBoard/dashboardsummary";
-const MONTHLY_PACKAGE =
-  "http://192.168.146.25:7057/api/DashBoard/packagemonthlydata";
-const TOP_SELLER = "http://192.168.146.25:7057/api/DashBoard/topsellers";
+// const TOP_SELLING_PRODUCT =
+//   "http://192.168.146.25:7057/api/DashBoard/topsellingproducts";
+// const DASHBOARD_SUMMARY =
+//   "http://192.168.146.25:7057/api/DashBoard/dashboardsummary";
+// const MONTHLY_PACKAGE =
+//   "http://192.168.146.25:7057/api/DashBoard/packagemonthlydata";
+// const TOP_SELLER = "http://192.168.146.25:7057/api/DashBoard/topsellers";
 
 export default function AdminDashboard() {
   const [summaryData, setSummaryData] = useState({});
@@ -35,19 +41,19 @@ export default function AdminDashboard() {
     try {
       setLoading(true);
 
-      const summaryResponse = await axios.get(DASHBOARD_SUMMARY);
+      const summaryResponse = await getSummaryAPI();
       setSummaryData(summaryResponse.data);
       console.log("summaryResponse: ", summaryResponse.data);
 
-      const topSellProductResponse = await axios.get(TOP_SELLING_PRODUCT);
+      const topSellProductResponse = await getMonthlyPackageAPI();
       setTopSellProductData(topSellProductResponse.data);
       console.log("topSellProductResponse:", topSellProductResponse.data);
 
-      const topSellerResponse = await axios.get(TOP_SELLER);
+      const topSellerResponse = await getTopSellerAPI();
       setTopSellerData(topSellerResponse.data);
       console.log("topSellerResponse:", topSellerResponse.data);
 
-      const sellingPackagesResponse = await axios.get(MONTHLY_PACKAGE);
+      const sellingPackagesResponse = await getTopSellingProductAPI();
       setSellingPackagesData(sellingPackagesResponse.data);
       console.log("sellingPackagesResponse:", sellingPackagesResponse.data);
     } catch (error) {
