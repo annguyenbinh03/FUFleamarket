@@ -121,7 +121,7 @@ namespace WebAPI.Controllers
                 User2 = createDto.TradingOrder.UserId2,
                 Note = createDto.TradingOrder.Note,
                 CreatedDate = DateTime.Now,
-                Status = true // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
+                Status = 1 // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
             };
 
             await _tradingRepo.CreateTradingOrderAsync(tradingOrder);

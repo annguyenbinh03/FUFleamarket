@@ -10,8 +10,8 @@ namespace BusinessObjects.Models;
 public partial class Contact
 {
     [Key]
-    [Column("tradingOrderId")]
-    public int TradingOrderId { get; set; }
+    [Column("contactId")]
+    public int ContactId { get; set; }
 
     [Column("user1")]
     public int User1 { get; set; }

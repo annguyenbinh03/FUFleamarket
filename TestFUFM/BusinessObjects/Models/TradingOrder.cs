@@ -27,7 +27,7 @@ public partial class TradingOrder
     public DateTime CreatedDate { get; set; }
 
     [Column("status")]
-    public bool Status { get; set; }
+    public int Status { get; set; }
 
     [InverseProperty("TradingOrder")]
     public virtual ICollection<TradingOrderDetail> TradingOrderDetails { get; set; } = new List<TradingOrderDetail>();

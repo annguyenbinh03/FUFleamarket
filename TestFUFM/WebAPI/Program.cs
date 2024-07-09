@@ -20,6 +20,8 @@ using Service.CalculateProductMonthlyTotal.Interfaces;
 using Service.CalculateOrderMonthlyTotal.Interfaces;
 using Service.CalculateOrderMonthlyTotal;
 using Service.CalculatePromotioTransactionMonthlyTotal.Interfaces;
+using Service.ContactCheck.Interfaces;
+using Service.ContactCheck;
 
 public class Program
 {
@@ -144,6 +146,8 @@ public class Program
         builder.Services.AddSingleton<VNPayHelper>();
         builder.Services.AddScoped<ITradingOrderRepository, TradingOrderRepository>();
         builder.Services.AddScoped<ITradingOrderDetailRepository, TradingOrderDetailRepository>();
+        builder.Services.AddScoped<IContactService, ContactService>();
+
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 
