@@ -167,7 +167,7 @@ CREATE TABLE [dbo].[TradingOrder](
 	[user2] INT NOT NULL,
 	[note] NVARCHAR(1000) NOT NULL,
 	[createdDate] DATETIME NOT NULL,
-	[status] BIT NOT NULL,
+	[status] INT NOT NULL,
 	CONSTRAINT FK_TradingOrder_User1 FOREIGN KEY ([user1]) REFERENCES [dbo].[User]([userId]),
     CONSTRAINT FK_TradingOrder_User2 FOREIGN KEY ([user2]) REFERENCES [dbo].[User]([userId])
 )
@@ -183,7 +183,7 @@ CREATE TABLE [dbo].[TradingOrderDetail](
 )
 
 CREATE TABLE [dbo].[Contact](
-	[tradingOrderId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[contactId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[user1] INT NOT NULL, 
 	[user2] INT NOT NULL,
 	[isActive] BIT NOT NULL,
