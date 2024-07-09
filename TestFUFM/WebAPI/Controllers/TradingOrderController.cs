@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 using DTO.Mappers;
 using BusinessObjects.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using BusinessObjects;
 
 namespace WebAPI.Controllers
 {
@@ -13,12 +16,13 @@ namespace WebAPI.Controllers
         private readonly ITradingOrderRepository _tradingRepo;
         private readonly IProductReposity _productRepo;
         private readonly ITradingOrderDetailRepository _tradingOrderDetailRepo;
-
-        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo)
+        private readonly FufleaMarketContext _context;
+        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context)
         {
             _tradingRepo = tradingRepo;
             _productRepo = productRepo;
             _tradingOrderDetailRepo = tradingOrderDetailRepo;
+            _context = context;
         }
 
         // GET: api/TradingOrder
@@ -167,6 +171,76 @@ namespace WebAPI.Controllers
             // Trả về dữ liệu mà không bao gồm User1
             return CreatedAtAction(nameof(GetTradingOrderById), new { id = tradingOrder.TradingOrderId }, tradingOrderDto);
         }
+
+
+
+        [HttpGet("getUserAndProductInfo/{productId}")]
+        public async Task<IActionResult> GetUserAndProductInfo(int productId)
+        {
+            // Get the userId from the claims
+            var userIdClaim = User.FindFirst("userId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized(new { message = "User ID claim not found" });
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized(new { message = "Invalid User ID claim" });
+            }
+
+            // Get the user based on the userId from the claims
+            var user = await _context.Users
+                                     .Include(u => u.Products)
+                                     .FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            // Get the product and its seller based on the productId
+            var product = await _context.Products
+                                        .Include(p => p.Seller)
+                                        .ThenInclude(s => s.Products) // Include seller's products
+                                        .FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            if (product == null)
+            {
+                return NotFound(new { message = "Product not found" });
+            }
+
+            var response = new
+            {
+                requestSide = new
+                {
+                    fullName = user.FullName,
+                    avarta = user.Avarta
+                },
+                responseSide = new
+                {
+                    fullName = product.Seller.FullName,
+                    avarta = product.Seller.Avarta
+                },
+                requestSideProducts = user.Products.Select(p => new
+                {
+                    productName = p.ProductName,
+                    imageLink = p.ImageLink,
+                    price = p.Price,
+                    storedQuantity = p.StoredQuantity
+                }).ToList(),
+                responseSideProducts = product.Seller.Products.Select(p => new
+                {
+                    productName = p.ProductName,
+                    imageLink = p.ImageLink,
+                    price = p.Price,
+                    storedQuantity = p.StoredQuantity
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
 
 
 
