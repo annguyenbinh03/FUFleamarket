@@ -79,7 +79,7 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
                 placeholder="Aa"
               />
               <button className="btn btn-primary" type="submit" disabled={!msg}>
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                <i className="fa fa-paper-plane" aria-hidden="true"></i>
               </button>
             </div>
           </form>

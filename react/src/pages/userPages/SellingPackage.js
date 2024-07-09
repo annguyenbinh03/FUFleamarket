@@ -25,7 +25,7 @@ const SellingPackage = () => {
   }, []);
 
   const handleBuy = (userId,promotionId) =>{
-    window.open(`https://localhost:7057/api/VNPay/payment/${userId}/${promotionId}`);
+    window.open(`https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`);
   }
 
 

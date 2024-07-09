@@ -7,6 +7,8 @@ import Footer from "../../Footer";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
+const GoogleRedirect = 'https://fufleamarketapi.azurewebsites.net/Auth/loginGoogle';
+//  https://localhost:7057/Auth/loginGoogle
 const Login = () => {
   const { auth, setAuth } = useContext(AuthContext);
 
@@ -23,7 +25,7 @@ const Login = () => {
       //   return;
       // }
       const response = await axios.post(
-        "https://localhost:7057/Auth/loginGoogle",
+        GoogleRedirect,
         JSON.stringify({ email, sub, name, avartaLink }),
         {
           headers: { "Content-Type": "application/json" },

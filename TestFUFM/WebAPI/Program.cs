@@ -140,14 +140,13 @@ public class Program
         builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
         builder.Services.AddScoped<IMessageRepository, MessageRepository>();
         builder.Services.AddScoped<IPromotionTransactionRepository, PromotionTransactionRepository>();
-        builder.Services.AddScoped<IPromotionTransactionService ,PromotionTransactionService>();
+        builder.Services.AddScoped<IPromotionTransactionService, PromotionTransactionService>();
         builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
         builder.Services.AddSingleton<VNPayHelper>();
         builder.Services.AddScoped<ITradingOrderRepository, TradingOrderRepository>();
         builder.Services.AddScoped<ITradingOrderDetailRepository, TradingOrderDetailRepository>();
         builder.Services.AddScoped<IContactService, ContactService>();
-
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 
@@ -163,29 +162,34 @@ public class Program
             });
         });
 
+        builder.Services.AddCors(opt =>
+        {
+            opt.AddPolicy("reactAzure", builder =>
+            {
+                builder.WithOrigins("https://fufleamarket.azurewebsites.net")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+            });
+        });
+
         builder.Services.AddSingleton<SharedDb>();
 
         var app = builder.Build();
 
         // Cấu hình Swagger
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
-        }
-		//show useCros with CorsPolicy
-        //app.UseCors( builder =>
-        //{
-        //    builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials(); ;
-        //} );
-        // Cấu hình middleware và routing
+
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1"));
+
+
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
         app.MapHub<ChatHub>("/Chat");
         app.UseCors("reactApp");
-
+        app.UseCors("reactAzure");
         app.Run();
     }
 }

@@ -2,14 +2,16 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({})
- 
+const GoogleRedirect = 'https://fufleamarketapi.azurewebsites.net/Auth/loginGoogle';
+//  https://localhost:7057/Auth/loginGoogle 
+
 export const AuthProvider = ({children}) =>{
     const [auth,setAuth] = useState({});
 
     const getToken = async (email, sub, name, avartaLink ) =>{
         try {
         const response = await axios.post(
-            "https://localhost:7057/Auth/loginGoogle",
+            GoogleRedirect,
             JSON.stringify({ email, sub, name, avartaLink }),
             {
               headers: { "Content-Type": "application/json" },

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useAuth();
-  const [isLogged, setIsLogged] = useState(null);
 
   const location = useLocation();
 

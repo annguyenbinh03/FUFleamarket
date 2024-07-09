@@ -30,7 +30,7 @@ const Chat = () => {
   const joinChatRoom = async (userid, receiverId, username) => {
     try {
       const conn = new HubConnectionBuilder()
-        .withUrl("https://localhost:7057/Chat")
+        .withUrl("https://fufleamarketapi.azurewebsites.net/Chat")
         .configureLogging(LogLevel.Information)
         .build();
       conn.on("JoinSpecificChatRoom", (listmessage) => {

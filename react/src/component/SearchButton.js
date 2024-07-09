@@ -8,7 +8,7 @@ function SearchButton() {
 
   const fetchTopSearch = (value) => {
     if(value){
-      fetch('https://localhost:7057/api/product/listproduct')
+      fetch('https://fufleamarketapi.azurewebsites.net/api/product/listproduct')
       .then(response => response.json())
       .then((json)=>{
         const results = json.filter((product)=>{
