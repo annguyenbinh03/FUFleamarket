@@ -11,6 +11,7 @@ using System.Security.Claims;
 using BusinessObjects.Models;
 using BusinessObjects.CategoryDto;
 using System.Linq;
+using Service.ContactCheck.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -20,10 +21,13 @@ namespace WebAPI.Controllers
     {
         private readonly FufleaMarketContext _context;
         private readonly IProductReposity _productRepo;
-        public ProductController(FufleaMarketContext context, IProductReposity productRepo)
+        private readonly IContactService _contactService;
+
+        public ProductController(FufleaMarketContext context, IProductReposity productRepo,IContactService contactService)
         {
             _productRepo = productRepo;
             _context = context;
+            _contactService = contactService;
         }
 
 
@@ -313,13 +317,33 @@ namespace WebAPI.Controllers
             }
 
             var product = await _productRepo.GetByIdProductAsync(id);
-            var address = await _productRepo.getSellerAddress(product.SellerId);
-            var productDTO = product.ToProductDto();
+
             if (product == null)
             {
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
-            return Ok(new { product = productDTO, address, sellerId = product.SellerId });
+
+            var address = await _productRepo.getSellerAddress(product.SellerId);
+            var productDTO = product.ToProductDto();
+
+            var buyerIdClaim = User.FindFirst("UserId")?.Value;
+            if (string.IsNullOrEmpty(buyerIdClaim) || !int.TryParse(buyerIdClaim, out var buyerId))
+            {
+                return BadRequest("Invalid buyer ID.");
+            }
+            var activeOrder = await _context.Orders
+           .AnyAsync(o => o.BuyerId == buyerId && o.SellerId == product.SellerId && o.ProductId == id && (o.Status == 1 || o.Status == 3));
+
+            var activeTradingOrder = await _context.TradingOrders
+                .AnyAsync(to => to.User1 == buyerId && to.User2 == product.SellerId && (to.Status == 1 || to.Status == 3));
+
+            bool contact = false;
+            if (activeOrder || activeTradingOrder)
+            {
+                contact = await _contactService.CheckAndManageContactAsync(buyerId, product.SellerId);
+            }
+
+            return Ok(new { product = productDTO, address, sellerId = product.SellerId, contact });
         }
 
 
