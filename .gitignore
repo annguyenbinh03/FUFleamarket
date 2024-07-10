@@ -12,6 +12,7 @@ TestFUFM/WebAPI/bin
 react/node_modules
 react/.env
 TestFUFM/BusinessObjects/FufleaMarketContext.cs
+TestFUFM/WebAPI/Properties
 
 mobile/node_modules
 mobile/android

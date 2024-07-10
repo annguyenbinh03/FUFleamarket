@@ -62,7 +62,6 @@ function App() {
             <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
             <Route path="/shopprofile/:userId" element={<ShopProfile/>} />
             <Route path="*" element={<div>404 Not Found</div>}/>
-            <Route path="/create-trading-order/:productId" element={<CreateTradingOrder />} />
            
 
 
@@ -74,9 +73,7 @@ function App() {
               <Route path="/create-order/:productId" element={<CreateOrder />} />
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />
-
-              
-             
+              <Route path="/create-trading-order/:productId" element={<CreateTradingOrder />} />            
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>
               <Route path="/buy-order" element={<BuyOrder />} />

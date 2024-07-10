@@ -1,150 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProductAPI, getProductByProductIdAPI } from "../../api/product";
 import AuthContext from "../../context/AuthProvider";
-import { getUserProfileAPI } from "../../api/user";
-import { createOrderAPI } from "../../api/order";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { toast } from "react-toastify";
-
-const fetchData = [
-  {
-    productId: 1,
-    productName: "iPhone 13",
-    price: 10000000,
-    isNew: true,
-    description: "The latest iPhone model with advanced features.",
-    seller: {
-      fullName: "Dan Thu",
-      phoneNumber: "1234567890",
-      avarta: "https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg",
-    },
-    categoryId: 1,
-    categoryName: "Đồ điện tử",
-    status: 1,
-    createdDate: "1 tháng trước",
-    categories: [
-      {
-        categoryId: 1,
-        name: "Đồ điện tử",
-        imageLink: null,
-        iconLink: null,
-      },
-    ],
-    productImages:
-      "https://th.bing.com/th/id/OIP.AivK9zFJ7PfalbxQrwDvaQHaGc?rs=1&pid=ImgDetMain",
-    storedQuantity: 10,
-  },
-  {
-    productId: 2,
-    productName: "Laptop HP Spectre x360",
-    price: 16500000,
-    isNew: false,
-    description: "A versatile and powerful laptop for professionals.",
-    seller: {
-      fullName: "Dan Thu",
-      phoneNumber: "1234567890",
-      avarta: "https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg",
-    },
-    categoryId: 1,
-    categoryName: "Đồ điện tử",
-    status: 1,
-    createdDate: "1 tháng trước",
-    categories: [
-      {
-        categoryId: 1,
-        name: "Đồ điện tử",
-        imageLink: null,
-        iconLink: null,
-      },
-    ],
-    productImages:
-      "https://th.bing.com/th/id/OIP.mGba6CDEayK-G5BrQdIgywHaFc?rs=1&pid=ImgDetMain",
-    storedQuantity: 5,
-  },
-  {
-    productId: 3,
-    productName: "Smart TV Samsung QLED",
-    price: 5540000,
-    isNew: true,
-    description: "Immerse yourself in a stunning visual experience.",
-    seller: {
-      fullName: "Dan Thu",
-      phoneNumber: "1234567890",
-      avarta: "https://zpsocial-f58-org.zadn.vn/e24c0fc754d3b48dedc2.jpg",
-    },
-    categoryId: 1,
-    categoryName: "Đồ điện tử",
-    status: 1,
-    createdDate: "21 ngày trước",
-    categories: [
-      {
-        categoryId: 1,
-        name: "Đồ điện tử",
-        imageLink: null,
-        iconLink: null,
-      },
-    ],
-    productImages:
-      "https://th.bing.com/th/id/R.6832579c872dcb0fbe6587ab7b827b18?rik=E5gfeoYKwrUmtw&pid=ImgRaw&r=0",
-    storedQuantity: 7,
-  },
-  {
-    productId: 4,
-    productName: "Mens Dress Shirt",
-    price: 200000,
-    isNew: false,
-    description: "A stylish and comfortable shirt for formal occasions.",
-    seller: {
-      fullName: "Quy duc",
-      phoneNumber: "0987654321",
-      avarta: "https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg",
-    },
-    categoryId: 6,
-    categoryName: "Thời trang",
-    status: 1,
-    createdDate: "20 ngày trước",
-    categories: [
-      {
-        categoryId: 6,
-        name: "Thời trang",
-        imageLink: null,
-        iconLink: null,
-      },
-    ],
-    productImages:
-      "https://th.bing.com/th/id/OIP.eyHjNYJpIui1VJdyHfCzogHaJ4?rs=1&pid=ImgDetMain",
-    storedQuantity: 4,
-  },
-  {
-    productId: 5,
-    productName: "Womens Summer Dress",
-    price: 227000,
-    isNew: true,
-    description: "Stay cool and fashionable in this lightweight dress.",
-    seller: {
-      fullName: "Quy duc",
-      phoneNumber: "0987654321",
-      avarta: "https://zpsocial-f43-org.zadn.vn/57f136ac3541d91f8050.jpg",
-    },
-    categoryId: 6,
-    categoryName: "Thời trang",
-    status: 1,
-    createdDate: "28 ngày trước",
-    categories: [
-      {
-        categoryId: 6,
-        name: "Thời trang",
-        imageLink: null,
-        iconLink: null,
-      },
-    ],
-    productImages:
-      "https://th.bing.com/th/id/OIP.gkRheGEuNAHdSZtvYnEtMAHaNg?rs=1&pid=ImgDetMain",
-    storedQuantity: 8,
-  },
-];
+import { getInfoForCreateTradingOrder } from "../../api/tradingOrder";
 
 const ALLOW_TWO_SIDES_DIFFERENT_PERCENT = 10;
 
@@ -153,25 +13,38 @@ function CreateTradingOrder() {
   const { auth } = useContext(AuthContext);
   const { productId } = useParams();
 
-  const [products, setProducts] = useState(fetchData);
+  const [user1Info, setUser1Info] = useState();
   const [user1Products, setUser1Products] = useState([]);
   const [user1SelectedItems, setUser1SelectedItems] = useState([]);
   const [user1Total, setUser1Total] = useState(0);
 
+  const [user2Info, setUser2Info] = useState();
   const [user2Products, setUser2Products] = useState([]);
   const [user2SelectedItems, setUser2SelectedItems] = useState([]);
   const [user2Total, setUser2Total] = useState(0);
 
+  const fetchDataTest = async () =>{
+    try {
+      console.log('ProductID: ' + productId);
+        const response = await getInfoForCreateTradingOrder(auth.accessToken, productId);
+        console.log(response);
+        setUser1Info(response.requestSide);
+        setUser2Info(response.responseSide);
+        setUser1Products(response.requestSideProducts);
+        setUser2Products(response.responseSideProducts);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   //Effect
   useEffect(()=>{
-    //fetchData...
     if(productId){
       const addedItem = user2SelectedItems.find(
         (item) => item.product.productId === productId
       );
+      fetchDataTest();
     }
-    
-  },[productId])
+  },[])
 
   //User1 interact
   const User1AddProduct = (product) => {
@@ -196,7 +69,7 @@ function CreateTradingOrder() {
     ) {
       var quantity = 1;
       var newItem = { product, quantity };
-      setUser1Total(user1Total + newItem.product.price);
+      setUser1Total( user1Total + newItem.product.price);
       updatedItems.push(newItem);
     }
     setUser1SelectedItems(updatedItems);
@@ -391,7 +264,7 @@ function CreateTradingOrder() {
                     <img
                       className="border border-info border-2 rounded-3 me-3"
                       style={{ maxWidth: "60px", maxHeight: "60px" }}
-                      src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-1/366338080_1661872127655573_4244859400445488746_n.jpg?stp=dst-jpg_p100x100&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeFkyDqfEFeTPULwxxHUXxPCv4K9-ZaRHge_gr35lpEeByAPVNjH8uCnTR_mdwRVw5aftgXmhv7Oa4j18bayuCWc&_nc_ohc=HSPu2kkrPLsQ7kNvgFrfmjM&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.fsgn2-5.fna&gid=AtForDzVgOcg2lPH0-BWuNh&oh=00_AYBMW_UuXkTxzDhPgWXfmskhPTLDsU7CY1-qQYWq8s445A&oe=668D8975"
+                      src={user1Info?.avarta}
                       alt="user1"
                     />
                   </div>
@@ -399,7 +272,7 @@ function CreateTradingOrder() {
                     <div>
                       <strong> Bên yêu cầu</strong>
                     </div>
-                    <div>SKT.T1_Yasuo</div>
+                    <div>{user1Info?.fullName}</div>
                   </div>
                 </div>
               </div>
@@ -411,7 +284,7 @@ function CreateTradingOrder() {
                     <img
                       className="border border-danger border-2 rounded-3 me-3"
                       style={{ maxWidth: "60px", maxHeight: "60px" }}
-                      src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-1/366338080_1661872127655573_4244859400445488746_n.jpg?stp=dst-jpg_p100x100&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeFkyDqfEFeTPULwxxHUXxPCv4K9-ZaRHge_gr35lpEeByAPVNjH8uCnTR_mdwRVw5aftgXmhv7Oa4j18bayuCWc&_nc_ohc=HSPu2kkrPLsQ7kNvgFrfmjM&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.fsgn2-5.fna&gid=AtForDzVgOcg2lPH0-BWuNh&oh=00_AYBMW_UuXkTxzDhPgWXfmskhPTLDsU7CY1-qQYWq8s445A&oe=668D8975"
+                      src={user2Info?.avarta}
                       alt="user2"
                     />
                   </div>
@@ -419,7 +292,7 @@ function CreateTradingOrder() {
                     <div>
                       <strong> Bên tiếp nhận</strong>
                     </div>
-                    <div>SKT.T1_Yasuo</div>
+                    <div>{user2Info?.fullName}</div>
                   </div>
                 </div>
                 <div className="fs-2 text-danger px-3">
@@ -442,9 +315,9 @@ function CreateTradingOrder() {
                     Thêm sản phẩm
                   </button>
                   <ul className="dropdown-menu w-100">
-                    {products?.length > 0 ? (
+                    {user1Products?.length > 0 ? (
                       <>
-                        {products.map((product) => (
+                        {user1Products.map((product) => (
                           <li
                             className="dropdown-item"
                             value="1"
@@ -461,7 +334,7 @@ function CreateTradingOrder() {
                                 maxWidth: "30px",
                                 maxHeight: "24px",
                               }}
-                              src={`${product.productImages}`}
+                              src={`${product.imageLink}`}
                               alt="product"
                             />
                             {"  "}
@@ -498,7 +371,7 @@ function CreateTradingOrder() {
                                     maxWidth: "30px",
                                     maxHeight: "24px",
                                   }}
-                                  src={`${item.product.productImages}`}
+                                  src={`${item.product.imageLink}`}
                                   alt="product"
                                 />
                                 {item.product.productName}
@@ -566,9 +439,9 @@ function CreateTradingOrder() {
                       Thêm sản phẩm
                     </button>
                     <ul className="dropdown-menu w-100">
-                      {products?.length > 0 ? (
+                      {user2Products?.length > 0 ? (
                         <>
-                          {products.map((product) => (
+                          {user2Products.map((product) => (
                             <li
                               className="dropdown-item"
                               value="1"
@@ -585,7 +458,7 @@ function CreateTradingOrder() {
                                   maxWidth: "30px",
                                   maxHeight: "24px",
                                 }}
-                                src={`${product.productImages}`}
+                                src={`${product.imageLink}`}
                                 alt="product"
                               />
                               {"  "}
@@ -607,7 +480,7 @@ function CreateTradingOrder() {
                     <table className="table">
                       <thead>
                         <tr>
-                          <th scope="col">Sản phẩm</th>
+                          <th className="text-start" scope="col">Sản phẩm</th>
                           <th scope="col">Giá niêm yết</th>
                           <th scope="col">Số lượng</th>
                           <th scope="col">{""}</th>
@@ -623,7 +496,7 @@ function CreateTradingOrder() {
                                     maxWidth: "30px",
                                     maxHeight: "24px",
                                   }}
-                                  src={`${item.product.productImages}`}
+                                  src={`${item.product.imageLink}`}
                                   alt="product"
                                 />
                                 {item.product.productName}

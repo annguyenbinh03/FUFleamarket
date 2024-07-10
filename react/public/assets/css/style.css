@@ -1174,6 +1174,9 @@ ul {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.create-trading-order .dropdown-menu li{
+  overflow-x: auto;
+}
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 

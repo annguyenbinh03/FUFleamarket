@@ -224,6 +224,7 @@ namespace WebAPI.Controllers
                 },
                 requestSideProducts = user.Products.Select(p => new
                 {
+                    productId = p.ProductId,
                     productName = p.ProductName,
                     imageLink = p.ImageLink,
                     price = p.Price,
@@ -231,6 +232,7 @@ namespace WebAPI.Controllers
                 }).ToList(),
                 responseSideProducts = product.Seller.Products.Select(p => new
                 {
+                    productId = p.ProductId,
                     productName = p.ProductName,
                     imageLink = p.ImageLink,
                     price = p.Price,

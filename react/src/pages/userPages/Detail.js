@@ -117,10 +117,30 @@ function Detail() {
               )}
             </div>
             <div className="px-5 mt-2">
-              <div className="product_name">
-                {data?.product
-                  ? data?.product?.productName
-                  : "Sản phẩm không tồn tại"}
+              <div className="product_name d-flex justify-content-start align-items-center">
+                {data?.product?.dealType ? (
+                  <span className="badge rounded-pill text-bg-info text-white py-1">
+                    <i
+                      className="fa fa-exchange py-1 me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Trao đổi
+                  </span>
+                ) : (
+                  <span className="badge rounded-pill text-bg-primary py-1">
+                    <i
+                      className="fa fa-credit-card py-1 me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Buôn bán
+                  </span>
+                )}
+
+                <div className="ms-2" style={{ fontSize: "24px" }}>
+                  {data?.product
+                    ? data?.product?.productName
+                    : "Sản phẩm không tồn tại"}
+                </div>
               </div>
               <div className="price_wistlist d-flex justify-content-between mb-2">
                 <p className="price_wistlist_left fs-5">
@@ -232,11 +252,13 @@ function Detail() {
                     className="show_phone_button_icon"
                     src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
                   />
+                </span>
+                <span>
+                  {" "}
                   {data?.product && data?.product.seller
                     ? data?.product.seller.phoneNumber
                     : "096595 ***"}
                 </span>
-                <span>BẤM ĐỂ HIỆN SỐ</span>
               </div>
             </div>
 
@@ -260,17 +282,31 @@ function Detail() {
                   </Link>
                 </button>
 
-                <button className="chat_button  w-100  px-3 mt-2">
-                  <Link
-                    className="d-flex justify-content-between align-items-center"
-                    to={`/create-order/${productId}`}
-                  >
-                    <span>
-                      <i className="fa fa-plus-square" aria-hidden="true"></i>
-                    </span>
-                    <span>TẠO HÓA ĐƠN</span>
-                  </Link>
-                </button>
+                {data?.product?.dealType ? (
+                  <button className="chat_button  w-100  px-3 mt-2">
+                    <Link
+                      className="d-flex justify-content-between align-items-center"
+                      to={`/create-trading-order/${productId}`}
+                    >
+                      <span>
+                        <i class="fa fa-exchange" aria-hidden="true"></i>
+                      </span>
+                      <span>TẠO HÓA ĐƠN TRAO ĐỔI</span>
+                    </Link>
+                  </button>
+                ) : (
+                  <button className="chat_button  w-100  px-3 mt-2">
+                    <Link
+                      className="d-flex justify-content-between align-items-center"
+                      to={`/create-order/${productId}`}
+                    >
+                      <span>
+                        <i className="fa fa-plus-square" aria-hidden="true"></i>
+                      </span>
+                      <span>TẠO HÓA ĐƠN MUA</span>
+                    </Link>
+                  </button>
+                )}
               </>
             )}
 
