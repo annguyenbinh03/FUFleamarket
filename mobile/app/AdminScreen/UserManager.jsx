@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { formatDate } from "../../utils/formatDate";
 import Empty from "../../components/Empty";
+import { getAllUserAPI } from "../api/user_api";
 
 const UserManager = () => {
   const navigation = useNavigation();
@@ -22,9 +22,7 @@ const UserManager = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await axios.get(
-        "http://192.168.146.25:7057/api/user/AllProfile(Admin)"
-      );
+      const response = await getAllUserAPI();
       console.log("Check API Response:", response.data);
       setUsers(response.data);
       setLoading(false);

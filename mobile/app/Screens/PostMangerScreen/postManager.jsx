@@ -17,22 +17,24 @@ import { formatDate } from "../../../utils/formatDate";
 import Empty from "../../../components/Empty";
 import formatPrice from "../../../utils/formatPrice";
 import { getMyProductsAPI } from "../../api/product";
+import { getMyPackageAPI } from "../../api/packages";
 
 const PostManager = () => {
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("ĐANG HIỂN THỊ");
   const [isLoading, setIsLoading] = useState(true);
+  const [sellingPackages, setSellingPackages] = useState([]);
   const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
 
-  const fetchProduct = useCallback(async () => {
+  const fetchProducts = useCallback(async () => {
     console.log("Token:", auth.token);
 
     try {
       setIsLoading(true);
-      const response = await getMyProductsAPI();
+      const response = await getMyProductsAPI(auth.token);
 
-      console.log("response API:", response.data);
+      console.log("Phản hồi API:", response.data);
 
       if (response.status === 200 && Array.isArray(response.data)) {
         setProducts(response.data);
@@ -50,8 +52,26 @@ const PostManager = () => {
   }, [auth.token]);
 
   useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const fetchMyPackage = useCallback(async () => {
+    try {
+      const response = await getMyPackageAPI(auth.token);
+      setSellingPackages(response.data);
+      console.log("Gói bán hàng:", response.data);
+      console.log(
+        "Giới hạn số lượng sản phẩm:",
+        response.data[0].promotion.productQuantityLimit
+      );
+    } catch (error) {
+      console.error("Lỗi khi lấy gói bán hàng:", error);
+    }
+  }, [auth.token]);
+
+  useEffect(() => {
+    fetchMyPackage();
+  }, [fetchMyPackage]);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -117,6 +137,12 @@ const PostManager = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Quản lý tin</Text>
         <View style={{ width: 20 }} />
+        <View>
+          <Text>
+            Số bài đăng {products.length}/
+            {sellingPackages[0]?.promotion.productQuantityLimit || 0}
+          </Text>
+        </View>
       </View>
 
       <ScrollView
@@ -188,7 +214,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
   },
-
   container: {
     backgroundColor: "#F8F8F8",
   },
