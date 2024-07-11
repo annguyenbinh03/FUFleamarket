@@ -59,5 +59,12 @@ namespace Repository
                                  .Where(pt => promoOrderIds.Contains(pt.PromoOrderId))
                                  .ToListAsync();
         }
+
+        public async Task<PromotionTransaction?> GetByPromoOrderIdAsync(int promoOrderId)
+        {
+            return await _context.PromotionTransactions
+                .FirstOrDefaultAsync(pt => pt.PromoOrderId == promoOrderId);
+        }
+
     }
 }

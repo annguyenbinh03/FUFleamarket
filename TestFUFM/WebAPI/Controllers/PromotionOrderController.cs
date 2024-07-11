@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
                     var dto = new DetailedPromotionOrderDTO
                     {
                         PromoOrderId = promoOrder.PromoOrderId,
-                        EndDate = promoOrder.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                        RemainedDate = promoOrder.RemainedDate,
                         UserId = promoOrder.UserId,
                         FullName = user.FullName,
                         Email = user.Email,
@@ -77,9 +77,9 @@ namespace WebAPI.Controllers
                         Status = promoOrder.Status,
                         PromotionName = promotion.Name,
                         PromotionDescription = promotion.Description,
-                        PromotionPeriod = promotion.Period,
                         PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
-                        PromotionPrice = promotion.Price
+                        PromotionPrice = promotion.Price,
+                        ImageLink = promotion.ImageLink,
                     };
                     detailedPromoOrderDtos.Add(dto);
                 }
@@ -120,7 +120,7 @@ namespace WebAPI.Controllers
                     var dto = new DetailedPromotionOrderDTO
                     {
                         PromoOrderId = promoOrder.PromoOrderId,
-                        EndDate = promoOrder.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                        RemainedDate = promoOrder.RemainedDate,
                         UserId = promoOrder.UserId,
                         FullName = user.FullName,
                         Email = user.Email,
@@ -130,9 +130,9 @@ namespace WebAPI.Controllers
                         Status = promoOrder.Status,
                         PromotionName = promotion.Name,
                         PromotionDescription = promotion.Description,
-                        PromotionPeriod = promotion.Period,
                         PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
-                        PromotionPrice = promotion.Price
+                        PromotionPrice = promotion.Price,
+                        ImageLink = promotion.ImageLink,
                     };
                     detailedPromoOrderDtos.Add(dto);
                 }
@@ -178,12 +178,12 @@ namespace WebAPI.Controllers
                 return BadRequest($"Promotion with ID {createDto.PromotionId} does not exist.");
             }
 
-            var startDate = DateTime.UtcNow;
-            var endDate = startDate.AddDays(promotion.Period);
-
+            //var startDate = DateTime.UtcNow;
+            //var endDate = startDate.AddDays(promotion.Period);
+            int RemainedDate = 30;
             var price = promotion.Price;
 
-            var promoOrderModel = createDto.ToPromotionOrderFromCreate(userId, endDate);
+            var promoOrderModel = createDto.ToPromotionOrderFromCreate(userId, RemainedDate);
             await _promoOrderRepo.CreateAsync(promoOrderModel);
 
             var promoOrderDTO = promoOrderModel.ToPromotionOrderDTO();

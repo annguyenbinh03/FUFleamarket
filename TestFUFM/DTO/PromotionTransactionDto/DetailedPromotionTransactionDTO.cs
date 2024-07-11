@@ -20,11 +20,13 @@ namespace DTO.PromotionTransactionDto
 
         public string Email { get; set; } = null!;
 
-        public DateTime StartDate { get; set; }
+        //public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        //public DateTime EndDate { get; set; }
 
         public int PromoOrderId { get; set; }
+
+        public int RemainedDate { get; set; }
 
         public decimal Price { get; set; }
 
@@ -34,6 +36,8 @@ namespace DTO.PromotionTransactionDto
 
         public string TransactionStatus { get; set; } = null!;
 
+        public int Quantity { get; set; }
+
         public DateTime TransactionCreatedDate { get; set; }
 
         public int PromotionId { get; set; }
@@ -42,11 +46,11 @@ namespace DTO.PromotionTransactionDto
 
         public string PromotionDescription { get; set; } = null!;
 
-        public int PromotionPeriod { get; set; }
-
         public int PromotionProductQuantityLimit { get; set; }
 
         public decimal PromotionPrice { get; set; }
+
+        public string ImageLink { get; set; } = null!;
 
         public string PromotionOrderStatus { get; set; } = null!;
 

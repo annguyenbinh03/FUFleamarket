@@ -12,6 +12,8 @@ namespace DTO.PromotionTransactionDto
 
         public decimal Price { get; set; }
 
+        public int Quantity { get; set; }
+
         public string PaymentMethod { get; set; } = null!;
 
 

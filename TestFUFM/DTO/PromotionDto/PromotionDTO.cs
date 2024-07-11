@@ -12,11 +12,18 @@ namespace BusinessObjects.PromotionDto
     public class PromotionDTO
     {       
         public int PromotionId { get; set; }
+
         public string Name { get; set; } = null!;
+
         public string Description { get; set; } = null!;
-        public int Period { get; set; }
-        public int ProductQuantity { get; set; }
+
+        public int ProductQuantityLimit { get; set; }
+
         public decimal Price { get; set; }
+
+        public string ImageLink { get; set; } = null!;
+
         public bool IsDeleted { get; set; }
+
     }
 }

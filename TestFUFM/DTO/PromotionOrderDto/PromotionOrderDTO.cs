@@ -15,7 +15,9 @@ namespace BusinessObjects.PromotionOrderDto
 
         //public string StartDate { get; set; }
 
-        public string EndDate { get; set; }
+        public int RemainedDate { get; set; }
+
+        //public string EndDate { get; set; }
 
         public int? UserId { get; set; }
 

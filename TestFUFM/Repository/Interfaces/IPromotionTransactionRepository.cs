@@ -23,5 +23,6 @@ namespace Repository.Interfaces
 
         Task<IEnumerable<PromotionTransaction>> GetByPromotionOrdersAsync(IEnumerable<int> promoOrderIds);
 
+        Task<PromotionTransaction?> GetByPromoOrderIdAsync(int promoOrderId);
     }
 }

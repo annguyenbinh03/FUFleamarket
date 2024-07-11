@@ -10,7 +10,7 @@ namespace DTO.PromotionOrderDto
     {
         public int PromoOrderId { get; set; }
 
-        public string EndDate { get; set; }
+        public int RemainedDate { get; set; }
 
         public int UserId { get; set; }
 
@@ -30,7 +30,9 @@ namespace DTO.PromotionOrderDto
 
         public string PromotionDescription { get; set; } = null!;
 
-        public int PromotionPeriod { get; set; }
+        //public int PromotionPeriod { get; set; }
+
+        public string ImageLink { get; set; } = null!;
 
         public int PromotionProductQuantityLimit { get; set; }
 

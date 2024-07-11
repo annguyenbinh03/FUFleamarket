@@ -16,11 +16,12 @@ namespace DTO.Mappers
             return new PromotionTransactionDTO
             {
                 PromoTransactionId = model.PromoTransactionId,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                TransactionCreatedDate = model.CreatedDate,
+                //StartDate = model.StartDate,
+                //EndDate = model.EndDate,
+                CreatedDate = model.CreatedDate,
                 PromoOrderId = model.PromoOrderId,
                 Price = model.Price,
+                Quantity = model.Quantity,
                 PaymentMethod = model.PaymentMethod,
                 TransactionCode = model.TransactionCode,
                 TransactionStatus = model.TransactionStatus,
@@ -31,11 +32,12 @@ namespace DTO.Mappers
         {
             return new PromotionTransaction
             {
-                StartDate = promotionTransactionDto.StartDate,
-                EndDate = promotionTransactionDto.EndDate,
-                CreatedDate = promotionTransactionDto.TransactionCreatedDate,
+                //StartDate = promotionTransactionDto.StartDate,
+                //EndDate = promotionTransactionDto.EndDate,
+                CreatedDate = promotionTransactionDto.CreatedDate,
                 PromoOrderId = promotionOrderId,
                 Price = promotionTransactionDto.Price,
+                Quantity = promotionTransactionDto.Quantity,
                 PaymentMethod = promotionTransactionDto.PaymentMethod,
                 TransactionCode = promotionTransactionDto.TransactionCode,
                 TransactionStatus = promotionTransactionDto.TransactionStatus,

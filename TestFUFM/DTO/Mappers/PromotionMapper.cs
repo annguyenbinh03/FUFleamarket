@@ -18,9 +18,10 @@ namespace BusinessObjects.Mappers
                 PromotionId = model.PromotionId,
                 Name = model.Name,
                 Description = model.Description,
-                Period = model.Period,
-               ProductQuantity = model.ProductQuantityLimit,
+                //Period = model.Period,
+                ProductQuantityLimit = model.ProductQuantityLimit,
                 Price = model.Price,
+                ImageLink = model.ImageLink,
                 IsDeleted = model.IsDeleted,
             };
         }
@@ -30,9 +31,10 @@ namespace BusinessObjects.Mappers
             {
                 Name = CreateModel.Name,
                 Description = CreateModel.Description,
-                Period = CreateModel.Period,
-              //  ProductQuantity = CreateModel.ProductQuantityLimit,
+                //Period = CreateModel.Period,
+                ProductQuantityLimit = CreateModel.ProductQuantityLimit,
                 Price = CreateModel.Price,
+                ImageLink = CreateModel.ImageLink,
             };
         }
     }

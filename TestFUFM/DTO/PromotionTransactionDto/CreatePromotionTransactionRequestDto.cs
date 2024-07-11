@@ -10,9 +10,9 @@ namespace DTO.PromotionTransactionDto
     {
        
 
-        public DateTime StartDate { get; set; }
+        //public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        //public DateTime EndDate { get; set; }
 
         public int PromoOrderId { get; set; }
 
@@ -24,7 +24,9 @@ namespace DTO.PromotionTransactionDto
 
         public string TransactionStatus { get; set; } = null!;
 
-        public DateTime TransactionCreatedDate { get; set; }
+        public int Quantity { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
     }
 }

@@ -16,8 +16,8 @@ namespace BusinessObjects.Mappers
             return new PromotionOrderDTO
             {
                 PromoOrderId = model.PromoOrderId,
-       //         StartDate = model.StartDate.ToString("yyyy-MM-dd"),
-                EndDate = model.EndDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                //         StartDate = model.StartDate.ToString("yyyy-MM-dd"),
+                RemainedDate = model.RemainedDate,
                 UserId = model.UserId,
             //Price = model.Price,
               //  ProductQuantity = model.ProductQuantity,
@@ -26,14 +26,14 @@ namespace BusinessObjects.Mappers
             };
         }
         
-        public static PromotionOrder ToPromotionOrderFromCreate(this CreatePromotionOrderRequestDto dto, int userId, DateTime endDate)
+        public static PromotionOrder ToPromotionOrderFromCreate(this CreatePromotionOrderRequestDto dto, int userId, int RemainedDate)
         {
             return new PromotionOrder
             {
                 UserId = userId,
                 PromotionId = dto.PromotionId,
-    //            StartDate = startDate,
-                EndDate = endDate,
+                //            StartDate = startDate,
+                RemainedDate = RemainedDate,
      //           Price = price, 
                // ProductQuantity = dto.ProductQuantity
                Status = dto.Status,

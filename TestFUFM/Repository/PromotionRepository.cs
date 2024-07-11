@@ -57,9 +57,11 @@ namespace Repository
             }
             existingPromotion.Name = promotionDto.Name;
             existingPromotion.Description = promotionDto.Description;
-            existingPromotion.Period = promotionDto.Period;
+            //existingPromotion.Period = promotionDto.Period;
           //  existingPromotion.ProductQuantity = promotionDto.ProductQuantity;
+            existingPromotion.ProductQuantityLimit = promotionDto.ProductQuantityLimit;
             existingPromotion.Price = promotionDto.Price;
+            existingPromotion.ImageLink = promotionDto.ImageLink;
             existingPromotion.IsDeleted = promotionDto.IsDeleted;
 
             await _dbcontext.SaveChangesAsync();

@@ -122,14 +122,14 @@ namespace WebAPI.Controllers
 
             Promotion? promotion = await _promotionRepo.GetByIdAsync(promotionId);
 
-            PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);
+            PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);           
+            PromotionTransaction? existingPromotionTransaction = await _promotionTransactionRepo.GetByPromoOrderIdAsync(existingPromoOrder.PromoOrderId);
 
             if (existingPromoOrder != null)
             {
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
                 {
-                    StartDate = existingPromoOrder.EndDate,
-                    EndDate = existingPromoOrder.EndDate.AddDays(promotion.Period),
+
                     CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
@@ -143,12 +143,12 @@ namespace WebAPI.Controllers
 
                     if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
                     {
-                        existingPromoOrder.EndDate = existingPromoOrder.EndDate.AddDays(promotion.Period);
+                        newPromoTransaction.Quantity = existingPromotionTransaction.Quantity + 30;
                     }
                     else if (existingPromoOrder.Status != StatusPromotionOrderEnum.Active.ToString())
                     {
                         existingPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
-                        existingPromoOrder.EndDate = DateTime.Now.AddDays(promotion.Period);
+                        
                     }
                 }
                 else
@@ -176,8 +176,7 @@ namespace WebAPI.Controllers
             else
             {
                 PromotionOrder newPromoOrder = new PromotionOrder
-                {
-                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                {                    
                     UserId = userId,
                     PromotionId = promotion.PromotionId
                 };
@@ -185,6 +184,7 @@ namespace WebAPI.Controllers
                 if (vnp_ResponseCode == "00")
                 {
                     newPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
+                    newPromoOrder.RemainedDate = 30;
                 }
                 else
                 {
@@ -195,9 +195,7 @@ namespace WebAPI.Controllers
                 await _promotionOrder.CreateAsync(newPromoOrder);
 
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
-                {
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(promotion.Period),
+                {                 
                     CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
@@ -208,6 +206,7 @@ namespace WebAPI.Controllers
                 if (vnp_ResponseCode == "00")
                 {
                     newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.Quantity = 1;
                 }
                 else
                 {

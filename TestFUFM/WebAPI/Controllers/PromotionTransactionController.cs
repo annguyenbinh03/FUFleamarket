@@ -58,9 +58,7 @@ namespace WebAPI.Controllers
                             FullName = user.FullName,
                             Email = user.Email,
                             Avarta = user.Avarta,
-                            CreatedDate = user.CreatedDate,
-                            StartDate = transaction.StartDate,
-                            EndDate = transaction.EndDate,
+                            CreatedDate = user.CreatedDate,                       
                             PaymentMethod = transaction.PaymentMethod,
                             TransactionCode = transaction.TransactionCode,
                             TransactionStatus = transaction.TransactionStatus,
@@ -70,9 +68,9 @@ namespace WebAPI.Controllers
                             PromotionId = promotion.PromotionId,
                             PromotionName = promotion.Name,
                             PromotionDescription = promotion.Description,
-                            PromotionPeriod = promotion.Period,
                             PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
                             PromotionPrice = promotion.Price,
+                            ImageLink = promotion.ImageLink,
                             PromotionOrderStatus = promotionOrder.Status                            
                             
                         };
@@ -137,8 +135,6 @@ namespace WebAPI.Controllers
                             Email = user.Email,
                             Avarta = user.Avarta,
                             CreatedDate = user.CreatedDate,
-                            StartDate = transaction.StartDate,
-                            EndDate = transaction.EndDate,
                             PaymentMethod = transaction.PaymentMethod,
                             TransactionCode = transaction.TransactionCode,
                             TransactionStatus = transaction.TransactionStatus,
@@ -148,10 +144,11 @@ namespace WebAPI.Controllers
                             PromotionId = promotion.PromotionId,
                             PromotionName = promotion.Name,
                             PromotionDescription = promotion.Description,
-                            PromotionPeriod = promotion.Period,
                             PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
                             PromotionPrice = promotion.Price,
+                            ImageLink = promotion.ImageLink,
                             PromotionOrderStatus = promotionOrder.Status
+
                         };
                         promotionTransactionDtos.Add(dto);
                     }
