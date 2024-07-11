@@ -6,6 +6,7 @@ using BusinessObjects.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using BusinessObjects;
+using BusinessObjects.Models.Enum;
 
 namespace WebAPI.Controllers
 {
@@ -59,7 +60,7 @@ namespace WebAPI.Controllers
             {
                 return Unauthorized("Invalid user ID claim.");
             }
-           
+
             var tradingOrders = await _tradingRepo.GetTradingOrdersByUserIdAsync(userId);
             if (tradingOrders == null || !tradingOrders.Any())
             {
@@ -117,7 +118,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Invalid input data.");
             }
-        
+
             // Tạo TradingOrder
             var tradingOrder = new TradingOrder
             {
@@ -125,7 +126,7 @@ namespace WebAPI.Controllers
                 User2 = createDto.TradingOrder.UserId2,
                 Note = createDto.TradingOrder.Note,
                 CreatedDate = DateTime.Now,
-                Status = 1 // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
+                Status = 0 // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
             };
 
             await _tradingRepo.CreateTradingOrderAsync(tradingOrder);
@@ -136,7 +137,7 @@ namespace WebAPI.Controllers
                 foreach (var productDto in products)
                 {
                     var product = await _productRepo.GetByIdProductAsync(productDto.ProductId);
-                    
+
 
                     var tradingOrderDetail = new TradingOrderDetail
                     {
@@ -263,13 +264,242 @@ namespace WebAPI.Controllers
 
             await _tradingRepo.UpdateAsync(id, tradingOrderDto);
 
-            var updatedOrder = await _tradingRepo.GetByIdAsync(id); 
+            var updatedOrder = await _tradingRepo.GetByIdAsync(id);
 
             var updatedOrderDto = updatedOrder.ToTradingOrderDTO();
 
             return Ok(updatedOrderDto);
         }
 
-        
+
+        [HttpPost("User2/Accept/{id}")]
+        public async Task<IActionResult> User2Accept(int id)
+        {
+            // Lấy User2 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var user2Id = int.Parse(userIdClaim.Value);
+
+            // Tìm TradingOrder
+            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            if (tradingOrder == null)
+            {
+                return BadRequest("Order not found.");
+            }
+
+            // Kiểm tra User2
+            if (tradingOrder.User2 != user2Id)
+            {
+                return BadRequest("You are not authorized to update this order.");
+            }
+
+            // Cập nhật trạng thái
+            tradingOrder.Status = 1;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("User2/Reject/{id}")]
+        public async Task<IActionResult> User2Reject(int id)
+        {
+            // Lấy User2 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var user2Id = int.Parse(userIdClaim.Value);
+
+            // Tìm TradingOrder
+            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            if (tradingOrder == null)
+            {
+                return BadRequest("Order not found.");
+            }
+
+            // Kiểm tra User2
+            if (tradingOrder.User2 != user2Id)
+            {
+                return BadRequest("You are not authorized to update this order.");
+            }
+
+            // Cập nhật trạng thái
+            tradingOrder.Status = 2;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("User1/Reject/{id}")]
+        public async Task<IActionResult> User1Reject(int id)
+        {
+            // Lấy User1 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+
+            var user1Id = int.Parse(userIdClaim.Value);
+
+            // Tìm TradingOrder
+            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            if (tradingOrder == null)
+            {
+                return BadRequest("Order not found.");
+            }
+
+            // Kiểm tra User2
+            if (tradingOrder.User1 != user1Id)
+            {
+                return BadRequest("You are not authorized to update this order.");
+            }
+
+            // Cập nhật trạng thái
+            tradingOrder.Status = 2;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("User1/Complete/{id}")]
+        public async Task<IActionResult> User1Complete(int id)
+        {
+            // Lấy User1 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+
+            var user1Id = int.Parse(userIdClaim.Value);
+
+            // Tìm TradingOrder
+            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            if (tradingOrder == null)
+            {
+                return BadRequest("Order not found.");
+            }
+
+            // Kiểm tra User2
+            if (tradingOrder.User1 != user1Id)
+            {
+                return BadRequest("You are not authorized to update this order.");
+            }
+
+            // Cập nhật trạng thái
+            tradingOrder.Status = 3;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpGet("user1/getMyRequest")]
+        public async Task<IActionResult> getMyRequest(
+                 [FromQuery] int? status,  // Optional status parameter
+                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
+        {
+            // Lấy User1 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var user1Id = int.Parse(userIdClaim.Value);
+
+            // Tạo truy vấn cơ bản
+            var query = _context.TradingOrders.AsQueryable();
+
+            // Lọc theo User1
+            query = query.Where(order => order.User1 == user1Id);
+
+            // Lọc theo trạng thái nếu được cung cấp
+            if (status.HasValue && (status.Value == 0 || status.Value == 1 || status.Value == 2 || status.Value == 3 || status.Value == 4))
+            {
+                query = query.Where(order => order.Status == status.Value);
+            }
+
+            // Sắp xếp theo ngày
+            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
+
+            // Thực hiện truy vấn và trả về kết quả
+            var orders = await query.ToListAsync();
+            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
+            return Ok(tradingOrderDtos);
+        }
+
+
+        [HttpGet("user2/getRequestAndContacting")]
+        public async Task<IActionResult> getRequestAndContacting(
+                 [FromQuery] int? status,  // Optional status parameter
+                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
+        {
+            // Lấy User1 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var user2Id = int.Parse(userIdClaim.Value);
+
+            // Tạo truy vấn cơ bản
+            var query = _context.TradingOrders.AsQueryable();
+
+            // Lọc theo User1
+            query = query.Where(order => order.User2 == user2Id);
+
+            // Lọc theo trạng thái nếu được cung cấp
+            if (status.HasValue && (status.Value == 0 || status.Value == 1))
+            {
+                query = query.Where(order => order.Status == status.Value);
+            }
+
+            // Sắp xếp theo ngày
+            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
+
+            // Thực hiện truy vấn và trả về kết quả
+            var orders = await query.ToListAsync();
+            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
+            return Ok(tradingOrderDtos);
+        }
+
+        [HttpGet("user2/GetCompleteAndReject")]
+        public async Task<IActionResult> getCompleteAndReject(
+                 [FromQuery] int? status,  // Optional status parameter
+                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
+        {
+            // Lấy User1 từ claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var user2Id = int.Parse(userIdClaim.Value);
+
+            // Tạo truy vấn cơ bản
+            var query = _context.TradingOrders.AsQueryable();
+
+            // Lọc theo User1
+            query = query.Where(order => order.User2 == user2Id);
+
+            // Lọc theo trạng thái nếu được cung cấp
+            if (status.HasValue && (status.Value == 2 || status.Value == 3))
+            {
+                query = query.Where(order => order.Status == status.Value);
+            }
+
+            // Sắp xếp theo ngày
+            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
+
+            // Thực hiện truy vấn và trả về kết quả
+            var orders = await query.ToListAsync();
+            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
+            return Ok(tradingOrderDtos);
+        }
+
     }
 }
