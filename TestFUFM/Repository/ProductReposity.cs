@@ -354,7 +354,7 @@ namespace Repository
             }
 
             // Subtract the order quantity from the stored quantity
-            product.StoredQuantity = product.StoredQuantity - orderQuantity;
+            product.StoredQuantity -= orderQuantity;
 
             try
             {

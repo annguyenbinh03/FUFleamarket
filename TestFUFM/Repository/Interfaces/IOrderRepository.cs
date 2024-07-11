@@ -25,6 +25,6 @@ namespace Repository.Interfaces
         Task<Order> GetOrderByProductIdAsync(int userId, int productId);
         Task UpdateBuyerRatingAsync(int buyerId, int rating);
         Task UpdateSellerRatingAsync(int sellerId, int rating);
-        
+        Task<bool> CompleteOrderAsync(int userId, int orderId);
     }
 }

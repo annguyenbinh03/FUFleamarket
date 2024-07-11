@@ -192,5 +192,19 @@ namespace Repository
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> CompleteOrderAsync(int userId, int orderId)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId && o.SellerId == userId);
+            if (order == null)
+            {
+                return false;
+            }
+
+            order.Status = 3; // Update status to 3 (completed)
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

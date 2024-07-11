@@ -576,6 +576,78 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+        [HttpPut]
+        [Route("completeOrder/{orderId}")]
+        public async Task<IActionResult> CompleteOrder([FromRoute] int orderId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            // Get the order details to know the status and quantity
+            var order = await _orderRepo.GetByOrderIdAsync(orderId);
+            if (order == null)
+            {
+                return BadRequest("Order not found");
+            }
+
+            // Check if the order status can be updated to 3 (order completed)
+            if (order.Status != 1) // Assuming the status 2 means order is ready to be completed
+            {
+                return BadRequest("Only orders with status 1 can be marked as completed");
+            }
+
+            // Check if the logged-in user is the seller of the product
+            if (order.SellerId != userId)
+            {
+                return BadRequest("Only the seller can complete the order");
+            }
+
+            // Get the product details to update the storedQuantity
+            var product = await _productRepo.GetProductById(order.ProductId);
+            if (product == null)
+            {
+                return BadRequest("Product not found");
+            }
+
+            // Ensure the stored quantity is valid for the completion
+            if (order.Quantity > product.StoredQuantity)
+            {
+                return BadRequest("Ordered quantity exceeds the stored quantity");
+            }
+
+            // Reduce the storedQuantity by the order quantity and complete the order
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    bool updateResult = await _productRepo.UpdateProductQuantityAsync(product.ProductId, order.Quantity);
+                    if (!updateResult)
+                    {
+                        return BadRequest("Failed to update product quantity");
+                    }
+
+                    bool result = await _orderRepo.CompleteOrderAsync(userId, orderId);
+                    if (!result)
+                    {
+                        return BadRequest("Failed to complete the order");
+                    }
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Internal server error");
+                }
+            }
+
+            return Ok("Order completed and product quantity updated");
+        }
 
 
     }
