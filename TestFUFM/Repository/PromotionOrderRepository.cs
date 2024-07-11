@@ -68,7 +68,7 @@ namespace Repository
             }
 
             existingOrder.Status = promotionOrderModel.Status;
-            existingOrder.EndDate = promotionOrderModel.EndDate;
+        //    existingOrder.EndDate = promotionOrderModel.EndDate;
        //     existingOrder.StartDate = promotionOrderModel.StartDate;
        //     existingOrder.Price = promotionOrderModel.Price;
            // existingOrder.ProductQuantity = promotionOrderModel.ProductQuantity;
@@ -82,6 +82,14 @@ namespace Repository
         {
             return await _dbcontext.PromotionOrders
                 .FirstOrDefaultAsync(po => po.UserId == userId && po.PromotionId == promotionId);
+        }
+
+
+        public async Task<IEnumerable<PromotionOrder>> GetByUserIdAsync(int userId)
+        {
+            return await _dbcontext.PromotionOrders
+                                 .Where(po => po.UserId == userId)
+                                 .ToListAsync();
         }
     }
 }

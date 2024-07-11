@@ -122,15 +122,26 @@ namespace WebAPI.Controllers
 
             Promotion? promotion = await _promotionRepo.GetByIdAsync(promotionId);
 
-            PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);           
-            
+            PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);
+
+            int predefinedThreshold = 100; // Define your threshold or logic here
+            bool isHigherPromotion = promotionId > predefinedThreshold; // Check if promotionId is higher
+
+            // Update any existing lower promotions to "Pending"
+            var allUserPromotions = await _promotionOrder.GetByUserIdAsync(userId);
+            foreach (var promoOrder in allUserPromotions)
+            {
+                if (promoOrder.PromotionId < promotionId && promoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
+                {
+                    promoOrder.Status = StatusPromotionOrderEnum.Pending.ToString();
+                    await _promotionOrder.UpdateAsync(promoOrder);
+                }
+            }
 
             if (existingPromoOrder != null)
             {
-
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
                 {
-
                     CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
@@ -141,7 +152,7 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.TransactionStatus = isHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
 
                     if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
                     {
@@ -150,7 +161,6 @@ namespace WebAPI.Controllers
                     else if (existingPromoOrder.Status != StatusPromotionOrderEnum.Active.ToString())
                     {
                         existingPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
-                        
                     }
                 }
                 else
@@ -178,7 +188,7 @@ namespace WebAPI.Controllers
             else
             {
                 PromotionOrder newPromoOrder = new PromotionOrder
-                {                    
+                {
                     UserId = userId,
                     PromotionId = promotion.PromotionId
                 };
@@ -197,19 +207,18 @@ namespace WebAPI.Controllers
                 await _promotionOrder.CreateAsync(newPromoOrder);
 
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
-                {                 
+                {
                     CreatedDate = DateTime.Now,
                     PaymentMethod = "VNPay",
                     TransactionCode = vnpayTranId.ToString(),
                     Price = promotion.Price,
                     PromoOrderId = newPromoOrder.PromoOrderId,
                     Quantity = 1,
-            };
+                };
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
-                    
+                    newPromoTransaction.TransactionStatus = isHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
                 }
                 else
                 {
@@ -220,10 +229,11 @@ namespace WebAPI.Controllers
             }
 
             return Redirect("http://localhost/my-selling-package");
+
         }
 
 
-            private bool ValidateSignature(string rspraw, string inputHash, string secretKey)
+        private bool ValidateSignature(string rspraw, string inputHash, string secretKey)
         {
             string myChecksum = VNPayHelper.HmacSHA512(secretKey, rspraw);
             return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);

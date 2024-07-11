@@ -19,5 +19,7 @@ namespace Repository.Interfaces
         Task<PromotionOrder> UpdateAsync(PromotionOrder PromotionOrderModel);
 
         Task<PromotionOrder?> GetByUserIdAndPromotionIdAsync(int userId, int promotionId);
+
+        Task<IEnumerable<PromotionOrder>> GetByUserIdAsync(int userId);
     }
 }
