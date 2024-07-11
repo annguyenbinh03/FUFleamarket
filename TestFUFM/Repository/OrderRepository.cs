@@ -138,26 +138,12 @@ namespace Repository
 
         public async Task<bool> AcceptOrderAsync(int userId, int orderId)
         {
-            try
-            {
-                var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId && o.SellerId == userId);
-                if (order == null)
-                {
-                    return false; // Order not found or the user is not the seller
-                }
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null || order.SellerId != userId || order.Status != 0) return false;
 
-                // Update the order status or other fields as needed
-                order.Status = 1; // Assuming 1 means accepted
-
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                // Example: _logger.LogError(ex, "Error accepting order {OrderId} for seller {UserId}", orderId, userId);
-                return false;
-            }
+            order.Status = 1;
+            await _context.SaveChangesAsync();
+            return true;
         }
         public async Task<bool> DenyOrderAsync(int userId, int orderId)
         {

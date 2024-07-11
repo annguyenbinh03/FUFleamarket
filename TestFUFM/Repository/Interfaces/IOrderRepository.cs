@@ -21,9 +21,10 @@ namespace Repository.Interfaces
         Task<List<Order>> GetOrdersByBuyerIdAsync(int buyerId, bool sortByDate = false, bool sortByPrice = false, bool descending = false);
 
         Task<bool> AcceptOrderAsync(int userId,int productId);
-        Task<bool> DenyOrderAsync(int userId, int productId);
+        Task<bool> DenyOrderAsync(int userId, int orderId);
         Task<Order> GetOrderByProductIdAsync(int userId, int productId);
         Task UpdateBuyerRatingAsync(int buyerId, int rating);
         Task UpdateSellerRatingAsync(int sellerId, int rating);
+        
     }
 }

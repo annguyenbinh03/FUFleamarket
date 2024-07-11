@@ -445,7 +445,7 @@ namespace WebAPI.Controllers
             // Check if the order status is 0
             if (order.Status != 0)
             {
-                return BadRequest("Only orders with status 0 can reduce the store quantity");
+                return BadRequest("Only orders with status 0 can be accepted");
             }
 
             // Check if the logged-in user is the seller of the product
@@ -467,18 +467,30 @@ namespace WebAPI.Controllers
                 return BadRequest("Ordered quantity exceeds the stored quantity");
             }
 
-            // Call the repository method to accept the order
-            bool result = await _orderRepo.AcceptOrderAsync(userId, orderId);
-            if (!result)
+            // Reduce the storedQuantity by the order quantity and accept the order
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                return BadRequest("Failed to accept the order request");
-            }
+                try
+                {
+                    bool updateResult = await _productRepo.UpdateProductQuantityAsync(product.ProductId, -order.Quantity);
+                    if (!updateResult)
+                    {
+                        return BadRequest("Failed to update product quantity");
+                    }
 
-            // Reduce the storedQuantity by the order quantity
-            bool updateResult = await _productRepo.UpdateProductQuantityAsync(product.ProductId, order.Quantity);
-            if (!updateResult)
-            {
-                return BadRequest("Failed to update product quantity");
+                    bool result = await _orderRepo.AcceptOrderAsync(userId, orderId);
+                    if (!result)
+                    {
+                        return BadRequest("Failed to accept the order request");
+                    }
+
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Internal server error");
+                }
             }
 
             return Ok("Order request accepted and product quantity updated");
