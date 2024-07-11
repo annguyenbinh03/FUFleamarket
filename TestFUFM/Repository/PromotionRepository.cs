@@ -67,5 +67,19 @@ namespace Repository
             await _dbcontext.SaveChangesAsync();
             return existingPromotion;
         }
+
+        public async Task<int?> GetHighestQuantityPromotionForUser(int userId)
+        {
+            var highestQuantity = await _dbcontext.PromotionOrders
+                .Where(po => po.UserId == userId)
+                .Join(_dbcontext.Promotions,
+                      po => po.PromotionId,
+                      p => p.PromotionId,
+                      (po, p) => p.ProductQuantityLimit)
+                .OrderByDescending(quantity => quantity)
+                .FirstOrDefaultAsync();
+
+            return highestQuantity;
+        }
     }
 }

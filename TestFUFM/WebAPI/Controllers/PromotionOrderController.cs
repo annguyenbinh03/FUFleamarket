@@ -6,6 +6,7 @@ using Repository.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using DTO.PromotionOrderDto;
+using Repository;
 
 namespace WebAPI.Controllers
 {
@@ -189,6 +190,31 @@ namespace WebAPI.Controllers
             var promoOrderDTO = promoOrderModel.ToPromotionOrderDTO();
 
             return CreatedAtAction(nameof(GetById), new { id = promoOrderModel.PromoOrderId }, promoOrderDTO);
+        }
+
+        [HttpGet("user/highestquantitypromotion")]
+        public async Task<IActionResult> GetHighestQuantityPromotionForUser()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return BadRequest("User ID not found in claims.");
+            }
+            var userId = int.Parse(userIdClaim.Value);
+
+            var highestQuantity = await _promotionRepo.GetHighestQuantityPromotionForUser(userId);
+
+            if (highestQuantity == null)
+            {
+                return NotFound("No promotions found for the user.");
+            }
+
+            var response = new
+            {
+                ProductQuantityLimit = highestQuantity.Value
+            };
+
+            return Ok(response);
         }
     }
 }
