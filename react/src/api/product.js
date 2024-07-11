@@ -76,15 +76,9 @@ export const getSellingProductForSlectOrderAPI = (token) => {
   return axiosClient.get(`${END_POINT.INFOR_PRODUCT_BUY_REQUEST}`, config);
 }
 
-
-
-
-
 export const getProductByCategoryAPI = (categoryId) => {
   return axiosClient.get(`${END_POINT.LIST_PRODUCT}?CategoryId=${categoryId}`);
 };
-
-
 
 export const getProductByProductIdAPI = (productId) => {
   return axiosClient.get(`${END_POINT.GET_PRODUCT_BY_ID}/${productId}`);

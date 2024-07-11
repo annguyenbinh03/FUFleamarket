@@ -77,7 +77,7 @@ const SellingPackage = () => {
                   <div className="fs-5">
                     <strong>{ formatPrice(sPackage.price)}đ</strong>
                     <span className="text-secondary">
-                      {" "}/ {sPackage.period} ngày
+                      {" "}/ tháng
                     </span>
                   </div>
                   <div className="d-flex justify-content-between fw-bold my-3">
@@ -87,7 +87,7 @@ const SellingPackage = () => {
                       </span>{" "}
                       Lượt đăng sản phẩm
                     </div>
-                    <div>{sPackage.productQuantity}</div>
+                    <div>{sPackage.productQuantityLimit}</div>
                   </div>
                   <div className="d-flex justify-content-start fw-bold my-3">
                     <div>

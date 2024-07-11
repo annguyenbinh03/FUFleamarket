@@ -4,9 +4,12 @@ import AuthContext from "../../context/AuthProvider";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { toast } from "react-toastify";
-import { getInfoForCreateTradingOrder } from "../../api/tradingOrder";
+import {
+  getInfoForCreateTradingOrder,
+  createTradingOrderAPI,
+} from "../../api/tradingOrder";
 
-const ALLOW_TWO_SIDES_DIFFERENT_PERCENT = 10;
+const ALLOW_TWO_SIDES_DIFFERENT_PERCENT = 90;
 
 function CreateTradingOrder() {
   const navigate = useNavigate();
@@ -23,28 +26,38 @@ function CreateTradingOrder() {
   const [user2SelectedItems, setUser2SelectedItems] = useState([]);
   const [user2Total, setUser2Total] = useState(0);
 
-  const fetchDataTest = async () =>{
-    try {
-      console.log('ProductID: ' + productId);
-        const response = await getInfoForCreateTradingOrder(auth.accessToken, productId);
-        console.log(response);
-        setUser1Info(response.requestSide);
-        setUser2Info(response.responseSide);
-        setUser1Products(response.requestSideProducts);
-        setUser2Products(response.responseSideProducts);
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  //Effect
-  useEffect(()=>{
-    if(productId){
-      const addedItem = user2SelectedItems.find(
-        (item) => item.product.productId === productId
+  const [note, setNote] = useState();
+
+  const fetchDataTest = async () => {
+    try {    
+      const response = await getInfoForCreateTradingOrder(
+        auth.accessToken,
+        productId
       );
+      console.log(response);
+      setUser1Info(response.requestSide);
+      setUser2Info(response.responseSide);
+      setUser1Products(response.requestSideProducts);
+      setUser2Products(response.responseSideProducts);
+      const productAfterFetch = response.responseSideProducts;
+      if (productAfterFetch.length > 0) {
+        const addedItem = productAfterFetch.find(
+          (item) => parseInt(item.productId) === parseInt(productId)
+        );
+        if (addedItem) User2AddProduct(addedItem);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // item.productId === productId
+
+  //Effect
+  useEffect(() => {
+    if (productId) {
       fetchDataTest();
     }
-  },[])
+  }, [productId]);
 
   //User1 interact
   const User1AddProduct = (product) => {
@@ -69,7 +82,7 @@ function CreateTradingOrder() {
     ) {
       var quantity = 1;
       var newItem = { product, quantity };
-      setUser1Total( user1Total + newItem.product.price);
+      setUser1Total(user1Total + newItem.product.price);
       updatedItems.push(newItem);
     }
     setUser1SelectedItems(updatedItems);
@@ -211,8 +224,33 @@ function CreateTradingOrder() {
     return percentDifference > ALLOW_TWO_SIDES_DIFFERENT_PERCENT;
   };
 
-  const handleSubmitForm = () => {
-    if (user1SelectedItems.length === 0 && user2SelectedItems.length === 0) {
+  const convertDataToCreate = () => {
+    var user1Product = user1SelectedItems.map(item => {
+      return {
+        "productId": item.product.productId,
+        "quantity": item.quantity
+      };
+    });
+    var user2Product = user2SelectedItems.map(item => {
+      return {
+        "productId": item.product.productId,
+        "quantity": item.quantity
+      };
+    });
+    var sendedData = {
+      tradingOrder: {
+        userId1: auth.id,
+        userId2: 2,
+        note: note,
+      },
+      user1Product,
+      user2Product,
+    };
+    return sendedData;
+  };
+
+  const handleSubmitForm = async () => {
+    if (user1SelectedItems.length === 0 || user2SelectedItems.length === 0) {
       pushErrorToast(
         `Phải có vật phẩm trao đổi giữa 2 bên ${ALLOW_TWO_SIDES_DIFFERENT_PERCENT}%.`
       );
@@ -223,6 +261,24 @@ function CreateTradingOrder() {
         `Chênh lệch tổng giá trị giao dịch 2 bên không được quá ${ALLOW_TWO_SIDES_DIFFERENT_PERCENT}%.`
       );
       return;
+    }
+    const sendedData = convertDataToCreate();
+    console.log(sendedData);
+    const response = await createTradingOrderAPI(sendedData);
+    if(response){
+      toast.info("Tạo đơn trao đổi hoàn tất, đang chờ đối phương xét duyệt!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/my-posts", { replace: true });
+    }else{
+      pushErrorToast('Tạo đơn thất bại!');
     }
   };
 
@@ -242,7 +298,10 @@ function CreateTradingOrder() {
 
   //format
   const formatPrice = (value) => {
-    return value.toLocaleString("vi-VN");
+    if (value) {
+      return value.toLocaleString("vi-VN");
+    }
+    return value;
   };
 
   return (
@@ -252,9 +311,17 @@ function CreateTradingOrder() {
         <div className="container bg-white py-4">
           <div className="row p-3">
             <div className="fs-2 fw-bold text-center">Trao đổi vật phẩm </div>
+            <div className="d-flex justify-content-center">
+              <div
+                className="col-md-3 text-center py-2 px-4 alert alert-warning fw-bold"
+                role="alert"
+              >
+                Mức chênh lệch: {ALLOW_TWO_SIDES_DIFFERENT_PERCENT}%
+              </div>
+            </div>
           </div>
           <div className="row">
-            <div className="col-lg-6 col-md-6 p-3">
+            <div className="col-md-6 p-3">
               <div className="border-bottom border-info border-2  p-3 d-flex">
                 <div className="fs-2 text-info px-2">
                   <i className="fa fa-map-marker" aria-hidden="true" />
@@ -277,7 +344,7 @@ function CreateTradingOrder() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 p-3">
+            <div className="col-md-6 p-3">
               <div className="border-bottom border-danger border-2  p-3 d-flex justify-content-end">
                 <div className="ps-2 d-flex">
                   <div>
@@ -352,69 +419,71 @@ function CreateTradingOrder() {
 
                 <div className="mt-3">
                   {user1SelectedItems?.length > 0 ? (
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Sản phẩm</th>
-                          <th scope="col">Giá niêm yết</th>
-                          <th scope="col">Số lượng</th>
-                          <th scope="col">{""}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {user1SelectedItems?.map((item) => (
-                          <tr key={item.product.productId}>
-                            <td>
-                              <div className="product-name">
-                                <img
-                                  style={{
-                                    maxWidth: "30px",
-                                    maxHeight: "24px",
-                                  }}
-                                  src={`${item.product.imageLink}`}
-                                  alt="product"
-                                />
-                                {item.product.productName}
-                              </div>
-                            </td>
-                            <td>{formatPrice(item.product.price)}</td>
-                            <td>
-                              <button
-                                className="btn btn-info btn-sm"
-                                onClick={() =>
-                                  User1DecreaseQuantityProduct(
-                                    item.product.productId
-                                  )
-                                }
-                              >
-                                -
-                              </button>
-                              <span className="px-2">{item.quantity} </span>
-                              <button
-                                className="btn btn-info btn-sm"
-                                onClick={() =>
-                                  User1AddQuantityProduct(
-                                    item.product.productId
-                                  )
-                                }
-                              >
-                                +
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                className="btn btn-danger"
-                                onClick={() =>
-                                  User1RemoveItem(item.product.productId)
-                                }
-                              >
-                                Bỏ
-                              </button>
-                            </td>
+                    <div style={{ minHeight: "300px" }}>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Giá niêm yết</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">{""}</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {user1SelectedItems?.map((item) => (
+                            <tr key={item.product.productId}>
+                              <td>
+                                <div className="product-name">
+                                  <img
+                                    style={{
+                                      maxWidth: "30px",
+                                      maxHeight: "24px",
+                                    }}
+                                    src={`${item.product.imageLink}`}
+                                    alt="product"
+                                  />
+                                  {item.product.productName}
+                                </div>
+                              </td>
+                              <td>{formatPrice(item.product.price)}</td>
+                              <td>
+                                <button
+                                  className="btn btn-info btn-sm"
+                                  onClick={() =>
+                                    User1DecreaseQuantityProduct(
+                                      item.product.productId
+                                    )
+                                  }
+                                >
+                                  -
+                                </button>
+                                <span className="px-2">{item.quantity} </span>
+                                <button
+                                  className="btn btn-info btn-sm"
+                                  onClick={() =>
+                                    User1AddQuantityProduct(
+                                      item.product.productId
+                                    )
+                                  }
+                                >
+                                  +
+                                </button>
+                              </td>
+                              <td>
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() =>
+                                    User1RemoveItem(item.product.productId)
+                                  }
+                                >
+                                  Bỏ
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   ) : (
                     <div
                       className="d-flex align-items-center"
@@ -477,69 +546,73 @@ function CreateTradingOrder() {
 
                 <div className="mt-3">
                   {user2SelectedItems?.length > 0 ? (
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th className="text-start" scope="col">Sản phẩm</th>
-                          <th scope="col">Giá niêm yết</th>
-                          <th scope="col">Số lượng</th>
-                          <th scope="col">{""}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {user2SelectedItems?.map((item) => (
-                          <tr key={item.product.productId}>
-                            <td>
-                              <div className="product-name">
-                                <img
-                                  style={{
-                                    maxWidth: "30px",
-                                    maxHeight: "24px",
-                                  }}
-                                  src={`${item.product.imageLink}`}
-                                  alt="product"
-                                />
-                                {item.product.productName}
-                              </div>
-                            </td>
-                            <td>{formatPrice(item.product.price)}</td>
-                            <td>
-                              <button
-                                className="btn btn-info btn-sm"
-                                onClick={() =>
-                                  User2DecreaseQuantityProduct(
-                                    item.product.productId
-                                  )
-                                }
-                              >
-                                -
-                              </button>
-                              <span className="px-2">{item.quantity} </span>
-                              <button
-                                className="btn btn-info btn-sm"
-                                onClick={() =>
-                                  User2AddQuantityProduct(
-                                    item.product.productId
-                                  )
-                                }
-                              >
-                                +
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                className="btn btn-danger"
-                                onClick={() =>
-                                  User2RemoveItem(item.product.productId)
-                                }
-                              >
-                                Bỏ
-                              </button>
-                            </td>
+                    <div style={{ minHeight: "300px" }}>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th className="text-start" scope="col">
+                              Sản phẩm
+                            </th>
+                            <th scope="col">Giá niêm yết</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">{""}</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {user2SelectedItems?.map((item) => (
+                            <tr key={item.product.productId}>
+                              <td>
+                                <div className="product-name">
+                                  <img
+                                    style={{
+                                      maxWidth: "30px",
+                                      maxHeight: "24px",
+                                    }}
+                                    src={`${item.product.imageLink}`}
+                                    alt="product"
+                                  />
+                                  {item.product.productName}
+                                </div>
+                              </td>
+                              <td>{formatPrice(item.product.price)}</td>
+                              <td>
+                                <button
+                                  className="btn btn-info btn-sm"
+                                  onClick={() =>
+                                    User2DecreaseQuantityProduct(
+                                      item.product.productId
+                                    )
+                                  }
+                                >
+                                  -
+                                </button>
+                                <span className="px-2">{item.quantity} </span>
+                                <button
+                                  className="btn btn-info btn-sm"
+                                  onClick={() =>
+                                    User2AddQuantityProduct(
+                                      item.product.productId
+                                    )
+                                  }
+                                >
+                                  +
+                                </button>
+                              </td>
+                              <td>
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() =>
+                                    User2RemoveItem(item.product.productId)
+                                  }
+                                >
+                                  Bỏ
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   ) : (
                     <div
                       className="d-flex justify-content-end align-items-center"
@@ -562,6 +635,18 @@ function CreateTradingOrder() {
               <span className="text-body-secondary">Tổng giá trị: </span>
               {formatPrice(user2Total)}
               <span className="text-body-secondary"> vnd</span>
+            </div>
+          </div>
+          <div className="row mt-3 px-5">
+            <div className="input-group px-5">
+              <span className="input-group-text">Ghi chú</span>
+              <textarea
+                className="form-control"
+                aria-label="With textarea"
+                placeholder="Note...."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              ></textarea>
             </div>
           </div>
           <div className="row  mt-4">

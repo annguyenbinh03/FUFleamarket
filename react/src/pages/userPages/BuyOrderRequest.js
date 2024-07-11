@@ -11,7 +11,6 @@ import Footer from "../../Footer";
 import { getSellingProductForSlectOrderAPI } from "../../api/product";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import 'react-toastify/ReactToastify.css'
 
 function BuyOrderRequest() {
   const [orders, setOrder] = useState([]);
@@ -94,10 +93,12 @@ function BuyOrderRequest() {
   };
 
   function removeTimeFromISOString(isoString) {
-    // const index = isoString.indexOf("T");
-    // if (index !== -1) {
-    //   return isoString.slice(0, index);
-    // }
+    if(isoString){
+      const index = isoString.indexOf("T");
+      if (index !== -1) {
+        return isoString.slice(0, index);
+      }
+    }
     return isoString;
   }
   const showChoosingProduct = () => {
