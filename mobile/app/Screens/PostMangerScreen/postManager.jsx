@@ -137,8 +137,8 @@ const PostManager = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Quản lý tin</Text>
         <View style={{ width: 20 }} />
-        <View>
-          <Text>
+        <View style={styles.slotPost}>
+          <Text style={styles.slotPostText}>
             Số bài đăng {products.length}/
             {sellingPackages[0]?.promotion.productQuantityLimit || 0}
           </Text>
@@ -297,6 +297,16 @@ const styles = StyleSheet.create({
     margin: 15,
     justifyContent: "center",
     alignItems: "center",
+  },
+  slotPost: {
+    backgroundColor: "#FFA500",
+    padding: 8,
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  slotPostText: {
+    color: "white",
+    fontWeight: "bold",
   },
   emptyContainer: {
     flex: 1,

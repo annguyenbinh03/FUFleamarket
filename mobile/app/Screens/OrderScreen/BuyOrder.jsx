@@ -6,17 +6,13 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  Alert,
   StatusBar,
   ActivityIndicator,
 } from "react-native";
 import AuthContext from "../../../context/AuthProvider";
-import axios from "axios";
 import Empty from "../../../components/Empty";
 import { formatDate } from "../../../utils/formatDate";
 import formatPrice from "../../../utils/formatPrice";
-
-import { useNavigation } from "@react-navigation/native";
 import { getBuyOrdersAPI } from "../../api/order";
 
 function BuyOrder() {
@@ -24,7 +20,6 @@ function BuyOrder() {
   const [activeTab, setActiveTab] = useState("pending");
   const [isLoading, setIsLoading] = useState(true);
   const { auth } = useContext(AuthContext);
-  const navigation = useNavigation();
 
   useEffect(() => {
     fetchOrders();
@@ -34,10 +29,10 @@ function BuyOrder() {
     setIsLoading(true);
     try {
       const response = await getBuyOrdersAPI(auth.token);
-      console.log("Tải đơn hàng thành công:", response.data);
+      console.log("BuyOrdersAPI: ", response.data);
       setOrders(response.data);
     } catch (error) {
-      console.log("Lỗi khi tải đơn hàng:", error);
+      console.error("Lỗi khi tải đơn hàng:", error);
     } finally {
       setIsLoading(false);
     }
@@ -47,64 +42,44 @@ function BuyOrder() {
     const order = item.order;
     const product = item.product;
     const seller = order.seller;
-    console.log("Seller object:", order.seller);
 
     return (
       <View style={styles.productContainer}>
-        <View style={styles.productImageContainer}>
+        <View style={styles.sellerInfo}>
+          <Image source={{ uri: seller.avarta }} style={styles.avatar} />
+          <Text style={styles.fullName}>{seller.fullName}</Text>
+        </View>
+        <View style={styles.productHeader}>
           <Image
             source={{ uri: product.imageLink }}
             style={styles.productImage}
           />
-          <View style={styles.productStatus}>
-            <Text style={styles.productStatusText}>
+          <View style={styles.productInfo}>
+            <Text style={styles.productName} numberOfLines={1}>
+              {product.productName}
+            </Text>
+            <Text style={styles.productPrice}>
+              {formatPrice(order.price)} VND
+            </Text>
+            <Text style={styles.productStatus}>
               {getStatusText(order.status)}
             </Text>
           </View>
         </View>
-        <View style={styles.productInfo}>
-          <Text style={styles.productName}>{product.productName}</Text>
-          <Text style={styles.productPrice}>
-            {formatPrice(order.price)} VNĐ
-          </Text>
-          <Text style={styles.productCreatedDate}>
-            Ngày đặt: {formatDate(order.orderDate)}
-          </Text>
-        </View>
-        <View style={styles.productActions}>
-          {order.status === 1 && (
-            <TouchableOpacity style={styles.productActionButton}>
-              <Text style={styles.tabButtonText}>Đánh giá</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.sellerInfo}>
-          <Image source={{ uri: seller.avarta }} style={styles.sellerAvatar} />
-          <View style={styles.sellerDetails}>
-            <Text style={styles.sellerName}>Người bán: {seller.fullName}</Text>
-            <Text style={styles.sellerContact}>
-              Liên hệ: {seller.phoneNumber}
-            </Text>
-          </View>
-        </View>
         <View style={styles.orderDetails}>
-          <Text style={styles.orderDetailText}>Mã đơn: {order.orderId}</Text>
           <Text style={styles.orderDetailText}>Số lượng: {order.quantity}</Text>
           <Text style={styles.orderDetailText}>
-            Phương thức thanh toán: {order.paymentMethod}
+            Ngày đặt: {formatDate(order.orderDate)}
           </Text>
-          <Text style={styles.orderDetailText}>
-            Địa chỉ nhận hàng: {order.receiverAddress}
+          <Text style={styles.productPrice}>
+            {formatPrice(order.price)} VND
           </Text>
-          {order.note && (
-            <Text style={styles.orderDetailText}>Ghi chú: {order.note}</Text>
-          )}
-          {order.deliveryDate && (
-            <Text style={styles.orderDetailText}>
-              Ngày giao hàng: {formatDate(order.deliveryDate)}
-            </Text>
-          )}
         </View>
+        {order.status === 1 && (
+          <TouchableOpacity style={styles.productActionButton}>
+            <Text style={styles.buttonText}>Đánh giá</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
@@ -122,6 +97,19 @@ function BuyOrder() {
     }
   };
 
+  const getTabText = (tab) => {
+    switch (tab) {
+      case "pending":
+        return "Chờ xác nhận";
+      case "confirmed":
+        return "Đã xác nhận";
+      case "cancelled":
+        return "Đã hủy";
+      default:
+        return "";
+    }
+  };
+
   const filteredOrders = orders.filter((item) => {
     switch (activeTab) {
       case "pending":
@@ -135,47 +123,23 @@ function BuyOrder() {
     }
   });
 
-  if (isLoading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#DD0000" />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#DD0000" style="light" />
       <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[
-            styles.tabButton,
-            activeTab === "pending" && styles.activeTab,
-          ]}
-          onPress={() => setActiveTab("pending")}
-        >
-          <Text style={styles.tabButtonText}>Chờ xác nhận</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.tabButton,
-            activeTab === "confirmed" && styles.activeTab,
-          ]}
-          onPress={() => setActiveTab("confirmed")}
-        >
-          <Text style={styles.tabButtonText}>Đã xác nhận</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.tabButton,
-            activeTab === "cancelled" && styles.activeTab,
-          ]}
-          onPress={() => setActiveTab("cancelled")}
-        >
-          <Text style={styles.tabButtonText}>Đã hủy</Text>
-        </TouchableOpacity>
+        {["pending", "confirmed", "cancelled"].map((tab) => (
+          <TouchableOpacity
+            key={tab}
+            style={[styles.tabButton, activeTab === tab && styles.activeTab]}
+            onPress={() => setActiveTab(tab)}
+          >
+            <Text style={styles.tabButtonText}>{getTabText(tab)}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
-      {filteredOrders.length === 0 ? (
+      {isLoading ? (
+        <ActivityIndicator style={styles.loader} size="large" color="#DD0000" />
+      ) : filteredOrders.length === 0 ? (
         <Empty />
       ) : (
         <FlatList
@@ -203,14 +167,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   tabButton: {
-    padding: 10,
+    padding: 8,
     borderRadius: 5,
   },
   activeTab: {
     backgroundColor: "#FFA500",
   },
   tabButtonText: {
-    textAlign: "center",
+    fontSize: 12,
     fontWeight: "bold",
   },
   productList: {
@@ -218,94 +182,48 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#000000",
+    borderRadius: 8,
     padding: 10,
     marginBottom: 10,
     elevation: 2,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  productImageContainer: {
-    position: "relative",
+  productHeader: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   productImage: {
-    width: "100%",
-    height: 200,
+    width: 60,
+    height: 60,
     borderRadius: 5,
-  },
-  productStatus: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    padding: 5,
-    borderRadius: 3,
-  },
-  productStatusText: {
-    color: "#fff",
-    fontSize: 12,
+    marginRight: 10,
   },
   productInfo: {
-    marginTop: 10,
+    flex: 1,
   },
   productName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   productPrice: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#FF6347",
-    marginTop: 5,
+    marginTop: 2,
   },
-  productCreatedDate: {
-    fontSize: 12,
-    color: "#777",
-    marginTop: 5,
-  },
-  productActions: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 10,
-  },
-  productActionButton: {
-    backgroundColor: "#FFA500",
-    padding: 8,
-    borderRadius: 5,
-  },
-  sellerInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    paddingTop: 10,
-  },
-  sellerAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  sellerDetails: {
-    flex: 1,
-  },
-  sellerName: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  sellerContact: {
-    fontSize: 12,
-    color: "#666",
+  productStatus: {
+    backgroundColor: "#008000",
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: "flex-start",
+    marginTop: 4,
+    color: "#fff",
   },
   orderDetails: {
-    marginTop: 15,
+    marginTop: 10,
     borderTopWidth: 1,
     borderTopColor: "#eee",
     paddingTop: 10,
@@ -313,7 +231,33 @@ const styles = StyleSheet.create({
   orderDetailText: {
     fontSize: 12,
     color: "#444",
-    marginBottom: 5,
+    marginBottom: 2,
+  },
+  productActionButton: {
+    backgroundColor: "#FFA500",
+    padding: 8,
+    borderRadius: 5,
+    alignSelf: "flex-end",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  sellerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  avatar: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 10,
+  },
+  fullName: {
+    fontWeight: "bold",
   },
   loader: {
     flex: 1,

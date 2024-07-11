@@ -31,9 +31,14 @@ export const getCategoriesAPI = () => {
 export const getProductByIdAPI = (productId) => {
   return axiosClient.get(`${END_POINT.PRODUCT_BY_ID}/${productId}`);
 };
-export const getMyProductsAPI = () => {
-  return axiosClient.get(END_POINT.GET_MY_PRODUCTS);
-};
+export const getMyProductsAPI = ( token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.get(`${END_POINT.GET_MY_PRODUCTS}`, config);
+}
 export const createProductAPI = (product, token) => {
   return axiosClient.post(END_POINT.CREATE_PRODUCT, product, getConfig(token));
 };
