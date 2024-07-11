@@ -13,8 +13,8 @@ public partial class PromotionOrder
     [Column("promoOrderId")]
     public int PromoOrderId { get; set; }
 
-    [Column("endDate", TypeName = "datetime")]
-    public DateTime EndDate { get; set; }
+    [Column("remainedDate")]
+    public int RemainedDate { get; set; }
 
     [Column("userId")]
     public int UserId { get; set; }

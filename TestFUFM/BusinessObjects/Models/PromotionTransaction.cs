@@ -13,12 +13,6 @@ public partial class PromotionTransaction
     [Column("promoTransactionId")]
     public int PromoTransactionId { get; set; }
 
-    [Column("startDate", TypeName = "datetime")]
-    public DateTime StartDate { get; set; }
-
-    [Column("endDate", TypeName = "datetime")]
-    public DateTime EndDate { get; set; }
-
     [Column("promoOrderId")]
     public int PromoOrderId { get; set; }
 
@@ -36,6 +30,9 @@ public partial class PromotionTransaction
     [Column("transactionStatus")]
     [StringLength(10)]
     public string TransactionStatus { get; set; } = null!;
+
+    [Column("quantity")]
+    public int Quantity { get; set; }
 
     [Column("createdDate", TypeName = "datetime")]
     public DateTime CreatedDate { get; set; }

@@ -13,9 +13,6 @@ public partial class Order
     [Column("orderId")]
     public int OrderId { get; set; }
 
-    [Column("orderDate", TypeName = "datetime")]
-    public DateTime OrderDate { get; set; }
-
     [Column("price", TypeName = "money")]
     public decimal Price { get; set; }
 
@@ -42,12 +39,12 @@ public partial class Order
     [Column("quantity")]
     public int Quantity { get; set; }
 
-    [Column("deliveryDate", TypeName = "datetime")]
-    public DateTime? DeliveryDate { get; set; }
-
     [Column("receiverAddress")]
     [StringLength(255)]
     public string ReceiverAddress { get; set; } = null!;
+
+    [Column("createdDate", TypeName = "datetime")]
+    public DateTime CreatedDate { get; set; }
 
     [ForeignKey("BuyerId")]
     [InverseProperty("OrderBuyers")]

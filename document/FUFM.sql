@@ -78,7 +78,6 @@ CREATE TABLE [dbo].[Promotion](
 	[promotionId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	[name] NVARCHAR(50) NOT NULL,
 	[description] NVARCHAR(300) NOT NULL,
-	[period] INT NOT NULL,
 	[productQuantityLimit] INT NOT NULL,
 	[price] MONEY NOT NULL,
 	[imageLink]  NVARCHAR(300) NOT NULL,
@@ -87,7 +86,7 @@ CREATE TABLE [dbo].[Promotion](
 
 CREATE TABLE [dbo].[PromotionOrder](
 	[promoOrderId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[endDate] DATETIME NOT NULL,
+	[remainedDate] INT NOT NULL,
 	[userId] INT NOT NULL,
 	[promotionId] INT NOT NULL,
 	[status] NVARCHAR(10) NOT NULL,
@@ -99,13 +98,12 @@ CREATE TABLE [dbo].[PromotionOrder](
 
 CREATE TABLE [dbo].[PromotionTransaction](
 	[promoTransactionId] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	[startDate] DATETIME NOT NULL,
-	[endDate] DATETIME NOT NULL,
 	[promoOrderId] INT NOT NULL,
 	[price] MONEY NOT NULL, 
 	[paymentMethod] NVARCHAR(100) NOT NULL,
 	[transactionCode] NVARCHAR(100) NOT NULL,
 	[transactionStatus] NVARCHAR(10) NOT NULL,
+	[quantity] INT NOT NULL,
 	[createdDate] DATETIME NOT NULL,
 	CONSTRAINT FK_PromotionTransaction_PromotionOrder FOREIGN KEY ([promoOrderId]) REFERENCES [dbo].[PromotionOrder]([promoOrderId])
 ) 
@@ -114,7 +112,6 @@ CREATE TABLE [dbo].[PromotionTransaction](
 
 CREATE TABLE [dbo].[Order](
 	[orderId]  INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
-	[orderDate] DATETIME NOT NULL,
 	[price] MONEY NOT NULL,
 	[buyerId] INT NOT NULL,
 	[sellerId] INT NOT NULL,
@@ -123,8 +120,8 @@ CREATE TABLE [dbo].[Order](
 	[note] NVARCHAR(1000),
 	[productId] INT NOT NULL,
 	[quantity] INT NOT NULL,
-	[deliveryDate] DATETIME NULL,
 	[receiverAddress] NVARCHAR(255) NOT NULL,
+	[createdDate] DATETIME NOT NULL,
 	CONSTRAINT FK_Order_UserBuy FOREIGN KEY ([buyerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Order_UserSell FOREIGN KEY ([sellerId]) REFERENCES [dbo].[User] ([userId]),
 	CONSTRAINT FK_Order_Product  FOREIGN KEY ([productId]) REFERENCES [dbo].[Product]([productId])
@@ -291,28 +288,28 @@ VALUES
 GO
 
 GO
-INSERT INTO [dbo].[Promotion] ([name], [description], [period], [productQuantityLimit], [price], [imageLink],[isDeleted])
+INSERT INTO [dbo].[Promotion] ([name], [description], [productQuantityLimit], [price], [imageLink],[isDeleted])
 VALUES
-    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 30, 10, 10000,'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F1.png?alt=media&token=b718f1f8-4ee3-49a7-96e2-c78a14bed850',0),
-    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp', 30 , 50, 40000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F2.png?alt=media&token=a00a427a-4e76-4f60-b6ce-22aa2feffc06',0),
-    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 30, 100, 80000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F3.png?alt=media&token=388b5c09-24e2-4e53-8985-f28bf8d4e970',0);
+    (N'Cơ bản', N'Dành cho mô hình kinh doanh nhỏ, người bắt đầu kinh doanh.', 20, 15000,'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F1.png?alt=media&token=b718f1f8-4ee3-49a7-96e2-c78a14bed850',0),
+    (N'Chuyên nghiệp', N'Dành cho người bán chuyên nghiệp',  50, 35000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F2.png?alt=media&token=a00a427a-4e76-4f60-b6ce-22aa2feffc06',0),
+    (N'Gói VIP ', N'Dành cho người bán chuyên nghiệp có quy mô lớn và quản lý hiệu suất bán hàng', 100, 65000, 'https://firebasestorage.googleapis.com/v0/b/fufleamarket.appspot.com/o/sellingPackagesImages%2F3.png?alt=media&token=388b5c09-24e2-4e53-8985-f28bf8d4e970',0);
 GO
 
 
 
 GO
-INSERT INTO [dbo].[Order] ([orderDate], [price], [buyerId], [sellerId], [paymentMethod], [status], [note], [productId], [quantity], [deliveryDate],[receiverAddress])
+INSERT INTO [dbo].[Order] ([createdDate], [price], [buyerId], [sellerId], [paymentMethod], [status], [note], [productId], [quantity],[receiverAddress])
 VALUES
-    ('2024-05-01', 99.99, 2, 1,'Credit Card', 1, 'Please handle with care.', 1, 1, GETDATE(),'123 Main St, City'),
-    ('2024-05-02', 49.99, 4, 1, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, GETDATE(),'456 Elm St, City'),
-    ('2024-05-03', 79.99, 5, 1,'Cash on Delivery', 1, NULL, 3, 1, GETDATE(),'789 Oak St, City'),
-    ('2024-05-04', 119.99, 4, 2,'Credit Card', 1, NULL, 4, 1, GETDATE(),'321 Pine St, City'),
-    ('2024-05-05', 69.99, 5, 2,'PayPal', 1, 'Gift wrapping required.', 5, 2, GETDATE(),'654 Maple St, City'),
-    ('2024-05-06', 59.99, 1, 2,'Cash on Delivery', 1, NULL, 6, 1, GETDATE(),'987 Cedar St, City'),
-    ('2024-05-07', 89.99, 2, 4,'Credit Card', 1, 'Please include a gift receipt.', 7, 1, GETDATE(),'789 Oak St, City'),
-    ('2024-05-08', 109.99, 3, 4,'PayPal', 1, NULL, 8, 2, GETDATE(),'543 Birch St, City'),
-    ('2024-05-09', 49.99, 4, 5,'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, GETDATE(),'876 Walnut St, City'),
-    ('2024-05-10', 89.99, 5, 6,'Credit Card', 1, NULL, 10, 1, GETDATE(),'234 Spruce St, City');
+    ('2024-05-01', 99.99, 2, 1,'Credit Card', 1, 'Please handle with care.', 1, 1,'123 Main St, City'),
+    ('2024-05-02', 49.99, 4, 1, 'PayPal', 1, 'Delivery instructions: Leave at the front door.', 2, 2, '456 Elm St, City'),
+    ('2024-05-03', 79.99, 5, 1,'Cash on Delivery', 1, NULL, 3, 1, '789 Oak St, City'),
+    ('2024-05-04', 119.99, 4, 2,'Credit Card', 1, NULL, 4, 1, '321 Pine St, City'),
+    ('2024-05-05', 69.99, 5, 2,'PayPal', 1, 'Gift wrapping required.', 5, 2, '654 Maple St, City'),
+    ('2024-05-06', 59.99, 1, 2,'Cash on Delivery', 1, NULL, 6, 1, '987 Cedar St, City'),
+    ('2024-05-07', 89.99, 2, 4,'Credit Card', 1, 'Please include a gift receipt.', 7, 1,'789 Oak St, City'),
+    ('2024-05-08', 109.99, 3, 4,'PayPal', 1, NULL, 8, 2, '543 Birch St, City'),
+    ('2024-05-09', 49.99, 4, 5,'Cash on Delivery', 1, 'Urgent delivery required.', 9, 1, '876 Walnut St, City'),
+    ('2024-05-10', 89.99, 5, 6,'Credit Card', 1, NULL, 10, 1, '234 Spruce St, City');
 
 GO
 

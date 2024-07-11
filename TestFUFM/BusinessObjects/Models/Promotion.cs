@@ -21,9 +21,6 @@ public partial class Promotion
     [StringLength(300)]
     public string Description { get; set; } = null!;
 
-    [Column("period")]
-    public int Period { get; set; }
-
     [Column("productQuantityLimit")]
     public int ProductQuantityLimit { get; set; }
 
