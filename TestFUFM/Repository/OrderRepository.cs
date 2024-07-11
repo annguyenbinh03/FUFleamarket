@@ -39,12 +39,12 @@ namespace Repository
             {
                 return null;
             }
-            existingOrder.OrderDate = updateOrder.OrderDate;
             existingOrder.PaymentMethod = updateOrder.PaymentMethod;
             existingOrder.Status = updateOrder.Status;
             existingOrder.Note = updateOrder.Note;
             existingOrder.Quantity = updateOrder.Quantity;
             existingOrder.ReceiverAddress = updateOrder.ReceiverAddress;
+            existingOrder.CreatedDate = (DateTime)updateOrder.CreatedDate;
 
             await _context.SaveChangesAsync();
             return existingOrder;
@@ -84,7 +84,7 @@ namespace Repository
 
             if (sortByDate)
             {
-                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderByDescending(order => order.OrderDate);
+                query = descending ? query.OrderByDescending(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
             }
             else if (sortByPrice)
             {
@@ -106,7 +106,7 @@ namespace Repository
            
             if (sortByDate)
             {
-                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderBy(order => order.OrderDate);
+                query = descending ? query.OrderByDescending(order => order.CreatedDate) : query.OrderBy(order => order.CreatedDate);
             }
             else if (sortByPrice)
             {
@@ -122,10 +122,10 @@ namespace Repository
                 .Where(order => order.BuyerId == buyerId)
                 .Include(order => order.Product)
                 .Include(order => order.Seller);
-            query.OrderByDescending(order => order.OrderDate);
+            query.OrderByDescending(order => order.CreatedDate);
             if (sortByDate)
             {
-                query = descending ? query.OrderByDescending(order => order.OrderDate) : query.OrderByDescending(order => order.OrderDate);
+                query = descending ? query.OrderByDescending(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
             }
             else if (sortByPrice)
             {

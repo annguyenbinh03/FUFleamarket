@@ -13,7 +13,6 @@ namespace BusinessObjects.Mappers
             return new OrderDTO
             {
                 OrderId = order.OrderId,
-                OrderDate = order.OrderDate,
                 Price = order.Price,
                 BuyerId = order.BuyerId,
                 SellerId = order.SellerId,
@@ -23,13 +22,13 @@ namespace BusinessObjects.Mappers
                 Quantity = order.Quantity,
                 Status = order.Status,
                 ReceiverAddress = order.ReceiverAddress,
-                DeliveryDate = order.DeliveryDate
+                CreatedDate = order.CreatedDate
             };
         }
 
         public static Order ToOrderFromCreateDTO(this CreateOrderRequestDto dto, int BuyerId, int SellerId) => new Order
         {
-            OrderDate = dto.OrderDate,
+            
             Price = dto.Price,
             BuyerId = BuyerId,
             SellerId = SellerId,
@@ -39,7 +38,7 @@ namespace BusinessObjects.Mappers
             ProductId = dto.ProductId,
             Quantity = dto.Quantity,
             ReceiverAddress = dto.ReceiverAddress,
-            DeliveryDate = dto.DeliveryDate
+            CreatedDate = (DateTime)dto.CreatedDate
         };
 
         public static OrderShowProfileDTO ToOrderShowProfileOfSellerDTO(this BusinessObjects.Models.Order order)
@@ -47,7 +46,6 @@ namespace BusinessObjects.Mappers
             return new OrderShowProfileDTO
             {
                 OrderId = order.OrderId,
-                OrderDate = order.OrderDate,
                 Price = order.Price,               
                 Seller = order.Seller != null ? order.Seller.ToProfileUserDTO() : null,
                 PaymentMethod = order.PaymentMethod,
@@ -56,7 +54,7 @@ namespace BusinessObjects.Mappers
                 Quantity = order.Quantity,
                 Status = order.Status,
                 ReceiverAddress = order.ReceiverAddress,
-                DeliveryDate = order.DeliveryDate
+                CreatedDate = order.CreatedDate
             };
         }
         public static OrderShowProfileDTO ToOrderShowProfileOfBuyerDTO(this BusinessObjects.Models.Order order)
@@ -64,7 +62,6 @@ namespace BusinessObjects.Mappers
             return new OrderShowProfileDTO
             {
                 OrderId = order.OrderId,
-                OrderDate = order.OrderDate,
                 Price = order.Price,
                 Buyer = order.Buyer != null ? order.Buyer.ToProfileUserDTO() : null,
                 PaymentMethod = order.PaymentMethod,
@@ -73,7 +70,7 @@ namespace BusinessObjects.Mappers
                 Quantity = order.Quantity,
                 Status = order.Status,
                 ReceiverAddress = order.ReceiverAddress,
-                DeliveryDate = order.DeliveryDate
+                CreatedDate = order.CreatedDate
             };
         }
     }

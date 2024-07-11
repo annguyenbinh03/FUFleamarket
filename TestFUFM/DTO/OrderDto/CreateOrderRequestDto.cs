@@ -11,16 +11,13 @@ namespace BusinessObjects.OrderDto
 {
     public class CreateOrderRequestDto
     {
-        public DateTime OrderDate { get; set; }
         public decimal Price { get; set; }
-        
         public string PaymentMethod { get; set; } = null!;
         public int Status { get;  } = 0;
         public string? Note { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public string ReceiverAddress { get; set; } = null!;
-
-        public DateTime? DeliveryDate { get; set; } 
+        public DateTime? CreatedDate { get; set; } 
     }
 }

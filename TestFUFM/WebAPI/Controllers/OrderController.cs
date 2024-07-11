@@ -394,7 +394,7 @@ namespace WebAPI.Controllers
             // Set BuyerId as the logged-in user's UserId
             var buyerId = userId;
             var sellerId = product.SellerId; // Assuming the Product entity has a SellerId field
-            createDTO.OrderDate = DateTime.UtcNow;
+            createDTO.CreatedDate = DateTime.UtcNow;
 
             // Create the order model from the DTO
             var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);
@@ -536,8 +536,8 @@ namespace WebAPI.Controllers
                 Status = order.Status,
                 Note = order.Note,
                 Quantity = order.Quantity,
-                DeliveryDate = order.DeliveryDate,
                 ReceiverAddress = order.ReceiverAddress,
+                CreatedDate = order.CreatedDate,
                 Buyer = new
                 {
                     BuyerID = order.BuyerId,

@@ -14,7 +14,7 @@ namespace DTO.OrderDto
     {
 
         public int OrderId { get; set; }
-        public DateTime OrderDate { get; set; }
+        
         public decimal Price { get; set; }
         public ProfileUserDTO Buyer { get; set; }
         public ProfileUserDTO Seller { get; set; }
@@ -24,8 +24,8 @@ namespace DTO.OrderDto
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public string ReceiverAddress { get; set; } = null!;
-        [Column("deliveryDate", TypeName = "datetime")]
-        public DateTime? DeliveryDate { get; set; }
+        [Column("createdDate", TypeName = "datetime")]
+        public DateTime? CreatedDate { get; set; }
 
     }
 }
