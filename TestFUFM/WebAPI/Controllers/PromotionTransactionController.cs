@@ -64,6 +64,7 @@ namespace WebAPI.Controllers
                             TransactionStatus = transaction.TransactionStatus,
                             TransactionCreatedDate = transaction.CreatedDate,
                             Price = transaction.Price,
+                            Quantity = transaction.Quantity,
                             PromoOrderId = transaction.PromoOrderId,
                             PromotionId = promotion.PromotionId,
                             PromotionName = promotion.Name,
@@ -71,6 +72,7 @@ namespace WebAPI.Controllers
                             PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
                             PromotionPrice = promotion.Price,
                             ImageLink = promotion.ImageLink,
+                            RemainedDate = promotionOrder.RemainedDate,
                             PromotionOrderStatus = promotionOrder.Status                            
                             
                         };
@@ -140,6 +142,7 @@ namespace WebAPI.Controllers
                             TransactionStatus = transaction.TransactionStatus,
                             TransactionCreatedDate = transaction.CreatedDate,
                             Price = transaction.Price,
+                            Quantity = transaction.Quantity,
                             PromoOrderId = transaction.PromoOrderId,
                             PromotionId = promotion.PromotionId,
                             PromotionName = promotion.Name,
@@ -147,6 +150,7 @@ namespace WebAPI.Controllers
                             PromotionProductQuantityLimit = promotion.ProductQuantityLimit,
                             PromotionPrice = promotion.Price,
                             ImageLink = promotion.ImageLink,
+                            RemainedDate = promotionOrder.RemainedDate,
                             PromotionOrderStatus = promotionOrder.Status
 
                         };

@@ -123,10 +123,11 @@ namespace WebAPI.Controllers
             Promotion? promotion = await _promotionRepo.GetByIdAsync(promotionId);
 
             PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);           
-            PromotionTransaction? existingPromotionTransaction = await _promotionTransactionRepo.GetByPromoOrderIdAsync(existingPromoOrder.PromoOrderId);
+            
 
             if (existingPromoOrder != null)
             {
+
                 PromotionTransaction newPromoTransaction = new PromotionTransaction
                 {
 
@@ -135,6 +136,7 @@ namespace WebAPI.Controllers
                     TransactionCode = vnpayTranId.ToString(),
                     Price = promotion.Price,
                     PromoOrderId = existingPromoOrder.PromoOrderId,
+                    Quantity = 1,
                 };
 
                 if (vnp_ResponseCode == "00")
@@ -143,7 +145,7 @@ namespace WebAPI.Controllers
 
                     if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
                     {
-                        newPromoTransaction.Quantity = existingPromotionTransaction.Quantity + 30;
+                        existingPromoOrder.RemainedDate = existingPromoOrder.RemainedDate + 30;
                     }
                     else if (existingPromoOrder.Status != StatusPromotionOrderEnum.Active.ToString())
                     {
@@ -201,12 +203,13 @@ namespace WebAPI.Controllers
                     TransactionCode = vnpayTranId.ToString(),
                     Price = promotion.Price,
                     PromoOrderId = newPromoOrder.PromoOrderId,
-                };
+                    Quantity = 1,
+            };
 
                 if (vnp_ResponseCode == "00")
                 {
                     newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
-                    newPromoTransaction.Quantity = 1;
+                    
                 }
                 else
                 {
