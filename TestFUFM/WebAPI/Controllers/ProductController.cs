@@ -133,7 +133,14 @@ namespace WebAPI.Controllers
 
 
         // hàm này chưa có check status 
+        /// <summary>
+        ///  Thêm check status 1 và 3 sẽ được hiển thị 
+        ///  và thêm sắp xếp ngày tạo sẽ giảm dần về sau 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("ShopProfile")]
+
         public async Task<IActionResult> ShopProfile([FromQuery] int id)
         {
             if (id <= 0)
@@ -170,8 +177,11 @@ namespace WebAPI.Controllers
                         a.SpecificAddress
                     })
                 },
-                Products = userWithDetails.Products.Select(p => new
-                {
+                Products = userWithDetails.Products
+                       .Where(p => p.Status == 1 || p.Status == 3)
+                       .OrderByDescending(p => p.CreatedDate)
+                       .Select(p => new
+                   {
                     p.ProductId,
                     p.ProductName,
                     p.Price,

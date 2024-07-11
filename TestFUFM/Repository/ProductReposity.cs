@@ -195,7 +195,7 @@ namespace Repository
                     products = products.OrderBy(s => s.Price);
                 }
             }
-
+            products = products.OrderByDescending(s => s.CreatedDate);
             return await products.ToListAsync();
         }
         public async Task<List<Product>> GetProductsByDealTypeAsync(bool dealType)
