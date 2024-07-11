@@ -23,7 +23,7 @@ namespace WebAPI.Controllers
         private readonly IProductReposity _productRepo;
         private readonly IContactService _contactService;
 
-        public ProductController(FufleaMarketContext context, IProductReposity productRepo,IContactService contactService)
+        public ProductController(FufleaMarketContext context, IProductReposity productRepo, IContactService contactService)
         {
             _productRepo = productRepo;
             _context = context;
@@ -31,7 +31,13 @@ namespace WebAPI.Controllers
         }
 
 
+
         // chỉnh lại admin có thể thấy hết các sp
+        /// <summary>
+        /// admin có thêm sắp xếp thứ tự ngày 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet("admingetlistproducts")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAll([FromQuery] QueryObject query)
@@ -45,12 +51,19 @@ namespace WebAPI.Controllers
         }
 
 
+
+
         // thêm thanh tìm kiếm về dealType 
+        /// <summary>
+        /// có thêm sắp xếp ngày vào 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("adminliststatus0")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminListStatus0()
         {
             var products = await _context.Products
+                .OrderByDescending(p => p.CreatedDate)
                 .Where(p => p.Status == 0)
                 .Select(p => new
                 {
@@ -83,6 +96,11 @@ namespace WebAPI.Controllers
 
 
         // thêm thanh tìm kiếm về dealType 
+        /// <summary>
+        /// có thêm sắp xếp ngày vào 
+        /// tương lai thêm thanh tìm kiếm dealtype
+        /// </summary>
+        /// <returns></returns>   
         [HttpGet("adminliststatus1,2,3,4,5")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAll([FromQuery] int? status)
@@ -98,10 +116,11 @@ namespace WebAPI.Controllers
             }
             else
             {
-                query = query.Where(p => p.Status == 1 || p.Status == 2 || p.Status == 3 || p.Status == 4 || p.Status == 5);
+                query = query.Where(p => p.Status == 1 || p.Status == 2 || p.Status == 3 || p.Status == 4);
             }
 
             var products = await query
+                .OrderByDescending(p => p.CreatedDate)
                 .Select(p => new
                 {
                     productId = p.ProductId,
@@ -134,8 +153,9 @@ namespace WebAPI.Controllers
 
         // hàm này chưa có check status 
         /// <summary>
-        ///  Thêm check status 1 và 3 sẽ được hiển thị 
+        ///  Thêm check status 1  sẽ được hiển thị 
         ///  và thêm sắp xếp ngày tạo sẽ giảm dần về sau 
+        ///  show ra hết sp của bản thân
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -178,29 +198,29 @@ namespace WebAPI.Controllers
                     })
                 },
                 Products = userWithDetails.Products
-                       .Where(p => p.Status == 1 || p.Status == 3)
+                       .Where(p => p.Status == 1)
                        .OrderByDescending(p => p.CreatedDate)
                        .Select(p => new
-                   {
-                    p.ProductId,
-                    p.ProductName,
-                    p.Price,
-                    p.IsNew,
-                    p.DealType,
-                    p.Description,
-                    p.CategoryId,
-                    p.Status,
-                    p.CreatedDate,
-                    p.ImageLink,
-                    p.StoredQuantity,
+                       {
+                           p.ProductId,
+                           p.ProductName,
+                           p.Price,
+                           p.IsNew,
+                           p.DealType,
+                           p.Description,
+                           p.CategoryId,
+                           p.Status,
+                           p.CreatedDate,
+                           p.ImageLink,
+                           p.StoredQuantity,
 
-                    ProductImages = p.ProductImages.Select(pi => new
-                    {
-                        pi.ProductId,
-                        pi.ImageName,
-                        pi.ImageLink
-                    })
-                })
+                           ProductImages = p.ProductImages.Select(pi => new
+                           {
+                               pi.ProductId,
+                               pi.ImageName,
+                               pi.ImageLink
+                           })
+                       })
             };
 
             return Ok(result);
@@ -208,6 +228,11 @@ namespace WebAPI.Controllers
 
 
 
+
+        /// <summary>
+        /// hàm này dùm để lấy ra thông tin tất cả sản phẩm seller có xem số lượng (order)yêu cầu của sanr phẩm của họ 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetInforProductBuyRequest")]
         [Authorize]
         public async Task<IActionResult> GetInforProductBuyRequest()
@@ -234,7 +259,13 @@ namespace WebAPI.Controllers
         }
 
 
+
         // thêm thanh tìm kiếm về dealType và chỉnh thêm trạng thái 3 đang bán hàng bình thường
+        /// <summary>
+        /// Tương lai sẽ thêm thanh tìn kiếm dealtype 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet("listproduct")]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
@@ -247,6 +278,14 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+
+
+
+
+        /// <summary>
+        /// Lấy danh sách sản phẩm buôn bán 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getProductsByDealType0")]
         public async Task<IActionResult> GetProductsByDealTypeSale()
         {
@@ -255,6 +294,15 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+
+
+
+
+
+        /// <summary>
+        /// Lấy danh sách sản phẩm trao đổi 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getProductsByDealType1")]
         public async Task<IActionResult> GetProductsByDealTypeExchange()
         {
@@ -263,6 +311,17 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+
+
+
+
+
+
+        /// <summary>
+        /// Admin chấp nhận đơn hàng
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         [HttpPut("adminacceptproductrequest/{productId:int}")] //status 1
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminAcceptCreateRequest([FromRoute] int productId)
@@ -280,6 +339,14 @@ namespace WebAPI.Controllers
 
 
 
+
+
+
+        /// <summary>
+        /// admin xóa đơn hàng
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         [HttpPut("admindeleteproduct/{productId:int}")] //status 5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminDeleteProduct([FromRoute] int productId)
@@ -296,6 +363,16 @@ namespace WebAPI.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// admin từ chối đơn hàng
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         [HttpPut("adminrejectproductrequest/{productId:int}")] //status 2
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminRejectCreateRequest([FromRoute] int productId)
@@ -313,20 +390,19 @@ namespace WebAPI.Controllers
 
 
 
+
+        /// <summary>
+        /// Lấy ra sản phẩm kiểm tra xem 2 user có thể tương tác với nhau ko 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("getproductbyid/{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var maxProductId = await _context.Products.MaxAsync(p => p.ProductId);
-
-            if (id > maxProductId)
-            {
-                return BadRequest("Product ID exceeds the maximum available ID. Please enter a valid Product ID.");
-            }
-
-            var product = await _productRepo.GetByIdProductAsync(id);
+            Product? product = await _productRepo.GetByIdProductAsync(id);
 
             if (product == null)
             {
@@ -336,28 +412,24 @@ namespace WebAPI.Controllers
             var address = await _productRepo.getSellerAddress(product.SellerId);
             var productDTO = product.ToProductDto();
 
-            var buyerIdClaim = User.FindFirst("UserId")?.Value;
-            if (string.IsNullOrEmpty(buyerIdClaim) || !int.TryParse(buyerIdClaim, out var buyerId))
-            {
-                return BadRequest("Invalid buyer ID.");
-            }
-            var activeOrder = await _context.Orders
-           .AnyAsync(o => o.BuyerId == buyerId && o.SellerId == product.SellerId && o.ProductId == id && (o.Status == 1 || o.Status == 3));
-
-            var activeTradingOrder = await _context.TradingOrders
-                .AnyAsync(to => to.User1 == buyerId && to.User2 == product.SellerId && (to.Status == 1 || to.Status == 3));
-
             bool contact = false;
-            if (activeOrder || activeTradingOrder)
+            var userIdClaim = User.FindFirstValue("UserId");
+            if (int.TryParse(userIdClaim, out var userId))
             {
-                contact = await _contactService.CheckAndManageContactAsync(buyerId, product.SellerId);
+                contact = await _contactService.CheckContactAsync(userId, product.SellerId);
             }
-
             return Ok(new { product = productDTO, address, sellerId = product.SellerId, contact });
         }
 
 
 
+
+        /// <summary>
+        /// xem sản phẩm của bảng thân 
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="dealType"></param>
+        /// <returns></returns>
         // chỉnh sửa trạng thái khi gọi đơn hàng của mình ra và thêm DealType
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
@@ -583,7 +655,7 @@ namespace WebAPI.Controllers
 
 
 
-        // chỉnh sửa lại trạng thái xóa của seller là 4 == bị ẩn
+        // chỉnh sửa lại trạng thái xóa của seller là 3 == bị ẩn
         [HttpDelete("deleteproductforsellers/{productId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int productId)
@@ -694,7 +766,7 @@ namespace WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDeletedProducts()
         {
-            var products = await _productRepo.GetProductsByStatusAsync(5);
+            var products = await _productRepo.GetProductsByStatusAsync(4);
 
             var productDtos = products.Select(p => p.ToProductDto());
 

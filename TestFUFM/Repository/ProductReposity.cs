@@ -45,7 +45,7 @@ namespace Repository
 
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
-            productModel.Status = 5;
+            productModel.Status = 4;
             productModel.CreatedDate = DateTime.Now;
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
@@ -66,7 +66,7 @@ namespace Repository
 
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
-            productModel.Status = 4;
+            productModel.Status = 3;
             productModel.CreatedDate = DateTime.Now;
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
@@ -106,7 +106,7 @@ namespace Repository
             {
                 return false;
             }
-            product.Status = 5;
+            product.Status = 4;
             product.IsNew = false;
             product.CreatedDate = DateTime.Now;
             await _context.SaveChangesAsync();
@@ -152,16 +152,23 @@ namespace Repository
                 }
             }
 
+            products = products.OrderByDescending(s => s.CreatedDate);
             return await products.ToListAsync();
         }
 
 
+
+        /// <summary>
+        /// không cần tìm trạng thái 3 nưã 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<List<Product>> GetALLAsync(QueryObject query)
         {
             var products = _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
-                .Where(p => p.Status == 1 || p.Status == 3) // thêm trạng thái 3: bình thường đang bán 
+                .Where(p => p.Status == 1)
                 .Where(p => p.StoredQuantity > 0)
                 .Include(p => p.Seller) // Include Seller
                 .AsQueryable();
@@ -198,14 +205,18 @@ namespace Repository
             products = products.OrderByDescending(s => s.CreatedDate);
             return await products.ToListAsync();
         }
+
+
+
+
         public async Task<List<Product>> GetProductsByDealTypeAsync(bool dealType)
         {
             var products = _context.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
-                .Where(p => p.DealType == dealType && (p.Status == 1 || p.Status == 3))
-                .ToListAsync();
+                .Where(p => p.DealType == dealType && (p.Status == 1))
+                .OrderByDescending(p => p.CreatedDate).ToListAsync();
 
             return await products;
         }
@@ -217,6 +228,7 @@ namespace Repository
                 .Include(p => p.ProductImages)
                 .Include(p => p.Category)
                 .Include(p => p.Seller) // Include Seller
+                .OrderByDescending(p => p.CreatedDate)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
@@ -317,6 +329,7 @@ namespace Repository
             return await _context.Products.Where(x => x.SellerId == userId)
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
+                .OrderByDescending(p => p.CreatedDate)
                 .ToListAsync();
         }
         public async Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange)

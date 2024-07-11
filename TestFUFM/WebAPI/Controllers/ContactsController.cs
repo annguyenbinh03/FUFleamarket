@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
         [HttpPost("checkstatus")]
         public async Task<IActionResult> CheckContactStatus([FromBody] ContactCheckDTO contactCheckDto)
         {
-            var status = await _contactService.CheckAndManageContactAsync(contactCheckDto.User1, contactCheckDto.User2);
+            var status = await _contactService.CheckContactAsync(contactCheckDto.User1, contactCheckDto.User2);
             return Ok(new { IsActive = status });
         }
 

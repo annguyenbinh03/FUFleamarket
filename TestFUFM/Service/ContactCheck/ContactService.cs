@@ -20,112 +20,113 @@ namespace Service.ContactCheck
             _context = context;
         }
 
-        public async Task<bool> CheckAndManageContactAsync(int user1, int user2)
+
+
+
+        /// <summary>
+        /// kiểm tra liên lạc của order 
+        /// </summary>
+        /// <param name="user1"></param>
+        /// <param name="user2"></param>
+        /// <returns></returns>
+        public async Task<bool> CheckContactAsync(int user1, int user2)
         {
+
             var activeOrder = await _context.Orders
-            .AnyAsync(o => o.BuyerId == user1 && o.SellerId == user2                   
-                     && (o.Status == 1 || o.Status == 3));
+            .AnyAsync(o => ((o.BuyerId == user1 && o.SellerId == user2))
+                       && o.Status == 1);
+
 
             var activeTradingOrder = await _context.TradingOrders
-                .AnyAsync(to => to.User1 == user1 && to.User2 == user2                            
-                                && (to.Status == 1 || to.Status == 3));
-            if (activeOrder || activeTradingOrder)
-            {
-                var existingContact = await _context.Contacts
-                    .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
+               .AnyAsync(to => ((to.User1 == user1 && to.User2 == user2))
+                         && to.Status == 1);
 
-                if (existingContact == null)
-                {
-                    var newContact = new Contact { User1 = user1, User2 = user2, IsActive = true };
-                    _context.Contacts.Add(newContact);
-                    await _context.SaveChangesAsync();
-                }
-                else if (!existingContact.IsActive)
-                {
-                    existingContact.IsActive = true;
-                    _context.Contacts.Update(existingContact);
-                    await _context.SaveChangesAsync();
-                }
+            return activeOrder || activeTradingOrder;
 
-                return true;
-            }
-            else
-            {
-                var existingContact = await _context.Contacts
-                    .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
-                // thêm 1 biến ghi vào database khi nó false
-                if (existingContact == null)
-                {
-                    var newContact = new Contact { User1 = user1, User2 = user2, IsActive = false };
-                    _context.Contacts.Add(newContact);
-                    await _context.SaveChangesAsync();
-                }
-                if (existingContact != null && existingContact.IsActive)
-                {
-                    existingContact.IsActive = false;
-                    _context.Contacts.Update(existingContact);
-                    await _context.SaveChangesAsync();
-                }
-
-                return false;
-            }
         }
 
+
+
+        /// <summary>
+        /// Đóng liên lạc 
+        /// </summary>
+        /// <param name="user1"></param>
+        /// <param name="user2"></param>
+        /// <returns></returns>
         public async Task CloseContactAsync(int user1, int user2)
         {
-            var existingContact = await _context.Contacts
-                .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
 
-            if (existingContact != null && existingContact.IsActive)
+            var existingContact = await _context.Contacts
+                 .FirstOrDefaultAsync(c => (c.User1 == user1 && c.User2 == user2)
+                                       || (c.User1 == user2 && c.User2 == user1));
+
+            if (existingContact != null)
             {
                 existingContact.IsActive = false;
-                _context.Contacts.Update(existingContact);
                 await _context.SaveChangesAsync();
             }
         }
+
+
+
+
+
+
+
+        /// <summary>
+        /// Mở liên lạc 
+        /// </summary>
+        /// <param name="user1"></param>
+        /// <param name="user2"></param>
+        /// <returns></returns>
         public async Task OpenContactAsync(int user1, int user2)
         {
-            var existingContact = await _context.Contacts
-                .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
+            bool canContact = await CheckContactAsync(user1, user2) || await CheckContactAsync(user2, user1);
 
-            if (existingContact != null && !existingContact.IsActive)
+            if (canContact)
             {
-                existingContact.IsActive = true;
-                _context.Contacts.Update(existingContact);
-                await _context.SaveChangesAsync();
+                await CreateContactAsync(user1, user2);
             }
         }
+
+
+
+
+
+
+        /// <summary>
+        /// Tạo liên lạc 
+        /// </summary>
+        /// <param name="user1"></param>
+        /// <param name="user2"></param>
+        /// <returns></returns>
         public async Task CreateContactAsync(int user1, int user2)
         {
             var existingContact = await _context.Contacts
-                .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
+                 .FirstOrDefaultAsync(c => (c.User1 == user1 && c.User2 == user2) ||
+                                          (c.User1 == user2 && c.User2 == user1));
 
             if (existingContact == null)
             {
-                var newContact = new Contact { User1 = user1, User2 = user2, IsActive = true };
+                var newContact = new Contact
+                {
+                    User1 = user1,
+                    User2 = user2,
+                    IsActive = true,
+                };
+
                 _context.Contacts.Add(newContact);
                 await _context.SaveChangesAsync();
             }
-            else
+            else if (!existingContact.IsActive)
             {
-                if (!existingContact.IsActive)
-                {
-                    existingContact.IsActive = true;
-                    _context.Contacts.Update(existingContact);
-                    await _context.SaveChangesAsync();
-                }
+                existingContact.IsActive = true;
+                await _context.SaveChangesAsync();
             }
         }
 
-        public async Task<bool> CheckContactStatusAsync(int user1, int user2)
-        {
-            var existingContact = await _context.Contacts
-                .FirstOrDefaultAsync(c => c.User1 == user1 && c.User2 == user2);
 
-            return existingContact?.IsActive ?? false;
-        }
     }
 }
-        
-        
-    
+
+
