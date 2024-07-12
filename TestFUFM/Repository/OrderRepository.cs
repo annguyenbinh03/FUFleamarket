@@ -234,5 +234,14 @@ namespace Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Order>> GetOrdersByUserId(int userId)
+        {
+            return await _context.Orders
+       .Include(o => o.Product)  // Include related Product entity
+       .Include(o => o.Buyer)    // Include related Buyer entity
+       .Where(o => o.SellerId == userId)
+       .ToListAsync();
+        }
     }
 }

@@ -36,68 +36,86 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("soldRequest")]
-        public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] int? productId, [FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] int? productId, [FromQuery] int? tab = null, [FromQuery] string? sortBy = null)
+{
+    var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+    if (userIdClaim == null)
+    {
+        return Unauthorized("Claim user ID not found");
+    }
+
+    var userId = int.Parse(userIdClaim.Value);
+
+    var soldOrders = await _orderRepo.GetOrdersByUserId(userId); // Assuming you have a method to get orders by user ID
+
+    if (!soldOrders.Any())
+    {
+        return NotFound("No orders found for the user.");
+    }
+
+    // Apply productId filter if productId parameter is provided
+    if (productId.HasValue)
+    {
+        soldOrders = soldOrders.Where(order => order.Product.ProductId == productId).ToList();
+
+        if (!soldOrders.Any())
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
-            if (userIdClaim == null)
-            {
-                return Unauthorized("Claim user ID not found");
-            }
-
-            var userId = int.Parse(userIdClaim.Value);
-
-            bool sortByDate = sortBy?.ToLower() == "date";
-            bool sortByPrice = sortBy?.ToLower() == "price";
-
-            var soldOrders = await _orderRepo.GetMyOrdersRequestBySellerIdAsync(userId, sortByDate, sortByPrice, descending);
-
-            if (!soldOrders.Any())
-            {
-                return NotFound("No orders found for the user.");
-            }
-
-            // Apply productId filter if productId parameter is provided
-            if (productId.HasValue)
-            {
-                soldOrders = soldOrders.Where(order => order.Product.ProductId == productId).ToList();
-
-                if (!soldOrders.Any())
-                {
-                    return NotFound($"No orders found for the product with ID {productId}.");
-                }
-            }
-
-            // Apply status filter (status = 0)
-            soldOrders = soldOrders.Where(order => order.Status == 0).ToList();
-
-            if (!soldOrders.Any())
-            {
-                return NotFound("No orders found with status = 0.");
-            }
-
-            var orders = soldOrders.Select(order => new
-            {
-                Order = order.ToOrderShowProfileOfBuyerDTO(),
-                Product = new
-                {
-                    ProductId = order.Product.ProductId,
-                    ProductName = order.Product.ProductName,
-                    Price = order.Product.Price,
-                    ImageLink = order.Product.ImageLink,
-                    StoredQuantity = order.Product.StoredQuantity
-                    // Add more properties as needed
-                },
-                Buyer = new
-                {
-                    Avarta = order.Buyer.Avarta,
-                    FullName = order.Buyer.FullName
-                    // Add more properties as needed
-                },
-                // Add more properties from Order model as needed
-            }).ToList();
-
-            return Ok(orders);
+            return NotFound($"No orders found for the product with ID {productId}.");
         }
+    }
+
+    // Apply status filter if status parameter is provided
+    if (tab.HasValue)
+    {
+        var validStatuses = new List<int> {0, 1, 2, 3, 4 }; // Các giá trị status hợp lệ
+        if (validStatuses.Contains(tab.Value))
+        {
+            soldOrders = soldOrders.Where(order => (int)order.Status == tab.Value).ToList();
+
+            if (!soldOrders.Any())
+            {
+                return NotFound($"No orders found with status = {tab.Value}.");
+            }
+        }
+        else
+        {
+            return BadRequest("Invalid status value.");
+        }
+    }
+
+    // Apply sorting based on sortBy parameter
+    soldOrders = sortBy switch
+    {
+        "date" => soldOrders.OrderBy(order => order.CreatedDate).ToList(),
+        "oldDate" => soldOrders.OrderByDescending(order => order.CreatedDate).ToList(),
+        "price" => soldOrders.OrderBy(order => order.Price).ToList(),
+        "lowPrice" => soldOrders.OrderByDescending(order => order.Price).ToList(),
+        _ => soldOrders
+    };
+
+    var orders = soldOrders.Select(order => new
+    {
+        Order = order.ToOrderShowProfileOfBuyerDTO(),
+        Product = new
+        {
+            ProductId = order.Product.ProductId,
+            ProductName = order.Product.ProductName,
+            Price = order.Product.Price,
+            ImageLink = order.Product.ImageLink,
+            StoredQuantity = order.Product.StoredQuantity
+            // Add more properties as needed
+        },
+        Buyer = new
+        {
+            Avarta = order.Buyer.Avarta,
+            FullName = order.Buyer.FullName
+            // Add more properties as needed
+        },
+        // Add more properties from Order model as needed
+    }).ToList();
+
+    return Ok(orders);
+}
 
         [HttpGet("sold")]
         public async Task<IActionResult> GetSoldOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
