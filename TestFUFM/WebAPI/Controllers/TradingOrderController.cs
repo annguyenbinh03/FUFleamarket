@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
                 User1 = createDto.TradingOrder.UserId1,
                 User2 = createDto.TradingOrder.UserId2,
                 Note = createDto.TradingOrder.Note,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now.AddHours(7),
                 Status = 0 // Giả định rằng đơn hàng mới luôn hoạt động ban đầu
             };
 

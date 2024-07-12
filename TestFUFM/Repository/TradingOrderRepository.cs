@@ -47,7 +47,7 @@ namespace Repository
             existingOrder.User1 = tradingOrderDto.User1;
             existingOrder.User2 = tradingOrderDto.User2;
             existingOrder.Note = tradingOrderDto.Note;
-            existingOrder.CreatedDate = tradingOrderDto.CreatedDate;
+            //existingOrder.CreatedDate = tradingOrderDto.CreatedDate;
             existingOrder.Status = tradingOrderDto.Status;
 
             

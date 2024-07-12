@@ -34,7 +34,7 @@ namespace DTO.Mappers
             {
                 //StartDate = promotionTransactionDto.StartDate,
                 //EndDate = promotionTransactionDto.EndDate,
-                CreatedDate = promotionTransactionDto.CreatedDate,
+                CreatedDate = DateTime.Now.AddHours(7),
                 PromoOrderId = promotionOrderId,
                 Price = promotionTransactionDto.Price,
                 Quantity = promotionTransactionDto.Quantity,

@@ -14,7 +14,7 @@ namespace DTO.TradingOrderDto
 
         public string Note { get; set; } = null!;
 
-        public DateTime CreatedDate { get; set; }
+        //public DateTime CreatedDate { get; set; }
 
         public int Status { get; set; }
 

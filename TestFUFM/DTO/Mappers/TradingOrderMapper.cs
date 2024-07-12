@@ -24,7 +24,7 @@ namespace DTO.Mappers
             {
                 User2 = createTradingOrderDto.User2,
                 Note = createTradingOrderDto.Note,
-                CreatedDate = createTradingOrderDto.CreatedDate,
+                CreatedDate = DateTime.Now.AddHours(7),
                 Status = createTradingOrderDto.Status
             };
         }
@@ -36,7 +36,7 @@ namespace DTO.Mappers
                 User1 = updateTradingOrderDto.User1,
                 User2 = updateTradingOrderDto.User2,
                 Note = updateTradingOrderDto.Note,
-                CreatedDate = updateTradingOrderDto.CreatedDate,
+                //CreatedDate = updateTradingOrderDto.CreatedDate,
                 Status = updateTradingOrderDto.Status
             };
         }
