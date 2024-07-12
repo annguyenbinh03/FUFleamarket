@@ -8,6 +8,42 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
   const [msg, setMessage] = useState("");
   const [isPickerVisible, setPickerVisible] = useState(false);
 
+  const calculateTimeAgo = (messageTimestamp) => {
+    const MINUTE = 60;
+    const HOUR = 60 * MINUTE;
+    const DAY = 24 * HOUR;
+    const MONTH = 30 * DAY;
+    const YEAR = 365 * DAY;
+
+    const currentTime = new Date().getTime();
+    const messageTime = new Date(messageTimestamp).getTime();
+
+    const elapsedSeconds = Math.floor((currentTime - messageTime) / 1000);
+
+    if(!elapsedSeconds || elapsedSeconds < 0){
+      return `vài giây trước`;
+    }
+
+    if (elapsedSeconds < MINUTE) {
+      return `${elapsedSeconds + 1} giây trước`;
+    } else if (elapsedSeconds < HOUR) {
+      const minutes = Math.floor(elapsedSeconds / MINUTE);
+      return `${minutes} phút trước`;
+    } else if (elapsedSeconds < DAY) {
+      const hours = Math.floor(elapsedSeconds / HOUR);
+      return `${hours} giờ trước`;
+    } else if (elapsedSeconds < MONTH) {
+      const days = Math.floor(elapsedSeconds / DAY);
+      return `${days} ngày trước`;
+    } else if (elapsedSeconds < YEAR) {
+      const months = Math.floor(elapsedSeconds / MONTH);
+      return `${months} tháng trước`;
+    } else {
+      const years = Math.floor(elapsedSeconds / YEAR);
+      return `${years} năm trước`;
+    }
+  };
+
   useEffect(() => {
     const container = document.getElementById("chat-messsages-container");
     if (container) {
@@ -15,8 +51,8 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
     }
   }, [messages]);
   return (
-    <div>
-      <div className="row px-5 pt-2">
+    <div className="h-100">
+      <div className="row px-5 pt-2 h-100">
         <div className="chat-messsages-container" id="chat-messsages-container">
           <div>
             {messages.map((msg, index) => (
@@ -33,7 +69,7 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
                         </div>
                       </div>
                       <span className="mess-create-time text-end">
-                        {msg.createdDate}{" "}
+                        {calculateTimeAgo(msg.createdDate)}
                       </span>
                     </div>
                   </div>
@@ -52,17 +88,44 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
                         </span>
                       </div>
                     </div>
-                    <span className="mess-create-time">{msg.createdDate} </span>
+                    <span className="mess-create-time">
+                      {" "}
+                      {calculateTimeAgo(msg.createdDate)}{" "}
+                    </span>
                   </div>
                 )}
               </div>
             ))}
           </div>
         </div>
-        <div className="d-flex">
+        <div className="d-flex ps-0 pb-1">
+        <div className="position-relative">
+            <div
+              className={
+                isPickerVisible
+                  ? "d-block position-absolute end-0 Picker"
+                  : "d-none"
+              }
+            >
+              <Picker
+                data={data}
+                previewPosition="none"
+                onEmojiSelect={(e) => {
+                  setMessage(msg + e.native);
+                }}
+              />
+            </div>
+          </div>
+        <button
+            type=""
+            className="btn bnt-primary"
+            onClick={() => setPickerVisible(!isPickerVisible)}
+          >
+            😀
+          </button>
           <form
             className="mt-2"
-            style={{minWidth:"95%"}}
+            style={{ minWidth: "90%" }}
             onSubmit={(e) => {
               e.preventDefault();
               sendMessage(msg);
@@ -83,31 +146,6 @@ const ChatRoom = ({ messages, sendMessage, receiverAvarta }) => {
               </button>
             </div>
           </form>
-          <button
-            type=""
-            className="btn bnt-primary"
-            onClick={() => setPickerVisible(!isPickerVisible)}
-          >
-            😀
-          </button>
-
-          <div className="position-relative">
-            <div
-              className={
-                isPickerVisible
-                  ? "d-block position-absolute bottom-0 start-0"
-                  : "d-none"
-              }
-            >
-              <Picker
-                data={data}
-                previewPosition="none"
-                onEmojiSelect={(e) => {
-                  setMessage(msg + e.native);
-                }}
-              />
-            </div>
-          </div>
         </div>
       </div>
     </div>

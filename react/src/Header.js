@@ -22,7 +22,7 @@ const UserDropdown = (authContainer) => {
   // console.log(auth);
   return (
     <span>
-      <div className="btn-group user-dropdown" style={{ width: "180px" }}>
+      <div className="btn-group user-dropdown">
         {auth?.email ? (
           <>
             <button
@@ -37,7 +37,7 @@ const UserDropdown = (authContainer) => {
                 src={auth.avarta}
                 alt=""
               />
-              <div className="fs-5 username px-1">{auth.fullName}</div>
+              <div className="fs-5 username px-1 hidden-md">{auth.fullName}</div>
             </button>
           </>
         ) : (
@@ -49,7 +49,7 @@ const UserDropdown = (authContainer) => {
             >
               <img
                 className="userLogo mx-1 img-fluid"
-                src="https://th.bing.com/th/id/R.7ea4af7d8401d2b43ee841bfa2abe89d?rik=xidyUKdveUKULQ&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-download-icons-logos-emojis-users-2240.png&ehk=2%2bOqgdMZqFkKaBclc%2fPL9B86vLju3iBGiFmH64kXaTM%3d&risl=&pid=ImgRaw&r=0"
+                src={`../assets/img/icon/login-google.png`}
                 alt=""
               />
               <span className="fs-5 username px-1">
@@ -61,27 +61,58 @@ const UserDropdown = (authContainer) => {
         <ul style={{ padding: 0 }} className="dropdown-menu">
           {auth.email ? (
             <>
-              <div className="ps-2 pe-3 py-2 bg-body-secondary fw-bold">
+              <div className="ps-3 pe-3 py-2 bg-body-secondary fw-bold">
                 Quản lý đơn hàng
               </div>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <Link to="/buy-order-request" className="dropdown-item">
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/trade.png`}
+                      alt="sofaIcon"
+                    />
                     Yêu cầu mua hàng
                   </Link>
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link to="/buy-order" className="dropdown-item">
-                    Đơn mua
+                <div className="d-flex justify-content-between align-items-center">
+                  <Link to="/trading-order-request" className="dropdown-item">
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/trade-goods.png`}
+                      alt="sofaIcon"
+                    />
+                    Yêu cầu trao đổi
                   </Link>
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
+                  <Link to="/buy-order" className="dropdown-item">
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/completed-task.png`}
+                      alt="sofaIcon"
+                    />
+                    Đơn mua hàng
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="d-flex justify-content-between align-items-center">
                   <Link to="/sell-order" className="dropdown-item">
-                    Đơn bán
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/checklist.png`}
+                      alt="sofaIcon"
+                    />
+                    Đơn trao đổi
                   </Link>
                 </div>
               </li>
@@ -91,8 +122,14 @@ const UserDropdown = (authContainer) => {
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <Link to="/my-selling-package" className="dropdown-item">
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/vip-card.png`}
+                      alt="sofaIcon"
+                    />
                     Quản lý gói bán hàng
                   </Link>
                 </div>
@@ -103,32 +140,43 @@ const UserDropdown = (authContainer) => {
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <Link
                     className="dropdown-item"
                     to={`/shopprofile/${auth?.id}`}
                   >
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/social-network.png`}
+                      alt="sofaIcon"
+                    />
                     Xem trang cá nhân
                   </Link>
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <Link className="dropdown-item" href="#">
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/help.png`}
+                      alt="sofaIcon"
+                    />
                     Trợ giúp
                   </Link>
                 </div>
               </li>
               <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
-                  <Link className="dropdown-item" href="#">
-                    Đóng góp ý kiến
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center ps-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <Link className="dropdown-item" onClick={(e) => logout(e)}>
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/turn-off.png`}
+                      alt="sofaIcon"
+                    />
                     Đăng xuất
                   </Link>
                 </div>
@@ -168,20 +216,31 @@ const Header = () => {
           <ul className="dropdown-menu ">
             <li>
               <Link to="/search-product/1" className="dropdown-item py-2">
-                <i className="fa fa-desktop me-2" aria-hidden="true"></i> Đồ
-                điện tử
+                <img
+                  className="me-2"
+                  width="28px"
+                  src={`../assets/img/icon/electronic-device.png`}
+                  alt="frideIcon"
+                />
+                Đồ điện tử
               </Link>
             </li>
             <li>
               <Link to="/search-product/2" className="dropdown-item py-2">
-                <i className="fa fa-book me-2" aria-hidden="true"></i> Đồ dùng
-                học tập
+                <img
+                  className="me-2"
+                  width="25px"
+                  src={`../assets/img/icon/school-material.png`}
+                  alt="frideIcon"
+                />
+                Đồ dùng học tập
               </Link>
             </li>
             <li>
               <Link to="/search-product/3" className="dropdown-item py-2">
                 <img
-                  width="20px"
+                  className="me-2"
+                  width="25px"
                   src={`../assets/img/icon/fridge.png`}
                   alt="frideIcon"
                 />
@@ -191,7 +250,8 @@ const Header = () => {
             <li>
               <Link to="/search-product/4" className="dropdown-item py-2">
                 <img
-                  width="20px"
+                  className="me-2"
+                  width="25px"
                   src={`../assets/img/icon/sofa.png`}
                   alt="sofaIcon"
                 />
@@ -200,14 +260,20 @@ const Header = () => {
             </li>
             <li>
               <Link to="/search-product/5" className="dropdown-item py-2">
-                <i className="fa fa-cutlery me-2" aria-hidden="true"></i> Đồ ăn,
-                thực phẩm
+                <img
+                  className="me-2"
+                  width="25px"
+                  src={`../assets/img/icon/burger.png`}
+                  alt="sofaIcon"
+                />
+                Đồ ăn, thực phẩm
               </Link>
             </li>
             <li>
               <Link to="/search-product/6" className="dropdown-item py-2">
                 <img
-                  width="20px"
+                  className="me-2"
+                  width="25px"
                   src={`../assets/img/icon/woman-clothes.png`}
                   alt="sofaIcon"
                 />
@@ -217,7 +283,8 @@ const Header = () => {
             <li>
               <Link to="/search-product/7" className="dropdown-item py-2">
                 <img
-                  width="20px"
+                  className="me-2"
+                  width="25px"
                   src={`../assets/img/icon/console.png`}
                   alt="sofaIcon"
                 />
@@ -231,17 +298,17 @@ const Header = () => {
         <SearchButton />
 
         {/* Nút thông báo, tin nhắn, yêu thích */}
-        <div className="">
-          <button className="btn fs-5 text-white">
+        <div>
+          <button className="col-md-4 px-2 btn fs-5 text-white">
             <i className="fa fa-bell" aria-hidden="true"></i>
           </button>
-          <button className="btn fs-5 text-white">
+          <button className="col-md-4 px-2 btn fs-5 text-white">
             <Link className="text-white" to="/chat">
               {" "}
               <i className="fa fa-comments-o" aria-hidden="true"></i>{" "}
             </Link>
           </button>
-          <button className="btn fs-5 text-white">
+          <button className="col-md-4 px-2 btn fs-5 text-white">
             <i className="fa fa-heart" aria-hidden="true"></i>
           </button>
         </div>

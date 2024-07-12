@@ -43,7 +43,7 @@ function SearchButton() {
    };
 
   return (
-    <form className="search-bar px-3 position-relative"  onSubmit={handleSubmit}> 
+    <form className="search-bar position-relative"  onSubmit={handleSubmit}> 
       <div className="input-group text-white">
         <input 
           type="text" 

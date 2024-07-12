@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-07-11T07:12:47.663Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="CdVBg7qYjgErtTeOkVEU" version="21.8.2" type="device">
+<mxfile host="Electron" modified="2024-07-11T14:55:04.319Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="-V9uTYwpYQmleVcwa6Hy" version="21.8.2" type="device">
   <diagram name="Page-1" id="2ca16b54-16f6-2749-3443-fa8db7711227">
-    <mxGraphModel dx="2282" dy="1593" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+    <mxGraphModel dx="3968" dy="2664" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -905,7 +905,7 @@
             <mxRectangle width="130" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QvAU7ecHsZQy278lUhVn-2" value="status:&lt;br&gt;0: đang chờ admin duyệt&lt;br&gt;1: admin đã duyệt&lt;br&gt;2: bình thường&amp;nbsp;&lt;br&gt;3: bị người bán ẩn&lt;br&gt;4: bị admin xóa" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
+        <mxCell id="QvAU7ecHsZQy278lUhVn-2" value="status:&lt;br&gt;0: đang chờ admin duyệt&lt;br&gt;1: admin đã duyệt (bình thường)&lt;br&gt;2: admin k duyệt&lt;br&gt;3: người dùng ẩn&lt;br&gt;4: admin xóa" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
           <mxGeometry x="410" y="590" width="210" height="150" as="geometry" />
         </mxCell>
         <mxCell id="QvAU7ecHsZQy278lUhVn-4" value="condition(tình trạng đơn hàng):&amp;nbsp;&lt;br&gt;0: old&lt;br&gt;1 new" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
@@ -1045,7 +1045,7 @@
         <mxCell id="QvAU7ecHsZQy278lUhVn-39" value="RoleID:&lt;br&gt;1: user&lt;br&gt;2: moderator&lt;br&gt;3: administor" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
           <mxGeometry x="750" y="295" width="120" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="QvAU7ecHsZQy278lUhVn-98" value="status:&lt;br&gt;0: đang chờ người bán duyệt&lt;br&gt;1: đã được người bán duyệt&lt;br&gt;2: người bán k duyệt&amp;nbsp;&lt;br&gt;3. đang bán hàng&lt;br&gt;4. đã giao dịch xong&lt;br&gt;5: đã bị admin xóa" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
+        <mxCell id="QvAU7ecHsZQy278lUhVn-98" value="status:&lt;br&gt;0: đang chờ người bán duyệt&lt;br&gt;1: đã được người bán duyệt (đang bán hàng)&lt;br&gt;2: người bán k duyệt&lt;br&gt;3. đã giao dịch xong&lt;br&gt;4: đã bị admin xóa" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
           <mxGeometry x="140" y="-20" width="190" height="160" as="geometry" />
         </mxCell>
         <mxCell id="QvAU7ecHsZQy278lUhVn-111" value="price/month(30 ngày)" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
@@ -1535,7 +1535,7 @@
             <mxPoint x="1150" y="450" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="UPTvRcya9LFYI0RSyNBZ-77" value="status:&lt;br&gt;0: đang chờ user2 duyệt&lt;br&gt;1: user2 đã duyệt&lt;br&gt;2: user2 đã từ chối&lt;br&gt;3: đang trao đổi&lt;br&gt;4: kết thúc đơn hàng&lt;br&gt;5: đã bị admin hủy" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
+        <mxCell id="UPTvRcya9LFYI0RSyNBZ-77" value="status:&lt;br&gt;0: đang chờ user2 duyệt&lt;br&gt;1: user2 đã duyệt (đang trao đổi)&lt;br&gt;2: user2 đã từ chối&lt;br&gt;3: kết thúc đơn hàng&lt;br&gt;4: đã bị admin hủy" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
           <mxGeometry x="440" y="1100" width="210" height="150" as="geometry" />
         </mxCell>
         <mxCell id="NNFUY4mLSP4heDJd7QKt-1" value="bỏ period&amp;nbsp;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -1552,6 +1552,9 @@
         </mxCell>
         <mxCell id="NNFUY4mLSP4heDJd7QKt-9" value="quantity: số lượng gói mua / tháng" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1300" y="1350" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="2xHPVuqisg_KwcrWKDcG-1" value="status:&amp;nbsp;&lt;br&gt;Inactive&lt;br&gt;Active&lt;br&gt;Peding" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1160" y="1160" width="190" height="110" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

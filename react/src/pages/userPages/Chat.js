@@ -79,9 +79,9 @@ const Chat = () => {
   return (
     <div>
       <Header />
-        <div className="container-fluid spad px-0 pb-4 chat">
-          <div className="row mt-3 mx-0">
-            <div className="col-md-2 col-lg-2">
+        <div className="container-fluid spad pb-0 px-0 chat">
+          <div className="row mx-0 pt-3 h-100">
+            <div className="col-md-3 list-contact">
               {chatters?.map((chatter, key) => (
                 <div>
                   {chatTarget?.fullName === chatter?.fullName ? (
@@ -129,14 +129,14 @@ const Chat = () => {
                   )}
                 </div>
               ))}
-              ;
             </div>
-            <div className="col-md-8 col-lg-8">
-              <div className="chat-container">
+            <div className="col-md-7">
+              <div className="message-container">
+                {" "}
                 {!conn ? (
-                  <div className="row px-5 pt-2">
+                  <div style={{minHeight:"100%"}} className="row px-5 pt-2">
                     <div
-                      className="chat-messsages-container"
+                      className="chat-messsages-container h-100"
                       id="chat-messsages-container"
                     >
                       &nbsp; Hãy chọn người bạn muốn nhắn tin
@@ -164,7 +164,7 @@ const Chat = () => {
                     }
                     alt=""
                   />
-                  <div className="my-3 fs-4 fw-bold">
+                  <div className="my-3 fs-4 fw-bold text-center">
                     {chatTarget ? chatTarget.fullName : ""}
                   </div>
                   {chatTarget ? (
@@ -190,7 +190,7 @@ const Chat = () => {
                   )}
                 </div>
 
-                <div className="container fst-italic text-center text-secondary">
+                <div className="container fst-italic text-center text-secondary pb-3">
                   Không chia sẻ mật khẩu của bạn cho bất kỳ ai, kể cả nhân viên
                   FUFM, gia đình, bạn bè hoặc nhân viên của Shop. Mật khẩu tài
                   khoản của bạn phải được bảo mật tuyệt đối.

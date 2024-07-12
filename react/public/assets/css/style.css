@@ -126,7 +126,7 @@ body {
 }
 
 .header .search-bar {
-  width: 40%;
+  width: 33%;
 }
 
 .logo {
@@ -139,13 +139,13 @@ body {
 }
 
 .header .result-search-list {
-  width: 90%;
+  width: 100%;
   background-color: white;
   display: flex;
   flex-direction: column;
   box-sizing: 0px 0px 8px #ddd;
-  border: 10px;
-  padding: 0 10px 0 10px;
+  border: none;
+  box-shadow: 0 0 10px black;
   max-height: 200px;
   overflow-y: scroll;
 }
@@ -158,7 +158,7 @@ body {
 }
 .header .top-search-items button {
   text-align: left;
-  padding: 8px;
+  padding: 8px 10px;
   background-color: white;
 }
 .header .result-search-list button:hover {
@@ -168,8 +168,7 @@ body {
 .header .username {
   display: inline-block;
   line-height: 50px;
-  min-width: 108px;
-  max-width: 170px;
+  max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1144,14 +1143,27 @@ ul {
 /*---------------------
   Chat
 -----------------------*/
+.chat {
+  height: calc(100vh);
+  min-height:auto;
+}
 
+.chat .list-contact{
+  max-height: 100%;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  padding: 0;
+}
 .chat .receiverLogo {
   width: 120px;
   border-radius: 20px;
 }
-
+.chat .message-container{
+  height: 100%;
+}
 .chat .chat-messsages-container {
-  height: 52em;
+  min-height: calc(100% - 54px) ;
+  max-height: 500px;
   overflow-y: scroll;
 }
 
@@ -1162,6 +1174,10 @@ ul {
 .chat .mess-create-time {
   font-size: 10px;
   color: silver;
+}
+
+.chat .Picker{
+ bottom: 20px;
 }
 
 /*---------------------
@@ -1201,7 +1217,7 @@ ul {
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .hidden-md {
-    display: none;
+    display: none !important;
   }
   .header .search-bar {
     width: 30%;
@@ -1212,7 +1228,7 @@ ul {
 
 @media only screen and (max-width: 767px) {
   .hidden-md {
-    display: none;
+    display: none !important;
   }
   .header .search-bar {
     width: 30%;
@@ -1344,17 +1360,27 @@ ul {
   font-size: 1.88rem;
 }
 
-.admin_page .product-table .td-description-content,
-.admin_page .product-table .td-product-name,
-.admin_page .product-table .td-seller-content {
-  max-width: 200px;
+.admin_page .product-table .td-description-content span,
+.admin_page .product-table .td-product-name span,
+.admin_page .product-table .td-seller-content span {
+  min-width: 80px;
+  max-width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: start;
-  display: flex;
-  align-items: center;
+  display: inline-block;
 }
+
+.admin_page .product-table .td-category-name-content span{
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+  display: inline-block;
+}
+
 
 .admin_page .order-table .td-order-product,
 .admin_page .order-table .td-order-user,
