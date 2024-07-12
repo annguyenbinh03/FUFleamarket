@@ -12,6 +12,7 @@ using BusinessObjects.Models;
 using BusinessObjects.CategoryDto;
 using System.Linq;
 using Service.ContactCheck.Interfaces;
+using BusinessObjects.Models.Enum;
 
 namespace WebAPI.Controllers
 {
@@ -513,50 +514,58 @@ namespace WebAPI.Controllers
 
             if (!int.TryParse(User.FindFirstValue("UserId"), out var sellerId))
             {
-                return Unauthorized("Invalid user ID format");
+                return Unauthorized("Invalid user ID format.");
             }
 
-            int standardProductLimit = 3;
+            const int standardProductLimit = 3;
             int totalProductLimit = standardProductLimit;
 
+            // Get all active promotion orders for the seller
             var currentPromotionOrders = await _context.PromotionOrders
                 .Include(po => po.Promotion)
-                //     .Where(po => po.UserId == sellerId && po.StartDate <= DateTime.Now && po.EndDate >= DateTime.Now)
+                .Where(po => po.UserId == sellerId && po.Status == StatusPromotionOrderEnum.Active.ToString())
                 .ToListAsync();
 
-            if (currentPromotionOrders != null && currentPromotionOrders.Any())
+            // Get the maximum ProductQuantityLimit from related Promotions, if any
+            if (currentPromotionOrders.Any())
             {
-                //   var additionalProductOrders = currentPromotionOrders.Where(po => po.Promotion.ProductQuantity > 0);
-
-                //    int additionalProductLimit = additionalProductOrders.Sum(po => po.Promotion.ProductQuantity * po.ProductQuantity);
-
-                //   totalProductLimit = standardProductLimit + additionalProductLimit;
+                totalProductLimit = currentPromotionOrders
+                    .Max(po => po.Promotion.ProductQuantityLimit);
             }
 
+            // Get the current product count for the seller
             var currentProductCount = await _context.Products.CountAsync(p => p.SellerId == sellerId);
+
             if (currentProductCount >= totalProductLimit)
             {
                 return BadRequest($"You have reached the maximum number of products allowed ({totalProductLimit}).");
             }
 
+            // Create the product model from the DTO
             var productModel = productDto.ToProductFromCreateDTO(sellerId);
 
-            var seller = await _context.Users.FirstOrDefaultAsync(u => u.UserId == sellerId);
+            // Find and assign the seller to the product
+            var seller = await _context.Users.FindAsync(sellerId);
             if (seller != null)
             {
                 productModel.Seller = seller;
             }
 
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == productModel.CategoryId);
+            // Find and assign the category to the product
+            var category = await _context.Categories.FindAsync(productModel.CategoryId);
             if (category != null)
             {
                 productModel.Category = category;
             }
 
+            // Save the product
             await _productRepo.CreateAsync(productModel);
 
             return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
         }
+
+
+
 
 
 
