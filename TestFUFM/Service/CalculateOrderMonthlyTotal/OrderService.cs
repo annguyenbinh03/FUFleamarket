@@ -24,7 +24,7 @@ namespace Service.CalculateOrderMonthlyTotal
             var currentYear = DateTime.Now.Year;
 
             var orderCount = await _context.Orders
-                .Where(o => o.OrderDate.Month == currentMonth && o.OrderDate.Year == currentYear)
+                .Where(o => o.CreatedDate.Month == currentMonth && o.CreatedDate.Year == currentYear)
                 .CountAsync();
 
             return orderCount;

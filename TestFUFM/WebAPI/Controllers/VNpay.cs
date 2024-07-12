@@ -124,10 +124,10 @@ namespace WebAPI.Controllers
 
             PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);
 
-            int predefinedThreshold = 100; // Define your threshold or logic here
-            bool isHigherPromotion = promotionId > predefinedThreshold; // Check if promotionId is higher
+            int predefinedThreshold = 100; // Định nghĩa ngưỡng hoặc logic của bạn ở đây
+            bool isHigherPromotion = promotionId > predefinedThreshold; // Kiểm tra nếu promotionId cao hơn
 
-            // Update any existing lower promotions to "Pending"
+            // Cập nhật bất kỳ khuyến mãi nào thấp hơn hiện có thành "Pending"
             var allUserPromotions = await _promotionOrder.GetByUserIdAsync(userId);
             foreach (var promoOrder in allUserPromotions)
             {
@@ -137,6 +137,9 @@ namespace WebAPI.Controllers
                     await _promotionOrder.UpdateAsync(promoOrder);
                 }
             }
+
+            // Kiểm tra nếu có bất kỳ khuyến mãi cao hơn nào đang hoạt động
+            bool hasActiveHigherPromotion = allUserPromotions.Any(p => p.PromotionId > promotionId && p.Status == StatusPromotionOrderEnum.Active.ToString());
 
             if (existingPromoOrder != null)
             {
@@ -152,15 +155,15 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = isHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.TransactionStatus = isHigherPromotion || hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
 
                     if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
                     {
-                        existingPromoOrder.RemainedDate = existingPromoOrder.RemainedDate + 30;
+                        existingPromoOrder.RemainedDate += 30;
                     }
                     else if (existingPromoOrder.Status != StatusPromotionOrderEnum.Active.ToString())
                     {
-                        existingPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
+                        existingPromoOrder.Status = hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Active.ToString();
                     }
                 }
                 else
@@ -171,18 +174,15 @@ namespace WebAPI.Controllers
                 await _promotionTransactionRepo.CreateAsync(newPromoTransaction);
 
                 // Kiểm tra nếu existingPromoOrder tồn tại trước khi cập nhật
-                if (existingPromoOrder != null)
+                try
                 {
-                    try
-                    {
-                        await _promotionOrder.UpdateAsync(existingPromoOrder);
-                    }
-                    catch (KeyNotFoundException ex)
-                    {
-                        // Xử lý lỗi khi không tìm thấy PromotionOrder với ID tương ứng
-                        Console.WriteLine(ex.Message);
-                        return StatusCode(404, new { error = true, message = "PromotionOrder not found" });
-                    }
+                    await _promotionOrder.UpdateAsync(existingPromoOrder);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    // Xử lý lỗi khi không tìm thấy PromotionOrder với ID tương ứng
+                    Console.WriteLine(ex.Message);
+                    return StatusCode(404, new { error = true, message = "PromotionOrder not found" });
                 }
             }
             else
@@ -195,7 +195,7 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoOrder.Status = StatusPromotionOrderEnum.Active.ToString();
+                    newPromoOrder.Status = hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Active.ToString();
                     newPromoOrder.RemainedDate = 30;
                 }
                 else
@@ -218,7 +218,7 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = isHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.TransactionStatus = hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
                 }
                 else
                 {
@@ -229,6 +229,7 @@ namespace WebAPI.Controllers
             }
 
             return Redirect("http://localhost/my-selling-package");
+
 
         }
 
