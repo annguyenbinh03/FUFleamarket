@@ -458,11 +458,33 @@ namespace WebAPI.Controllers
 
             if (tab.HasValue)
             {
-                query = query.Where(p => p.Status == tab.Value);
+                switch (tab.Value)
+                {
+                    case 1:
+                        // No filter applied
+                        break;
+                    case 2:
+                        query = query.Where(p => p.Status == 0);
+                        break;
+                    case 3:
+                        query = query.Where(p => p.Status == 1 && p.DealType == true);
+                        break;
+                    case 4:
+                        query = query.Where(p => p.Status == 1 && p.DealType == false);
+                        break;
+                    case 5:
+                        query = query.Where(p => p.Status == 3);
+                        break;
+                    case 6:
+                        query = query.Where(p => p.Status == 4);
+                        break;
+                    default:
+                        return BadRequest("Invalid tab value");
+                }
             }
             else
             {
-                query = query.Where(p => p.Status == 0 || p.Status == 1 || p.Status == 2 || p.Status == 3 || p.Status == 4);
+                query = query.Where(p => p.Status >= 0 && p.Status <= 4);
             }
             if (dealType.HasValue)
             {
