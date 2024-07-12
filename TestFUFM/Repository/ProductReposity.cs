@@ -24,7 +24,7 @@ namespace Repository
 
         public async Task<Product> CreateAsync(Product productModel)
         {
-            productModel.CreatedDate = DateTime.Now;
+            productModel.CreatedDate = DateTime.Now.AddHours(7);
             await _context.Products.AddAsync(productModel);
             await _context.SaveChangesAsync();
             return productModel;
@@ -46,7 +46,7 @@ namespace Repository
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
             productModel.Status = 4;
-            productModel.CreatedDate = DateTime.Now;
+            productModel.CreatedDate = DateTime.Now.AddHours(7);
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
             return productModel;
@@ -67,7 +67,7 @@ namespace Repository
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
             productModel.Status = 3;
-            productModel.CreatedDate = DateTime.Now;
+            productModel.CreatedDate = DateTime.Now.AddHours(7);
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
             return productModel;
@@ -108,7 +108,7 @@ namespace Repository
             }
             product.Status = 4;
             product.IsNew = false;
-            product.CreatedDate = DateTime.Now;
+            product.CreatedDate = DateTime.Now.AddHours(7);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -249,7 +249,7 @@ namespace Repository
             existingProduct.Price = productDto.Price;
             existingProduct.Description = productDto.Description;
             existingProduct.CategoryId = productDto.CategoryId;
-            existingProduct.CreatedDate = DateTime.Now;
+            existingProduct.CreatedDate = DateTime.Now.AddHours(7);
             //existingProduct.Status = productDto.Status;
 
             await _context.SaveChangesAsync();
@@ -268,6 +268,7 @@ namespace Repository
             existingProduct.Price = productDto.Price;
             existingProduct.Description = productDto.Description;
             existingProduct.CategoryId = productDto.CategoryId;
+            existingProduct.CreatedDate = DateTime.Now.AddHours(7);
 
             await _context.SaveChangesAsync();
             return existingProduct;

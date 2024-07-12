@@ -13,6 +13,7 @@ using BusinessObjects.CategoryDto;
 using System.Linq;
 using Service.ContactCheck.Interfaces;
 using BusinessObjects.Models.Enum;
+using System.Globalization;
 
 namespace WebAPI.Controllers
 {
@@ -434,7 +435,7 @@ namespace WebAPI.Controllers
         // chỉnh sửa trạng thái khi gọi đơn hàng của mình ra và thêm DealType
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> GetMyProducts([FromQuery] int? status, [FromQuery] bool? dealType)
+        public async Task<IActionResult> GetMyProducts([FromQuery] int? tab, [FromQuery] bool? dealType, [FromQuery] string? sortBy)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -455,9 +456,9 @@ namespace WebAPI.Controllers
 
             IQueryable<Product> query = products.AsQueryable();
 
-            if (status.HasValue)
+            if (tab.HasValue)
             {
-                query = query.Where(p => p.Status == status.Value);
+                query = query.Where(p => p.Status == tab.Value);
             }
             else
             {
@@ -467,6 +468,25 @@ namespace WebAPI.Controllers
             {
                 query = query.Where(p => p.DealType == dealType.Value);
             }
+            switch (sortBy)
+            {
+                case "date":
+                    query = query.OrderByDescending(p => p.CreatedDate);
+                    break;
+                case "oldDate":
+                    query = query.OrderBy(p => p.CreatedDate);
+                    break;
+                case "price":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                case "lowPrice":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                default:
+                    query = query.OrderByDescending(p => p.CreatedDate);
+                    break;
+            }
+
             var filteredProducts = query.Select(p => new
             {
                 p.ProductId,
@@ -489,10 +509,11 @@ namespace WebAPI.Controllers
 
                 Orders = new List<object>() // Assuming orders should be included, this is a placeholder
             })
-                .ToList();
+            .ToList();
 
 
             return Ok(filteredProducts);
+
 
         }
 
