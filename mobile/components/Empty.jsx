@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Empty; // Update the export to Empty
+export default Empty; 

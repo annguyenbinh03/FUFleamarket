@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router, usePathname } from "expo-router";
 import {
   View,
@@ -7,53 +7,154 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  Text,
+  FlatList,
 } from "react-native";
 import { icons } from "../constants";
+import { useNavigation } from "@react-navigation/native";
 
-const SearchInput = ({ initialQuery }) => {
+function SearchInput({ initialQuery }) {
+  const [searchProductName, setSearchProductName] = useState(
+    initialQuery || ""
+  );
+  const [topSearchResults, setTopSearchResults] = useState([]);
   const pathname = usePathname();
-  const [query, setQuery] = useState(initialQuery || "");
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    fetchTopSearch(searchProductName);
+  }, [searchProductName]);
+
+  const fetchTopSearch = (value) => {
+    console.log("Fetching search results for:", value);
+    if (value) {
+      fetch("https://fufleamarketapi.azurewebsites.net/api/product/listproduct")
+        .then((response) => response.json())
+        .then((json) => {
+          const results = json.filter((product) => {
+            return (
+              product &&
+              product.productName &&
+              product.productName.toLowerCase().includes(value.toLowerCase())
+            );
+          });
+          console.log("Filtered results:", results);
+          console.log("Số lượng sản phẩm tìm kiếm:", results.length);
+          setTopSearchResults(results);
+        })
+        .catch((error) => {
+          console.error("Error fetching search results:", error);
+        });
+    } else {
+      setTopSearchResults([]);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log("Submitting search for:", searchProductName);
+    if (searchProductName === "") {
+      return Alert.alert("Vui lòng nhập sản phẩm bạn muốn vào ô tìm kiếm");
+    }
+
+    if (pathname.startsWith("/search")) {
+      router.setParams({ query: searchProductName });
+    } else {
+      router.push(`/search/${searchProductName}`);
+    }
+  };
+
+  const handleProductPress = (productId) => {
+    console.log("Navigating to product details for ID:", productId);
+    navigation.navigate("Detail", { productId });
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.resultItem}
+      onPress={() => handleProductPress(item.productId)}
+    >
+      <Text style={styles.itemName}>{item.productName}</Text>
+      <Text style={styles.itemCategory}>
+        trong {item.category || "Danh mục"}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
-    <View className="flex flex-row items-center space-x-4 w-5/6 h-12 px-4 bg-white rounded-2xl border-2 border-gray-300 focus:border-secondary">
-      <TextInput
-        className="text-base mt-0.5 text-black flex-1 font-pregular"
-        value={query}
-        placeholder="Tìm kiếm"
-        placeholderTextColor="#CDCDE0"
-        onChangeText={(e) => setQuery(e)}
-      />
-
-      <TouchableOpacity
-        style={styles.iconButton}
-        onPress={() => {
-          if (query === "")
-            return Alert.alert(
-              "Missing Query",
-              "Vui lòng nhập sản phẩm bạn muốn vào ô tìm kiếm "
-            );
-
-          if (pathname.startsWith("/search")) router.setParams({ query });
-          else router.push(`/search/${query}`);
-        }}
-      >
-        <View style={styles.iconContainer}>
+    <View style={styles.container}>
+      <View style={styles.searchBar}>
+        <TextInput
+          style={styles.input}
+          value={searchProductName}
+          placeholder="Tìm kiếm"
+          placeholderTextColor="#999"
+          onChangeText={(text) => setSearchProductName(text)}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSubmit}>
           <Image
             source={icons.search}
-            style={styles.icon}
+            style={styles.searchIcon}
             resizeMode="contain"
           />
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={topSearchResults}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.productId.toString()}
+        style={styles.resultsList}
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  icon: {
+  container: {
+    flex: 1,
+    backgroundColor: "#FFA500",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: "gray",
+    marginBottom: 10,
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+    margin: 10,
+    borderRadius: 5,
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+    color: "black",
+  },
+  searchButton: {
+    padding: 10,
+  },
+  searchIcon: {
     width: 20,
     height: 20,
-    tintColor: "black",
+    tintColor: "#999",
+  },
+  resultsList: {
+    backgroundColor: "white",
+  },
+  resultItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  itemName: {
+    fontSize: 16,
+    color: "black",
+  },
+  itemCategory: {
+    fontSize: 14,
+    color: "#FFA500",
   },
 });
 
