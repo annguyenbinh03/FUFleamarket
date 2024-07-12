@@ -38,7 +38,7 @@ namespace BusinessObjects.Mappers
             ProductId = dto.ProductId,
             Quantity = dto.Quantity,
             ReceiverAddress = dto.ReceiverAddress,
-            CreatedDate = (DateTime)dto.CreatedDate
+            CreatedDate = DateTime.Now
         };
 
         public static OrderShowProfileDTO ToOrderShowProfileOfSellerDTO(this BusinessObjects.Models.Order order)
