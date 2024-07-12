@@ -62,6 +62,7 @@ function SellOrder() {
                           style={{ borderRadius: "20px" }}
                           src={order.buyer.avarta}
                           width={"30px"}
+                          alt="buyer avarta"
                         />{" "}
                         {order.buyer.name}
                       </span>

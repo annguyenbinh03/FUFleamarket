@@ -395,5 +395,13 @@ namespace Repository
 
             return products;
         }
+         public async Task<int> CountProduct(int userId)
+        {
+            int number = 0;
+            User? user = await _context.Users.FindAsync(userId);
+            if (user != null)
+                number = _context.Products.Count((p => p.SellerId == userId));
+            return number;
+        }
     }
 }

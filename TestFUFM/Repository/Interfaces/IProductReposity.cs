@@ -50,6 +50,7 @@ namespace Repository.Interfaces
         Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange);
         Task<bool> UpdateProductQuantityAsync(int productId, int orderQuantity);
 
+        Task<int> CountProduct(int userId);
     }
 
 }

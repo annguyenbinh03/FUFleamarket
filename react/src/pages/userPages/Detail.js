@@ -41,7 +41,7 @@ function Detail() {
       <Header />
       <section className="product-details spad">
         <div className="container bg-white py-4 d-flex">
-          <div className="col-lg-8 col-md-8">
+          <div className="col-md-8 pb-5">
             <div className="d-flex justify-content-center">
               {data &&
               data?.product?.images &&
@@ -153,8 +153,8 @@ function Detail() {
               </div>
               <div className="product_description">
                 <p>
-                  {data?.product
-                    ? data?.product.description
+                  {data?.product?.description
+                    ? data.product.description
                     : "Sản phẩm không có mô tả"}
                 </p>
               </div>
@@ -163,14 +163,21 @@ function Detail() {
                 <div className="seller_address_flex d-flex justify-content-between">
                   <div className="seller_address_left">
                     <img
+                      width="25px"
                       className="img-fluid"
                       alt="location"
-                      src="https://static.chotot.com/storage/icons/logos/ad-param/location.svg"
+                      src={`../assets/img/icon/map.png`}
                     />
                   </div>
-                  <div className="seller_address_right">
-                    {data?.address ||
-                      "Người này chưa tiết lộ thông tin về địa chỉ"}
+                  <div className="seller_address_right ps-1">
+                    {data?.Contact ? (
+                      <div>
+                        {data?.address ||
+                          "Người này chưa tiết lộ thông tin về địa chỉ"}
+                      </div>
+                    ) : (
+                      <span> Hãy giao dịch để liên hệ </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -178,8 +185,9 @@ function Detail() {
                 <div className="reprt_wrapper_text d-flex justify-content-between">
                   <div className="reprt_wrapper_text_left">
                     <img
+                      width="25px"
                       className="img-fluid sc-bxivhb dhhSqq"
-                      src="https://static.chotot.com/storage/marketplace/shield-iconx4.png"
+                      src={`../assets/img/icon/shield.png`}
                       alt="mua bán an toàn"
                     />
                   </div>
@@ -194,14 +202,6 @@ function Detail() {
                       Xem thêm ››
                     </a>
                   </div>
-                </div>
-                <div className="report_wrapper_button mt-3 d-flex justify-content-center">
-                  <button
-                    type="button"
-                    className="btn btn-default btn-xs reportButton"
-                  >
-                    Báo tin không hợp lệ
-                  </button>
                 </div>
               </div>
             </div>
@@ -245,42 +245,68 @@ function Detail() {
                   </Link>
                 </div>
               </div>
-              <div className="show_phone_button  d-flex justify-content-between align-items-center p-3 mt-5">
-                <span>
-                  <img
-                    alt="loadingIcon"
-                    className="show_phone_button_icon"
-                    src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
-                  />
-                </span>
-                <span>
-                  {" "}
-                  {data?.product && data?.product.seller
-                    ? data?.product.seller.phoneNumber
-                    : "096595 ***"}
-                </span>
-              </div>
             </div>
 
             {auth?.id === data?.sellerId ? (
               <></>
             ) : (
               <>
-                <button className="chat_button w-100  px-3 mt-2">
-                  <Link
-                    className="d-flex justify-content-between align-items-center"
-                    to={`/chat`}
-                    state={{
-                      receiverId: data?.sellerId,
-                      receiverName: data?.product?.seller.fullName,
-                    }}
-                  >
+                {data?.Contact ? (
+                  <div className="show_phone_button  d-flex justify-content-between align-items-center p-3 mt-5">
                     <span>
-                      <i className="fa fa-comments-o" aria-hidden="true"></i>
+                      <img
+                        alt="loadingIcon"
+                        className="show_phone_button_icon"
+                        src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
+                      />
                     </span>
-                    <span>CHAT VỚI NGƯỜI BÁN</span>
-                  </Link>
-                </button>
+                    <span>
+                      {data?.product && data?.product.seller
+                        ? data?.product.seller.phoneNumber
+                        : "096595 ***"}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="show_phone_button bg-secondary text-white d-flex justify-content-between align-items-center p-3 mt-5">
+                    <span>
+                      <img
+                        alt="loadingIcon"
+                        className="show_phone_button_icon"
+                        src="https://static.chotot.com/storage/chotot-icons/svg/white-phone.svg"
+                      />
+                    </span>
+                    <span>
+                      <span>Hãy giao dịch để liên hệ</span>
+                    </span>
+                  </div>
+                )}
+
+                {data?.contact ? (
+                  <button className="chat_button w-100  px-3 mt-2">
+                    <Link
+                      className="d-flex justify-content-between align-items-center"
+                      to={`/chat`}
+                      state={{
+                        receiverId: data?.sellerId,
+                        receiverName: data?.product?.seller.fullName,
+                      }}
+                    >
+                      <span>
+                        <i className="fa fa-comments-o" aria-hidden="true"></i>
+                      </span>
+                      <span>CHAT VỚI NGƯỜI BÁN</span>
+                    </Link>
+                  </button>
+                ) : (
+                  <div className="chat_button bg-secondary text-white border-0 w-100 px-3 mt-2">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>
+                        <i className="fa fa-comments-o" aria-hidden="true"></i>
+                      </span>
+                      <span>Hãy giao dịch để liên hệ</span>
+                    </div>
+                  </div>
+                )}
 
                 {data?.product?.dealType ? (
                   <button className="chat_button  w-100  px-3 mt-2">
@@ -314,12 +340,12 @@ function Detail() {
               <img
                 alt="safe tips"
                 className="pull-left"
-                width="100"
+                width="80"
                 height="auto"
-                src="https://st.chotot.com/storage/images/tips/2_other_cate.png"
+                src={`../assets/img/icon/communication.png`}
               />
               <div className="safe_tip_text">
-                <p className="pt-3" style={{ fontSize: "13px" }}>
+                <p className="pt-2" style={{ fontSize: "13px" }}>
                   NÊN gặp mặt trực tiếp kiểm tra hàng trước khi giao dịch.
                 </p>
                 <a

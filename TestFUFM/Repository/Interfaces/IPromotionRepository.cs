@@ -17,7 +17,7 @@ namespace Repository.Interfaces
         Task<Promotion?> UpdateAsync(int id, UpdatePromotionRequestDto PromotionDto);
         Task<Promotion?> DeleteAsync(int id);
 
-        Task<int?> GetHighestQuantityPromotionForUser(int userId);
+        Task<Promotion?> GetHighestPromotionForUser(int userId);
 
     }
 }

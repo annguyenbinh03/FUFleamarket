@@ -30,7 +30,10 @@ const SellingPackage = () => {
 
 
   const formatPrice = (value) => {
-    return value.toLocaleString('vi-VN');
+    if(value){
+      return value.toLocaleString('vi-VN');
+    }
+    return value;
   };
 
 

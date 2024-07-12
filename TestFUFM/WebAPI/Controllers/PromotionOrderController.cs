@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using DTO.PromotionOrderDto;
 using Repository;
+using Azure;
 
 namespace WebAPI.Controllers
 {
@@ -17,12 +18,14 @@ namespace WebAPI.Controllers
         private readonly IPromotionOrderRepository _promoOrderRepo;
         private readonly IUserRepository _userRepo;
         private readonly IPromotionRepository _promotionRepo;
+        private readonly IProductReposity _productReposity;
 
-        public PromotionOrderController(IPromotionOrderRepository promoOrederRepo, IUserRepository userRepo, IPromotionRepository promotionRepo)
+        public PromotionOrderController(IPromotionOrderRepository promoOrederRepo, IUserRepository userRepo, IPromotionRepository promotionRepo, IProductReposity productReposity)
         {
             _promoOrderRepo = promoOrederRepo;
             _userRepo = userRepo;
             _promotionRepo = promotionRepo;
+            _productReposity = productReposity;
         }
         [HttpGet("GetMyPackage")]
         [Authorize(Roles = "User,Admin")]
@@ -143,10 +146,10 @@ namespace WebAPI.Controllers
 
         [HttpGet("InformationPromotionOrderById(Admin){id:int}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetById([FromRoute]int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var PromoOrder = await _promoOrderRepo.GetByIdAsync(id);
-            if(PromoOrder == null)
+            if (PromoOrder == null)
             {
                 return NotFound();
             }
@@ -156,7 +159,7 @@ namespace WebAPI.Controllers
         [HttpPost("CreatePromotionOrder")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> Create([FromBody] CreatePromotionOrderRequestDto createDto)
-        {            
+        {
             var userIdClaim = User.FindFirstValue("UserId");
             if (userIdClaim == null)
             {
@@ -192,7 +195,7 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = promoOrderModel.PromoOrderId }, promoOrderDTO);
         }
 
-        [HttpGet("user/maxpromotionproductlimit")]
+        [HttpGet("user/countproductandmaxlimit")]
         public async Task<IActionResult> GetHighestQuantityPromotionForUser()
         {
             // Extract user ID from claims
@@ -204,12 +207,15 @@ namespace WebAPI.Controllers
             var userId = int.Parse(userIdClaim.Value);
 
             // Get the highest quantity promotion for the user
-            var highestQuantity = await _promotionRepo.GetHighestQuantityPromotionForUser(userId);
+            Promotion? promotion = await _promotionRepo.GetHighestPromotionForUser(userId);
 
             // Prepare response
+
             var response = new
             {
-                ProductQuantityLimit = highestQuantity ?? 5 // Use 5 as default value if highestQuantity is null
+                currentProductQuantity = _productReposity.CountProduct(userId),
+                image = promotion != null ? promotion.ImageLink : "",
+                ProductQuantityLimit = promotion != null ? promotion.ProductQuantityLimit : 5  // Use 5 as default value if highestQuantity is null
             };
 
             // Return response

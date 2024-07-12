@@ -68,18 +68,18 @@ namespace Repository
             return existingPromotion;
         }
 
-        public async Task<int?> GetHighestQuantityPromotionForUser(int userId)
+        public async Task<Promotion?> GetHighestPromotionForUser(int userId)
         {
-            var highestQuantity = await _dbcontext.PromotionOrders
+            var promotion = await _dbcontext.PromotionOrders
                 .Where(po => po.UserId == userId)
                 .Join(_dbcontext.Promotions,
                       po => po.PromotionId,
                       p => p.PromotionId,
-                      (po, p) => p.ProductQuantityLimit)
+                      (po, p) => p)
                 .OrderByDescending(quantity => quantity)
                 .FirstOrDefaultAsync();
 
-            return highestQuantity;
+            return promotion;
         }
     }
 }

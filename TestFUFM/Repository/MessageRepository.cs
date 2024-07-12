@@ -26,7 +26,7 @@ namespace Repository
                 ChatRoomId = chatRoom,
                 ReceiverId = receiverId,
                 MessageText = msg,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.Now.AddHours(7),
                 IsRead = false
             };
             await _dbcontext.Messages.AddAsync(newMessage);

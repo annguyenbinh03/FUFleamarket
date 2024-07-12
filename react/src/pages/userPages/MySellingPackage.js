@@ -40,23 +40,10 @@ const MySellingPackage = () => {
     return value;
   };
 
-  const handleBuy = (userId,promotionId) =>{
-    window.open(`https://localhost:7057/api/VNPay/payment/${userId}/${promotionId}`);
-  }
-
-  const dateConverter = (timeEnd) => {
-    const newStartDate = new Date();
-    const newEndDate = new Date(timeEnd);
-    const one_day = 1000 * 60 * 60 * 24;
-    let result;
-    result = Math.ceil(
-      (newEndDate.getTime() - newStartDate.getTime()) / one_day
+  const handleBuy = (userId, promotionId) => {
+    window.open(
+      `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`  
     );
-    console.log("date Converter result", result);
-    if (result < 0) {
-      return 0;
-    }
-    return result;
   };
 
   function removeTimeFromISOString(isoString) {
@@ -74,20 +61,31 @@ const MySellingPackage = () => {
       <Header />
       <section className="selling-package spad">
         <div className="container bg-white py-4">
-          <div className=" p-1">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to="/">Home</Link>
-                </li>
-                <li className="breadcrumb-item">
-                  <Link to="/my-posts">Quản lý tin</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Quản lý gói bán hàng
-                </li>
-              </ol>
-            </nav>
+          <div className="d-flex justify-content-between">
+            <div className="px-4 py-2">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to="/my-posts">Quản lý tin</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Quản lý gói bán hàng
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <div>
+              {sellingPackages && (
+                <div className="me-4">
+                  <Link className="btn btn-primary" to="/selling-package">
+                    Mua thêm gói bán hàng{" "}
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="fs-3 fw-bold   text-center px-5 mb-4">
@@ -108,11 +106,16 @@ const MySellingPackage = () => {
                   <p className="card-text" style={{ minHeight: "80px" }}>
                     {sPackage.promotion.description}
                   </p>
-                  <span className="badge text-bg-success">Đang hoạt động</span>
+                  {sPackage.status === "Active" ? (
+                    <span className="badge text-bg-success">
+                      Đang hoạt động
+                    </span>
+                  ) : (
+                    <span class="badge rounded-pill text-bg-info text-white">Đang chờ</span>
+                  )}
                   <div className="fs-5">
                     <span className="">
-                      {" "}
-                      Còn lại {dateConverter(sPackage.endDate)} ngày
+                      Còn lại {sPackage.remainedDate} ngày
                     </span>
                   </div>
                   <div className="d-flex justify-content-between fw-bold my-3">
@@ -151,7 +154,7 @@ const MySellingPackage = () => {
                     <div>{removeTimeFromISOString(sPackage.endDate)}</div>
                   </div>
                   <button
-                   onClick={() => handleBuy(auth.id, sPackage.promotionId)}
+                    onClick={() => handleBuy(auth.id, sPackage.promotionId)}
                     className="btn btn-dark w-100"
                   >
                     Gia hạn
@@ -188,10 +191,7 @@ const MySellingPackage = () => {
                       Giá
                     </th>
                     <th className="text-center" scope="col">
-                      Ngày bắt đầu
-                    </th>
-                    <th className="text-center" scope="col">
-                      Ngày kết thúc
+                      Ngày mua
                     </th>
                     <th className="text-center" scope="col">
                       Phương thức thanh toán
@@ -217,23 +217,26 @@ const MySellingPackage = () => {
                         />{" "}
                         {order.promotionName}
                       </th>
+                      <td className="text-center">{order.quantity} tháng</td>
                       <td className="text-center">
-                        {order.promotionPeriod} ngày
-                      </td>
-                      <td className="text-center">{formatPrice( order.price)} đ</td>
-                      <td className="text-center">
-                        {removeTimeFromISOString(order.startDate)}
+                        {formatPrice(order.price)} đ
                       </td>
                       <td className="text-center">
-                        {removeTimeFromISOString(order.endDate)}
+                        {removeTimeFromISOString(order.transactionCreatedDate)}
                       </td>
                       <td className="text-center">{order.paymentMethod}</td>
                       <td className="text-center">{order.transactionCode}</td>
                       <td className="text-center">
                         {" "}
-                        {order.transactionStatus === "Completed"
-                          ? "Thành công"
-                          : "Thất bại"}{" "}
+                        {order.transactionStatus === "Completed" ? (
+                          <span class="badge rounded-pill text-bg-success">
+                            Thành công
+                          </span>
+                        ) : (
+                          <span class="badge rounded-pill text-bg-danger">
+                            Thất bại
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}
