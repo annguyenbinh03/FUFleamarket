@@ -394,7 +394,7 @@ namespace WebAPI.Controllers
             // Set BuyerId as the logged-in user's UserId
             var buyerId = userId;
             var sellerId = product.SellerId; // Assuming the Product entity has a SellerId field
-            createDTO.CreatedDate = DateTime.UtcNow;
+            createDTO.CreatedDate = DateTime.Now;
 
             // Create the order model from the DTO
             var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);
@@ -648,8 +648,69 @@ namespace WebAPI.Controllers
 
             return Ok("Order completed and product quantity updated");
         }
+        [HttpPut]
+        [Route("rejectOrder/{orderId}")]
+        public async Task<IActionResult> RejectOrder([FromRoute] int orderId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
 
+            var userId = int.Parse(userIdClaim.Value);
 
+            var result = await _orderRepo.RejectOrderAsync(userId, orderId);
+            if (!result)
+            {
+                return BadRequest("Failed to reject the order or you are not authorized to reject this order");
+            }
+
+            return Ok("Order rejected successfully");
+        }
+        [HttpPut]
+        [Route("rejectOrderByBuyer/{orderId}")]
+        public async Task<IActionResult> RejectOrderByBuyer([FromRoute] int orderId)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            // Get the order details to know the status and ensure the user is the buyer
+            var order = await _orderRepo.GetByOrderIdAsync(orderId);
+            if (order == null)
+            {
+                return BadRequest("Order not found");
+            }
+
+            // Check if the logged-in user is the buyer of the order
+            if (order.BuyerId != userId)
+            {
+                return BadRequest("Only the buyer can reject the order");
+            }
+
+            // Check if the order status allows it to be rejected (e.g., status 0)
+            if (order.Status != 0)
+            {
+                return BadRequest("Only orders with status 0 can be rejected");
+            }
+
+            // Update the order status to 2 (rejected by buyer)
+            order.Status = 2;
+
+            // Save the changes to the database
+            bool updateResult = await _orderRepo.UpdateOrderAsync(order.OrderId, order);
+            if (!updateResult)
+            {
+                return BadRequest("Failed to reject the order");
+            }
+
+            return Ok("Order rejected successfully");
+        }
     }
 }
 

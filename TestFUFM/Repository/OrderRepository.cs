@@ -44,7 +44,7 @@ namespace Repository
             existingOrder.Note = updateOrder.Note;
             existingOrder.Quantity = updateOrder.Quantity;
             existingOrder.ReceiverAddress = updateOrder.ReceiverAddress;
-            existingOrder.CreatedDate = (DateTime)updateOrder.CreatedDate;
+            existingOrder.CreatedDate = DateTime.Now.AddHours(7);
 
             await _context.SaveChangesAsync();
             return existingOrder;
@@ -203,6 +203,34 @@ namespace Repository
 
             order.Status = 3; // Update status to 3 (completed)
             _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RejectOrderAsync(int userId, int orderId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null || order.SellerId != userId)
+            {
+                return false;
+            }
+
+            order.Status = 2; // Status 2 for rejected orders
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateOrderAsync(int orderId, Order order)
+        {
+            var existingOrder = await _context.Orders.FindAsync(orderId);
+            if (existingOrder == null)
+            {
+                return false;
+            }
+
+            existingOrder.Status = order.Status;
+            _context.Orders.Update(existingOrder);
             await _context.SaveChangesAsync();
             return true;
         }
