@@ -221,7 +221,8 @@ namespace WebAPI.Controllers
                 responseSide = new
                 {
                     fullName = product.Seller.FullName,
-                    avarta = product.Seller.Avarta
+                    avarta = product.Seller.Avarta,
+                    UserId = product.SellerId
                 },
                 requestSideProducts = user.Products.Select(p => new
                 {

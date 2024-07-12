@@ -517,7 +517,7 @@ namespace WebAPI.Controllers
                 return Unauthorized("Invalid user ID format.");
             }
 
-            const int standardProductLimit = 3;
+            const int standardProductLimit = 5;
             int totalProductLimit = standardProductLimit;
 
             // Get all active promotion orders for the seller

@@ -157,7 +157,7 @@ namespace WebAPI.Controllers
                 {
                     newPromoTransaction.TransactionStatus = isHigherPromotion || hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
 
-                    if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString())
+                    if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString() || existingPromoOrder.Status == StatusPromotionOrderEnum.Pending.ToString())
                     {
                         existingPromoOrder.RemainedDate += 30;
                     }

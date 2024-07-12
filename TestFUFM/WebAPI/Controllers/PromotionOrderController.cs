@@ -192,9 +192,10 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = promoOrderModel.PromoOrderId }, promoOrderDTO);
         }
 
-        [HttpGet("user/highestquantitypromotion")]
+        [HttpGet("user/maxpromotionproductlimit")]
         public async Task<IActionResult> GetHighestQuantityPromotionForUser()
         {
+            // Extract user ID from claims
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
@@ -202,19 +203,18 @@ namespace WebAPI.Controllers
             }
             var userId = int.Parse(userIdClaim.Value);
 
+            // Get the highest quantity promotion for the user
             var highestQuantity = await _promotionRepo.GetHighestQuantityPromotionForUser(userId);
 
-            if (highestQuantity == null)
-            {
-                return NotFound("No promotions found for the user.");
-            }
-
+            // Prepare response
             var response = new
             {
-                ProductQuantityLimit = highestQuantity.Value
+                ProductQuantityLimit = highestQuantity ?? 5 // Use 5 as default value if highestQuantity is null
             };
 
+            // Return response
             return Ok(response);
         }
+
     }
 }
