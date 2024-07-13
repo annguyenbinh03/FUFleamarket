@@ -7,23 +7,17 @@ import SearchInput from "../../../components/SearchInput"; // Adjust the path as
 export default function Header() {
   return (
     <View style={styles.header}>
-      <View style={styles.logo}>
+      <View style={styles.bannerContainer}>
         <Image source={images.logo} style={styles.logoImage} />
-        <View style={styles.searchContainer}>
-          <SearchInput style={styles.searchInput} />
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Bell")}
-          >
-            <FontAwesome5 name="bell" size={20} color="#111111" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() => console.log("Message")}
-          >
-            <FontAwesome5 name="comments" size={20} color="#111111" />
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.searchContainer}>
+        <SearchInput style={styles.searchInput} />
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => console.log("Thông báo")}
+        >
+          <FontAwesome5 name="bell" size={20} color="#000" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -31,42 +25,45 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "#DD0000",
-    borderWidth: 0,
     width: "100%",
-  },
-  logo: {
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
     alignItems: "center",
-    flex: 1,
+  },
+  bannerContainer: {
+    width: "100%",
+    backgroundColor: "#FF4C4C",
+    paddingVertical: 5,
+    alignItems: "center",
+  },
+  bannerText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   logoImage: {
     width: 100,
-    height: 100,
-    resizeMode: "contain",
-  },
-  headerIcons: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  iconButton: {
-    padding: 8,
-    margin: 3,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: "#000",
+    height: 30,
   },
   searchContainer: {
+    width: "90%",
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
+    marginTop: 10,
   },
   searchInput: {
     flex: 1,
+    marginRight: 10,
+  },
+  iconButton: {
+    padding: 10,
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
