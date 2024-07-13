@@ -141,18 +141,6 @@ const MySellingPackage = () => {
                       Duyệt tin nhanh dưới 5 phút
                     </div>
                   </div>
-                  <div className="d-flex justify-content-between fw-bold my-3">
-                    <div>
-                      <span className="text-success">
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>{" "}
-                      Ngày hết hạn
-                    </div>
-                    <div>{removeTimeFromISOString(sPackage.endDate)}</div>
-                  </div>
                   <button
                     onClick={() => handleBuy(auth.id, sPackage.promotionId)}
                     className="btn btn-dark w-100"

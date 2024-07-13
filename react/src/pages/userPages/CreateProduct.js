@@ -1,6 +1,6 @@
 import { React, useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-import { createProductAPI } from "../../api/product";
+import { getCountProductAndLimit, createProductAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { useNavigate } from "react-router-dom";
@@ -14,17 +14,61 @@ function CreateProduct() {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const [countProductAndLimit, setCountProductAndLimit] = useState();
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [storedQuantity, setStoredQuantity] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("1");
+  const [dealType, setDealType] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [img, setImg] = useState("");
   const inputRef = useRef(null);
 
+  const fetchCountProductInfo = async () => {
+    try {
+      var response = await getCountProductAndLimit(auth.accessToken);
+      setCountProductAndLimit(response);
+      if(response.currentProductQuantity === response.productQuantityLimit){
+        toast.error(
+          "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
+          {
+            position: "bottom-right",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCountProductInfo();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(countProductAndLimit.currentProductQuantity === countProductAndLimit.productQuantityLimit){
+      toast.error(
+        "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
+        {
+          position: "bottom-right",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        return;
+    }
     var urlImg = await handleUploadImagesClick();
     console.log(urlImg);
     if (urlImg !== "") {
@@ -35,6 +79,7 @@ function CreateProduct() {
         description,
         categoryId,
         isNew,
+        dealType,
         imageLink,
         storedQuantity,
       };
@@ -98,6 +143,12 @@ function CreateProduct() {
   const handleImageChange = (event) => {
     if (event.target.files[0]) {
       setImg(event.target.files[0]);
+    }
+  };
+
+  const formatPrice = (value) => {
+    if(value){
+      return value.toLocaleString('vi-VN');
     }
   };
 
@@ -193,12 +244,12 @@ function CreateProduct() {
                     </span>
                     <select
                       required
-                      value={isNew}
-                      onChange={(e) => setIsNew(e.target.value)}
+                      value={dealType}
+                      onChange={(e) => setDealType(e.target.value)}
                       className="form-select select"
                     >
-                      <option value="True">Buôn bán</option>
-                      <option value="False">Trao đổi</option>
+                      <option value="false">Buôn bán</option>
+                      <option value="true">Trao đổi</option>
                     </select>
                   </div>
                 </div>
@@ -222,7 +273,7 @@ function CreateProduct() {
                   type="number"
                   className="form-control"
                   placeholder="Giá (vnd)"
-                  value={price}
+                  value={formatPrice(price)}
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
@@ -234,6 +285,7 @@ function CreateProduct() {
                   className="form-control"
                   placeholder="Số lượng sản phẩm"
                   value={storedQuantity}
+                  min="1"
                   onChange={(e) => setStoredQuantity(e.target.value)}
                 />
               </div>

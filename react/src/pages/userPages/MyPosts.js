@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-import { getMyProductsAPI } from "../../api/product";
+import { getCountProductAndLimit, getMyProductsAPI } from "../../api/product";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { Link } from "react-router-dom";
@@ -10,13 +10,24 @@ function MyPosts() {
   const [products, setProducts] = useState([]);
   const { auth } = useContext(AuthContext);
   const [sellingPackages, setSellingPackages] = useState([]);
+  const [sortBy, setSortBy] = useState("date");
+  const [tab, setTab] = useState(1);
+  const [countProductAndLimit, setCountProductAndLimit] = useState();
 
   const fetchProduct = async () => {
     try {
-      var response = await getMyProductsAPI(auth.accessToken);
+      var response = await getMyProductsAPI(auth.accessToken, tab, sortBy);
       setProducts(response);
     } catch (error) {
       console.error("Error fetching product:", error);
+    }
+  };
+  const fetchCountProductAndLimit = async () => {
+    try {
+      var response = await getCountProductAndLimit(auth.accessToken);
+      setCountProductAndLimit(response);
+    } catch (error) {
+      console.error("Error fetching fetchCountProductAndLimit:", error);
     }
   };
   const fetchMyPackage = async () => {
@@ -28,13 +39,19 @@ function MyPosts() {
     }
   };
 
+  useEffect(()=>{
+    fetchProduct();
+  }, [tab,sortBy])
+
+
   useEffect(() => {
     fetchProduct();
     fetchMyPackage();
+    fetchCountProductAndLimit();
   }, []);
 
   const formatPrice = (value) => {
-    if(value){
+    if (value) {
       return value.toLocaleString("vi-VN");
     }
     return value;
@@ -74,7 +91,10 @@ function MyPosts() {
                   </div>
                 </div>
                 <div className="col-md-2 col-lg-4 my-auto">
-                  <Link  to={ auth?.id ?  `/shopprofile/${auth?.id}` : "/"}  className="btn btn btn-dark">
+                  <Link
+                    to={auth?.id ? `/shopprofile/${auth?.id}` : "/"}
+                    className="btn btn btn-dark"
+                  >
                     <span>Xem trang</span>
                   </Link>
                 </div>
@@ -93,26 +113,17 @@ function MyPosts() {
                   <div></div>
                 )}
 
-                {(sellingPackages?.[0]?.promotion.productQuantityLimit &&
-                  sellingPackages?.[0]?.promotion.productQuantityLimit === products?.length) ||
-                (!sellingPackages?.[0]?.promotion.productQuantityLimit &&
-                  3 === products?.length) ? (
+                {countProductAndLimit?.currentProductQuantity ===
+                countProductAndLimit?.productQuantityLimit ? (
                   <div className="my-auto fw-bold me-3 fs-5 text-danger">
-                    Số lượng bài đăng:{" "}
-                    {Array.isArray(products) ? products.length : 0}/
-                    {sellingPackages
-                      ? sellingPackages?.[0]?.promotion.productQuantityLimit
-                      : 3}
+                    Số lượng bài đăng:{" "} {countProductAndLimit?.currentProductQuantity}/{countProductAndLimit?.productQuantityLimit}
                   </div>
                 ) : (
                   <div className="my-auto fw-bold me-3 fs-5 ">
-                    Số lượng bài đăng:{" "}
-                    {Array.isArray(products) ? products.length : 0}/
-                    {sellingPackages
-                      ? sellingPackages?.[0]?.promotion.productQuantityLimit
-                      : 3}
+                    Số lượng bài đăng:{" "} {countProductAndLimit?.currentProductQuantity}/{countProductAndLimit?.productQuantityLimit}
                   </div>
                 )}
+
                 <Link
                   to="/my-selling-package"
                   className="btn btn-warning rounded my-2"
@@ -121,71 +132,104 @@ function MyPosts() {
                 </Link>
               </div>
             </div>
-            <div className="postnav mt-3">
-              <div className="d-flex flex-wrap justify-content-center">
+            <div className="postnav mt-3 py-1">
+              <div className="col-md-8 d-flex justify-content-center">
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1 selected"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 1 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(1)}
                 >
-                  <span className="name">ĐANG HIỂN THỊ (1)</span>
+                  <span className="name">Tất cả</span>
                 </button>
 
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 2 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(2)}
                 >
-                  <span>HẾT HẠN (0)</span>
+                  <span>Đang chờ duyệt</span>
                 </button>
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 3 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(3)}
                 >
-                  <span>BỊ TỪ CHỐI (0)</span>
+                  <span>Đang đăng bán</span>
                 </button>
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 4 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(4)}
                 >
-                  <span>CẦN THANH TOÁN (0)</span>
+                  <span>Đang trao đổi</span>
                 </button>
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 5 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(5)}
                 >
-                  <span>CHỜ DUYỆT (0)</span>
+                  <span>Đã ẩn</span>
                 </button>
                 <button
-                  className="btn btn-outline-secondary mx-2 my-1"
+                  className={`btn btn-outline-secondary mx-2 my-1 ${
+                    tab === 6 && "selected"
+                  } `}
                   role="tab"
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
+                  onClick={() => setTab(6)}
                 >
-                  <span>ĐÃ ẨN (0)</span>
+                  <span>Bị admin ẩn</span>
                 </button>
+              </div>
+              <div className="input-group">
+                <div className="input-group-text bg-transparent border-0">
+                  {" "}
+                  Ưu tiên xem{" "}
+                </div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="form-select rounded"
+                >
+                  <option value="date">Sản phẩm mới nhất</option>
+                  <option value="oldDate">Sản phẩm cũ nhất</option>
+                  <option value="price">Giá cao nhất</option>
+                  <option value="lowPrice">Giá thấp nhất</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
-
-        <div className="container bg-white px-5 mt-3 py-3">
+        <div className="container bg-white px-5 py-3">
           {products?.map((product) => (
-            <div className="product_container py-3">
+            <div key={product.productId} className="product_container py-3">
               <div className="row mb-2 p-3 order">
                 <div className="col-8 col-md-8">
                   <div className="row">
@@ -216,9 +260,6 @@ function MyPosts() {
                       </Link>
                       <div className="price">
                         {formatPrice(product.price)} đ
-                      </div>
-                      <div className="address">
-                        Phường Dĩ An, Thành phố Dĩ An, Bình Dương
                       </div>
                       <div className="created_date">
                         Ngày đăng tin:{" "}
@@ -279,8 +320,27 @@ function MyPosts() {
                 </div>
 
                 {/* Advertisement */}
-                <div className="col-4 col-md-4 d-inline-block">
-                  {product.description}
+                <div className="col-4  col-md-4 d-inline-block">
+                  <div className="text-center fs-5 mb-3">
+                    {product?.dealType ? (
+                      <span className="badge rounded-pill text-bg-info text-white py-1">
+                        <i
+                          className="fa fa-exchange py-1 me-2"
+                          aria-hidden="true"
+                        ></i>
+                        Trao đổi
+                      </span>
+                    ) : (
+                      <span className="badge rounded-pill text-bg-primary py-1">
+                        <i
+                          className="fa fa-credit-card py-1 me-2"
+                          aria-hidden="true"
+                        ></i>
+                        Buôn bán
+                      </span>
+                    )}
+                  </div>
+                  <div> {product.description}</div>
                 </div>
               </div>
             </div>

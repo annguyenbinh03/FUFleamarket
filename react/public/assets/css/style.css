@@ -853,6 +853,8 @@ ul {
 
 .postnav {
   border-top: #dfdfdf solid 1px;
+  display: flex;
+  justify-content: space-around;
 }
 .postnav button {
   opacity: 0.5;
@@ -862,7 +864,8 @@ ul {
   font-size: 14px;
 }
 .postnav .selected {
-  opacity: 0.9;
+  opacity: 1;
+  color: #252525;
 }
 .mypost {
   min-height: 600px;
@@ -957,17 +960,20 @@ ul {
   border-radius: 0.25rem;
 }
 
-.buy_order .product_container .name {
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 18px;
-  color: black;
+.buy_order .tab button{
+  opacity: 0.5;
+  border: none;
+  padding: 7px 5px;
+  font-size: 14px;
+}
+.buy_order .tab .selected {
+  opacity: 1;
+  color: #252525;
 }
 
 .buy_order .product_container .price {
   font-weight: bold;
   text-decoration: none;
-  font-size: 18px;
   color: #cd1818;
 }
 
@@ -977,6 +983,29 @@ ul {
 .buy_order .product_container .order_info span {
   color: black;
 }
+
+.buy_order .product-name{
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.buy_order .address{
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.buy_order .note{
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
 
 /*---------------------
   Footer
