@@ -467,10 +467,10 @@ namespace WebAPI.Controllers
                         query = query.Where(p => p.Status == 0);
                         break;
                     case 3:
-                        query = query.Where(p => p.Status == 1 && p.DealType == true);
+                        query = query.Where(p => p.Status == 1 && p.DealType == false);
                         break;
                     case 4:
-                        query = query.Where(p => p.Status == 1 && p.DealType == false);
+                        query = query.Where(p => p.Status == 1 && p.DealType == true);
                         break;
                     case 5:
                         query = query.Where(p => p.Status == 3);
