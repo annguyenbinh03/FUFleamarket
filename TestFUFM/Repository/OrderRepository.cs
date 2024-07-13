@@ -121,7 +121,8 @@ namespace Repository
             IQueryable<Order> query = _context.Orders
                 .Where(order => order.BuyerId == buyerId)
                 .Include(order => order.Product)
-                .Include(order => order.Seller);
+                .Include(order => order.Seller)
+                .OrderByDescending(order => order.CreatedDate);
             query.OrderByDescending(order => order.CreatedDate);
             if (sortByDate)
             {

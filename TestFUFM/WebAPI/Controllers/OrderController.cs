@@ -260,7 +260,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("bought")]
-        public async Task<IActionResult> GetBoughtOrders([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
+        public async Task<IActionResult> GetBoughtOrders([FromQuery] int? tab = null, [FromQuery] string? sortBy = null)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
@@ -270,30 +270,62 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            bool sortByDate = sortBy?.ToLower() == "date";
-            bool sortByPrice = sortBy?.ToLower() == "price";
-
-            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId, sortByDate, sortByPrice, descending);
+            var boughtOrders = await _orderRepo.GetOrdersByBuyerIdAsync(userId);
 
             if (!boughtOrders.Any())
             {
                 return NotFound("No bills.");
             }
 
-            var orders = boughtOrders.Select(boughtOrder => new 
+            // Apply status filter if tab parameter is provided
+            if (tab.HasValue)
+            {
+                boughtOrders = tab.Value switch
+                {
+                    1 => boughtOrders, // tab = 1 lấy tất cả
+                    2 => boughtOrders.Where(order => (int)order.Status == 0).ToList(), // tab = 2 lấy status = 0
+                    3 => boughtOrders.Where(order => (int)order.Status == 1).ToList(), // tab = 3 lấy status = 1
+                    4 => boughtOrders.Where(order => (int)order.Status == 3).ToList(), // tab = 4 lấy status = 3
+                    5 => boughtOrders.Where(order => (int)order.Status == 2).ToList(), // tab = 5 lấy status = 2
+                    _ => null
+                };
+
+                if (boughtOrders == null)
+                {
+                    return BadRequest("Invalid tab value.");
+                }
+
+                if (!boughtOrders.Any())
+                {
+                    return NotFound($"No orders found with the specified criteria for tab = {tab.Value}.");
+                }
+            }
+
+            // Apply sorting based on sortBy parameter
+            boughtOrders = sortBy switch
+            {
+                "date" => boughtOrders.OrderByDescending(order => order.CreatedDate).ToList(),
+                "oldDate" => boughtOrders.OrderBy(order => order.CreatedDate).ToList(),
+                "price" => boughtOrders.OrderByDescending(order => order.Price).ToList(),
+                "lowPrice" => boughtOrders.OrderBy(order => order.Price).ToList(),
+                _ => boughtOrders
+            };
+
+            var orders = boughtOrders.Select(boughtOrder => new
             {
                 order = boughtOrder.ToOrderShowProfileOfSellerDTO(),
                 Product = new
                 {
-                  productId =  boughtOrder.Product.ProductId,
-                  productName = boughtOrder.Product.ProductName,
-                  productPrice =  boughtOrder.Product.Price,
-                   ImageLink = boughtOrder.Product.ImageLink
+                    productId = boughtOrder.Product.ProductId,
+                    productName = boughtOrder.Product.ProductName,
+                    productPrice = boughtOrder.Product.Price,
+                    ImageLink = boughtOrder.Product.ImageLink
                 }
             }).ToList();
 
             return Ok(orders);
         }
+
 
         [HttpGet("BoughtStatus0")]
         public async Task<IActionResult> GetBoughtOrdersStatus0([FromQuery] string? sortBy = null, [FromQuery] bool descending = false)
