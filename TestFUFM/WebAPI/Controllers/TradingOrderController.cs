@@ -18,12 +18,14 @@ namespace WebAPI.Controllers
         private readonly IProductReposity _productRepo;
         private readonly ITradingOrderDetailRepository _tradingOrderDetailRepo;
         private readonly FufleaMarketContext _context;
-        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context)
+        private readonly IUserRepository _userRepo;
+        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context, IUserRepository userRepo)
         {
             _tradingRepo = tradingRepo;
             _productRepo = productRepo;
             _tradingOrderDetailRepo = tradingOrderDetailRepo;
             _context = context;
+            _userRepo = userRepo;
         }
 
         // GET: api/TradingOrder
@@ -61,23 +63,74 @@ namespace WebAPI.Controllers
                 return Unauthorized("Invalid user ID claim.");
             }
 
-            var tradingOrders = await _tradingRepo.GetTradingOrdersByUserIdAsync(userId);
+            var tradingOrders = await _tradingRepo.GetTradingOrdersByUser1IdAsync(userId);
             if (tradingOrders == null || !tradingOrders.Any())
             {
                 return NotFound("No trading orders found for this user.");
             }
 
-            var tradingOrdersForUser1 = tradingOrders.Where(order => order.User1 == userId).ToList();
+            var userIds = tradingOrders.SelectMany(order => new[] { order.User1, order.User2 }).Distinct();
+            var users = await _userRepo.GetUsersByIdsAsync(userIds);
 
-            if (!tradingOrdersForUser1.Any())
+            var productIds = tradingOrders.SelectMany(order => order.TradingOrderDetails.Select(detail => detail.ProductId)).Distinct();
+            var products = await _productRepo.GetProductsByIdsAsync(productIds);
+
+            var tradingOrderDtos = tradingOrders.Select(order => new
             {
-                return Unauthorized("Claim ID does not match User1 for any trading order.");
-            }
-
-            var tradingOrderDtos = tradingOrdersForUser1.Select(order => order.ToTradingOrderDTO()).ToList();
+                TradingOrderId = order.TradingOrderId,
+                User1 = users.Where(u => u.UserId == order.User1).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User1TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User1).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                User2 = users.Where(u => u.UserId == order.User2).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User2TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User2).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                order.Note,
+                order.CreatedDate,
+                order.Status
+            }).ToList();
 
             return Ok(tradingOrderDtos);
         }
+
+
 
 
 
@@ -399,10 +452,10 @@ namespace WebAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("user1/getMyRequest")]
-        public async Task<IActionResult> getMyRequest(
-                 [FromQuery] int? status,  // Optional status parameter
-                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
+        [HttpGet("user1/TradingOrder")]
+        public async Task<IActionResult> TradingOrder(
+     [FromQuery] int? tab = null,
+     [FromQuery] string? sortBy = null)
         {
             // Lấy User1 từ claims
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
@@ -410,97 +463,240 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("User ID not found in claims.");
             }
-            var user1Id = int.Parse(userIdClaim.Value);
-
-            // Tạo truy vấn cơ bản
-            var query = _context.TradingOrders.AsQueryable();
-
-            // Lọc theo User1
-            query = query.Where(order => order.User1 == user1Id);
-
-            // Lọc theo trạng thái nếu được cung cấp
-            if (status.HasValue && (status.Value == 0 || status.Value == 1 || status.Value == 2 || status.Value == 3 || status.Value == 4))
+            if (!int.TryParse(userIdClaim.Value, out var user1Id))
             {
-                query = query.Where(order => order.Status == status.Value);
+                return Unauthorized("Invalid user ID claim.");
             }
 
-            // Sắp xếp theo ngày
-            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
+            // Lấy danh sách trading orders từ repository
+            var tradingOrders = await _tradingRepo.GetTradingOrdersByUser1IdAsync(user1Id);
+            if (tradingOrders == null || !tradingOrders.Any())
+            {
+                return NotFound("No trading orders found for this user.");
+            }
 
-            // Thực hiện truy vấn và trả về kết quả
-            var orders = await query.ToListAsync();
-            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
+            // Lọc theo trạng thái nếu tab được cung cấp
+            if (tab.HasValue)
+            {
+                tradingOrders = tab.Value switch
+                {
+                    1 => tradingOrders, // tab = 1 lấy tất cả
+                    2 => tradingOrders.Where(order => order.Status == 0).ToList(), // tab = 2 lấy status = 0
+                    3 => tradingOrders.Where(order => order.Status == 1).ToList(), // tab = 3 lấy status = 1
+                    4 => tradingOrders.Where(order => order.Status == 3).ToList(), // tab = 4 lấy status = 3
+                    5 => tradingOrders.Where(order => order.Status == 2).ToList(), // tab = 5 lấy status = 2
+                    _ => null
+                };
+
+                if (tradingOrders == null)
+                {
+                    return BadRequest("Invalid tab value.");
+                }
+
+                if (!tradingOrders.Any())
+                {
+                    return NotFound($"No orders found with the specified criteria for tab = {tab.Value}.");
+                }
+            }
+
+            // Sắp xếp theo sortBy parameter
+            tradingOrders = sortBy switch
+            {
+                "date" => tradingOrders.OrderByDescending(order => order.CreatedDate).ToList(),
+                "oldDate" => tradingOrders.OrderBy(order => order.CreatedDate).ToList(),
+                _ => tradingOrders
+            };
+
+            // Lấy danh sách userId và productId từ các đơn hàng
+            var userIds = tradingOrders.SelectMany(order => new[] { order.User1, order.User2 }).Distinct();
+            var users = await _userRepo.GetUsersByIdsAsync(userIds);
+
+            var productIds = tradingOrders.SelectMany(order => order.TradingOrderDetails.Select(detail => detail.ProductId)).Distinct();
+            var products = await _productRepo.GetProductsByIdsAsync(productIds);
+
+            // Tạo cấu trúc phản hồi
+            var tradingOrderDtos = tradingOrders.Select(order => new
+            {
+                TradingOrderId = order.TradingOrderId,
+                User1 = users.Where(u => u.UserId == order.User1).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User1TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User1).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                User2 = users.Where(u => u.UserId == order.User2).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User2TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User2).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                order.Note,
+                order.CreatedDate,
+                order.Status
+            }).ToList();
+
             return Ok(tradingOrderDtos);
         }
 
 
-        [HttpGet("user2/getRequestAndContacting")]
-        public async Task<IActionResult> getRequestAndContacting(
-                 [FromQuery] int? status,  // Optional status parameter
-                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
+
+
+
+        [HttpGet("user2/TradingOrderRequest")]
+        public async Task<IActionResult> TradingOrderRequest(
+    [FromQuery] int? tab = null,
+    [FromQuery] string? sortBy = null)
         {
-            // Lấy User1 từ claims
+            // Lấy User2 từ claims
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
-                return BadRequest("User ID not found in claims.");
+                return Unauthorized("Claim user ID not found.");
             }
-            var user2Id = int.Parse(userIdClaim.Value);
 
-            // Tạo truy vấn cơ bản
-            var query = _context.TradingOrders.AsQueryable();
-
-            // Lọc theo User1
-            query = query.Where(order => order.User2 == user2Id);
-
-            // Lọc theo trạng thái nếu được cung cấp
-            if (status.HasValue && (status.Value == 0 || status.Value == 1))
+            if (!int.TryParse(userIdClaim.Value, out var user2Id))
             {
-                query = query.Where(order => order.Status == status.Value);
+                return Unauthorized("Invalid user ID claim.");
             }
 
-            // Sắp xếp theo ngày
-            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
+            // Lấy danh sách trading orders từ repository
+            var tradingOrders = await _tradingRepo.GetTradingOrdersByUser2IdAsync(user2Id);
+            if (tradingOrders == null || !tradingOrders.Any())
+            {
+                return NotFound("No trading orders found for this user.");
+            }
 
-            // Thực hiện truy vấn và trả về kết quả
-            var orders = await query.ToListAsync();
-            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
+            // Lọc theo trạng thái nếu tab được cung cấp
+            if (tab.HasValue)
+            {
+                tradingOrders = tab.Value switch
+                {
+                    1 => tradingOrders, // tab = 1 lấy tất cả
+                    2 => tradingOrders.Where(order => order.Status == 0).ToList(), // tab = 2 lấy status = 0
+                    3 => tradingOrders.Where(order => order.Status == 1).ToList(), // tab = 3 lấy status = 1
+                    4 => tradingOrders.Where(order => order.Status == 3).ToList(), // tab = 4 lấy status = 3
+                    5 => tradingOrders.Where(order => order.Status == 2).ToList(), // tab = 5 lấy status = 2
+                    _ => null
+                };
+
+                if (tradingOrders == null)
+                {
+                    return BadRequest("Invalid tab value.");
+                }
+
+                if (!tradingOrders.Any())
+                {
+                    return NotFound($"No orders found with the specified criteria for tab = {tab.Value}.");
+                }
+            }
+
+            // Sắp xếp theo sortBy parameter
+            tradingOrders = sortBy switch
+            {
+                "date" => tradingOrders.OrderByDescending(order => order.CreatedDate).ToList(),
+                "oldDate" => tradingOrders.OrderBy(order => order.CreatedDate).ToList(),
+                _ => tradingOrders
+            };
+
+            // Lấy danh sách userId và productId từ các đơn hàng
+            var userIds = tradingOrders.SelectMany(order => new[] { order.User1, order.User2 }).Distinct();
+            var users = await _userRepo.GetUsersByIdsAsync(userIds);
+
+            var productIds = tradingOrders.SelectMany(order => order.TradingOrderDetails.Select(detail => detail.ProductId)).Distinct();
+            var products = await _productRepo.GetProductsByIdsAsync(productIds);
+
+            // Tạo cấu trúc phản hồi
+            var tradingOrderDtos = tradingOrders.Select(order => new
+            {
+                TradingOrderId = order.TradingOrderId,
+                User1 = users.Where(u => u.UserId == order.User1).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User1TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User1).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                User2 = users.Where(u => u.UserId == order.User2).Select(u => new
+                {
+                    u.UserId,
+                    u.FullName,
+                    u.Avarta
+                }).FirstOrDefault(),
+                User2TradingOrderDetails = order.TradingOrderDetails.Where(detail => detail.OwnerId == order.User2).Select(detail => new
+                {
+                    detail.TradingOrderDetailId,
+                    detail.ProductId,
+                    detail.OwnerId,
+                    detail.Quantity,
+                    detail.Price,
+                    Product = products.Where(p => p.ProductId == detail.ProductId).Select(p => new
+                    {
+                        p.ProductId,
+                        p.ProductName,
+                        p.Price,
+                        p.ImageLink,
+                        p.StoredQuantity
+                    }).FirstOrDefault()
+                }).ToList(),
+                order.Note,
+                order.CreatedDate,
+                order.Status
+            }).ToList();
+
             return Ok(tradingOrderDtos);
         }
 
-        [HttpGet("user2/GetCompleteAndReject")]
-        public async Task<IActionResult> getCompleteAndReject(
-                 [FromQuery] int? status,  // Optional status parameter
-                 [FromQuery] bool sortByDateAsc = true)  // Default sort by date in ascending order
-        {
-            // Lấy User1 từ claims
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
-            if (userIdClaim == null)
-            {
-                return BadRequest("User ID not found in claims.");
-            }
-            var user2Id = int.Parse(userIdClaim.Value);
 
-            // Tạo truy vấn cơ bản
-            var query = _context.TradingOrders.AsQueryable();
-
-            // Lọc theo User1
-            query = query.Where(order => order.User2 == user2Id);
-
-            // Lọc theo trạng thái nếu được cung cấp
-            if (status.HasValue && (status.Value == 2 || status.Value == 3))
-            {
-                query = query.Where(order => order.Status == status.Value);
-            }
-
-            // Sắp xếp theo ngày
-            query = sortByDateAsc ? query.OrderBy(order => order.CreatedDate) : query.OrderByDescending(order => order.CreatedDate);
-
-            // Thực hiện truy vấn và trả về kết quả
-            var orders = await query.ToListAsync();
-            var tradingOrderDtos = orders.Select(order => order.ToTradingOrderDTO()).ToList();
-            return Ok(tradingOrderDtos);
-        }
 
     }
 }
+
+
+

@@ -18,9 +18,11 @@ namespace Repository.Interfaces
 
         Task<TradingOrder?> UpdateAsync(int id, UpdateTradingOrderRequestDto tradingOrderDto);
 
-        Task<List<TradingOrder>> GetTradingOrdersByUserIdAsync(int userId);
+        Task<List<TradingOrder>> GetTradingOrdersByUser1IdAsync(int userId);
 
         Task<bool> ExistsAsync(int id);
+
+        Task<List<TradingOrder>> GetTradingOrdersByUser2IdAsync(int userId);
 
     }
 }

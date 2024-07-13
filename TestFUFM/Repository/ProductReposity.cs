@@ -403,5 +403,12 @@ namespace Repository
                 number = _context.Products.Count((p => p.SellerId == userId));
             return number;
         }
+
+        public async Task<List<Product>> GetProductsByIdsAsync(IEnumerable<int> productIds)
+        {
+            return await _context.Products
+                                   .Where(product => productIds.Contains(product.ProductId))
+                                   .ToListAsync();
+        }
     }
 }

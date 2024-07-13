@@ -51,6 +51,8 @@ namespace Repository.Interfaces
         Task<bool> UpdateProductQuantityAsync(int productId, int orderQuantity);
 
         Task<int> CountProduct(int userId);
+
+        Task<List<Product>> GetProductsByIdsAsync(IEnumerable<int> productIds);
     }
 
 }

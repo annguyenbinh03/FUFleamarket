@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.UserDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Interfaces
 {
@@ -20,5 +21,8 @@ namespace Repository.Interfaces
         public Task<bool> IsExistUser(int id);
 
         public Task<User> GetProfileUser(int userId);
+
+        public Task<List<User>> GetUsersByIdsAsync(IEnumerable<int> userIds);
+        
     }
 }

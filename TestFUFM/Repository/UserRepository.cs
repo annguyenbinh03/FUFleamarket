@@ -104,5 +104,13 @@ namespace Repository
             // Query the database to get the profile by User ID
             return await _dbcontext.Users.Include(x=>x.Addresses).Where(user => user.UserId == userId).FirstOrDefaultAsync();
         }
+
+        public async Task<List<User>> GetUsersByIdsAsync(IEnumerable<int> userIds)
+        {
+            return await _dbcontext.Users
+                                   .Where(user => userIds.Contains(user.UserId))
+                                   .ToListAsync();
+        }
+
     }
 }

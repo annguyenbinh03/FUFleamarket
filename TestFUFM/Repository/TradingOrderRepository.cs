@@ -55,14 +55,28 @@ namespace Repository
             return existingOrder;
         }
 
-        public async Task<List<TradingOrder>> GetTradingOrdersByUserIdAsync(int userId)
+        public async Task<List<TradingOrder>> GetTradingOrdersByUser1IdAsync(int userId)
         {
-            return await _context.TradingOrders.Where(order => order.User1 == userId || order.User2 == userId).ToListAsync();
+            return await _context.TradingOrders
+                                 .Where(order => order.User1 == userId)
+                                 .Include(order => order.TradingOrderDetails)
+                                 .ToListAsync();
         }
+
 
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.TradingOrders.AnyAsync(e => e.TradingOrderId == id);
         }
+
+        public async Task<List<TradingOrder>> GetTradingOrdersByUser2IdAsync(int userId)
+        {
+            return await _context.TradingOrders
+                                 .Where(order => order.User2 == userId)
+                                 .Include(order => order.TradingOrderDetails)
+                                 .ToListAsync();
+        }
+
+
     }
 }
