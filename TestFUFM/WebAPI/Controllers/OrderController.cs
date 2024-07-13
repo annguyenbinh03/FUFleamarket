@@ -717,10 +717,10 @@ namespace WebAPI.Controllers
                 return BadRequest("Only the buyer can reject the order");
             }
 
-            // Check if the order status allows it to be rejected (e.g., status 0)
-            if (order.Status != 0)
+            // Check if the order status allows it to be rejected (e.g., status 1)
+            if (order.Status != 1)
             {
-                return BadRequest("Only orders with status 0 can be rejected");
+                return BadRequest("Only orders with status 1 can be rejected");
             }
 
             // Update the order status to 2 (rejected by buyer)
