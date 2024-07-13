@@ -55,7 +55,7 @@ namespace BusinessObjects.Mappers
 
         public static string ToRelativeTime(this DateTime dateTime)
         {
-            var timeSpan = DateTime.Now - dateTime;
+            var timeSpan = DateTime.Now.AddHours(7) - dateTime;
 
             if (timeSpan <= TimeSpan.FromSeconds(60))
                 return $"{timeSpan.Seconds} giây trước";

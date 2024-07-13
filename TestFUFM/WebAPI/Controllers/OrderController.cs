@@ -14,6 +14,8 @@ using System.Security.Claims;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
+using Service.ContactCheck;
+using Service.ContactCheck.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -26,13 +28,15 @@ namespace WebAPI.Controllers
         private readonly IUserRepository _userRepo;
         private readonly IProductReposity _productRepo;
         private readonly FufleaMarketContext _context;
+        private readonly IContactService _contactService;
 
-        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context)
+        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context, IContactService contactService)
         {
             _orderRepo = orderRepo;
             _userRepo = userRepo;
             _productRepo = productRepo;
             _context = context;
+            _contactService = contactService;
         }
 
         [HttpGet("soldRequest")]
@@ -547,7 +551,8 @@ namespace WebAPI.Controllers
                     await transaction.RollbackAsync();
                     return StatusCode(500, "Internal server error");
                 }
-            }
+             }
+            await _contactService.OpenContactAsync(userId, order.BuyerId);
 
             return Ok("Order request accepted and product quantity updated");
         }
@@ -721,7 +726,12 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Failed to reject the order or you are not authorized to reject this order");
             }
-
+            Order? order = await _orderRepo.GetByOrderIdAsync(orderId);
+            if (order != null)
+            {
+                await _contactService.CloseContactAsync(userId, order.BuyerId);
+            }
+          
             return Ok("Order rejected successfully");
         }
         [HttpPut]
@@ -763,6 +773,11 @@ namespace WebAPI.Controllers
             if (!updateResult)
             {
                 return BadRequest("Failed to reject the order");
+            }
+
+            if (order != null)
+            {
+                await _contactService.CloseContactAsync(userId, order.SellerId);
             }
 
             return Ok("Order rejected successfully");

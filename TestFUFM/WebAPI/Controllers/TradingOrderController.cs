@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using BusinessObjects;
 using BusinessObjects.Models.Enum;
+using Service.ContactCheck.Interfaces;
+using Service.ContactCheck;
 
 namespace WebAPI.Controllers
 {
@@ -19,13 +21,15 @@ namespace WebAPI.Controllers
         private readonly ITradingOrderDetailRepository _tradingOrderDetailRepo;
         private readonly FufleaMarketContext _context;
         private readonly IUserRepository _userRepo;
-        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context, IUserRepository userRepo)
+        private readonly IContactService _contactService;
+        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context, IUserRepository userRepo, IContactService contactService)
         {
             _tradingRepo = tradingRepo;
             _productRepo = productRepo;
             _tradingOrderDetailRepo = tradingOrderDetailRepo;
             _context = context;
             _userRepo = userRepo;
+            _contactService = contactService;
         }
 
         // GET: api/TradingOrder
@@ -243,21 +247,22 @@ namespace WebAPI.Controllers
                 return Unauthorized(new { message = "Invalid User ID claim" });
             }
 
-            // Get the user based on the userId from the claims
+            // Get the user based on the userId from the claims with additional conditions
             var user = await _context.Users
-                                     .Include(u => u.Products)
-                                     .FirstOrDefaultAsync(u => u.UserId == userId);
+                             .Include(u => u.Products)
+                             .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
 
-            // Get the product and its seller based on the productId
+            // Get the product and its seller based on the productId with additional conditions
             var product = await _context.Products
                                         .Include(p => p.Seller)
-                                        .ThenInclude(s => s.Products) // Include seller's products
-                                        .FirstOrDefaultAsync(p => p.ProductId == productId);
+                                        .ThenInclude(s => s.Products)
+                                        .Where(p => p.ProductId == productId && p.DealType == true && p.Status == 1)
+                                        .FirstOrDefaultAsync();
 
             if (product == null)
             {
@@ -297,6 +302,7 @@ namespace WebAPI.Controllers
 
             return Ok(response);
         }
+
 
 
 
@@ -352,6 +358,7 @@ namespace WebAPI.Controllers
 
             // Cập nhật trạng thái
             tradingOrder.Status = 1;
+            await _contactService.OpenContactAsync(user2Id, tradingOrder.User1);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -383,6 +390,7 @@ namespace WebAPI.Controllers
 
             // Cập nhật trạng thái
             tradingOrder.Status = 2;
+            await _contactService.CloseContactAsync(user2Id, tradingOrder.User1);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -415,6 +423,7 @@ namespace WebAPI.Controllers
 
             // Cập nhật trạng thái
             tradingOrder.Status = 2;
+            await _contactService.CloseContactAsync(user1Id, tradingOrder.User2);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -447,8 +456,9 @@ namespace WebAPI.Controllers
 
             // Cập nhật trạng thái
             tradingOrder.Status = 3;
+            await _contactService.CloseContactAsync(user1Id, tradingOrder.User2);
             await _context.SaveChangesAsync();
-
+            
             return NoContent();
         }
 

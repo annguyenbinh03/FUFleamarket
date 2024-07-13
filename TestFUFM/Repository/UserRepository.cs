@@ -58,7 +58,8 @@ namespace Repository
         public async Task<List<User>> GetAllUserForChatAsync()
         {
             return await _dbcontext.Users
-                .Where(x => x.RoleId == 1)
+                .Where(x => x.RoleId == 1 && x.ContactUser1Navigations.Any(c => c.IsActive) ||
+                     x.ContactUser2Navigations.Any(c => c.IsActive))
                 .Select(
                     x => new User
                     {
