@@ -38,14 +38,14 @@ function Home() {
             <div className="carousel-inner">
               <div className="carousel-item active">
                 <img
-                  src="assets/img/hero/b1.jpg"
+                  src="assets/img/hero/b1.png"
                   className="d-block w-100"
                   alt="..."
                 />
               </div>
               <div className="carousel-item">
                 <img
-                  src="assets/img/hero/b2.jpg"
+                  src="assets/img/hero/b2.png"
                   className="d-block w-100"
                   alt="..."
                 />

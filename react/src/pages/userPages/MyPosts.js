@@ -340,7 +340,7 @@ function MyPosts() {
                       </span>
                     )}
                   </div>
-                  <div> {product.description}</div>
+                  <div className="product-discription"> {product.description}</div>
                 </div>
               </div>
             </div>

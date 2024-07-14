@@ -240,7 +240,7 @@ function CreateTradingOrder() {
     var sendedData = {
       tradingOrder: {
         userId1: auth.id,
-        userId2: 2,
+        userId2: user2Info.userId,
         note: note,
       },
       user1Product,
