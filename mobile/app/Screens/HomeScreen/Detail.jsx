@@ -4,20 +4,20 @@ import {
   Text,
   StyleSheet,
   Image,
-  ActivityIndicator,
   ScrollView,
-  TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import ChatButton from "../../../components/ChatButton";
 import WishListAddButton from "../../../components/WishListAddButton";
 import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
 import { getProductByIdAPI } from "../../../app/api/product";
 import AuthContext from "../../../context/AuthProvider";
-
+import OrderTradeButton from "../../../components/OrderTradeButton";
+import OrderBuyButton from "../../../components/OrderBuyButton";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 const { width } = Dimensions.get("window");
 
 const Detail = () => {
@@ -32,14 +32,13 @@ const Detail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        setLoading(true);
         const response = await getProductByIdAPI(productId);
+        console.log("fetchProduct: ", response.data);
         setProduct(response.data);
         setLoading(false);
-        console.log("Thông tin sản phẩm:", response.data);
       } catch (error) {
-        console.error("Lỗi khi tải thông tin sản phẩm:", error);
-        setError("Đã xảy ra lỗi khi tải thông tin sản phẩm");
+        console.error("Error loading product information:", error);
+        setError("An error occurred while loading product information");
         setLoading(false);
       }
     };
@@ -47,172 +46,95 @@ const Detail = () => {
     fetchProduct();
   }, [productId]);
 
-  if (loading) {
-    return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#DD0000" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
-    );
-  }
-
-  if (!product) {
-    return <Empty />;
-  }
+  if (loading) return <ActivityIndicator size="large" color="#DD0000" />;
+  if (error) return <Text>{error}</Text>;
+  if (!product) return <Empty />;
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: product.product.productImages }}
-          style={styles.productImage}
-        />
-        <View style={styles.wishlistButtonContainer}>
-          <WishListAddButton productId={productId} />
-        </View>
+      <Image
+        source={{ uri: product.product.productImages }}
+        style={styles.productImage}
+      />
+      <View style={styles.wishlistButtonContainer}>
+        <WishListAddButton productId={productId} />
       </View>
       <View style={styles.contentContainer}>
         <Text style={styles.productName}>{product.product.productName}</Text>
         <Text style={styles.productPrice}>
-          {formatPrice(product.product.price)} VNĐ
+          {formatPrice(product.product.price)} VND
         </Text>
-        <Text style={styles.productStatus}>
-          Tình trạng: {product.product.isNew ? "Mới" : "Đã sử dụng"}
-        </Text>
-        <Text style={styles.productQuantity}>
-          Số lượng: {product.product.storedQuantity}
-        </Text>
-        <Text style={styles.productStatus}>
-          Ngày đăng:{" "}
-          {new Date(product.product.createdDate).toLocaleDateString()}
-        </Text>
-        <Text style={styles.productDescription}>
-          {product.product.description}
-        </Text>
-        <SellerInfo
-          seller={product.product.seller}
-          address={product.address}
-          sellerId={product.sellerId}
-        />
-        <View style={styles.buttonGroup}>
-          {auth?.userId === product.sellerId ? null : (
-            <>
-              <ChatButton phoneNumber={product.product.seller.phoneNumber} />
-              <TouchableOpacity
-                style={styles.orderButton}
-                onPress={() => {
-                  navigation.navigate("CreateOrder", {
-                    productId: productId,
-                    productName: product.product.productName,
-                    productImage: product.product.productImages,
-                    productPrice: product.product.price,
-                    sellerName: product.product.seller.fullName,
-                    sellerAvatar: product.product.seller.avarta,
-                  });
-                }}
-              >
-                <View style={styles.buttonContent}>
-                  <FontAwesome5 name="plus-square" size={20} color="#fff" />
-                  <Text style={styles.buttonText}>TẠO HÓA ĐƠN</Text>
-                </View>
-              </TouchableOpacity>
-            </>
-          )}
+        <View style={styles.infoContainer}>
+          <InfoItem
+            icon="tag"
+            text={product.product.isNew ? "Mới" : "Đã qua sử dụng"}
+          />
+          <InfoItem
+            icon="cubes"
+            text={`Số lượng: ${product.product.storedQuantity}`}
+          />
+          <InfoItem
+            icon="list"
+            text={`Danh mục: ${product.product.categoryName}`}
+          />
+          <InfoItem
+            icon="calendar-alt"
+            text={`Ngày đăng: ${product.product.createdDate}`}
+          />
         </View>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.descriptionTitle}>Mô tả sản phẩm</Text>
+          <Text style={styles.descriptionText}>
+            {product.product.description}
+          </Text>
+        </View>
+        <View style={styles.sellerInfo}>
+          <Text style={styles.sellerTitle}>Thông tin người bán</Text>
+          <View style={styles.sellerProfile}>
+            <Image
+              source={{ uri: product.product.seller.avarta }}
+              style={styles.sellerAvatar}
+            />
+            <View style={styles.sellerDetails}>
+              <Text style={styles.sellerName}>
+                {product.product.seller.fullName}
+              </Text>
+              <Text style={styles.sellerAddress}>
+                {product.address || "Chưa cung cấp địa chỉ"}
+              </Text>
+            </View>
+          </View>
+        </View>
+        {auth?.userId !== product.sellerId && (
+          <View style={styles.actionButtonsContainer}>
+            {product.product.dealType ? (
+              <OrderTradeButton product={product} navigation={navigation} />
+            ) : (
+              <OrderBuyButton product={product} navigation={navigation} />
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
 };
 
-const SellerInfo = ({ seller, address, sellerId }) => {
-  const navigation = useNavigation();
-
-  const navigateToUserDetail = () => {
-    navigation.navigate("UserDetailScreen", { userId: sellerId });
-  };
-
-  return (
-    <View style={styles.sellerInfoContainer}>
-      <TouchableOpacity
-        onPress={navigateToUserDetail}
-        style={styles.sellerHeader}
-      >
-        <Image source={{ uri: seller.avarta }} style={styles.sellerAvatar} />
-        <View style={styles.sellerDetails}>
-          <Text style={styles.sellerName}>{seller.fullName}</Text>
-          <Text style={styles.sellerPhoneNumber}>{seller.phoneNumber}</Text>
-        </View>
-      </TouchableOpacity>
-      <View style={styles.sellerAddress}>
-        <Text style={styles.khuVuc}>Khu Vực</Text>
-        <View style={styles.sellerAddressFlex}>
-          <FontAwesome5 name="map-marker-alt" size={16} color="#666" />
-          <Text style={styles.addressText}>
-            {address || "Chưa cập nhật địa chỉ"}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.reportWrapper}>
-        <View style={styles.reportWrapperText}>
-          <FontAwesome5
-            name="shield-alt"
-            size={16}
-            color="#4CAF50"
-            style={styles.safeTradeIcon}
-          />
-          <Text style={styles.reportText}>
-            Tin đăng này đã được kiểm duyệt. Nếu gặp vấn đề, vui lòng báo cáo
-            tin đăng hoặc liên hệ CSKH để được trợ giúp.
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            // Xử lý sự kiện khi nhấn vào nút "Báo tin không hợp lệ"
-          }}
-          style={styles.reportButton}
-        >
-          <Text style={styles.reportButtonText}>Báo tin không hợp lệ</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+const InfoItem = ({ icon, text }) => (
+  <View style={styles.infoItem}>
+    <FontAwesome5 name={icon} size={16} color="#666" />
+    <Text style={styles.infoText}>{text}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8f9fa",
   },
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  errorText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#DC3545",
-  },
-  imageContainer: {
-    position: "relative",
-    width: "100%",
-    height: 300,
-  },
   productImage: {
-    width: "100%",
-    height: "100%",
+    width: width,
+    height: width,
+    resizeMode: "cover",
   },
   wishlistButtonContainer: {
     position: "absolute",
@@ -220,57 +142,71 @@ const styles = StyleSheet.create({
     right: 10,
   },
   contentContainer: {
-    padding: 20,
+    padding: 15,
   },
   productName: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
     color: "#333",
+    marginBottom: 5,
   },
   productPrice: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 10,
-    color: "#DC3545",
+    color: "#DD0000",
+    marginBottom: 15,
   },
-  productStatus: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: "#666",
-    fontWeight: "bold",
+  infoContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 2,
   },
-  productQuantity: {
-    borderRadius: 20,
-    borderColor: "green",
-    backgroundColor: "green",
-    color: "white",
-    borderWidth: 1,
-    borderStyle: "solid",
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    alignSelf: "flex-start",
-    textAlign: "left",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  productDescription: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "#333",
-    lineHeight: 24,
-  },
-  sellerInfoContainer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
-    paddingTop: 20,
-  },
-  sellerHeader: {
+  infoItem: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 8,
+  },
+  infoText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: "#333",
+  },
+  descriptionContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 15,
     marginBottom: 15,
+    elevation: 2,
+  },
+  descriptionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: "#666",
+    lineHeight: 24,
+  },
+  sellerInfo: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 2,
+  },
+  sellerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  sellerProfile: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   sellerAvatar: {
     width: 60,
@@ -285,82 +221,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#333",
-  },
-  sellerPhoneNumber: {
-    fontSize: 16,
-    color: "#666",
+    marginBottom: 5,
   },
   sellerAddress: {
-    marginBottom: 15,
-  },
-  khuVuc: {
-    fontWeight: "bold",
-    marginBottom: 5,
-    color: "#333",
-  },
-  sellerAddressFlex: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  addressText: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: "#666",
-  },
-  reportWrapper: {
-    backgroundColor: "#f0f0f0",
-    padding: 15,
-    borderRadius: 10,
-  },
-  reportWrapperText: {
-    flexDirection: "row",
-    marginBottom: 15,
-  },
-  safeTradeIcon: {
-    marginRight: 10,
-    marginTop: 2,
-  },
-  reportText: {
-    flex: 1,
     fontSize: 14,
     color: "#666",
-    lineHeight: 20,
   },
-  reportButton: {
-    backgroundColor: "#DC3545",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: "center",
+  actionButtonsContainer: {
+    marginTop: 15,
   },
-  reportButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  buttonGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  errorText: {
+    fontSize: 18,
+    color: "#DD0000",
+    textAlign: "center",
     marginTop: 20,
-  },
-  orderButton: {
-    backgroundColor: "#28A745",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    flex: 1,
-    marginLeft: 10,
-  },
-  buttonContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    marginLeft: 8,
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 

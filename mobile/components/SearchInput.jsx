@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { router, usePathname } from "expo-router";
 import {
   View,
   TouchableOpacity,
@@ -12,13 +11,13 @@ import {
 } from "react-native";
 import { icons } from "../constants";
 import { useNavigation } from "@react-navigation/native";
+import formatPrice from "../utils/formatPrice";
 
 function SearchInput({ initialQuery }) {
   const [searchProductName, setSearchProductName] = useState(
     initialQuery || ""
   );
   const [topSearchResults, setTopSearchResults] = useState([]);
-  const pathname = usePathname();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -26,7 +25,6 @@ function SearchInput({ initialQuery }) {
   }, [searchProductName]);
 
   const fetchTopSearch = (value) => {
-    console.log("Fetching search results for:", value);
     if (value) {
       fetch("https://fufleamarketapi.azurewebsites.net/api/product/listproduct")
         .then((response) => response.json())
@@ -38,8 +36,6 @@ function SearchInput({ initialQuery }) {
               product.productName.toLowerCase().includes(value.toLowerCase())
             );
           });
-          console.log("Filtered results:", results);
-          console.log("Số lượng sản phẩm tìm kiếm:", results.length);
           setTopSearchResults(results);
         })
         .catch((error) => {
@@ -51,20 +47,13 @@ function SearchInput({ initialQuery }) {
   };
 
   const handleSubmit = () => {
-    console.log("Submitting search for:", searchProductName);
     if (searchProductName === "") {
       return Alert.alert("Vui lòng nhập sản phẩm bạn muốn vào ô tìm kiếm");
     }
-
-    if (pathname.startsWith("/search")) {
-      router.setParams({ query: searchProductName });
-    } else {
-      router.push(`/search/${searchProductName}`);
-    }
+    // Add navigation logic if needed
   };
 
   const handleProductPress = (productId) => {
-    console.log("Navigating to product details for ID:", productId);
     navigation.navigate("Detail", { productId });
   };
 
@@ -74,9 +63,7 @@ function SearchInput({ initialQuery }) {
       onPress={() => handleProductPress(item.productId)}
     >
       <Text style={styles.itemName}>{item.productName}</Text>
-      <Text style={styles.itemCategory}>
-        trong {item.category || "Danh mục"}
-      </Text>
+      <Text style={styles.price}>{formatPrice(item.price)} VND</Text>
     </TouchableOpacity>
   );
 
@@ -98,12 +85,16 @@ function SearchInput({ initialQuery }) {
           />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={topSearchResults}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.productId.toString()}
-        style={styles.resultsList}
-      />
+      {topSearchResults.length > 0 && (
+        <View style={styles.resultsContainer}>
+          <FlatList
+            data={topSearchResults}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.productId.toString()}
+            style={styles.resultsList}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -111,24 +102,31 @@ function SearchInput({ initialQuery }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFA500",
-    alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: "gray",
-    marginBottom: 10,
+    backgroundColor: "#FFF",
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    margin: 10,
-    borderRadius: 5,
+    backgroundColor: "#F9F9F9",
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    width: "100%",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
   },
   input: {
     flex: 1,
-    padding: 10,
     fontSize: 16,
     color: "black",
   },
@@ -136,25 +134,32 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   searchIcon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
     tintColor: "#999",
   },
+  resultsContainer: {
+    width: "100%",
+    marginTop: 10,
+  },
   resultsList: {
-    backgroundColor: "white",
+    width: "100%",
   },
   resultItem: {
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
+    backgroundColor: "#FAFAFA",
+    borderRadius: 10,
+    marginBottom: 10,
   },
   itemName: {
     fontSize: 16,
     color: "black",
+    fontWeight: "600",
   },
-  itemCategory: {
-    fontSize: 14,
-    color: "#FFA500",
+  price: {
+    color: "red",
   },
 });
 

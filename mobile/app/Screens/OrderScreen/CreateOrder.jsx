@@ -14,7 +14,6 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AuthContext from "../../../context/AuthProvider";
 import formatPrice from "../../../utils/formatPrice";
-import axios from "axios";
 import { getProductByIdAPI } from "../../api/product";
 import { createOrderAPI } from "../../api/order";
 
