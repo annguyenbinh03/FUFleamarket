@@ -41,7 +41,7 @@ namespace BusinessObjects.Mappers
             {
                 ProductName = productDto.ProductName,
                 Price = productDto.Price,
-                IsNew = true,
+                IsNew = productDto.IsNew,
                 DealType = productDto.DealType,
                 Description = productDto.Description,
                 SellerId = sellerId,

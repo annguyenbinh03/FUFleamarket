@@ -213,7 +213,7 @@ namespace WebAPI.Controllers
 
             var response = new
             {
-                currentProductQuantity = _productReposity.CountProduct(userId),
+                currentProductQuantity = await _productReposity.CountProduct(userId),
                 image = promotion != null ? promotion.ImageLink : "",
                 ProductQuantityLimit = promotion != null ? promotion.ProductQuantityLimit : 5  // Use 5 as default value if highestQuantity is null
             };

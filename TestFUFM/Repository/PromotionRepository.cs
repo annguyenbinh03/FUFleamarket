@@ -76,7 +76,7 @@ namespace Repository
                       po => po.PromotionId,
                       p => p.PromotionId,
                       (po, p) => p)
-                .OrderByDescending(quantity => quantity)
+                .OrderByDescending(p => p.ProductQuantityLimit)
                 .FirstOrDefaultAsync();
 
             return promotion;
