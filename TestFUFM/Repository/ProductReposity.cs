@@ -418,5 +418,14 @@ namespace Repository
                                    .Where(product => productIds.Contains(product.ProductId))
                                    .ToListAsync();
         }
+
+        public async Task<bool> UpdateProductTemporaryQuantityAsync(int productId, int orderQuantity)
+        {
+            var product = await GetProductById(productId);
+            if (product == null) return false;
+
+            product.StoredQuantity += orderQuantity;
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }
