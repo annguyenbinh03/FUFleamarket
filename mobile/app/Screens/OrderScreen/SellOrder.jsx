@@ -18,10 +18,11 @@ import {
   acceptBuyRequestOrdersAPI,
   denyBuyRequestOrdersAPI,
 } from "../../api/order";
+import axios from "axios";
 
 function SellOrder() {
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState("pending");
+  const [activeTab, setActiveTab] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const { auth } = useContext(AuthContext);
 
@@ -30,9 +31,17 @@ function SellOrder() {
   }, [auth]);
 
   const fetchOrders = async () => {
+    console.log("auth: ", auth.token);
     setIsLoading(true);
     try {
-      const response = await getSellOrdersAPI(auth.token);
+      const response = await axios.get(
+        `https://fufleamarketapi.azurewebsites.net/api/order/soldRequest?sortBy=date&descending=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
       console.log("SellOrdersAPI: ", response.data);
       setOrders(response.data);
     } catch (error) {
@@ -83,7 +92,12 @@ function SellOrder() {
             <Text style={styles.productPrice}>
               {formatPrice(order.price)} VND
             </Text>
-            <Text style={styles.productStatus}>
+            <Text
+              style={[
+                styles.productStatus,
+                { backgroundColor: getStatusColor(order.status) },
+              ]}
+            >
               {getStatusText(order.status)}
             </Text>
           </View>
@@ -113,7 +127,7 @@ function SellOrder() {
             </TouchableOpacity>
           </View>
         )}
-        {order.status === 1 && (
+        {order.status === 3 && (
           <TouchableOpacity style={styles.productActionButton}>
             <Text style={styles.buttonText}>Đánh giá người mua</Text>
           </TouchableOpacity>
@@ -125,24 +139,51 @@ function SellOrder() {
   const getStatusText = (status) => {
     switch (status) {
       case 0:
-        return "Chờ xác nhận";
+        return "Đang chờ duyệt";
       case 1:
-        return "Đã xác nhận";
+        return "Đang trao đổi";
       case 2:
-        return "Đã hủy";
+        return "Đã từ chối giao dịch";
+      case 3:
+        return "Đã hoàn thành giao dịch";
+      case 4:
+        return "Đã bị admin ẩn";
       default:
         return "Không xác định";
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 0:
+        return "#6c757d"; // secondary
+      case 1:
+        return "#17a2b8"; // info
+      case 2:
+        return "#dc3545"; // danger
+      case 3:
+        return "#007bff"; // primary
+      case 4:
+        return "#dc3545"; // danger
+      default:
+        return "#6c757d"; // secondary
+    }
+  };
+
   const getTabText = (tab) => {
     switch (tab) {
+      case "all":
+        return "Tất cả";
       case "pending":
-        return "Chờ xác nhận";
-      case "confirmed":
-        return "Đã xác nhận";
-      case "cancelled":
-        return "Đã hủy";
+        return "Chờ duyệt";
+      case "exchanging":
+        return "Đang trao đổi";
+      case "rejected":
+        return "Đã từ chối";
+      case "completed":
+        return "Hoàn thành";
+      case "hidden":
+        return "Bị ẩn";
       default:
         return "";
     }
@@ -150,12 +191,18 @@ function SellOrder() {
 
   const filteredOrders = orders.filter((item) => {
     switch (activeTab) {
+      case "all":
+        return true;
       case "pending":
         return item.order.status === 0;
-      case "confirmed":
+      case "exchanging":
         return item.order.status === 1;
-      case "cancelled":
+      case "rejected":
         return item.order.status === 2;
+      case "completed":
+        return item.order.status === 3;
+      case "hidden":
+        return item.order.status === 4;
       default:
         return true;
     }
@@ -165,7 +212,14 @@ function SellOrder() {
     <View style={styles.container}>
       <StatusBar backgroundColor="#DD0000" style="light" />
       <View style={styles.tabContainer}>
-        {["pending", "confirmed", "cancelled"].map((tab) => (
+        {[
+          "all",
+          "pending",
+          "exchanging",
+          "rejected",
+          "completed",
+          "hidden",
+        ].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tabButton, activeTab === tab && styles.activeTab]}
@@ -192,7 +246,6 @@ function SellOrder() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

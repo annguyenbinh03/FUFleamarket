@@ -8,16 +8,17 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import AuthContext from "../../../context/AuthProvider";
 import Empty from "../../../components/Empty";
 import { formatDate } from "../../../utils/formatDate";
 import formatPrice from "../../../utils/formatPrice";
-import { getBuyOrdersAPI } from "../../api/order";
+import { completeOrdersByBuyerAPI, getBuyOrdersAPI } from "../../api/order";
 
 function BuyOrder() {
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState("pending");
+  const [activeTab, setActiveTab] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const { auth } = useContext(AuthContext);
 
@@ -35,6 +36,17 @@ function BuyOrder() {
       console.error("Lỗi khi tải đơn hàng:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleCompleteOrder = async (productId) => {
+    try {
+      await completeOrdersByBuyerAPI(auth.token, productId);
+      fetchOrders();
+      console.log("Order completed successfully");
+      Alert.alert("Đã hoàn thành giao dịch");
+    } catch (error) {
+      console.error("Error completing order:", error.response.data);
     }
   };
 
@@ -61,7 +73,12 @@ function BuyOrder() {
             <Text style={styles.productPrice}>
               {formatPrice(order.price)} VND
             </Text>
-            <Text style={styles.productStatus}>
+            <Text
+              style={[
+                styles.productStatus,
+                { backgroundColor: getStatusColor(order.status) },
+              ]}
+            >
               {getStatusText(order.status)}
             </Text>
           </View>
@@ -76,6 +93,14 @@ function BuyOrder() {
           </Text>
         </View>
         {order.status === 1 && (
+          <TouchableOpacity
+            style={styles.completeButton}
+            onPress={() => handleCompleteOrder(order.productId)}
+          >
+            <Text style={styles.buttonText}>Hoàn thành</Text>
+          </TouchableOpacity>
+        )}
+        {order.status === 3 && (
           <TouchableOpacity style={styles.productActionButton}>
             <Text style={styles.buttonText}>Đánh giá</Text>
           </TouchableOpacity>
@@ -87,24 +112,51 @@ function BuyOrder() {
   const getStatusText = (status) => {
     switch (status) {
       case 0:
-        return "Chờ xác nhận";
+        return "Đang chờ người bán duyệt";
       case 1:
-        return "Đã xác nhận";
+        return "Đang trao đổi";
       case 2:
-        return "Đã hủy";
+        return "Đã từ chối giao dịch";
+      case 3:
+        return "Đã hoàn thành giao dịch";
+      case 4:
+        return "Đã bị admin ẩn";
       default:
         return "Không xác định";
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 0:
+        return "#6c757d"; // secondary
+      case 1:
+        return "#17a2b8"; // info
+      case 2:
+        return "#dc3545"; // danger
+      case 3:
+        return "#007bff"; // primary
+      case 4:
+        return "#dc3545"; // danger
+      default:
+        return "#6c757d"; // secondary
+    }
+  };
+
   const getTabText = (tab) => {
     switch (tab) {
+      case "all":
+        return "Tất cả";
       case "pending":
-        return "Chờ xác nhận";
-      case "confirmed":
-        return "Đã xác nhận";
-      case "cancelled":
-        return "Đã hủy";
+        return "Chờ duyệt";
+      case "exchanging":
+        return "Đang trao đổi";
+      case "rejected":
+        return "Đã từ chối";
+      case "completed":
+        return "Hoàn thành";
+      case "hidden":
+        return "Bị ẩn";
       default:
         return "";
     }
@@ -112,12 +164,18 @@ function BuyOrder() {
 
   const filteredOrders = orders.filter((item) => {
     switch (activeTab) {
+      case "all":
+        return true;
       case "pending":
         return item.order.status === 0;
-      case "confirmed":
+      case "exchanging":
         return item.order.status === 1;
-      case "cancelled":
+      case "rejected":
         return item.order.status === 2;
+      case "completed":
+        return item.order.status === 3;
+      case "hidden":
+        return item.order.status === 4;
       default:
         return true;
     }
@@ -127,7 +185,14 @@ function BuyOrder() {
     <View style={styles.container}>
       <StatusBar backgroundColor="#DD0000" style="light" />
       <View style={styles.tabContainer}>
-        {["pending", "confirmed", "cancelled"].map((tab) => (
+        {[
+          "all",
+          "pending",
+          "exchanging",
+          "rejected",
+          "completed",
+          "hidden",
+        ].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tabButton, activeTab === tab && styles.activeTab]}
@@ -235,6 +300,13 @@ const styles = StyleSheet.create({
   },
   productActionButton: {
     backgroundColor: "#FFA500",
+    padding: 8,
+    borderRadius: 5,
+    alignSelf: "flex-end",
+    marginTop: 10,
+  },
+  completeButton: {
+    backgroundColor: "#4CAF50",
     padding: 8,
     borderRadius: 5,
     alignSelf: "flex-end",

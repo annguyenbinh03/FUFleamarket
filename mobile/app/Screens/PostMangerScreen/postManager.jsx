@@ -18,12 +18,15 @@ import Empty from "../../../components/Empty";
 import formatPrice from "../../../utils/formatPrice";
 import { getMyProductsAPI } from "../../api/product";
 import { getMyPackageAPI } from "../../api/packages";
+import { getCountProductAndLimit } from "../../api/promotionOrder";
 
 const PostManager = () => {
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("ĐANG HIỂN THỊ");
   const [isLoading, setIsLoading] = useState(true);
   const [sellingPackages, setSellingPackages] = useState([]);
+  const [countProductAndLimit, setcountProductAndLimit] = useState();
+
   const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
 
@@ -66,11 +69,23 @@ const PostManager = () => {
       );
     } catch (error) {
       console.error("Lỗi khi lấy gói bán hàng:", error);
+      console.error(error.response);
     }
   }, [auth.token]);
 
+  const fetchCountProductAndLimit = useCallback(async () => {
+    try {
+      const response = await getCountProductAndLimit(auth.token);
+      setcountProductAndLimit(response.data);
+      console.log("fetch CountProductAndLimit: ", response.data);
+    } catch (error) {
+      console.error("Error fetch CountProductAndLimit: ", error.response);
+    }
+  });
+
   useEffect(() => {
     fetchMyPackage();
+    fetchCountProductAndLimit();
   }, [fetchMyPackage]);
 
   const handleTabChange = (tabName) => {
@@ -84,6 +99,10 @@ const PostManager = () => {
     if (activeTab === "ĐÃ ẨN") return product.status === 3;
     return true;
   });
+
+  const handleNavigate = () => {
+    navigation.navigate("SellingPackage");
+  };
 
   const renderProductItem = ({ item }) => (
     <View style={styles.productContainer}>
@@ -137,12 +156,16 @@ const PostManager = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Quản lý tin</Text>
         <View style={{ width: 20 }} />
-        <View style={styles.slotPost}>
-          <Text style={styles.slotPostText}>
-            Số bài đăng {products.length}/
-            {sellingPackages[0]?.promotion.productQuantityLimit || 0}
-          </Text>
-        </View>
+
+        <TouchableOpacity onPress={handleNavigate}>
+          <View style={styles.slotPost}>
+            <Text style={styles.slotPostText}>
+              Số bài đăng{" "}
+              {countProductAndLimit?.currentProductQuantity || "N/A"}/
+              {countProductAndLimit?.productQuantityLimit || "N/A"}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -305,7 +328,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   slotPostText: {
-    color: "white",
+    color: "#000000",
     fontWeight: "bold",
   },
   emptyContainer: {

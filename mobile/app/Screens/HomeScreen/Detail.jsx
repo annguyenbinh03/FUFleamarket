@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import WishListAddButton from "../../../components/WishListAddButton";
 import formatPrice from "../../../utils/formatPrice";
 import Empty from "../../../components/Empty";
 import { getProductByIdAPI } from "../../../app/api/product";
+import AuthContext from "../../../context/AuthProvider";
 
 const { width } = Dimensions.get("window");
 
@@ -26,6 +27,7 @@ const Detail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -88,7 +90,8 @@ const Detail = () => {
           Số lượng: {product.product.storedQuantity}
         </Text>
         <Text style={styles.productStatus}>
-          Ngày đăng: {product.product.createdDate}
+          Ngày đăng:{" "}
+          {new Date(product.product.createdDate).toLocaleDateString()}
         </Text>
         <Text style={styles.productDescription}>
           {product.product.description}
@@ -99,25 +102,29 @@ const Detail = () => {
           sellerId={product.sellerId}
         />
         <View style={styles.buttonGroup}>
-          <ChatButton phoneNumber={product.product.seller.phoneNumber} />
-          <TouchableOpacity
-            style={styles.orderButton}
-            onPress={() => {
-              navigation.navigate("CreateOrder", {
-                productId: productId,
-                productName: product.product.productName,
-                productImage: product.product.productImages,
-                productPrice: product.product.price,
-                sellerName: product.product.seller.fullName,
-                sellerAvatar: product.product.seller.avarta,
-              });
-            }}
-          >
-            <View style={styles.buttonContent}>
-              <FontAwesome5 name="plus-square" size={20} color="#fff" />
-              <Text style={styles.buttonText}>TẠO HÓA ĐƠN</Text>
-            </View>
-          </TouchableOpacity>
+          {auth?.userId === product.sellerId ? null : (
+            <>
+              <ChatButton phoneNumber={product.product.seller.phoneNumber} />
+              <TouchableOpacity
+                style={styles.orderButton}
+                onPress={() => {
+                  navigation.navigate("CreateOrder", {
+                    productId: productId,
+                    productName: product.product.productName,
+                    productImage: product.product.productImages,
+                    productPrice: product.product.price,
+                    sellerName: product.product.seller.fullName,
+                    sellerAvatar: product.product.seller.avarta,
+                  });
+                }}
+              >
+                <View style={styles.buttonContent}>
+                  <FontAwesome5 name="plus-square" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>TẠO HÓA ĐƠN</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
     </ScrollView>

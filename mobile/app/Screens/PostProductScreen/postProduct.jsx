@@ -14,10 +14,10 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import AuthContext from "../../../context/AuthProvider";
-import axios from "axios";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { imageDb } from "../../FirebaseImage/Config";
 import { createProductAPI } from "../../api/product";
+import formatPrice from "../../../utils/formatPrice";
 
 const PostProduct = () => {
   const navigation = useNavigation();
@@ -32,6 +32,7 @@ const PostProduct = () => {
   const [storedQuantity, setStoredQuantity] = useState("");
 
   const handleImagePicker = async (sourceType) => {
+    console.log("Bắt đầu chọn ảnh từ:", sourceType);
     let result;
     if (sourceType === "camera") {
       result = await ImagePicker.launchCameraAsync({
@@ -48,15 +49,17 @@ const PostProduct = () => {
       });
     }
 
+    console.log("Kết quả chọn ảnh:", result);
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImageUri(result.assets[0].uri);
+      console.log("Đã cập nhật imageUri:", result.assets[0].uri);
     }
   };
 
   const uploadImage = async () => {
-    console.log("Uploading image...");
+    console.log("Bắt đầu tải ảnh lên...");
     if (!imageUri) {
-      console.log("No image to upload.");
+      console.log("Không có ảnh để tải lên.");
       return "";
     }
 
@@ -67,15 +70,31 @@ const PostProduct = () => {
       const imageRef = ref(imageDb, imageName);
       await uploadBytes(imageRef, blob);
       const downloadURL = await getDownloadURL(imageRef);
+      console.log("URL tải ảnh:", downloadURL);
       return downloadURL;
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Lỗi khi tải ảnh lên:", error);
       return "";
     }
   };
 
+  const handlePriceChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, "");
+    setPrice(numericValue);
+    console.log("Giá sau khi định dạng:", numericValue);
+  };
+
   const handlePostProduct = async () => {
-    console.log("Bắt đầu vào đăng sản phẩm");
+    console.log("Bắt đầu quá trình đăng sản phẩm");
+
+    console.log("Kiểm tra thông tin sản phẩm:");
+    console.log("Tên sản phẩm:", productName);
+    console.log("Giá:", price);
+    console.log("Mô tả:", description);
+    console.log("Danh mục ID:", categoryId);
+    console.log("Là sản phẩm mới:", isNew);
+    console.log("URI hình ảnh:", imageUri);
+    console.log("Số lượng:", storedQuantity);
 
     if (
       !productName ||
@@ -85,6 +104,7 @@ const PostProduct = () => {
       !imageUri ||
       !storedQuantity
     ) {
+      console.log("Thông tin sản phẩm không đầy đủ");
       Alert.alert(
         "Thông báo",
         "Vui lòng điền đầy đủ thông tin sản phẩm và chọn ảnh."
@@ -95,13 +115,14 @@ const PostProduct = () => {
     const imageUrl = await uploadImage();
 
     if (!imageUrl) {
+      console.log("Không thể tải lên hình ảnh");
       Alert.alert("Lỗi", "Không thể tải lên hình ảnh. Vui lòng thử lại.");
       return;
     }
 
     const productData = {
       productName,
-      price: parseFloat(price),
+      price: parseInt(price),
       description,
       categoryId,
       isNew,
@@ -109,10 +130,14 @@ const PostProduct = () => {
       storedQuantity: parseInt(storedQuantity),
     };
 
+    console.log("Dữ liệu sản phẩm chuẩn bị gửi:", productData);
+
     try {
       const response = await createProductAPI(productData, auth.token);
+      console.log("Phản hồi từ API:", response);
 
       if (response.status === 200 || response.status === 201) {
+        console.log("Đăng sản phẩm thành công");
         Alert.alert(
           "Thành công",
           "Sản phẩm đã được đăng và đang chờ admin duyệt."
@@ -129,10 +154,10 @@ const PostProduct = () => {
     } catch (error) {
       console.error("Lỗi khi đăng sản phẩm:", error);
       if (error.response) {
-        console.error("Dữ liệu phản hồi:", error.response.data);
+        console.error("Dữ liệu phản hồi lỗi:", error.response.data);
       }
       Alert.alert("Lỗi", "Không thể đăng sản phẩm. Vui lòng thử lại sau.");
-      Alert.alert("Lỗi", `${error.response.data}`);
+      Alert.alert("Lỗi", `${error.response?.data || "Không xác định"}`);
     }
   };
 
@@ -175,8 +200,8 @@ const PostProduct = () => {
           <TextInput
             style={styles.input}
             placeholder="Giá"
-            value={price}
-            onChangeText={setPrice}
+            value={formatPrice(price)}
+            onChangeText={handlePriceChange}
             keyboardType="numeric"
           />
           <TextInput
@@ -322,7 +347,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   radioButtonSelected: {
-    backgroundColor: "#DD0000",
+    backgroundColor: "#0000ff",
   },
   radioButtonText: {
     color: "#000",
@@ -331,7 +356,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   postButton: {
-    backgroundColor: "#DD0000",
+    backgroundColor: "#008000",
     padding: 16,
     borderRadius: 4,
     alignItems: "center",
