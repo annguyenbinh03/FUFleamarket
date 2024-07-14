@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
 using Service.ContactCheck;
 using Service.ContactCheck.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAPI.Controllers
 {
@@ -42,6 +43,9 @@ namespace WebAPI.Controllers
         [HttpGet("soldRequest")]
         public async Task<IActionResult> GetMySoldRequestOrders([FromQuery] int? productId, [FromQuery] int? tab = null, [FromQuery] string? sortBy = null)
         {
+                  //Xác Thực Người Dùng
+                  //Lấy claim UserId từ các claim của người dùng.
+                  //Nếu không tìm thấy UserId, trả về trạng thái Unauthorized
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim == null)
             {
@@ -50,16 +54,20 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            var soldOrders = await _orderRepo.GetOrdersByUserId(userId); // Assuming you have a method to get orders by user ID
+             // var soldOrders: Đây là biến dùng để lưu trữ kết quả trả về, đó là danh sách các đơn hàng đã bán.
+            //await: Từ khóa này được sử dụng để chờ đợi kết quả của một phương thức bất đồng bộ(async), đảm bảo rằng phương thức hoàn thành trước khi tiếp tục thực hiện các câu lệnh tiếp theo.
+            //_orderRepo.GetOrdersByUserId(userId): Đây là phương thức trong repository(_orderRepo) để lấy danh sách các đơn hàng dựa trên userId.
+            var soldOrders = await _orderRepo.GetOrdersByUserId(userId); 
 
             if (!soldOrders.Any())
             {
                 return NotFound("No orders found for the user.");
             }
 
-            // Apply productId filter if productId parameter is provided
+            
             if (productId.HasValue)
             {
+                //Nếu productId được cung cấp, lọc danh sách đơn hàng theo productId
                 soldOrders = soldOrders.Where(order => order.Product.ProductId == productId).ToList();
 
                 if (!soldOrders.Any())
@@ -68,7 +76,8 @@ namespace WebAPI.Controllers
                 }
             }
 
-            // Apply status filter if status parameter is provided
+            //Lọc Theo tab:
+           // Nếu tab được cung cấp, lọc danh sách đơn hàng theo trạng thái cụ thể.
             if (tab.HasValue)
             {
                 soldOrders = tab.Value switch
@@ -94,8 +103,11 @@ namespace WebAPI.Controllers
 
 
 
-            // Apply sorting based on sortBy parameter
-            soldOrders = sortBy switch
+            //Sắp Xếp Theo sortBy:
+
+            //Nếu sortBy được cung cấp, sắp xếp danh sách đơn hàng theo tiêu chí cụ thể.
+                       
+                        soldOrders = sortBy switch
             {
                 "date" => soldOrders.OrderByDescending(order => order.CreatedDate).ToList(),
                 "oldDate" => soldOrders.OrderBy(order => order.CreatedDate).ToList(),
@@ -103,7 +115,10 @@ namespace WebAPI.Controllers
                 "lowPrice" => soldOrders.OrderBy(order => order.Price).ToList(),
                 _ => soldOrders
             };
+            //Chuẩn Bị Dữ Liệu Trả Về:
 
+            //Chuyển đổi danh sách đơn hàng thành định dạng DTO(Data Transfer Object) để trả về cho client.
+            //thực hiện chức năng chuyển đổi dữ liệu và trả về kết quả dưới dạng HTTP Response
             var orders = soldOrders.Select(order => new
             {
                 Order = order.ToOrderShowProfileOfBuyerDTO(),
@@ -428,6 +443,7 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Authorize]
+        //createDTO là dữ liệu đầu vào được gửi từ client để tạo đơn hàng mới
         public async Task<IActionResult> Create([FromBody] CreateOrderRequestDto createDTO)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
@@ -438,28 +454,29 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            // Fetch the product details to get the SellerId and StoredQuantity
+            //Kiểm tra và lấy thông tin sản phẩm:
             var product = await _productRepo.GetProductById(createDTO.ProductId);
             if (product == null)
             {
                 return BadRequest("ProductId does not exist");
             }
 
-            // Check if requested quantity is valid
+            // Kiểm tra xem số lượng yêu cầu (Quantity trong createDTO) có hợp lệ không. Yêu cầu phải lớn hơn 0 và nhỏ hơn số lượng tồn kho (StoredQuantity) của sản phẩm
             if (createDTO.Quantity <= 0 || createDTO.Quantity >= product.StoredQuantity)
             {
                 return BadRequest("Invalid quantity requested");
             }
 
-            // Set BuyerId as the logged-in user's UserId
+            // Đặt BuyerId là UserId của người dùng đã đăng nhập
             var buyerId = userId;
-            var sellerId = product.SellerId; // Assuming the Product entity has a SellerId field
+            //Lấy SellerId từ thông tin của sản phẩm
+            var sellerId = product.SellerId; 
             createDTO.CreatedDate = DateTime.Now;
 
-            // Create the order model from the DTO
+            // Tạo đối tượng orderModel từ dữ liệu createDTO và thông tin buyerId, sellerId.
             var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);
 
-            // Save the order to the database
+            // Gọi repository (_orderRepo) để lưu đơn đặt hàng mới vào cơ sở dữ liệu.
             await _orderRepo.CreateOrderAsync(orderModel);
 
             // Return the created order details including BuyerId, SellerId, and ProductId
@@ -662,9 +679,9 @@ namespace WebAPI.Controllers
             }
 
             // Check if the logged-in user is the seller of the product
-            if (order.SellerId != userId)
+            if (order.BuyerId != userId)
             {
-                return BadRequest("Only the seller can complete the order");
+                return BadRequest("Only the buyer can complete the order");
             }
 
             // Update the order status to 3 (completed)
