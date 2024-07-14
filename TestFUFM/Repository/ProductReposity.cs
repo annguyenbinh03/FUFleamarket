@@ -24,7 +24,15 @@ namespace Repository
 
         public async Task<Product> CreateAsync(Product productModel)
         {
-            productModel.CreatedDate = DateTime.Now.AddHours(7);
+            DateTime serverTime = DateTime.Now;
+            TimeZoneInfo serverTimeZone = TimeZoneInfo.Local;
+            Console.WriteLine($"Server time: {serverTime}, Server time zone: {serverTimeZone.DisplayName}");
+
+            TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            DateTime localTime = TimeZoneInfo.ConvertTime(serverTime, targetTimeZone);
+            Console.WriteLine($"Converted local time: {localTime}, Target time zone: {targetTimeZone.DisplayName}");
+
+            productModel.CreatedDate = localTime;
             await _context.Products.AddAsync(productModel);
             await _context.SaveChangesAsync();
             return productModel;
