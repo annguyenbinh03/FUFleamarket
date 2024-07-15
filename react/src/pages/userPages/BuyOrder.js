@@ -14,7 +14,7 @@ function BuyOrder() {
 
   const fetchOrder = async () => {
     try {
-      var response = await getBuyOrdersAPI(auth.accessToken);
+      var response = await getBuyOrdersAPI(auth.accessToken, tab, sortBy);
       setOrder(response);
     } catch (error) {
       console.error("Error fetching order:", error);
@@ -22,7 +22,7 @@ function BuyOrder() {
   };
   useEffect(() => {
     fetchOrder();
-  }, []);
+  }, [tab, sortBy]);
 
   const showErrorToast = (message) =>{
     toast.error(message, {
@@ -97,7 +97,7 @@ function BuyOrder() {
           <div className="product_container px-4 py-2">
             <h3 className="mb-4 pb-2 fw-bold">Đơn mua của tôi</h3>
             <div className="border-top border-1">
-              <form className="d-flex justify-content-start align-items-center">
+              <div className="d-flex justify-content-start align-items-center">
                 <div className="tab col-md-7 d-flex justify-content-center">
                   <button
                     className={`btn btn-outline-secondary mx-2 my-1 ${
@@ -177,7 +177,7 @@ function BuyOrder() {
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
             {orders?.length !== 0 ? (
               <div>

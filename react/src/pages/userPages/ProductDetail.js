@@ -5,7 +5,7 @@ import Header from "../../Header";
 import Footer from "../../Footer";
 import AuthContext from "../../context/AuthProvider";
 
-function Detail() {
+function ProductDetail() {
   const { productId } = useParams();
   const [data, setData] = useState(null);
   const { auth } = useContext(AuthContext);
@@ -365,4 +365,4 @@ function Detail() {
   );
 }
 
-export default Detail;
+export default ProductDetail;

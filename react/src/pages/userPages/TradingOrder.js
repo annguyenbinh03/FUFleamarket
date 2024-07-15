@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-import { getBuyOrdersAPI } from "../../api/order";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { toast } from "react-toastify";

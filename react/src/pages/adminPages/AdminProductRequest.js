@@ -78,8 +78,8 @@ function AdminProductRequest() {
             <tbody>
               {products?.map((product) => (
                 <tr key={product.productId}>
-                  <td>
-                    <div className="td-seller-content"> 
+                  <td >
+                    <div className="td-seller-content d-flex"> 
                       <img
                       className="rounded-3 me-2"
                         src={product?.seller?.avarta}
@@ -90,24 +90,27 @@ function AdminProductRequest() {
                     </div>
                   </td>
                   <td>
-                    <div className="td-product-name">
+                    <div className="td-product-name d-flex">
                     <img
                       className="rounded-3 me-2"
                         src={product?.linkImage}
                         style={{ maxWidth: "30px" }} alt="product"
                       />
-                      {product.productName}
-
+                     <span>{product.productName}</span>
                     </div>
                   </td>
                   <td>{product.status === 1 ? "Mới" : "Đã sử dụng"}</td>
                   <td>{product.price}</td>
                   <td>
                     <div className="td-description-content">
-                      {product.description}
+                     <span>{product.description}</span> 
                     </div>
                   </td>
-                  <td>{product.categoryName}</td>
+                  <td>
+                    <div className="td-category-name-content">
+                     <span>{product.categoryName}</span>
+                    </div>
+                    </td>
                   <td>
                     <button
                       onClick={() =>

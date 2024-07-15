@@ -1,20 +1,19 @@
-// src/component/ProductList.js
-
 import React from "react";
 import { Link } from "react-router-dom";
 
 function ProductList({ products }) {
+
   const formatPrice = (value) => {
     return value.toLocaleString("vi-VN");
   };
 
   return (
-    <div className="row featured__filter">
+    <div className="row product-component">
       {products?.map((product) => (
         <div className="col-lg-2 col-md-4 col-sm-6" key={product.productId}>
-          <div className="featured__item">
+          <div className="product">
             <div
-              className="featured__item__pic set-bg"
+              className="product-picture set-bg"
               style={{
                 backgroundImage: `url(${
                   product?.productImages ||
@@ -22,7 +21,7 @@ function ProductList({ products }) {
                 })`,
               }}
             >
-              <ul className="featured__item__pic__hover">
+              <ul className="product-picture-hover">
                 <li>
                   <Link to={`/detail/${product.productId}`}>
                     <i className="fa fa-heart"></i>
@@ -35,31 +34,50 @@ function ProductList({ products }) {
                 </li>
               </ul>
             </div>
-            <div className="featured__item__text">
+            <div className="product-text">
               <h6>
                 <Link
-                  className="featured__item_product_name"
+                  className="product-text-name"
                   to={`/detail/${product.productId}`}
                 >
                   {product.productName}
                 </Link>
               </h6>
               <h5>{formatPrice(product.price)} vnd</h5>
-              <div className="featured__item__text__footer">
-                <div>
-                  <img
-                    height="16"
-                    width="16"
-                    src="https://static.chotot.com/storage/chotot-icons/svg/user.svg"
-                    alt="shopicon"
-                  />
+              <div className="product-text-footer">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div>
+                      <img
+                        height="16"
+                        width="16"
+                        src="https://static.chotot.com/storage/chotot-icons/svg/user.svg"
+                        alt="shopicon"
+                      />
+                    </div>
+                    <div>
+                      <span className="ms-1">{product.createdDate}</span>
+                    </div>
+                  </div>
+                  <div>
+                  <span>
+                    {product.dealType ? (
+                      <span class="badge rounded-pill text-bg-info text-white">
+                        <i
+                          class="fa fa-exchange py-1 mx-2"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                    ) : (
+                      <span class="badge rounded-pill text-bg-primary text-white">
+                        <i
+                          class="fa fa-credit-card py-1 mx-2"
+                          aria-hidden="true"
+                        ></i>
+                      </span>
+                    )}
+                  </span>
                 </div>
-                <div>
-                  <span>{product.createdDate}</span>
-                </div>
-                <div>   -  </div>
-                <div>
-                  <span>Tp Hồ Chí Minh</span>
                 </div>
               </div>
             </div>

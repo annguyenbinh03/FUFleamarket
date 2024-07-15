@@ -1,7 +1,6 @@
 import { React, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import MyPostButton from "./component/MyPostButton";
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
 
@@ -37,7 +36,9 @@ const UserDropdown = (authContainer) => {
                 src={auth.avarta}
                 alt=""
               />
-              <div className="fs-5 username px-1 hidden-md">{auth.fullName}</div>
+              <div className="fs-5 username px-1 hidden-md">
+                {auth.fullName}
+              </div>
             </button>
           </>
         ) : (
@@ -105,7 +106,7 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center">
-                  <Link to="/sell-order" className="dropdown-item">
+                  <Link to="/trading-order" className="dropdown-item">
                     <img
                       className="ps-1 me-2"
                       width="25px"
@@ -164,7 +165,7 @@ const UserDropdown = (authContainer) => {
                       src={`../assets/img/icon/help.png`}
                       alt="sofaIcon"
                     />
-                    Trợ giúp
+                    Câu hỏi thường gặp
                   </Link>
                 </div>
               </li>
@@ -298,17 +299,14 @@ const Header = () => {
         <SearchButton />
 
         {/* Nút thông báo, tin nhắn, yêu thích */}
-        <div>
-          <button className="col-md-4 px-2 btn fs-5 text-white">
-            <i className="fa fa-bell" aria-hidden="true"></i>
-          </button>
-          <button className="col-md-4 px-2 btn fs-5 text-white">
+        <div className="text-center">
+          <button className="col-md-4 me-2 btn fs-5 text-white">
             <Link className="text-white" to="/chat">
               {" "}
               <i className="fa fa-comments-o" aria-hidden="true"></i>{" "}
             </Link>
           </button>
-          <button className="col-md-4 px-2 btn fs-5 text-white">
+          <button className="col-md-4 ms-1 btn fs-5 text-white">
             <i className="fa fa-heart" aria-hidden="true"></i>
           </button>
         </div>
@@ -317,7 +315,16 @@ const Header = () => {
         <UserDropdown auth={auth} />
 
         {/* Nút đăng bài */}
-        <MyPostButton />
+        <button className="btn fs-5 text-white">
+          <Link
+            to="/my-products"
+            className="text-decoration-none"
+            style={{ color: "white" }}
+          >
+            <i className="fa fa-list-alt pe-2" aria-hidden="true"></i>
+            <span className="hidden-md">Quản lý sản phẩm</span>
+          </Link>
+        </button>
 
         {/* Nút đăng sản phẩm */}
         <Link to="/create-product">

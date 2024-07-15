@@ -2,7 +2,7 @@ import axiosClient from './axiosClient'
 
 const END_POINT = {
     USERS_ORDER_TRANS : "promotiontransaction/getallpromotiontransactionofuser",
-    ADMIN_PROMO_TRANSAC : "promotiontransaction/getallpromotiontransaction"
+    ADMIN_PROMO_TRANSAC : "promotiontransaction/getallpromotiontransaction",
 }
 
 export const getUserPromoTransac = (token) => {

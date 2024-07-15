@@ -5,8 +5,9 @@ import Header from "../../Header";
 import Footer from "../../Footer";
 import { Link } from "react-router-dom";
 import { getMyPackageAPI } from "../../api/packages";
+import { toast } from "react-toastify";
 
-function MyPosts() {
+function MyProducts() {
   const [products, setProducts] = useState([]);
   const { auth } = useContext(AuthContext);
   const [sellingPackages, setSellingPackages] = useState([]);
@@ -39,6 +40,19 @@ function MyPosts() {
     }
   };
 
+  const showSuccessToast = (message) => {
+    toast.success(message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
   useEffect(()=>{
     fetchProduct();
   }, [tab,sortBy])
@@ -63,6 +77,11 @@ function MyPosts() {
       return isoString.slice(0, index);
     }
     return isoString;
+  }
+
+  const copyToClipboard = (text) =>{
+    showSuccessToast('Đã sao chép đường dẫn sản phẩm vào clipboard!');
+    navigator.clipboard.writeText(text);
   }
 
   return (
@@ -311,7 +330,7 @@ function MyPosts() {
                         <i className="fa fa-eye-slash" aria-hidden="true"></i>
                         Ẩn tin
                       </button>
-                      <button className="btn">
+                      <button className="btn" onClick={()=> copyToClipboard(`https://fufleamarket.azurewebsites.net/detail/${product.productId}`)}>
                         <i className="fa fa-share" aria-hidden="true"></i>
                         Chia sẻ
                       </button>
@@ -352,4 +371,4 @@ function MyPosts() {
   );
 }
 
-export default MyPosts;
+export default MyProducts;

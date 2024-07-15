@@ -42,7 +42,7 @@ const MySellingPackage = () => {
 
   const handleBuy = (userId, promotionId) => {
     window.open(
-      `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`  
+      `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`
     );
   };
 
@@ -93,62 +93,59 @@ const MySellingPackage = () => {
           </div>
           <div className="row d-flex justify-content-around">
             {sellingPackages?.map((sPackage) => (
-              <div className="card col-lg-3 py-2">
-                <img
-                  src={require(`../../assets/img/selling-package/${sPackage.promotion.promotionId}.png`)}
-                  className="card-img-top"
-                  alt="..."
-                />
-                <div className="card-body">
-                  <h5 className="card-title fw-bold">
-                    {sPackage.promotion.name}
-                  </h5>
-                  <p className="card-text" style={{ minHeight: "80px" }}>
-                    {sPackage.promotion.description}
-                  </p>
-                  {sPackage.status === "Active" ? (
-                    <span className="badge text-bg-success">
-                      Đang hoạt động
-                    </span>
-                  ) : (
-                    <span class="badge rounded-pill text-bg-info text-white">Đang chờ</span>
-                  )}
-                  <div className="fs-5">
-                    <span className="">
-                      Còn lại {sPackage.remainedDate} ngày
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between fw-bold my-3">
-                    <div>
-                      <span className="text-success">
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>{" "}
-                      Lượt đăng sản phẩm
+              <>
+                {sPackage.status === "Failed" ? (
+                  <></>
+                ) : (
+                  <div className="card col-lg-3 py-2">
+                    <img
+                      src={require(`../../assets/img/selling-package/${sPackage.promotion.promotionId}.png`)}
+                      className="card-img-top"
+                      alt="..."
+                    />
+                    <div className="card-body">
+                      <h5 className="card-title fw-bold">
+                        {sPackage.promotion.name}
+                      </h5>
+                      <p className="card-text" >
+                        {sPackage.promotion.description}
+                      </p>
+                      {sPackage.status === "Active" ? (
+                        <span className="badge text-bg-success">
+                          Đang hoạt động
+                        </span>
+                      ) : (
+                        <span class="badge rounded-pill text-bg-info text-white">
+                          Đang chờ
+                        </span>
+                      )}
+                      <div className="fs-5">
+                        <span className="">
+                          Còn lại {sPackage.remainedDate} ngày
+                        </span>
+                      </div>
+                      <div className="d-flex justify-content-between fw-bold my-3">
+                        <div>
+                          <span className="text-success">
+                            <i
+                              className="fa fa-check-circle"
+                              aria-hidden="true"
+                            ></i>
+                          </span>{" "}
+                          Lượt đăng sản phẩm
+                        </div>
+                        <div>{sPackage.promotion.productQuantityLimit}</div>
+                      </div>
+                      <button
+                        onClick={() => handleBuy(auth.id, sPackage.promotionId)}
+                        className="btn btn-dark w-100"
+                      >
+                        Gia hạn
+                      </button>
                     </div>
-                    <div>{sPackage.promotion.productQuantityLimit}</div>
                   </div>
-                  <div className="d-flex justify-content-start fw-bold my-3">
-                    <div>
-                      <span className="text-success">
-                        <i
-                          className="fa fa-check-circle"
-                          aria-hidden="true"
-                        ></i>
-                      </span>{" "}
-                      Duyệt tin nhanh dưới 5 phút
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleBuy(auth.id, sPackage.promotionId)}
-                    className="btn btn-dark w-100"
-                  >
-                    Gia hạn
-                  </button>
-                </div>
-              </div>
+                )}
+              </>
             ))}
             {sellingPackages ? (
               <div></div>

@@ -61,18 +61,18 @@ function ShopProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     var urlImg;
-    if(img !== null){
+    if (img !== null) {
       urlImg = await handleUploadImagesClick();
-    }else{
+    } else {
       urlImg = userInfo?.avarta;
     }
     if (urlImg !== "") {
       var avarta = urlImg;
       var introduction = description;
-      const user = {fullName,phoneNumber,introduction ,avarta};
+      const user = { fullName, phoneNumber, introduction, avarta };
       const response = await editUserProfileAPI(auth.accessToken, user);
-      if(response){
-        toast.success('Cập nhật thông tin thành công!', {
+      if (response) {
+        toast.success("Cập nhật thông tin thành công!", {
           position: "bottom-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -80,11 +80,11 @@ function ShopProfile() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "colored"
-          });
-          fetchShopInfo();
-      } else{
-        toast.error('Cập nhật thông tin thất bại!', {
+          theme: "colored",
+        });
+        fetchShopInfo();
+      } else {
+        toast.error("Cập nhật thông tin thất bại!", {
           position: "bottom-right",
           autoClose: 10000,
           hideProgressBar: false,
@@ -92,11 +92,11 @@ function ShopProfile() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "colored"
-          });
+          theme: "colored",
+        });
       }
-    }else{
-      toast.error('Cập nhật thông tin thất bại, không tìm thấy ảnh!', {
+    } else {
+      toast.error("Cập nhật thông tin thất bại, không tìm thấy ảnh!", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -104,8 +104,8 @@ function ShopProfile() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored"
-        });
+        theme: "colored",
+      });
     }
   };
 
@@ -157,11 +157,13 @@ function ShopProfile() {
             </div>
             {auth.logged && userId === auth?.id?.toString() ? (
               <button className="btn text-white fw-bold btn-secondary disabled my-2 w-100">
-                <i className="fa fa-comments-o" aria-hidden="true"></i> Chat ngay
+                <i className="fa fa-comments-o" aria-hidden="true"></i> Chat
+                ngay
               </button>
             ) : (
               <button className="btn text-white fw-bold btn-danger my-2 w-100">
-                <i className="fa fa-comments-o" aria-hidden="true"></i> Chat ngay
+                <i className="fa fa-comments-o" aria-hidden="true"></i> Chat
+                ngay
               </button>
             )}
 
@@ -232,12 +234,12 @@ function ShopProfile() {
             <div className="d-flex">
               {products?.map((product) => (
                 <div
-                  className="col-lg-4 col-md-4 col-sm-6"
+                  className="col-lg-3 col-md-4 col-sm-6"
                   key={product.productId}
                 >
-                  <div className="featured__item">
+                  <div className="product">
                     <div
-                      className="featured__item__pic set-bg"
+                      className="product-picture set-bg"
                       style={{
                         backgroundImage: `url(${
                           product?.imageLink ||
@@ -245,7 +247,7 @@ function ShopProfile() {
                         })`,
                       }}
                     >
-                      <ul className="featured__item__pic__hover">
+                      <ul className="product-picture-hover">
                         <li>
                           <LinkRouter to={`/detail/${product.productId}`}>
                             <i className="fa fa-heart"></i>
@@ -258,31 +260,52 @@ function ShopProfile() {
                         </li>
                       </ul>
                     </div>
-                    <div className="featured__item__text">
+                    <div className="product-text">
                       <h6>
                         <LinkRouter
-                          className="featured__item_product_name"
+                          className="product-text-name"
                           to={`/detail/${product.productId}`}
                         >
                           {product.productName}
                         </LinkRouter>
                       </h6>
                       <h5>{formatPrice(product.price)} vnd</h5>
-                      <div className="featured__item__text__footer">
-                        <div>
-                          <img
-                            height="16"
-                            width="16"
-                            src="https://static.chotot.com/storage/chotot-icons/svg/user.svg"
-                            alt="shopicon"
-                          />
-                        </div>
-                        <div>
-                          <span>{product.createdDate}</span>
-                        </div>
-                        <div>   -  </div>
-                        <div>
-                          <span>Tp Hồ Chí Minh</span>
+                      <div className="product-text-footer">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div>
+                            <div>
+                              <img
+                                height="16"
+                                width="16"
+                                src="https://static.chotot.com/storage/chotot-icons/svg/user.svg"
+                                alt="shopicon"
+                              />
+                            </div>
+                            <div>
+                              <span className="ms-1">
+                                {product.createdDate}
+                              </span>
+                            </div>
+                          </div>
+                          <div>
+                            <span>
+                              {product.dealType ? (
+                                <span class="badge rounded-pill text-bg-info text-white">
+                                  <i
+                                    class="fa fa-exchange py-1 mx-2"
+                                    aria-hidden="true"
+                                  ></i>
+                                </span>
+                              ) : (
+                                <span class="badge rounded-pill text-bg-primary text-white">
+                                  <i
+                                    class="fa fa-credit-card py-1 mx-2"
+                                    aria-hidden="true"
+                                  ></i>
+                                </span>
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -339,7 +362,10 @@ function ShopProfile() {
                           ) : (
                             <img
                               className="img-fluid"
-                              src={userInfo?.avarta ?? require("../../assets/img/upload-product/photo.png")}
+                              src={
+                                userInfo?.avarta ??
+                                require("../../assets/img/upload-product/photo.png")
+                              }
                               alt="uploadimage"
                             />
                           )}
@@ -369,7 +395,7 @@ function ShopProfile() {
                       className="form-control"
                       placeholder={`${fullName ? "" : "Nhập vào tên"}`}
                       value={fullName}
-                      onChange={(e)=>setFullName(e.target.value)}
+                      onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                   <div className="input-group input-group-lg mb-3 ">
@@ -398,7 +424,7 @@ function ShopProfile() {
                       className="form-control disable"
                       placeholder={`${phoneNumber ? "" : "Thêm số điện thoại"}`}
                       value={phoneNumber}
-                      onChange={(e)=>setPhoneNumber(e.target.value)}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                   </div>
                   <div className="input-group input-group-lg mb-3 ">
@@ -414,7 +440,7 @@ function ShopProfile() {
                       placeholder={`${description ? "" : "Thêm giới thiệu"}`}
                       rows="5"
                       value={description}
-                      onChange={(e)=>setDescription(e.target.value)}
+                      onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
                 </div>

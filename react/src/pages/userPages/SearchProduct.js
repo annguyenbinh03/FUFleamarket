@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { getProductAPI, getProductByCategoryAPI, getSearchProductAPI } from "../../api/product";
-import Loading from "../../component/Loading";
 import ProductList from "../../component/ProductList";
 import Header from "../../Header";
 import Footer from "../../Footer";
@@ -47,32 +46,27 @@ function SearchProduct() {
     <div>
       <Header/>
       <section className="product spad">
-        <div className="container py-5 bg-white">
+        <div className="container pt-3 pb-3 bg-white">
           <div className="row">
             <div className="col-12">
-              <div className="filter__item mb-4">
+              <div className="filter-item mb-4">
                 <div className="row d-flex justify-content-between align-items-center">
                   <div className="col-lg-4 col-md-4">
-                    <div className="filter__found ps-5">
+                    <div className="filter-found ps-5">
                       <h6>
                         <span>{products?.length}</span> Sản phẩm được tìm thấy
                       </h6>
                     </div>
                   </div>
                   <div className="col-lg-8 col-md-8 d-flex justify-content-end">
-                    <div className="filter__sort d-flex me-3">
+                    <div className="filter-sort d-flex me-4">
                       <span className="me-2">Sắp xếp theo</span>
                       <select className="form-select form-select-sm">
                         <option value="0">Mới nhất</option>
+                        <option value="0">Cũ nhất</option>
                         <option value="1">Giá từ thấp đến cao</option>
                         <option value="2">Giá từ cao xuống thấp</option>
                       </select>
-                    </div>
-                    <div className="filter__option">
-                      <span>
-                        <i className="fa fa-th-large px-2" aria-hidden="true"></i>
-                        <i className="fa fa-th-list px-2" aria-hidden="true"></i>
-                      </span>
                     </div>
                   </div>
                 </div>

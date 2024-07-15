@@ -21,7 +21,7 @@ function CreateProduct() {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("1");
   const [dealType, setDealType] = useState(false);
-  const [isNew, setIsNew] = useState(false);
+  const [isNew, setIsNew] = useState(true);
   const [img, setImg] = useState("");
   const inputRef = useRef(null);
 

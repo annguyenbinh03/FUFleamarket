@@ -1,35 +1,30 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Loading from "./component/Loading";
 import { ToastContainer } from "react-toastify";
-import Register from "./pages/userPages/Register";
 import Login from "./pages/userPages/Login";
 import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
-import Chat from "./pages/userPages/Chat";
+import Loading from "./component/Loading"
 import 'react-toastify/ReactToastify.css'
 
-
-
-
-
-
-
 // Lazy loading components
-const Detail = lazy(() => import("./pages/userPages/Detail"));
+const Detail = lazy(() => import("./pages/userPages/ProductDetail"));
 const Home = lazy(() => import("./pages/userPages/Home"));
 const AboutUs = lazy(() => import("./pages/userPages/AboutUs"));
-const MyPosts = lazy(() => import("./pages/userPages/MyPosts"));
+const MyProducts = lazy(() => import("./pages/userPages/MyProducts"));
+const Chat = lazy(()=>  import("./pages/userPages/Chat"))
 const CreateProduct = lazy(() => import("./pages/userPages/CreateProduct"));
 const CreateOrder = lazy(() => import("./pages/userPages/CreateOrder"));
 const CreateTradingOrder = lazy(() => import("./pages/userPages/CreateTradingOrder"));
 const BuyOrder = lazy(() => import("./pages/userPages/BuyOrder"));
-const SellOrder = lazy(() => import("./pages/userPages/SellOrder"));
+const TradingOrder = lazy(() => import("./pages/userPages/TradingOrder"));
 const SearchProduct = lazy(()=> import("./pages/userPages/SearchProduct"));
 const SellingPackage = lazy(()=> import("./pages/userPages/SellingPackage"));
 const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
 const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
 const MySellingPackage = lazy(() => import("./pages/userPages/MySellingPackage"));
+const TradingOrderRequest = lazy(()=> import("./pages/userPages/TradingOrderRequest") );
+
 const AdminDoashboard = lazy(()=>import("./pages/adminPages/AdminDashboard") );
 const AdminProduct = lazy(() => import("./pages/adminPages/AdminProduct"));
 const AdminProductRequest = lazy(() => import("./pages/adminPages/AdminProductRequest"));
@@ -46,20 +41,16 @@ const ROLES = {
 
 function App() {
   return (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading/>}>
         <Routes>
           {/* public routes  */}
             <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/detail/:productId" element={<Detail />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/search-product" element={<SearchProduct />} />
-            <Route path="/search-product/:CategoryId" element={<SearchProduct />}/>
-           
+            <Route path="/search-product/:CategoryId" element={<SearchProduct />}/>      
             <Route path="/aboutUs" element={<AboutUs />} />
-            <Route path="/my-selling-package" element={<MySellingPackage/>} />
-            <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
             <Route path="/shopprofile/:userId" element={<ShopProfile/>} />
             <Route path="*" element={<div>404 Not Found</div>}/>
            
@@ -67,16 +58,17 @@ function App() {
 
             {/* protected */}
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin,ROLES.User]} />}>
-              <Route path="/sell-order" element={<SellOrder />} />
-              <Route path="/my-posts" element={<MyPosts />} />
+              <Route path="/trading-order" element={<TradingOrder />} />
+              <Route path="/trading-order-request" element={<TradingOrderRequest/>} />
+              <Route path="/buy-order" element={<BuyOrder />} />   
+              <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
+              <Route path="/my-products" element={<MyProducts />} />
               <Route path="/create-product" element={<CreateProduct />} />
               <Route path="/create-order/:productId" element={<CreateOrder />} />
+              <Route path="/create-trading-order/:productId" element={<CreateTradingOrder />} />  
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />
-              <Route path="/create-trading-order/:productId" element={<CreateTradingOrder />} />            
-            </Route>
-            <Route element={<RequireAuth allowedRoles={[ROLES.Moderator, ROLES.Admin,ROLES.User]} />}>
-              <Route path="/buy-order" element={<BuyOrder />} />
+              <Route path="/my-selling-package" element={<MySellingPackage/>} />
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin]} />} >
               <Route path="/admin" element={<AdminDoashboard />} />

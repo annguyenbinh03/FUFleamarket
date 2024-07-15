@@ -1,6 +1,6 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { useRef, useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import Header from "../../Header";
 import Footer from "../../Footer";
@@ -10,7 +10,7 @@ import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 const GoogleRedirect = 'https://fufleamarketapi.azurewebsites.net/Auth/loginGoogle';
 //  https://localhost:7057/Auth/loginGoogle
 const Login = () => {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { setAuth } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,27 +61,11 @@ const Login = () => {
     }
   };
 
-  const login = useGoogleLogin({
-    onSuccess: (credentialResponse) => {
-      console.log(credentialResponse);
-      var credentialResponseDecoded = jwtDecode(credentialResponse.credential);
-      loginGoogle(
-        credentialResponseDecoded.email,
-        credentialResponseDecoded.sub,
-        credentialResponseDecoded.name,
-        credentialResponseDecoded.picture
-      );
-    },
-    onError: () => {
-      console.log("Login Failed");
-    },
-  });
-
   return (
     <div>
       <Header />
       <div className="d-flex justify-content-center" style={{minHeight:"700px"}}>
-        <section className="register bg-danger pt-5 pb-1" style={{boxShadow:"0px 0px 10px black"}}>
+        <section className="login bg-danger pt-5 pb-1" style={{boxShadow:"0px 0px 10px black"}}>
           <div className="px-4">
             <div className="text-center fs-1 text-white fw-bold">Đăng nhập</div>
             <img

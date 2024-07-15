@@ -1,8 +1,21 @@
-import FeaturedProducts from "../../component/FeaturedProducts";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getProductAPI } from "../../api/product";
+import ProductList from "../../component/ProductList";
+
+
 function Home() {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setProducts(await getProductAPI());
+  };
+
   return (      
     <div>
        <Header />
@@ -185,7 +198,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="featured spad">
+      <section className="featured-product spad">
         <div className="container bg-white px-2">
           <div className="row">
             <div className="col-lg-12 pt-3">
@@ -194,7 +207,7 @@ function Home() {
               </div>
             </div>
           </div>
-          <FeaturedProducts />
+          <ProductList products={products}  />
         </div>
       </section>
       <Footer/>

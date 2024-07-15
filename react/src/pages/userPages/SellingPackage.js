@@ -4,7 +4,6 @@ import Header from "../../Header";
 import AuthContext from "../../context/AuthProvider";
 import sellingPackageBanner from "../../assets/img/selling-package/sellingPackageBanner.png";
 import { getPackagesAPI } from "../../api/packages";
-import { Link } from "react-router-dom";
 
 
 const SellingPackage = () => {
@@ -45,16 +44,14 @@ const SellingPackage = () => {
           <div className="row d-flex align-items-center">
             <div className="col-lg-6">
               <div className="fs-2 text-center fw-bold px-5 mx-3">
-                Chỉ 10,000đ cho 30 ngày dùng gói cơ bản
+                Chỉ 15,000đ cho 30 ngày dùng gói cơ bản
               </div>
               <div className="text-start  px-5 mx-3 mt-2">
                 Trải nghiệm gói bán hàng tiết kiệm, tiện lợi và hiệu quả cao,
                 không giới hạn số tin đăng hiển thị trên FUFM
               </div>
               <div className="text-start  px-5 mx-3 mt-2">
-                <li>10 lượt đăng bài</li>
-                <li>Quản lý kinh doanh và chi tiêu hiệu quả</li>
-                <li>Tiếp cận thêm liên hệ của nhóm khách hàng thụ động cần tư vấn</li>
+                <li>15 lượt đăng bài</li>
               </div>
             </div>
             <div className="col-lg-6">
@@ -74,7 +71,7 @@ const SellingPackage = () => {
                 <img src={ require(`../../assets/img/selling-package/${sPackage.promotionId}.png`)} class="card-img-top" alt="..." />
                 <div class="card-body">
                   <h5 class="card-title fw-bold">{sPackage.name}</h5>
-                  <p class="card-text" style={{ minHeight: "80px" }}>
+                  <p class="card-text">
                     {sPackage.description}
                   </p>
                   <div className="fs-5">
@@ -91,14 +88,6 @@ const SellingPackage = () => {
                       Lượt đăng sản phẩm
                     </div>
                     <div>{sPackage.productQuantityLimit}</div>
-                  </div>
-                  <div className="d-flex justify-content-start fw-bold my-3">
-                    <div>
-                      <span className="text-success">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
-                      </span>{" "}
-                      Duyệt tin nhanh dưới 5 phút
-                    </div>
                   </div>
                   <button 
                   onClick={()=> handleBuy(auth.id, sPackage.promotionId)}
