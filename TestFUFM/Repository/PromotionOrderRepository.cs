@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects;
+using BusinessObjects.Models.Enum;
 
 namespace Repository
 {
@@ -68,11 +69,11 @@ namespace Repository
             }
 
             existingOrder.Status = promotionOrderModel.Status;
-        //    existingOrder.EndDate = promotionOrderModel.EndDate;
-       //     existingOrder.StartDate = promotionOrderModel.StartDate;
-       //     existingOrder.Price = promotionOrderModel.Price;
-           // existingOrder.ProductQuantity = promotionOrderModel.ProductQuantity;
-       //     existingOrder.PaymentMethod = promotionOrderModel.PaymentMethod;
+            //    existingOrder.EndDate = promotionOrderModel.EndDate;
+            //     existingOrder.StartDate = promotionOrderModel.StartDate;
+            //     existingOrder.Price = promotionOrderModel.Price;
+            // existingOrder.ProductQuantity = promotionOrderModel.ProductQuantity;
+            //     existingOrder.PaymentMethod = promotionOrderModel.PaymentMethod;
 
             await _dbcontext.SaveChangesAsync();
 
@@ -91,5 +92,58 @@ namespace Repository
                                  .Where(po => po.UserId == userId)
                                  .ToListAsync();
         }
+
+
+        public async Task<List<PromotionOrder>> UpdatePromotionPackagesAsync()
+        {
+            // Lấy tất cả các gói khuyến mãi có trạng thái là "active"
+            var activePackages = await _dbcontext.PromotionOrders
+                                                 .Where(po => po.Status == StatusPromotionOrderEnum.Active.ToString())
+                                                 .OrderByDescending(po => po.PromoOrderId) // Sắp xếp theo ID giảm dần
+                                                 .ToListAsync();
+
+            var updatedPackages = new List<PromotionOrder>();
+
+            // Duyệt qua từng gói khuyến mãi
+            foreach (var package in activePackages)
+            {
+                // Giảm RemainDate đi 1
+                package.RemainedDate -= 1;
+
+                // Nếu RemainDate bằng 0, chuyển trạng thái thành "inactive"
+                if (package.RemainedDate <= 0)
+                {
+                    package.Status = StatusPromotionOrderEnum.InActive.ToString();
+
+                    // Tìm gói khuyến mãi có trạng thái "pending" và ID thấp hơn ID hiện tại
+                    var pendingPackage = await _dbcontext.PromotionOrders
+                                                         .Where(po => po.Status == StatusPromotionOrderEnum.Pending.ToString() && po.PromoOrderId < package.PromoOrderId)
+                                                         .OrderByDescending(po => po.PromoOrderId)
+                                                         .FirstOrDefaultAsync();
+
+                    if (pendingPackage != null)
+                    {
+                        // Chuyển trạng thái của gói "pending" thành "active"
+                        pendingPackage.Status = StatusPromotionOrderEnum.Active.ToString();
+                        updatedPackages.Add(pendingPackage);
+                        _dbcontext.PromotionOrders.Update(pendingPackage);
+                    }
+                }
+
+                // Cập nhật lại đối tượng gói khuyến mãi trong DbContext
+                _dbcontext.PromotionOrders.Update(package);
+
+                // Thêm gói khuyến mãi đã được cập nhật vào danh sách
+                updatedPackages.Add(package);
+            }
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _dbcontext.SaveChangesAsync();
+
+            // Trả về danh sách các gói khuyến mãi đã được cập nhật
+            return updatedPackages;
+        }
+
+
     }
 }
