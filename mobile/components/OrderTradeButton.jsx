@@ -2,25 +2,31 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-const OrderTradeButton = ({ product, navigation }) => (
-  <TouchableOpacity
-    style={styles.orderButton}
-    onPress={() => {
-      navigation.navigate("CreateTradingOrder", {
-        productId: product.product.productId,
-        productName: product.product.productName,
-        productImage: product.product.productImages,
-        productPrice: product.product.price,
-        sellerName: product.product.seller.fullName,
-        sellerAvatar: product.product.seller.avarta,
-        sellerId: product.product.seller.sellerId,
-      });
-    }}
-  >
-    <FontAwesome5 name="exchange-alt" size={20} color="#fff" />
-    <Text style={styles.buttonText}>Tạo hóa đơn trao đổi</Text>
-  </TouchableOpacity>
-);
+const OrderTradeButton = ({ product, navigation }) => {
+  const handlePress = () => {
+    const params = {
+      productId: product.product.productId,
+      productName: product.product.productName,
+      productImage: product.product.productImages,
+      productPrice: product.product.price,
+      sellerName: product.product.seller.fullName,
+      sellerAvatar: product.product.seller.avarta,
+      sellerId: product.sellerId,
+    };
+
+    console.log("Navigating to CreateTradingOrder with params:");
+    console.log(JSON.stringify(params, null, 2));
+
+    navigation.navigate("CreateTradingOrder", params);
+  };
+
+  return (
+    <TouchableOpacity style={styles.orderButton} onPress={handlePress}>
+      <FontAwesome5 name="exchange-alt" size={20} color="#fff" />
+      <Text style={styles.buttonText}>Tạo hóa đơn trao đổi</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   orderButton: {

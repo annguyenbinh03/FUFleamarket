@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -56,23 +56,23 @@ const ProductListContainer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await getProductAPI();
-        console.log("Dữ liệu API:", response.data);
-        setProductList(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Lỗi API:", error);
-        setError("Đã xảy ra lỗi khi tải danh sách sản phẩm");
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await getProductAPI();
+      console.log("Dữ liệu API:", response.data);
+      setProductList(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Lỗi API:", error);
+      setError("Đã xảy ra lỗi khi tải danh sách sản phẩm");
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;

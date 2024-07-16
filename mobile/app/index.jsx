@@ -18,8 +18,8 @@ import AdminPostManager from "./AdminScreen/AdminPostManager";
 import AdminProductManager from "./AdminScreen/AdminProductManager";
 import MySellingPackage from "./Screens/PackageScreen/MySellingPackage";
 import SellingPackage from "./Screens/PackageScreen/SellingPackage";
-import TradingOrder from "./Screens/OrderScreen/TradingOrder";
 import CreateTradingOrder from "./Screens/OrderScreen/CreateTradingOrder";
+import TradingOrderRequest from "./Screens/OrderScreen/TradingOrderRequest";
 
 const Stack = createNativeStackNavigator();
 
@@ -158,6 +158,15 @@ export default function App() {
                 component={BuyOrder}
                 options={{
                   title: "Đơn mua",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
+                name="TradingOrderRequest"
+                component={TradingOrderRequest}
+                options={{
+                  title: "Yêu cầu trao đổi",
                   headerStyle: styles.header,
                   headerTitleStyle: styles.headerTitle,
                 }}

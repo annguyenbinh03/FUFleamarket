@@ -57,6 +57,7 @@
     "react-native-stars": "^1.2.2",
     "react-native-svg": "15.2.0",
     "react-native-url-polyfill": "^2.0.0",
+    "react-native-vnpay-merchant": "file:react-native-vnpay-merchant",
     "react-native-web": "~0.19.6",
     "react-router-dom": "^6.23.1",
     "rimraf": "^5.0.7",
