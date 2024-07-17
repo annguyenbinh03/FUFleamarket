@@ -7,6 +7,7 @@ import PostProduct from "../Screens/PostProductScreen/postProduct";
 import Profile from "../Screens/ProfileScreen/profile";
 import PostManager from "../Screens/PostMangerScreen/postManager";
 import Chat from "../Screens/ChatScreen/Chat";
+import AuthWrapper from "../../components/AuthWrapper";
 
 const Tab = createBottomTabNavigator();
 
@@ -42,16 +43,20 @@ export default function TabNavigation() {
       />
       <Tab.Screen
         name="Quản lý tin"
-        component={PostManager}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="post" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {() => (
+          <AuthWrapper>
+            <PostManager />
+          </AuthWrapper>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Đăng tin"
-        component={PostProduct}
         options={{
           tabBarIcon: ({ color, size }) => (
             <View
@@ -81,25 +86,41 @@ export default function TabNavigation() {
           ),
           tabBarLabel: () => null,
         }}
-      />
+      >
+        {() => (
+          <AuthWrapper>
+            <PostProduct />
+          </AuthWrapper>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Trò chuyện"
-        component={Chat}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="message" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {() => (
+          <AuthWrapper>
+            <Chat />
+          </AuthWrapper>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Tài khoản"
-        component={Profile}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {() => (
+          <AuthWrapper>
+            <Profile />
+          </AuthWrapper>
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

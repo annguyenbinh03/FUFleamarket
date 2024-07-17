@@ -7,7 +7,6 @@ import {
   ScrollView,
   ActivityIndicator,
   Dimensions,
-  TouchableOpacity,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import WishListAddButton from "../../../components/WishListAddButton";
@@ -28,6 +27,8 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { auth } = useContext(AuthContext);
+
+  console.log("Auth: ", auth);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -105,7 +106,7 @@ const Detail = () => {
             </View>
           </View>
         </View>
-        {auth?.userId !== product.sellerId && (
+        {auth?.userId !== product.sellerId && auth.role != 2 && (
           <View style={styles.actionButtonsContainer}>
             {product.product.dealType ? (
               <OrderTradeButton product={product} navigation={navigation} />
