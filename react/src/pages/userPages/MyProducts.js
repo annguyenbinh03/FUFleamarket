@@ -6,6 +6,7 @@ import Footer from "../../Footer";
 import { Link } from "react-router-dom";
 import { getMyPackageAPI } from "../../api/packages";
 import { toast } from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function MyProducts() {
   const [products, setProducts] = useState([]);
@@ -14,6 +15,7 @@ function MyProducts() {
   const [sortBy, setSortBy] = useState("date");
   const [tab, setTab] = useState(1);
   const [countProductAndLimit, setCountProductAndLimit] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchProduct = async () => {
     try {
@@ -58,10 +60,16 @@ function MyProducts() {
   }, [tab,sortBy])
 
 
-  useEffect(() => {
+  const loadData = async () => {
+    setIsLoading(true);
     fetchProduct();
     fetchMyPackage();
     fetchCountProductAndLimit();
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   const formatPrice = (value) => {
@@ -247,7 +255,16 @@ function MyProducts() {
           </div>
         </div>
         <div className="container bg-white px-5 py-3">
-          {products?.map((product) => (
+        {isLoading && <div className="d-flex justify-content-center pt-3 pb-5">
+            <ClipLoader
+              color="orange"
+              loading={isLoading}
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div> }  
+          { !isLoading && products?.map((product) => (
             <div key={product.productId} className="product_container py-3">
               <div className="row mb-2 p-3 order">
                 <div className="col-8 col-md-8">

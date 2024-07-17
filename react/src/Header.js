@@ -322,7 +322,7 @@ const Header = () => {
             style={{ color: "white" }}
           >
             <i className="fa fa-list-alt pe-2" aria-hidden="true"></i>
-            <span className="hidden-md">Quản lý sản phẩm</span>
+            <span className="hidden-md">Quản lý tin</span>
           </Link>
         </button>
 

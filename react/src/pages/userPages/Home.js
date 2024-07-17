@@ -4,21 +4,24 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProductAPI } from "../../api/product";
 import ProductList from "../../component/ProductList";
-
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Home() {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    setIsLoading(true);
     setProducts(await getProductAPI());
+    setIsLoading(false);
   };
 
-  return (      
+  return (
     <div>
-       <Header />
+      <Header />
       <section className="hero">
         <div className="container bg-white pt-3">
           <div
@@ -207,12 +210,21 @@ function Home() {
               </div>
             </div>
           </div>
-          <ProductList products={products}  />
+          {isLoading && <div className="d-flex justify-content-center pt-3 pb-5">
+            <ClipLoader
+              color="orange"
+              loading={isLoading}
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div> }  
+          {!isLoading && <ProductList products={products} />}
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
-};
+}
 
 export default Home;
