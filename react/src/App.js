@@ -6,6 +6,9 @@ import RequireAuth from "./component/RequireAuth";
 import Unauthorized from "./component/Unauthorized";
 import Loading from "./component/Loading"
 import 'react-toastify/ReactToastify.css'
+import RegisterGG from "./pages/userPages/RegisterGG";
+
+
 
 // Lazy loading components
 const Detail = lazy(() => import("./pages/userPages/ProductDetail"));
@@ -46,6 +49,7 @@ function App() {
           {/* public routes  */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register-google" element={<RegisterGG />} />
             <Route path="/detail/:productId" element={<Detail />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/search-product" element={<SearchProduct />} />
