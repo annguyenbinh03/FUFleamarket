@@ -244,5 +244,18 @@ namespace Repository
        .Where(o => o.SellerId == userId)
        .ToListAsync();
         }
+
+        public async Task<Order> GetOrderByProductIdAsync( int productId)
+        {
+            return await _context.Orders
+                         .FirstOrDefaultAsync(o => o.ProductId == productId);
+        }
+        public async Task<bool> CheckProductHasAnyActiveOrder(int productId)
+        {
+            return await _context.Orders
+                         .Where(o => o.ProductId == productId)
+                         .AnyAsync(o => o.Status == 0 || o.Status == 1);
+        }
+
     }
 }

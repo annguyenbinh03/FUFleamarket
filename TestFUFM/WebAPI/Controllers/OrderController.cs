@@ -16,7 +16,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore;
 using Service.ContactCheck;
 using Service.ContactCheck.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Service.CheckProductHasActiveOrder.Interfaces;
+
 
 namespace WebAPI.Controllers
 {
@@ -30,14 +31,16 @@ namespace WebAPI.Controllers
         private readonly IProductReposity _productRepo;
         private readonly FufleaMarketContext _context;
         private readonly IContactService _contactService;
+        private readonly ICheckProduct _checkProduct;
 
-        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context, IContactService contactService)
+        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context, IContactService contactService,ICheckProduct checkProduct)
         {
             _orderRepo = orderRepo;
             _userRepo = userRepo;
             _productRepo = productRepo;
             _context = context;
             _contactService = contactService;
+            _checkProduct = checkProduct;
         }
 
         [HttpGet("soldRequest")]
@@ -129,15 +132,15 @@ namespace WebAPI.Controllers
                     Price = order.Product.Price,
                     ImageLink = order.Product.ImageLink,
                     StoredQuantity = order.Product.StoredQuantity
-                    // Add more properties as needed
+                    
                 },
                 Buyer = new
                 {
                     Avarta = order.Buyer.Avarta,
                     FullName = order.Buyer.FullName
-                    // Add more properties as needed
+                    
                 },
-                // Add more properties from Order model as needed
+                
             }).ToList();
             return Ok(orders);
         }
@@ -471,7 +474,7 @@ namespace WebAPI.Controllers
             var buyerId = userId;
             //Lấy SellerId từ thông tin của sản phẩm
             var sellerId = product.SellerId; 
-            createDTO.CreatedDate = DateTime.Now;
+            
 
             // Tạo đối tượng orderModel từ dữ liệu createDTO và thông tin buyerId, sellerId.
             var orderModel = createDTO.ToOrderFromCreateDTO(buyerId, sellerId);
@@ -479,12 +482,14 @@ namespace WebAPI.Controllers
             // Gọi repository (_orderRepo) để lưu đơn đặt hàng mới vào cơ sở dữ liệu.
             await _orderRepo.CreateOrderAsync(orderModel);
 
-            // Return the created order details including BuyerId, SellerId, and ProductId
+            // Chuyển đổi orderModel thành một DTO (orderDto) để trả về thông tin đơn hàng đã tạo.
             var orderDto = orderModel.ToOrderDTO();
+            //được thiết lập để chắc chắn rằng thông tin này được gửi lại cho client
             orderDto.BuyerId = buyerId;
             orderDto.SellerId = sellerId;
             orderDto.ProductId = createDTO.ProductId;
-
+            //thông tin chi tiết của đơn hàng vừa tạo. 
+            //Điều này bao gồm một liên kết đến phương thức GetByOrderId để lấy thông tin chi tiết của đơn hàng theo OrderId.
             return CreatedAtAction(nameof(GetByOrderId), new { id = orderModel.OrderId }, orderDto);
         }
 
@@ -512,7 +517,7 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            // Get the order details to know the status and quantity
+            //_orderRepo:  chịu trách nhiệm truy cập với cơ sở dữ liệu hoặc một nguồn dữ liệu khác để thao tác với các đối tượng Order.
             var order = await _orderRepo.GetByOrderIdAsync(orderId);
             if (order == null)
             {
@@ -538,7 +543,7 @@ namespace WebAPI.Controllers
                 return BadRequest("Product not found");
             }
 
-            // Check if the ordered quantity is less than or equal to the stored quantity
+            //  kiểm tra xem số lượng sản phẩm được đặt hàng (order.Quantity) có vượt quá số lượng sản phẩm hiện có trong kho (product.StoredQuantity) hay không
             if (order.Quantity > product.StoredQuantity)
             {
                 return BadRequest("Ordered quantity exceeds the stored quantity");
@@ -604,19 +609,22 @@ namespace WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminGetAllOrders([FromQuery] int? status )
         {
-           if(!ModelState.IsValid)
+            //Kiểm tra tính hợp lệ của Model State. Nếu không hợp lệ, trả về kết quả BadRequest với thông tin ModelState.
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-           IQueryable<Order> query = _context.Orders.AsQueryable();
-            if(status.HasValue)
+            //Tạo một truy vấn trên bảng Orders từ context cơ sở dữ liệu (_context)
+            IQueryable<Order> query = _context.Orders.AsQueryable();
+            //Kiểm tra giá trị của status
+            if (status.HasValue)
             {
                 query = query.Where(o => o.Status == status.Value);
             }
             else
             {
+                //thêm điều kiện vào truy vấn để lấy những đơn hàng có Status là 0, 1 hoặc 2.
                 query = query.Where(o => o.Status == 0 || o.Status == 1 || o.Status ==2);
             }
-
+            // truy vấn để lấy danh sách các đơn hàng từ cơ sở dữ liệu, chuyển đổi dữ liệu thành định dạng mong muốn và trả về kết quả cho client
             var result = await query.Select(order => new
             {
                 OrderId = order.OrderId,
@@ -646,7 +654,7 @@ namespace WebAPI.Controllers
                     ImageLink = order.Product.ImageLink
                 }
             }).ToListAsync();
-            if(!result.Any())
+            if(!result.Any()) //Kiểm tra xem danh sách kết quả có rỗng hay không.
             {
                 return BadRequest("No order here");
             }
@@ -665,29 +673,28 @@ namespace WebAPI.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            // Get the order details to know the status and quantity
             var order = await _orderRepo.GetByOrderIdAsync(orderId);
             if (order == null)
             {
                 return BadRequest("Order not found");
             }
 
-            // Check if the order status can be updated to 3 (order completed)
+            
             if (order.Status != 1)
             {
                 return BadRequest("Only orders with status 1 can be marked as completed");
             }
 
-            // Check if the logged-in user is the seller of the product
+            
             if (order.BuyerId != userId)
             {
                 return BadRequest("Only the buyer can complete the order");
             }
 
-            // Update the order status to 3 (completed)
+            
             order.Status = 3;
 
-            // Save the changes to the database
+           
             bool updateResult = await _orderRepo.UpdateOrderAsync(order.OrderId, order);
             if (!updateResult)
             {
@@ -810,6 +817,28 @@ namespace WebAPI.Controllers
 
             return Ok("Order rejected successfully");
         }
+        [HttpGet]
+        [Route("CheckProductHasActiveOrder/{id}")]
+        public async Task<IActionResult> CheckProductHasActiveOrder(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid product ID.");
+            }
+
+            var existProduct = await _checkProduct.CheckProductHasAnyActiveOrderAsync(id);
+
+            // Xử lý kết quả trả về từ phương thức dịch vụ
+            if (!existProduct)
+            {
+                return NotFound($"Product with ID {id} does not have any active orders.");
+            }
+
+            return Ok("Product has active orders.");
+        }
+    
+
+
     }
 }
 

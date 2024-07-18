@@ -23,6 +23,8 @@ using Service.CalculatePromotioTransactionMonthlyTotal.Interfaces;
 using Service.ContactCheck.Interfaces;
 using Service.ContactCheck;
 using Service.BackgroudService;
+using Service.CheckProductHasActiveOrder;
+using Service.CheckProductHasActiveOrder.Interfaces;
 
 public class Program
 {
@@ -149,6 +151,7 @@ public class Program
         builder.Services.AddScoped<ITradingOrderDetailRepository, TradingOrderDetailRepository>();
         builder.Services.AddScoped<IContactService, ContactService>();
         builder.Services.AddHostedService<PromotionPackagesService>();
+        builder.Services.AddScoped<ICheckProduct, CheckProductHascActiveOrder>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 

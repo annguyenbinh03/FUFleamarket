@@ -28,6 +28,8 @@ namespace Repository.Interfaces
         Task<bool> CompleteOrderAsync(int userId, int orderId);
         Task<bool> RejectOrderAsync(int userId, int orderId);
         Task<bool> UpdateOrderAsync(int orderId, Order order);
+        Task<bool> CheckProductHasAnyActiveOrder(int userId);
+        Task<Order> GetOrderByProductIdAsync(int productId);
         Task<List<Order>> GetOrdersByUserId(int userId);
     }
 }
