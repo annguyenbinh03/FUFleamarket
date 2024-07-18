@@ -117,9 +117,9 @@ function ProductDetail() {
               )}
             </div>
             <div className="px-5 mt-2">
-              <div className="product_name d-flex justify-content-start align-items-center">
+              <div className="product_name d-flex justify-content-start align-items-start">
                 {data?.product?.dealType ? (
-                  <span className="badge rounded-pill text-bg-info text-white py-1">
+                  <span className="badge rounded-pill text-bg-info text-white py-1 mt-1">
                     <i
                       className="fa fa-exchange py-1 me-2"
                       aria-hidden="true"

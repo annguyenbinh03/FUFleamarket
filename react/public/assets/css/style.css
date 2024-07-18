@@ -810,10 +810,8 @@ body {
 }
 
 .mypost .product_container .price {
-  font-weight: bold;
   text-decoration: none;
   font-size: 18px;
-  color: #cd1818;
 }
 
 .mypost .product_container .post_button button {
@@ -1028,7 +1026,7 @@ body {
 .not-found-text {
   display: flex;
   text-align: center;
-  height: 500px;
+  height: 550px;
   align-items: center;
   justify-content: center;
   font-weight: bold;

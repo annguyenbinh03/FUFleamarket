@@ -7,7 +7,7 @@ import { createOrderAPI } from "../../api/order";
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { toast } from "react-toastify";
-import 'react-toastify/ReactToastify.css'
+import "react-toastify/ReactToastify.css";
 
 function CreateOrder() {
   const navigate = useNavigate();
@@ -47,12 +47,19 @@ function CreateOrder() {
   }, [productId]);
 
   const handleSubmit = async (e) => {
+    var totalPrice = price*quantity;
     e.preventDefault();
-    const orderDate = "2024-06-06T06:16:18.408Z" ;
-    const order = { price, quantity, paymentMethod,receiverAddress,note, productId,orderDate };
+    const order = {
+      totalPrice,
+      quantity,
+      paymentMethod,
+      receiverAddress,
+      note,
+      productId
+    };
     const response = await createOrderAPI(order, auth.accessToken);
     console.log(response);
-    toast.info('Đã tạo đơn hàng, đang chờ xác nhận từ người bán!', {
+    toast.info("Đã tạo đơn hàng, đang chờ xác nhận từ người bán!", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -60,35 +67,54 @@ function CreateOrder() {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored"
-      });
-    navigate('/buy-order', { replace: true });
+      theme: "colored",
+    });
+    navigate("/buy-order", { replace: true });
   };
 
   const formatPrice = (value) => {
-    return value.toLocaleString('vi-VN');
+    if(value){
+      return value.toLocaleString("vi-VN");
+    }
+    return value;
   };
-  const CheckQuantity = (value) =>{
-    if(value > product.storedQuantity){
-      toast.error('Số lượng muốn mua không được vượt quá số lượng trong kho!',{
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored"
-        });
-    }else{
+  const CheckQuantity = (value) => {
+    if (value > product.storedQuantity) {
+      showErrorToast("Số lượng muốn mua không được vượt quá số lượng trong kho!", 5000)
+    } else {
       setQuantity(value);
     }
+  };
+
+  const showErrorToast = (message, closeTime) =>{
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: closeTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   }
 
+  const handleChangePrice = (price) =>{
+    if(price){
+      if(price<1){
+          showErrorToast("Giá sản phẩm phải lớn hơn 0", 5000);
+      }else{
+        setPrice(price);
+      }
+    }else{
+      setPrice(price);
+    }
+
+  }
 
   return (
     <div>
-         <Header />
+      <Header />
       <section className="create-order spad">
         <div className="container bg-white py-4">
           <div className="row p-3">
@@ -105,10 +131,7 @@ function CreateOrder() {
                     {" "}
                     <strong> Người mua</strong>
                   </div>
-                  <div>
-                    Từ: {buyer?.fullName} | {buyer?.phoneNumber}
-                  </div>
-                  <div>{buyer?.addresses[0]?.specificAddress}</div>
+                  <div>Từ: {buyer?.fullName}</div>
                 </div>
               </div>
             </div>
@@ -126,16 +149,10 @@ function CreateOrder() {
                     <div>Đang tải thông tin người bán...</div>
                   ) : (
                     <>
-                      {product?.seller?.fullName ? (
+                      {product?.seller?.fullName && (
                         <>
-                          <div>
-                            Đến: {product.seller.fullName} |{" "}
-                            {product.seller.phoneNumber}
-                          </div>
-                          <div>{buyerAddress || "Address Not Found"}</div>
+                          <div>Đến: {product.seller.fullName}</div>
                         </>
-                      ) : (
-                        <div>Không tìm thấy thông tin người bán</div>
                       )}
                     </>
                   )}
@@ -238,7 +255,10 @@ function CreateOrder() {
                 <>
                   <div className="product_name">{product.productName}</div>
                   <div>
-                    <p className="price_wistlist_left">$ { formatPrice(product.price) }</p>
+                    <p className="price_wistlist_left">
+                      {" "}
+                      {formatPrice(product.price)}đ
+                    </p>
                   </div>
                   <div>
                     {product.isNew ? (
@@ -247,13 +267,10 @@ function CreateOrder() {
                       <div>Tình trạng: đã qua sử dụng</div>
                     )}
                   </div>
-                  <div>
-                    Số lượng trong kho: {product.storedQuantity}
-                  </div>
+                  <div>Số lượng trong kho: {product.storedQuantity}</div>
                   <div>
                     <p className="">{product.description}</p>
                   </div>
-                 
                 </>
               ) : (
                 <div>Đang tải thông tin sản phẩm...</div>
@@ -268,20 +285,35 @@ function CreateOrder() {
                     placeholder="300.000đ"
                     required
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => handleChangePrice(e.target.value)}
                   />
-                  <label className="ms-2">Giá mong muốn (vnd)</label>
+                  <label className="ms-2">
+                    Giá mong muốn cho 1 sản phẩm (vnd) *
+                  </label>
                 </div>
-                <div className="form-floating mb-3">
-                  <input
-                    type="number"
-                    className="form-control"
-                    required
-                    value={quantity}
-                    onChange={(e) => CheckQuantity(e.target.value)}
-                  />
-                  <label className="ms-2">Số lượng</label>
+                <div className="d-flex">
+                  <div className="form-floating mb-3 pe-1 col-md-6">
+                    <input
+                      type="number"
+                      className="form-control"
+                      required
+                      value={quantity}
+                      onChange={(e) => CheckQuantity(e.target.value)}
+                    />
+                    <label className="ms-2">Số lượng sản phẩm muốn mua *</label>
+                  </div>
+                  <div className="form-floating mb-3 ps-1 col-md-6">
+                    <div
+                      type="number"
+                      className="form-control"
+                      required
+                    >
+                      { formatPrice( quantity*price)} đ
+                      </div>
+                    <label className="ms-2">Tổng giá trị hóa đơn</label>
+                  </div>
                 </div>
+
                 <div className="form-floating mb-3">
                   <select
                     className="form-select"
@@ -327,7 +359,7 @@ function CreateOrder() {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

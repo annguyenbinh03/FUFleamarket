@@ -14,6 +14,11 @@ const MySellingPackage = () => {
     try {
       var response = await getMyPackageAPI(auth.accessToken);
       setSellingPackages(response);
+      if(CheckAnyActivePackage(response)){
+          console.log("true");
+      }else{
+        console.log("false");
+      }
     } catch (error) {
       console.error("Error fetching product:", error);
     }
@@ -56,6 +61,16 @@ const MySellingPackage = () => {
     return isoString;
   }
 
+  const CheckAnyActivePackage = (sellingPackages) =>{
+    var result = false;
+    if(sellingPackages){
+      result = sellingPackages.some((aPackage) =>{
+        return aPackage.status !== "InActive" || aPackage.status !== "Failed"
+      });
+    }
+    return result;
+  }
+
   return (
     <div>
       <Header />
@@ -92,12 +107,12 @@ const MySellingPackage = () => {
             Các gói đang hoạt động
           </div>
           <div className="row d-flex justify-content-around">
-            {sellingPackages?.map((sPackage) => (
+            { sellingPackages?.map((sPackage) => (
               <>
-                {sPackage.status === "Failed" ? (
+                {sPackage.status === "InActive" ? (
                   <></>
                 ) : (
-                  <div className="card col-lg-3 py-2">
+                  <div className="card col-lg-3 py-2" key={sPackage.promotion.promotionId}>
                     <img
                       src={require(`../../assets/img/selling-package/${sPackage.promotion.promotionId}.png`)}
                       className="card-img-top"
@@ -115,7 +130,7 @@ const MySellingPackage = () => {
                           Đang hoạt động
                         </span>
                       ) : (
-                        <span class="badge rounded-pill text-bg-info text-white">
+                        <span className="badge rounded-pill text-bg-info text-white">
                           Đang chờ
                         </span>
                       )}
@@ -147,7 +162,7 @@ const MySellingPackage = () => {
                 )}
               </>
             ))}
-            {sellingPackages ? (
+            {CheckAnyActivePackage(sellingPackages) ? (
               <div></div>
             ) : (
               <div
@@ -155,7 +170,7 @@ const MySellingPackage = () => {
                 style={{ height: "500px" }}
               >
                 <div className="fs-3 fw-bold mb-3">
-                  Bạn chưa sở hữu bất kì gói bàn hàng nào
+                  Bạn chưa có gói bán hàng nào đang hoạt động
                 </div>
                 <Link className="btn btn-primary" to="/selling-package">
                   Mua gói bán hàng ngay{" "}
@@ -164,8 +179,8 @@ const MySellingPackage = () => {
             )}
           </div>
           <div className="row mt-4 p-3">
-            <div class="table-responsive bg-white p-2 border rounded-3">
-              <table class="table  ">
+            <div className="table-responsive bg-white p-2 border rounded-3">
+              <table className="table  ">
                 <thead>
                   <tr>
                     <th scope="col">Gói</th>
@@ -214,11 +229,11 @@ const MySellingPackage = () => {
                       <td className="text-center">
                         {" "}
                         {order.transactionStatus === "Completed" ? (
-                          <span class="badge rounded-pill text-bg-success">
+                          <span className="badge rounded-pill text-bg-success">
                             Thành công
                           </span>
                         ) : (
-                          <span class="badge rounded-pill text-bg-danger">
+                          <span className="badge rounded-pill text-bg-danger">
                             Thất bại
                           </span>
                         )}
@@ -231,7 +246,7 @@ const MySellingPackage = () => {
                 <></>
               ) : (
                 <div className="not-found-text fs-3">
-                  Bạn vẫn chưa có đơn bán nào
+                  Bạn vẫn chưa có đơn mua gói nào
                 </div>
               )}
             </div>
