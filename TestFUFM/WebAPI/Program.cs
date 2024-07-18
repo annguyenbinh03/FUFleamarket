@@ -152,6 +152,7 @@ public class Program
         builder.Services.AddScoped<IContactService, ContactService>();
         builder.Services.AddHostedService<PromotionPackagesService>();
         builder.Services.AddScoped<ICheckProduct, CheckProductHascActiveOrder>();
+        builder.Services.AddScoped<StatusTradingOrderService>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 

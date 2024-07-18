@@ -24,5 +24,7 @@ namespace Repository.Interfaces
 
         Task<List<TradingOrder>> GetTradingOrdersByUser2IdAsync(int userId);
 
+        Task<TradingOrder?> UpdateStatusAsync(int id);
+
     }
 }

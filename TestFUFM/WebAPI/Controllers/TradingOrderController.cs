@@ -9,6 +9,7 @@ using BusinessObjects;
 using BusinessObjects.Models.Enum;
 using Service.ContactCheck.Interfaces;
 using Service.ContactCheck;
+using Service.BackgroudService;
 
 namespace WebAPI.Controllers
 {
@@ -22,7 +23,8 @@ namespace WebAPI.Controllers
         private readonly FufleaMarketContext _context;
         private readonly IUserRepository _userRepo;
         private readonly IContactService _contactService;
-        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context, IUserRepository userRepo, IContactService contactService)
+        private readonly StatusTradingOrderService _statusTradingOrderService;
+        public TradingOrderController(ITradingOrderRepository tradingRepo, IProductReposity productRepo, ITradingOrderDetailRepository tradingOrderDetailRepo, FufleaMarketContext context, IUserRepository userRepo, IContactService contactService, StatusTradingOrderService statusTradingOrderService)
         {
             _tradingRepo = tradingRepo;
             _productRepo = productRepo;
@@ -30,6 +32,7 @@ namespace WebAPI.Controllers
             _context = context;
             _userRepo = userRepo;
             _contactService = contactService;
+            _statusTradingOrderService = statusTradingOrderService;
         }
 
         // GET: api/TradingOrder
@@ -249,8 +252,8 @@ namespace WebAPI.Controllers
 
             // Get the user based on the userId from the claims with additional conditions
             var user = await _context.Users
-                             .Include(u => u.Products)
-                             .FirstOrDefaultAsync(u => u.UserId == userId);
+                     .Include(u => u.Products.Where(p => p.DealType == true && p.Status == 1)) // Added condition here
+                     .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
             {
@@ -259,10 +262,10 @@ namespace WebAPI.Controllers
 
             // Get the product and its seller based on the productId with additional conditions
             var product = await _context.Products
-                                        .Include(p => p.Seller)
-                                        .ThenInclude(s => s.Products)
-                                        .Where(p => p.ProductId == productId && p.DealType == true && p.Status == 1)
-                                        .FirstOrDefaultAsync();
+                                .Include(p => p.Seller)
+                                .ThenInclude(s => s.Products.Where(p => p.DealType == true && p.Status == 1)) // Added condition here
+                                .Where(p => p.ProductId == productId && p.DealType == true && p.Status == 1)
+                                .FirstOrDefaultAsync();
 
             if (product == null)
             {
@@ -361,10 +364,18 @@ namespace WebAPI.Controllers
             await _contactService.OpenContactAsync(user2Id, tradingOrder.User1);
             await _context.SaveChangesAsync();
 
+            // Lấy thời gian hiện tại khi người dùng accept
+            var acceptTime = DateTime.Now;
+            Console.WriteLine($"Order accepted at: {acceptTime}");
+
+            // Chạy background job sau khi các tác vụ chính đã hoàn tất
+            Task.Run(() => _statusTradingOrderService.RunBacgkroundJobAsync(id, acceptTime));
+
             return NoContent();
         }
+    
 
-        [HttpPost("User2/Reject/{id}")]
+    [HttpPost("User2/Reject/{id}")]
         public async Task<IActionResult> User2Reject(int id)
         {
             // Lấy User2 từ claims

@@ -58,9 +58,9 @@ namespace Repository
         public async Task<List<TradingOrder>> GetTradingOrdersByUser1IdAsync(int userId)
         {
             return await _context.TradingOrders
-                                 .Where(order => order.User1 == userId)
-                                 .Include(order => order.TradingOrderDetails)
-                                 .ToListAsync();
+                         .Where(order => order.User1 == userId)
+                         .Include(order => order.TradingOrderDetails)
+                         .ToListAsync();
         }
 
 
@@ -77,6 +77,27 @@ namespace Repository
                                  .ToListAsync();
         }
 
+        public async Task<TradingOrder?> UpdateStatusAsync(int id)
+        {
+            
+            var existingOrder = await _context.TradingOrders.FindAsync(id);
+            if (existingOrder == null)
+            {
+                throw new KeyNotFoundException("Order not found");
+            }
+
+            if (existingOrder.Status == 1)
+            {
+                existingOrder.Status = 2;
+                await _context.SaveChangesAsync();
+                return existingOrder;
+            }
+            else
+            {
+                Console.WriteLine($"Order with ID {existingOrder.TradingOrderId} is not in status 1, no update performed.");
+                return existingOrder;
+            }
+        }
 
     }
 }
