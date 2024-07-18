@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using DTO.Helpers;
 
 namespace Repository
 {
@@ -24,15 +25,7 @@ namespace Repository
 
         public async Task<Product> CreateAsync(Product productModel)
         {
-            DateTime serverTime = DateTime.Now;
-            TimeZoneInfo serverTimeZone = TimeZoneInfo.Local;
-            Console.WriteLine($"Server time: {serverTime}, Server time zone: {serverTimeZone.DisplayName}");
-
-            TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-            DateTime localTime = TimeZoneInfo.ConvertTime(serverTime, targetTimeZone);
-            Console.WriteLine($"Converted local time: {localTime}, Target time zone: {targetTimeZone.DisplayName}");
-
-            productModel.CreatedDate = localTime;
+            productModel.CreatedDate = SEATimeZone.GetCurrentSEATime();
             await _context.Products.AddAsync(productModel);
             await _context.SaveChangesAsync();
             return productModel;
@@ -54,7 +47,7 @@ namespace Repository
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
             productModel.Status = 4;
-            productModel.CreatedDate = DateTime.Now.AddHours(7);
+            productModel.CreatedDate = SEATimeZone.GetCurrentSEATime();
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
             return productModel;
@@ -75,12 +68,18 @@ namespace Repository
             // Cập nhật trạng thái sản phẩm trước khi xóa
             productModel.IsNew = false;
             productModel.Status = 3;
-            productModel.CreatedDate = DateTime.Now.AddHours(7);
+            productModel.CreatedDate = SEATimeZone.GetCurrentSEATime();
 
             await _context.SaveChangesAsync(); // Lưu thay đổi trạng thái vào cơ sở dữ liệu
             return productModel;
         }
 
+
+        /// <summary>
+        /// admin khi accept lúc này ngày admin accept từ status 0 => 1 và ngày chấp nhận sản phẩm sẽ thành ngày đó 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         public async Task<bool> AcceptProductRequest(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -89,6 +88,7 @@ namespace Repository
                 return false;
             }
             product.Status = 1;
+            product.CreatedDate = SEATimeZone.GetCurrentSEATime();
             await _context.SaveChangesAsync();
             return true;
         }
@@ -116,7 +116,7 @@ namespace Repository
             }
             product.Status = 4;
             product.IsNew = false;
-            product.CreatedDate = DateTime.Now.AddHours(7);
+            product.CreatedDate = SEATimeZone.GetCurrentSEATime();
             await _context.SaveChangesAsync();
             return true;
         }
@@ -211,7 +211,8 @@ namespace Repository
                 }
             }
             products = products.OrderByDescending(s => s.CreatedDate);
-            return await products.ToListAsync();
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
 
@@ -257,7 +258,7 @@ namespace Repository
             existingProduct.Price = productDto.Price;
             existingProduct.Description = productDto.Description;
             existingProduct.CategoryId = productDto.CategoryId;
-            existingProduct.CreatedDate = DateTime.Now.AddHours(7);
+            existingProduct.CreatedDate = SEATimeZone.GetCurrentSEATime();
             //existingProduct.Status = productDto.Status;
 
             await _context.SaveChangesAsync();
@@ -276,7 +277,7 @@ namespace Repository
             existingProduct.Price = productDto.Price;
             existingProduct.Description = productDto.Description;
             existingProduct.CategoryId = productDto.CategoryId;
-            existingProduct.CreatedDate = DateTime.Now.AddHours(7);
+            existingProduct.CreatedDate = SEATimeZone.GetCurrentSEATime();
 
             await _context.SaveChangesAsync();
             return existingProduct;

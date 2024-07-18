@@ -435,7 +435,7 @@ namespace WebAPI.Controllers
         // chỉnh sửa trạng thái khi gọi đơn hàng của mình ra và thêm DealType
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> GetMyProducts([FromQuery] int? tab, [FromQuery] bool? dealType, [FromQuery] string? sortBy)
+        public async Task<IActionResult> GetMyProducts([FromQuery] int? tab, [FromQuery] bool? dealType, [FromQuery] string? sortBy, [FromQuery] int PageNumber = 1, [FromQuery] int PageSize = 10)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -508,8 +508,8 @@ namespace WebAPI.Controllers
                     query = query.OrderByDescending(p => p.CreatedDate);
                     break;
             }
-
-            var filteredProducts = query.Select(p => new
+            var skipNumber = (PageNumber - 1) * PageSize;   
+            var filteredProducts =  query.Skip(skipNumber).Take(PageSize).Select(p => new
             {
                 p.ProductId,
                 p.ProductName,
