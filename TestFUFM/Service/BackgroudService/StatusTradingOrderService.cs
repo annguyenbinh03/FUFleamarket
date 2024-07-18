@@ -12,7 +12,7 @@ public class StatusTradingOrderService
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public async Task RunBackgroundJobAsync(int orderId, DateTime acceptTime)
+    public async Task RunBackgroundJobForTradingOrder(int orderId, DateTime acceptTime)
     {
         // Wait for 1 minute (example delay)
         await Task.Delay(TimeSpan.FromSeconds(20));
@@ -31,7 +31,7 @@ public class StatusTradingOrderService
 
                     Console.WriteLine($"Order with ID {updatedOrder.TradingOrderId} status updated to 2.");
                     Console.WriteLine($"Order ID: {updatedOrder.TradingOrderId}, User1: {updatedOrder.User1}, User2: {updatedOrder.User2}, Status: {updatedOrder.Status}");
-                    Console.WriteLine($"Background service is running at: {DateTimeOffset.Now}");
+                    Console.WriteLine($"Background service (TradingOrder) is running at: {DateTimeOffset.Now}");
                 }
             }
             catch (KeyNotFoundException)

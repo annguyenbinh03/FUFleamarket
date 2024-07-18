@@ -369,7 +369,7 @@ namespace WebAPI.Controllers
             Console.WriteLine($"Order accepted at: {acceptTime}");
 
             // Chạy background job sau khi các tác vụ chính đã hoàn tất
-            Task.Run(() => _statusTradingOrderService.RunBacgkroundJobAsync(id, acceptTime));
+            Task.Run(() => _statusTradingOrderService.RunBackgroundJobForTradingOrder(id, acceptTime));
 
             return NoContent();
         }
