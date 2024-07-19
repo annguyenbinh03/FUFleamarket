@@ -9,52 +9,41 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
-import formatPrice from "../../../utils/formatPrice";
 import { Picker } from "@react-native-picker/picker";
 import { getCategoriesAPI, getProductAPI } from "../../api/product";
+import formatPrice from "./../../../utils/formatPrice";
 
 export default function ProductListByCategory() {
   const route = useRoute();
-  const { category } = route.params;
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(category.categoryId);
   const navigation = useNavigation();
+  const { category } = route.params;
+
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(category.categoryId);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [productResponse, categoryResponse] = await Promise.all([
-          getProductAPI(),
-          getCategoriesAPI(),
-        ]);
-
-        setProducts(productResponse.data);
-        setCategories(categoryResponse.data);
-        filterProducts(productResponse.data, category.categoryId);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [category]);
+  }, []);
 
-  const filterProducts = (products, categoryId) => {
-    const filtered = products.filter(
-      (product) => product.categoryId === categoryId
-    );
-    setFilteredProducts(filtered);
+  const fetchData = async () => {
+    try {
+      const productResponse = await getProductAPI();
+      const categoryResponse = await getCategoriesAPI();
+
+      setProducts(productResponse.data);
+      setCategories(categoryResponse.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
   };
 
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategory(categoryId);
-    filterProducts(products, categoryId);
-  };
+  const filteredProducts = products.filter(
+    (product) => product.categoryId === selectedCategory
+  );
 
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6600" />;
@@ -63,11 +52,12 @@ export default function ProductListByCategory() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sản phẩm theo danh mục</Text>
+
       <View style={styles.filterContainer}>
         <Text style={styles.filterLabel}>Chọn danh mục:</Text>
         <Picker
           selectedValue={selectedCategory}
-          onValueChange={handleCategoryChange}
+          onValueChange={(value) => setSelectedCategory(value)}
           style={styles.picker}
         >
           {categories.map((cat) => (
@@ -79,6 +69,7 @@ export default function ProductListByCategory() {
           ))}
         </Picker>
       </View>
+
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.productId.toString()}
@@ -96,16 +87,12 @@ export default function ProductListByCategory() {
             <View style={styles.productInfo}>
               <Text style={styles.productName}>{item.productName}</Text>
               <Text style={styles.productPrice}>
-                {formatPrice(item.price)} VND
+                Giá: {formatPrice(item.price)} VND
               </Text>
-              <View style={styles.sellerInfo}>
-                <Image
-                  source={{ uri: item.seller.avarta }}
-                  style={styles.sellerAvatar}
-                />
-                <Text style={styles.sellerName}>{item.sellerName}</Text>
-                <Text style={styles.sellerName}>{item.createdDate}</Text>
-              </View>
+              <Text>Loại : {item.dealType ? "Trao đổi" : "Bán"}</Text>
+              <Text>Tình trạng: {item.isNew ? "Mới" : "Đã sử dụng"}</Text>
+              <Text>Người bán: {item.seller.fullName}</Text>
+              <Text>Ngày đăng: {item.createdDate}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -120,7 +107,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   title: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
   },
@@ -140,15 +127,15 @@ const styles = StyleSheet.create({
   productItem: {
     flexDirection: "row",
     marginBottom: 15,
-    borderRadius: 15,
     backgroundColor: "white",
     padding: 10,
+    borderRadius: 10,
   },
   productImage: {
     width: 100,
     height: 100,
     marginRight: 15,
-    borderRadius: 15,
+    borderRadius: 10,
   },
   productInfo: {
     flex: 1,
@@ -156,26 +143,11 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 5,
   },
   productPrice: {
     fontSize: 16,
     color: "#FF6600",
     marginTop: 5,
-  },
-  sellerInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 5,
-  },
-  sellerAvatar: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    marginRight: 5,
-  },
-  sellerName: {
-    fontSize: 12,
-    color: "#555",
-    marginRight: 10,
   },
 });

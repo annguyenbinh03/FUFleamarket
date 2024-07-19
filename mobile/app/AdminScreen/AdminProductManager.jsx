@@ -14,6 +14,7 @@ import AuthContext from "../../context/AuthProvider";
 import Empty from "./../../components/Empty";
 import formatPrice from "./../../utils/formatPrice";
 import { getAdminProductS123API } from "../api/product";
+import { useNavigation } from "expo-router";
 
 const AdminProductManager = () => {
   const [products, setProducts] = useState([]);
@@ -21,6 +22,7 @@ const AdminProductManager = () => {
   const [error, setError] = useState(null);
   const { auth } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("ĐÃ DUYỆT");
+  const navigation = useNavigation();
 
   const fetchData = async () => {
     console.log("Bắt đầu lấy dữ liệu");
@@ -95,7 +97,7 @@ const AdminProductManager = () => {
       <TouchableOpacity
         style={styles.viewButton}
         onPress={() =>
-          Alert.alert("Xem sản phẩm", `Đang xem sản phẩm ${item.productId}`)
+          navigation.navigate("Detail", { productId: item.productId })
         }
       >
         <Text style={styles.buttonText}>Xem</Text>

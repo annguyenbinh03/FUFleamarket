@@ -46,6 +46,15 @@ export default function App() {
                 }}
               />
               <Stack.Screen
+                name="Trang chủ"
+                component={TabNavigation}
+                options={{
+                  title: "Trang chủ",
+                  headerStyle: styles.header,
+                  headerTitleStyle: styles.headerTitle,
+                }}
+              />
+              <Stack.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{ headerShown: false }}

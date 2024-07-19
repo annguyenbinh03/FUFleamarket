@@ -87,7 +87,12 @@ const AdminPostManager = () => {
         <View style={styles.productDetails}>
           <Text style={styles.productName}>{item.productName}</Text>
           <Text style={styles.productStatus}>
-            {item.status === 1 ? "Mới" : "Đã qua sử dụng"}
+            {" "}
+            Tình trạng: {item.isNew === true ? "Mới" : "Đã qua sử dụng"}
+          </Text>
+          <Text style={styles.productStatus}>
+            {" "}
+            Loại: {item.dealType === true ? "Trao đổi" : "Bán"}
           </Text>
           <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
           <Text style={styles.productCategory}>{item.categoryName}</Text>

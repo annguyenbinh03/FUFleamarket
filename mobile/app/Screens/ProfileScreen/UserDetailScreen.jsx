@@ -54,6 +54,14 @@ const UserDetailScreen = () => {
           style={styles.productItem}
           onPress={handlePressToDetail}
         >
+          <View style={styles.iconContainer}>
+            <FontAwesome5
+              name={item.dealType ? "exchange-alt" : "credit-card"}
+              size={16}
+              color="#fff"
+              style={styles.icon}
+            />
+          </View>
           <Image source={{ uri: item.imageLink }} style={styles.productImage} />
           <Text style={styles.productName}>{item.productName}</Text>
           <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
@@ -286,6 +294,18 @@ const styles = StyleSheet.create({
     color: "#777",
     textAlign: "center",
     marginTop: 20,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    zIndex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 12,
+    padding: 4,
+  },
+  icon: {
+    textAlign: "center",
   },
 });
 

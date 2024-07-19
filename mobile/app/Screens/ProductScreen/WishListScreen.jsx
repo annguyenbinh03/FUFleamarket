@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -12,39 +12,29 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../../../utils/formatPrice";
 import { formatDate } from "../../../utils/formatDate";
-import Empty from "../../../components/Empty";
+import AuthContext from "../../../context/AuthProvider";
 
-const WishListScreen = ({ route }) => {
-  const { userId } = route.params;
+const WishListScreen = () => {
   const navigation = useNavigation();
-  console.log("Received User ID:", userId);
-
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { auth } = useContext(AuthContext);
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
-  const fetchWishList = useCallback(async () => {
+  const fetchWishlist = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.146.25:7057/api/Wishlist/user/${userId}`
+        `https://fufleamarketapi.azurewebsites.net/api/Wishlist/user/${auth.userId}`
       );
-      console.log("Check API Response:", response.data);
       setWishlistItems(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Check Error fetching wishlist:", error);
-      setError(true);
+      console.error("Error fetching wishlist:", error);
       setLoading(false);
     }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchWishList();
-  }, [fetchWishList]);
-
-  useEffect(() => {
-    console.log("Check Wishlist Items:", wishlistItems);
-  }, [wishlistItems]);
+  };
 
   if (loading) {
     return (
@@ -54,13 +44,9 @@ const WishListScreen = ({ route }) => {
     );
   }
 
-  if (error || wishlistItems.length === 0) {
-    return <Empty />;
-  }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Wish List</Text>
+      <Text style={styles.title}>Danh sách yêu thích</Text>
       <FlatList
         data={wishlistItems}
         keyExtractor={(item) => item.productId.toString()}
@@ -72,7 +58,7 @@ const WishListScreen = ({ route }) => {
             }
           >
             <Image
-              source={{ uri: item.productImages }}
+              source={{ uri: item.imageLink }}
               style={styles.productImage}
             />
             <View style={styles.productInfo}>
@@ -80,9 +66,15 @@ const WishListScreen = ({ route }) => {
               <Text style={styles.productPrice}>
                 {formatPrice(item.price)} VND
               </Text>
-              <View style={styles.sellerInfo}>
+              <View style={styles.additionalInfo}>
                 <Text style={styles.createdDate}>
-                  {formatDate(item.createdDate)}
+                  Ngày tạo: {formatDate(item.createdDate)}
+                </Text>
+                <Text style={styles.dealType}>
+                  Loại giao dịch: {item.dealType ? "Bán" : "Trao đổi"}
+                </Text>
+                <Text style={styles.isNew}>
+                  Tình trạng: {item.isNew ? "Mới" : "Đã sử dụng"}
                 </Text>
               </View>
             </View>
@@ -97,7 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    gap: 10,
   },
   loadingContainer: {
     justifyContent: "center",
@@ -113,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 15,
     backgroundColor: "white",
-    gap: 10,
+    padding: 10,
   },
   productInfo: {
     flex: 1,
@@ -123,33 +114,29 @@ const styles = StyleSheet.create({
     height: 100,
     marginRight: 15,
     borderRadius: 15,
-    shadowColor: "black",
   },
   productName: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   productPrice: {
-    fontSize: 15,
+    fontSize: 16,
     color: "#FF6600",
-  },
-  sellerInfo: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 5,
   },
-  sellerAvatar: {
-    width: 15,
-    height: 15,
-    borderRadius: 15,
-    marginRight: 5,
-  },
-  sellerName: {
-    fontSize: 10,
-    color: "#555",
+  additionalInfo: {
+    marginTop: 5,
   },
   createdDate: {
-    fontSize: 10,
+    fontSize: 12,
+    color: "#555",
+  },
+  dealType: {
+    fontSize: 12,
+    color: "#555",
+  },
+  isNew: {
+    fontSize: 12,
     color: "#555",
   },
 });

@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import WishListAddButton from "../../../components/WishListAddButton";
@@ -29,12 +30,14 @@ const Detail = () => {
   const { auth } = useContext(AuthContext);
 
   console.log("Auth: ", auth);
+  console.log("Role: ", auth.roleId);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await getProductByIdAPI(productId);
         console.log("fetchProduct: ", response.data);
+        console.log("fetch Seller info: ", response.data.sellerId);
         setProduct(response.data);
         setLoading(false);
       } catch (error) {
@@ -67,7 +70,7 @@ const Detail = () => {
         </Text>
         <View style={styles.infoContainer}>
           <InfoItem
-            icon="tag"
+            icon="hand-paper"
             text={product.product.isNew ? "Mới" : "Đã qua sử dụng"}
           />
           <InfoItem
@@ -77,6 +80,10 @@ const Detail = () => {
           <InfoItem
             icon="list"
             text={`Danh mục: ${product.product.categoryName}`}
+          />
+          <InfoItem
+            icon="tag"
+            text={`Loại: ${product.product.dealType ? "Trao đổi" : "Bán"}`}
           />
           <InfoItem
             icon="calendar-alt"
@@ -89,24 +96,33 @@ const Detail = () => {
             {product.product.description}
           </Text>
         </View>
-        <View style={styles.sellerInfo}>
-          <Text style={styles.sellerTitle}>Thông tin người bán</Text>
-          <View style={styles.sellerProfile}>
-            <Image
-              source={{ uri: product.product.seller.avarta }}
-              style={styles.sellerAvatar}
-            />
-            <View style={styles.sellerDetails}>
-              <Text style={styles.sellerName}>
-                {product.product.seller.fullName}
-              </Text>
-              <Text style={styles.sellerAddress}>
-                {product.address || "Chưa cung cấp địa chỉ"}
-              </Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("UserDetailScreen", {
+              userId: product.sellerId,
+            })
+          }
+        >
+          <View style={styles.sellerInfo}>
+            <Text style={styles.sellerTitle}>Thông tin người bán</Text>
+            <View style={styles.sellerProfile}>
+              <Image
+                source={{ uri: product.product.seller.avarta }}
+                style={styles.sellerAvatar}
+              />
+              <View style={styles.sellerDetails}>
+                <Text style={styles.sellerName}>
+                  {product.product.seller.fullName}
+                </Text>
+                <Text style={styles.sellerAddress}>
+                  {product.address || "Chưa cung cấp địa chỉ"}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        {auth?.userId !== product.sellerId && auth.role != 2 && (
+        </TouchableOpacity>
+
+        {auth?.userId !== product.sellerId && auth.roleId !== 2 && (
           <View style={styles.actionButtonsContainer}>
             {product.product.dealType ? (
               <OrderTradeButton product={product} navigation={navigation} />

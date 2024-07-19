@@ -28,6 +28,7 @@ const PostProduct = () => {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState(1);
   const [isNew, setIsNew] = useState(true);
+  const [dealType, setDealType] = useState(true);
   const [imageUri, setImageUri] = useState(null);
   const [storedQuantity, setStoredQuantity] = useState("");
 
@@ -84,6 +85,15 @@ const PostProduct = () => {
     console.log("Giá sau khi định dạng:", numericValue);
   };
 
+  const handleStoredQuantityChange = (text) => {
+    const numericValue = text.replace(/[^0-9]/g, "");
+    if (parseInt(numericValue) > 0 || numericValue === "") {
+      setStoredQuantity(numericValue);
+    } else {
+      Alert.alert("Lỗi", "Số lượng phải lớn hơn 0");
+    }
+  };
+
   const handlePostProduct = async () => {
     console.log("Bắt đầu quá trình đăng sản phẩm");
 
@@ -93,6 +103,7 @@ const PostProduct = () => {
     console.log("Mô tả:", description);
     console.log("Danh mục ID:", categoryId);
     console.log("Là sản phẩm mới:", isNew);
+    console.log("Loại giao dịch:", dealType);
     console.log("URI hình ảnh:", imageUri);
     console.log("Số lượng:", storedQuantity);
 
@@ -102,12 +113,13 @@ const PostProduct = () => {
       !description ||
       !categoryId ||
       !imageUri ||
-      !storedQuantity
+      !storedQuantity ||
+      parseInt(storedQuantity) <= 0
     ) {
-      console.log("Thông tin sản phẩm không đầy đủ");
+      console.log("Thông tin sản phẩm không đầy đủ hoặc không hợp lệ");
       Alert.alert(
         "Thông báo",
-        "Vui lòng điền đầy đủ thông tin sản phẩm và chọn ảnh."
+        "Vui lòng điền đầy đủ thông tin sản phẩm, chọn ảnh và đảm bảo số lượng lớn hơn 0."
       );
       return;
     }
@@ -126,40 +138,37 @@ const PostProduct = () => {
       description,
       categoryId,
       isNew,
-      imageLink: imageUrl,
+      ImageLink: imageUrl,
       storedQuantity: parseInt(storedQuantity),
+      dealType,
+      status: 1,
     };
 
-    console.log("Dữ liệu sản phẩm chuẩn bị gửi:", productData);
-
     try {
-      const response = await createProductAPI(productData, auth.token);
-      console.log("Phản hồi từ API:", response);
-
-      if (response.status === 200 || response.status === 201) {
-        console.log("Đăng sản phẩm thành công");
-        Alert.alert(
-          "Thành công",
-          "Sản phẩm đã được đăng và đang chờ admin duyệt."
-        );
-        setProductName("");
-        setPrice("");
-        setDescription("");
-        setCategoryId(1);
-        setIsNew(true);
-        setImageUri(null);
-        setStoredQuantity("");
-        navigation.goBack();
-      }
+      const response = await createProductAPI(productData);
+      console.log("Sản phẩm đã được đăng thành công:", response.data);
+      Alert.alert("Thành công", "Sản phẩm đã được đăng thành công");
+      navigation.goBack();
     } catch (error) {
-      console.error("Lỗi khi đăng sản phẩm:", error);
-      if (error.response) {
-        console.error("Dữ liệu phản hồi lỗi:", error.response.data);
-      }
-      Alert.alert("Lỗi", "Không thể đăng sản phẩm. Vui lòng thử lại sau.");
-      Alert.alert("Lỗi", `${error.response?.data || "Không xác định"}`);
+      console.error("Lỗi khi đăng sản phẩm:", error.response.data);
+      Alert.alert("Lỗi", "Không thể đăng sản phẩm. Vui lòng thử lại.");
     }
   };
+
+  const RadioButton = ({ label, selected, onPress }) => (
+    <TouchableOpacity
+      style={[styles.radioButton, selected && styles.radioButtonSelected]}
+      onPress={onPress}
+    >
+      <Text
+        style={
+          selected ? styles.radioButtonTextSelected : styles.radioButtonText
+        }
+      >
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -208,7 +217,7 @@ const PostProduct = () => {
             style={styles.input}
             placeholder="Số lượng"
             value={storedQuantity}
-            onChangeText={setStoredQuantity}
+            onChangeText={handleStoredQuantityChange}
             keyboardType="numeric"
           />
           <Picker
@@ -225,34 +234,28 @@ const PostProduct = () => {
             <Picker.Item label="Giải trí, thể thao, sở thích" value={7} />
           </Picker>
           <View style={styles.radioButtonContainer}>
-            <TouchableOpacity
-              style={[styles.radioButton, isNew && styles.radioButtonSelected]}
+            <RadioButton
+              label="Mới"
+              selected={isNew}
               onPress={() => setIsNew(true)}
-            >
-              <Text
-                style={
-                  isNew
-                    ? styles.radioButtonTextSelected
-                    : styles.radioButtonText
-                }
-              >
-                Mới
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.radioButton, !isNew && styles.radioButtonSelected]}
+            />
+            <RadioButton
+              label="Đã sử dụng"
+              selected={!isNew}
               onPress={() => setIsNew(false)}
-            >
-              <Text
-                style={
-                  !isNew
-                    ? styles.radioButtonTextSelected
-                    : styles.radioButtonText
-                }
-              >
-                Đã sử dụng
-              </Text>
-            </TouchableOpacity>
+            />
+          </View>
+          <View style={styles.radioButtonContainer}>
+            <RadioButton
+              label="Trao đổi"
+              selected={dealType}
+              onPress={() => setDealType(true)}
+            />
+            <RadioButton
+              label="Bán"
+              selected={!dealType}
+              onPress={() => setDealType(false)}
+            />
           </View>
           <TextInput
             style={[styles.input, styles.descriptionInput]}
