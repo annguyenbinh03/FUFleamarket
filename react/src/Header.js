@@ -158,6 +158,22 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center">
+                  <Link
+                    className="dropdown-item"
+                    to={`/settings`}
+                  >
+                    <img
+                      className="ps-1 me-2"
+                      width="25px"
+                      src={`../assets/img/icon/user-setting.png`}
+                      alt="sofaIcon"
+                    />
+                    Cài đặt người dùng
+                  </Link>
+                </div>
+              </li>
+              <li>
+                <div className="d-flex justify-content-between align-items-center">
                   <Link className="dropdown-item" href="#">
                     <img
                       className="ps-1 me-2"

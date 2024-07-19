@@ -63,7 +63,10 @@ function BuyOrder() {
     if (isoString) {
       const index = isoString.indexOf("T");
       if (index !== -1) {
-        return isoString.slice(0, index);
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index+1, index+6);
+        return string;
       }
     }
     return isoString;
@@ -179,7 +182,7 @@ function BuyOrder() {
                 </div>
               </div>
             </div>
-            {orders?.length !== 0 ? (
+            {orders && orders?.length !== 0 ? (
               <div>
                 {orders?.map((order) => (
                   <div
@@ -231,7 +234,7 @@ function BuyOrder() {
                             {order.product?.productName}
                           </Link>
                           <div>
-                            Giá mong muốn:{" "}
+                            Giá người mua mong muốn:{" "}
                             <span className="price">
                               {formatPrice(order.order?.price)} đ
                             </span>
@@ -293,7 +296,7 @@ function BuyOrder() {
               </div>
             ) : (
               <div className="not-found-text fs-3">
-                Bạn vẫn chưa có đơn mua nào
+                Bạn vẫn chưa tạo đơn mua nào
               </div>
             )}
           </div>

@@ -21,7 +21,8 @@ body {
   top: 0;
   left: 0;
   z-index: 999999;
-  background: #000;
+  background: #ffffff;
+  opacity: 0.8;
 }
 
 .loader {
@@ -757,7 +758,7 @@ body {
 }
 
 .upload-product .input-group-text {
-  min-width: 170px;
+  min-width: 178px;
 }
 
 /*---------------------
@@ -1175,6 +1176,14 @@ body {
   text-overflow: ellipsis;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+
+/*---------------------
+  settings
+-----------------------*/
+.settings .input-group-text{
+  min-width: 120px;
 }
 
 

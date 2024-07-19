@@ -113,7 +113,10 @@ function BuyOrderRequest() {
     if (isoString) {
       const index = isoString.indexOf("T");
       if (index !== -1) {
-        return isoString.slice(0, index);
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index+1, index+6);
+        return string;
       }
     }
     return isoString;

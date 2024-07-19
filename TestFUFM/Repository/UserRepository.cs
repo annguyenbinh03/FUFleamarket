@@ -83,12 +83,17 @@ namespace Repository
             {
                 return null;
             }
-            
-            existingUser.Password = userDto.Password;
+
+            if (userDto.Password != null)
+            {
+                existingUser.Password = userDto.Password;
+            } 
             existingUser.FullName = userDto.FullName;
             existingUser.PhoneNumber = userDto.PhoneNumber;
             existingUser.Introduction = userDto.Introduction;                        
             existingUser.Avarta = userDto.Avarta;
+            existingUser.Address = userDto.Address;
+            existingUser.AcceptedTradingPercent = userDto.AcceptedTradingPercent;
 
             await _dbcontext.SaveChangesAsync();
             return existingUser;

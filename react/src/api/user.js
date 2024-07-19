@@ -5,7 +5,8 @@ const END_POINT = {
     CHATTERS : "user/getlistsellerforchat",
     SHOP_PROFILE : "product/ShopProfile",
     ADMIN_GET_ALL_PROFILE : "user/AllProfile(Admin)",
-    EDIT_USER_PROFILE: "user/UpdateProfileOfUser"
+    EDIT_USER_PROFILE: "user/UpdateProfileOfUser",
+    USER_SETTINGS: "user/GetUserSettings"
 }
 
 export const getAllUserAPI = () => {
@@ -45,5 +46,14 @@ export const getUserProfileAPI = (token) => {
         }
       };
     return axiosClient.get(`${END_POINT.USERS}/Profile`, config);
+}
+
+export const getUserSettings = (token) => {
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+  return axiosClient.get(`${END_POINT.USER_SETTINGS}`, config);
 }
 

@@ -16,8 +16,8 @@ function CreateProduct() {
 
   const [countProductAndLimit, setCountProductAndLimit] = useState();
   const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState("");
-  const [storedQuantity, setStoredQuantity] = useState("");
+  const [price, setPrice] = useState(1);
+  const [storedQuantity, setStoredQuantity] = useState(1);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("1");
   const [dealType, setDealType] = useState(false);
@@ -29,19 +29,11 @@ function CreateProduct() {
     try {
       var response = await getCountProductAndLimit(auth.accessToken);
       setCountProductAndLimit(response);
-      if(response.currentProductQuantity === response.productQuantityLimit){
-        toast.error(
+      if (response.currentProductQuantity === response.productQuantityLimit) {
+        showErrorToast(
           "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
-          {
-            position: "bottom-right",
-            autoClose: 10000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
+          10000
+        );
       }
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -52,25 +44,49 @@ function CreateProduct() {
     fetchCountProductInfo();
   }, []);
 
+  const checkValidation = () => {
+    var check = true;
+    if (productName !== null) {
+      if (productName.length < 5 || productName.length > 100) {
+        showErrorToast("Tên sản phẩm phải lớn hơn 5 và bé hơn 100 kí tự");
+        check = false;
+      }
+    } else {
+      showErrorToast("Tên sản phẩm không được trống");
+      check = false;
+    }
+    if (price === null || price < 1) {
+      showErrorToast("Giá sản phẩm phải lớn hơn 0");
+      check = false;
+    }
+    if (storedQuantity === null || storedQuantity < 1) {
+      showErrorToast("Số lượng sản phẩm trong kho phải lớn hơn 0");
+      check = false;
+    }
+    if (description && description.length > 3000) {
+      showErrorToast(
+        `Miêu tả sản phẩm không được quá 3000 kí tự(${description.length})`
+      );
+      check = false;
+    }
+    return check;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(countProductAndLimit.currentProductQuantity === countProductAndLimit.productQuantityLimit){
-      toast.error(
+    if (
+      countProductAndLimit.currentProductQuantity ===
+      countProductAndLimit.productQuantityLimit
+    ) {
+      showErrorToast(
         "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
-        {
-          position: "bottom-right",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-        return;
+        10000
+      );
+    }
+    if (!checkValidation()) {
+      return; //stop
     }
     var urlImg = await handleUploadImagesClick();
-    console.log(urlImg);
     if (urlImg !== "") {
       var imageLink = urlImg;
       const product = {
@@ -85,44 +101,40 @@ function CreateProduct() {
       };
       const response = await createProductAPI(product, auth.accessToken);
       if (response) {
-        toast.info("Tạo sản phẩm hoàn tất, đang chờ xét duyệt!", {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-        navigate("/my-posts", { replace: true });
+        showInforToast("Tạo sản phẩm hoàn tất, đang chờ xét duyệt!", 5000);
+        navigate("my-products", { replace: true });
       } else {
-        toast.error(
-          "Số lượng sản phẩm bạn được đăng đã đạt mức tối đa, hãy mua các gói bán hàng để tiếp tục đăng tải sản phẩm!",
-          {
-            position: "bottom-right",
-            autoClose: 10000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          }
-        );
+        showErrorToast("Xảy ra lỗi trong quá trình tạo sản phẩm!", 7000);
       }
     } else {
-      toast.error("Đăng sản phẩm thất bại, không tìm thấy ảnh!", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      showErrorToast("Đăng sản phẩm thất bại, không tìm thấy ảnh!", 5000);
     }
+  };
+
+  const showErrorToast = (message, closeTime) => {
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: closeTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const showInforToast = (message, closeTime) => {
+    toast.info(message, {
+      position: "bottom-right",
+      autoClose: closeTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const handleUploadImagesClick = async () => {
@@ -141,14 +153,26 @@ function CreateProduct() {
     inputRef.current.click();
   };
   const handleImageChange = (event) => {
-    if (event.target.files[0]) {
-      setImg(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      const fileType = file.type;
+      const validImagesType = ["image/png", "image/jpeg"];
+      const limitFileSize = 10 * 1024 * 1024;
+      if (validImagesType.includes(fileType)) {
+        if (file.size < limitFileSize) {
+          setImg(file);
+        } else {
+          showErrorToast("Dung lượng ảnh phải bé hơn 10Mb.");
+        }
+      } else {
+        showErrorToast("Chỉ có thể đăng ảnh thuộc dạng jpg/png.");
+      }
     }
   };
 
   const formatPrice = (value) => {
-    if(value){
-      return value.toLocaleString('vi-VN');
+    if (value) {
+      return value.toLocaleString("vi-VN");
     }
   };
 
@@ -160,10 +184,12 @@ function CreateProduct() {
           <div className="col-lg-4 com-md-4">
             <div className="d-flex flex-column px-3">
               <h5>Hình ảnh về sản phẩm </h5>
-              <span>
-                Xem thêm về &nbsp;
-                <a href="?">Quy định đăng tin của FUFM</a>
-              </span>
+              <p className="fst-italic text-secondary pb-0 mb-0">
+                Chỉ đăng ảnh thuộc dạng jpg/png.
+              </p>
+              <p className="fst-italic text-secondary pb-0 mb-0">
+                Dung lượng ảnh phải bé hơn 10Mb.
+              </p>
               <div className="file-uploader mt-4 ">
                 <div className="uploader-header">
                   <h2 className="uploader-title">Tải ảnh lên</h2>
@@ -192,7 +218,7 @@ function CreateProduct() {
                         onChange={(e) => handleImageChange(e)}
                         style={{ display: "none" }}
                         alt="click here to upload image"
-                        accept="image/*"
+                        accept=".jpg, .png"
                       />
                     </div>
                   </div>
@@ -238,10 +264,8 @@ function CreateProduct() {
                   </div>
                 </div>
                 <div className="col-md">
-                <div className="input-group mb-3">
-                    <span className="input-group-text">
-                      Loại giao dịch{" "}
-                    </span>
+                  <div className="input-group mb-3">
+                    <span className="input-group-text">Loại giao dịch </span>
                     <select
                       required
                       value={dealType}
@@ -256,7 +280,7 @@ function CreateProduct() {
               </div>
 
               <div className="input-group mb-3">
-                <span className="input-group-text">Tên sản phẩm</span>
+                <span className="input-group-text">Tên sản phẩm *</span>
                 <input
                   required
                   type="text"
@@ -267,7 +291,7 @@ function CreateProduct() {
                 />
               </div>
               <div className="input-group mb-3">
-                <span className="input-group-text">Giá bán</span>
+                <span className="input-group-text">Giá mong muốn *</span>
                 <input
                   required
                   type="number"
@@ -278,7 +302,7 @@ function CreateProduct() {
                 />
               </div>
               <div className="input-group mb-3">
-                <span className="input-group-text">Số lượng sản phẩm</span>
+                <span className="input-group-text">Số lượng sản phẩm *</span>
                 <input
                   required
                   type="number"
@@ -289,25 +313,24 @@ function CreateProduct() {
                   onChange={(e) => setStoredQuantity(e.target.value)}
                 />
               </div>
+
               <div className="input-group mb-3">
                 <span className="input-group-text">Mô tả chi tiết</span>
                 <textarea
-                  required
                   className="form-control text_mota"
-                  placeholder="- Xuất xứ, tình trạng chiếc điện thoại
-- Thời gian sử dụng
-- Bảo hành nếu có
-- Sửa chữa, nâng cấp, phụ kiện đi kèm
-- Chấp nhận thanh toán/ vận chuyển qua Chợ Tốt
-- Chính sách bảo hành, bảo trì, đổi trả hàng hóa/sản phẩm
-- Địa chỉ giao nhận, đổi trả hàng hóa/sản phẩm"
+                  placeholder=" - Xuất xứ, tình trạng chiếc điện thoại
+                - Thời gian sử dụng
+                - Bảo hành nếu có
+                - Sửa chữa, nâng cấp, phụ kiện đi kèm
+                - Chấp nhận thanh toán/ vận chuyển qua Chợ Tốt
+                - Chính sách bảo hành, bảo trì, đổi trả hàng hóa/sản phẩm
+                - Địa chỉ giao nhận, đổi trả hàng hóa/sản phẩm"
                   rows="10"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
-              <div className="container d-flex justify-content-between px-5 pt-3">
-                <button className="btn btn-warning">Xem trước</button>
+              <div className="container d-flex justify-content-end px-5 pt-3">
                 <button type="submit" className="btn btn-warning">
                   Đăng tin
                 </button>

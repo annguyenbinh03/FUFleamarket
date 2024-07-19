@@ -9,7 +9,6 @@ import { imageDb } from "../../FirebaseImage/Config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import { toast } from "react-toastify";
-import "react-toastify/ReactToastify.css";
 
 function ShopProfile() {
   const { userId } = useParams();
@@ -49,10 +48,12 @@ function ShopProfile() {
 
   function removeTimeFromISOString(isoString) {
     if (isoString) {
-      var index = -1;
-      index = isoString.indexOf("T");
+      const index = isoString.indexOf("T");
       if (index !== -1) {
-        return isoString.slice(0, index);
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index + 1, index + 6);
+        return string;
       }
     }
     return isoString;
@@ -231,7 +232,7 @@ function ShopProfile() {
             <div className="text-center text-danger fs-5 fw-bold border-bottom border-danger bg-opacity-10  border-3 mb-2">
               Đang bán
             </div>
-            <div className="d-flex">
+            <div className="row">
               {products?.map((product) => (
                 <div
                   className="col-lg-3 col-md-4 col-sm-6"
@@ -283,7 +284,7 @@ function ShopProfile() {
                             </div>
                             <div>
                               <span className="ms-1">
-                                {product.createdDate}
+                                {product.createDate}
                               </span>
                             </div>
                           </div>

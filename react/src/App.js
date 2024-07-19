@@ -27,6 +27,7 @@ const BuyOrderRequest = lazy(() => import("./pages/userPages/BuyOrderRequest"));
 const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
 const MySellingPackage = lazy(() => import("./pages/userPages/MySellingPackage"));
 const TradingOrderRequest = lazy(()=> import("./pages/userPages/TradingOrderRequest") );
+const Setting = lazy(()=> import("./pages/userPages/Setting"));
 
 const AdminDoashboard = lazy(()=>import("./pages/adminPages/AdminDashboard") );
 const AdminProduct = lazy(() => import("./pages/adminPages/AdminProduct"));
@@ -73,6 +74,7 @@ function App() {
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />
               <Route path="/my-selling-package" element={<MySellingPackage/>} />
+              <Route path="/settings" element={<Setting />} />           
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin]} />} >
               <Route path="/admin" element={<AdminDoashboard />} />
