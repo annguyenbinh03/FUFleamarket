@@ -1,6 +1,6 @@
 ﻿GO
 IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'FUFleaMarket')
-   DROP DATABASE [FUFleaMarket]
+DROP DATABASE [FUFleaMarket]
 GO
 CREATE DATABASE [FUFleaMarket]
 GO
@@ -153,7 +153,7 @@ CREATE TABLE [dbo].[TradingOrderDetail](
 )
 
 CREATE TABLE [dbo].[Contact](
-	[contactId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[contactId] INT IDENTITY(1,1) PRIMARY KEY,
 	[user1] INT NOT NULL, 
 	[user2] INT NOT NULL,
 	[isActive] BIT NOT NULL,
@@ -161,7 +161,16 @@ CREATE TABLE [dbo].[Contact](
 	CONSTRAINT FK_Contact_User2 FOREIGN KEY ([user2]) REFERENCES [dbo].[User]([userId])
 )
 
-
+CREATE TABLE [dbo].[Report](
+  [reportId] INT IDENTITY(1,1) PRIMARY KEY,
+  [reporterId] INT,
+  [reportedUserId] INT,
+  [reason] VARCHAR(1000),
+  [isProcessed] BIT,
+  [createdDate] DATETIME,
+  CONSTRAINT FK_Report_User_ReporterId FOREIGN KEY ([reporterId]) REFERENCES [dbo].[User]([userId]),
+  CONSTRAINT FK_Report_User_ReportedUserId FOREIGN KEY ([reportedUserId]) REFERENCES [dbo].[User]([userId])
+);
 
 GO	
 INSERT INTO [dbo].[User] ([password], [fullName], [email], [phoneNumber], [introduction], [roleId], [isDeleted], [avarta], [createdDate], [sub])
