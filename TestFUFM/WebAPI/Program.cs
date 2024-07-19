@@ -131,13 +131,10 @@ public class Program
 
         // Đăng ký các repository
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-        builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
         builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<IAddressRepository, AddressRepository>();
         builder.Services.AddScoped<IPromotionOrderRepository, PromotionOrderRepository>();
         builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
-        builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<IProductReposity, ProductReposity>();
         builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();

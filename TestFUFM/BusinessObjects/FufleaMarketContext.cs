@@ -16,23 +16,17 @@ public partial class FufleaMarketContext : DbContext
     {
     }
 
-    public virtual DbSet<Address> Addresses { get; set; }
-
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<ChatRoom> ChatRooms { get; set; }
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
-    public virtual DbSet<Feedback> Feedbacks { get; set; }
-
     public virtual DbSet<Message> Messages { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
-
-    public virtual DbSet<ProductImage> ProductImages { get; set; }
 
     public virtual DbSet<Promotion> Promotions { get; set; }
 
@@ -48,27 +42,18 @@ public partial class FufleaMarketContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-JSUUR41\\SQLEXPRESS;Initial Catalog=FUFleaMarket;User ID=SA;Password=12345;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-MQ0K2RJ\\SQLEXPRESS;Initial Catalog=FUFleaMarket;User ID=SA;Password=12345;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Address>(entity =>
-        {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__26A111AD3FACD550");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Addresses)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Address_User");
-        });
-
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D8C67A24E0");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D8B83E8F7D");
         });
 
         modelBuilder.Entity<ChatRoom>(entity =>
         {
-            entity.HasKey(e => e.ChatRoomId).HasName("PK__ChatRoom__CB58B492C58F59E4");
+            entity.HasKey(e => e.ChatRoomId).HasName("PK__ChatRoom__CB58B492694111E3");
 
             entity.HasOne(d => d.User1Navigation).WithMany(p => p.ChatRoomUser1Navigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -81,7 +66,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Contact>(entity =>
         {
-            entity.HasKey(e => e.ContactId).HasName("PK__Contact__7121FD357CC57B94");
+            entity.HasKey(e => e.ContactId).HasName("PK__Contact__7121FD351EA5B405");
 
             entity.HasOne(d => d.User1Navigation).WithMany(p => p.ContactUser1Navigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -92,18 +77,9 @@ public partial class FufleaMarketContext : DbContext
                 .HasConstraintName("FK_Contact_User2");
         });
 
-        modelBuilder.Entity<Feedback>(entity =>
-        {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__Feedback__2613FD247E4D3888");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.Feedbacks)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Feedback_Order");
-        });
-
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B9934ACDE6F9");
+            entity.HasKey(e => e.MessageId).HasName("PK__Message__4808B99370442C5A");
 
             entity.HasOne(d => d.ChatRoom).WithMany(p => p.Messages)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -112,7 +88,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__0809335DECBAD4E4");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__0809335D4C8A70D2");
 
             entity.HasOne(d => d.Buyer).WithMany(p => p.OrderBuyers)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -129,7 +105,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16ABF4E13BA");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16AFBB9FACA");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -140,23 +116,14 @@ public partial class FufleaMarketContext : DbContext
                 .HasConstraintName("FK_Product_User");
         });
 
-        modelBuilder.Entity<ProductImage>(entity =>
-        {
-            entity.HasKey(e => new { e.ProductId, e.ImageName }).HasName("FK_ProductImage_PrimaryKey");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.ProductImages)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ProductImage_Product");
-        });
-
         modelBuilder.Entity<Promotion>(entity =>
         {
-            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__99EB696E7F25603C");
+            entity.HasKey(e => e.PromotionId).HasName("PK__Promotio__99EB696EC120866F");
         });
 
         modelBuilder.Entity<PromotionOrder>(entity =>
         {
-            entity.HasKey(e => e.PromoOrderId).HasName("PK__Promotio__BCD805E502B96D50");
+            entity.HasKey(e => e.PromoOrderId).HasName("PK__Promotio__BCD805E5DB569DA1");
 
             entity.HasOne(d => d.Promotion).WithMany(p => p.PromotionOrders)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -169,7 +136,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<PromotionTransaction>(entity =>
         {
-            entity.HasKey(e => e.PromoTransactionId).HasName("PK__Promotio__76BA6198E2097519");
+            entity.HasKey(e => e.PromoTransactionId).HasName("PK__Promotio__76BA6198160FD54C");
 
             entity.HasOne(d => d.PromoOrder).WithMany(p => p.PromotionTransactions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -178,7 +145,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<TradingOrder>(entity =>
         {
-            entity.HasKey(e => e.TradingOrderId).HasName("PK__TradingO__EF3C7C73BAFF5805");
+            entity.HasKey(e => e.TradingOrderId).HasName("PK__TradingO__EF3C7C73369BD48A");
 
             entity.HasOne(d => d.User1Navigation).WithMany(p => p.TradingOrderUser1Navigations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -191,7 +158,7 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<TradingOrderDetail>(entity =>
         {
-            entity.HasKey(e => e.TradingOrderDetailId).HasName("PK__TradingO__9B566A810701B041");
+            entity.HasKey(e => e.TradingOrderDetailId).HasName("PK__TradingO__9B566A8114A35634");
 
             entity.HasOne(d => d.TradingOrder).WithMany(p => p.TradingOrderDetails)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -200,10 +167,13 @@ public partial class FufleaMarketContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CFFDF859BC0");
+            entity.HasKey(e => e.UserId).HasName("PK__User__CB9A1CFFD7DC8DB9");
 
+            entity.Property(e => e.AcceptedTradingPercent).HasDefaultValue(10.0);
             entity.Property(e => e.BuyRating).HasDefaultValue(0.0);
+            entity.Property(e => e.BuyTimes).HasDefaultValue(0);
             entity.Property(e => e.SellRating).HasDefaultValue(0.0);
+            entity.Property(e => e.SellTimes).HasDefaultValue(0);
 
             entity.HasMany(d => d.ProductsNavigation).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(

@@ -37,7 +37,7 @@ namespace Repository
             var productModel = await _context.Products
                             .Include(p => p.Seller)
                             .Include(p => p.Category)
-                            .Include(p => p.ProductImages) // Bao gồm các hình ảnh sản phẩm
+                            
                             .FirstOrDefaultAsync(x => x.ProductId == id);
             if (productModel == null)
             {
@@ -58,7 +58,7 @@ namespace Repository
             var productModel = await _context.Products
                             .Include(p => p.Seller)
                             .Include(p => p.Category)
-                            .Include(p => p.ProductImages) // Bao gồm các hình ảnh sản phẩm
+                            
                             .FirstOrDefaultAsync(x => x.ProductId == id);
             if (productModel == null)
             {
@@ -125,7 +125,7 @@ namespace Repository
         public async Task<List<Product>> AdminGetAllAsync(QueryObject query)
         {
             var products = _context.Products
-                .Include(p => p.ProductImages)
+                
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
                 .AsQueryable();
@@ -174,7 +174,7 @@ namespace Repository
         public async Task<List<Product>> GetALLAsync(QueryObject query)
         {
             var products = _context.Products
-                .Include(p => p.ProductImages)
+                
                 .Include(p => p.Category)
                 .Where(p => p.Status == 1)
                 .Where(p => p.StoredQuantity > 0)
@@ -221,7 +221,7 @@ namespace Repository
         public async Task<List<Product>> GetProductsByDealTypeAsync(bool dealType)
         {
             var products = _context.Products
-                .Include(p => p.ProductImages)
+                
                 .Include(p => p.Category)
                 .Include(p => p.Seller)
                 .Where(p => p.DealType == dealType && (p.Status == 1))
@@ -234,7 +234,7 @@ namespace Repository
         public async Task<Product?> GetByIdProductAsync(int id)
         {
             return await _context.Products
-                .Include(p => p.ProductImages)
+                
                 .Include(p => p.Category)
                 .Include(p => p.Seller) // Include Seller
                 .OrderByDescending(p => p.CreatedDate)
@@ -298,7 +298,7 @@ namespace Repository
             return await _context.Products
                 .Include(p => p.Seller) // Bao gồm thông tin người bán
                 .Include(p => p.Category)
-                .Include(p => p.ProductImages) // Bao gồm thông tin hình ảnh sản phẩm
+                
                 .Where(p => p.Status == status)
                 .ToListAsync();
         }
@@ -306,7 +306,7 @@ namespace Repository
         public async Task<Product?> GetProductByIdAsync(int productId)  // Updated method implementation
         {
             return await _context.Products
-               .Include(p => p.ProductImages)
+               
                .Include(p => p.Category)
                .Include(p => p.Seller)
                .FirstOrDefaultAsync(p => p.ProductId == productId);
@@ -319,20 +319,7 @@ namespace Repository
                 .ToListAsync();
         }
 
-        public async Task<string?> getSellerAddress(int sellerId)
-        {
-            User user = await _context.Users.Include(x => x.Addresses).FirstOrDefaultAsync(x => x.UserId == sellerId);
-            Address address = user?.Addresses.FirstOrDefault();
-            if (address != null)
-            {
-                return address.SpecificAddress;
-            }
-            else
-            {
-                return "";
-            }
-
-        }
+        
 
         public async Task<List<Product>?> GetProductByUserIdAsync(int userId)
         {

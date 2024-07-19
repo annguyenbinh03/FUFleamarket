@@ -52,7 +52,7 @@ namespace Repository
         }
         public async Task<List<User>> GetAllUserAsync()
         {
-          return await _dbcontext.Users.Include(add => add.Addresses).ToListAsync();
+          return await _dbcontext.Users.ToListAsync();
         
         }
         public async Task<List<User>> GetAllUserForChatAsync()
@@ -72,9 +72,7 @@ namespace Repository
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            return await _dbcontext.Users
-                                   .Include(user => user.Addresses)
-                                   .SingleOrDefaultAsync(user => user.UserId == id);
+            return await _dbcontext.Users.SingleOrDefaultAsync(user => user.UserId == id);
         }
 
 
@@ -100,10 +98,10 @@ namespace Repository
         {
             return await _dbcontext.Users.AnyAsync(x => x.UserId == id);
         }
-        public async Task<User> GetProfileUser(int userId)
+        public async Task<User?> GetProfileUser(int userId)
         {
             // Query the database to get the profile by User ID
-            return await _dbcontext.Users.Include(x=>x.Addresses).Where(user => user.UserId == userId).FirstOrDefaultAsync();
+            return await _dbcontext.Users.Where(user => user.UserId == userId).FirstOrDefaultAsync();
         }
 
         public async Task<List<User>> GetUsersByIdsAsync(IEnumerable<int> userIds)

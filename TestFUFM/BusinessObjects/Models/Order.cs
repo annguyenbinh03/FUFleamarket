@@ -50,9 +50,6 @@ public partial class Order
     [InverseProperty("OrderBuyers")]
     public virtual User Buyer { get; set; } = null!;
 
-    [InverseProperty("Order")]
-    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
-
     [ForeignKey("ProductId")]
     [InverseProperty("Orders")]
     public virtual Product Product { get; set; } = null!;

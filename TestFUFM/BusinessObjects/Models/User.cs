@@ -50,14 +50,24 @@ public partial class User
     [StringLength(100)]
     public string? Sub { get; set; }
 
+    [Column("address")]
+    [StringLength(255)]
+    public string? Address { get; set; }
+
+    [Column("acceptedTradingPercent")]
+    public double? AcceptedTradingPercent { get; set; }
+
     [Column("buyRating")]
     public double? BuyRating { get; set; }
+
+    [Column("buyTimes")]
+    public int? BuyTimes { get; set; }
 
     [Column("sellRating")]
     public double? SellRating { get; set; }
 
-    [InverseProperty("User")]
-    public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
+    [Column("sellTimes")]
+    public int? SellTimes { get; set; }
 
     [InverseProperty("User1Navigation")]
     public virtual ICollection<ChatRoom> ChatRoomUser1Navigations { get; set; } = new List<ChatRoom>();

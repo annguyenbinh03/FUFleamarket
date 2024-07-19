@@ -56,9 +56,6 @@ public partial class Product
     [InverseProperty("Product")]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    [InverseProperty("Product")]
-    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
-
     [ForeignKey("SellerId")]
     [InverseProperty("Products")]
     public virtual User Seller { get; set; } = null!;

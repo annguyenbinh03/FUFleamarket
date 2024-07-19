@@ -170,11 +170,11 @@ namespace WebAPI.Controllers
                 return BadRequest("Invalid ID.");
             }
             var userWithDetails = await _context.Users
-                .Include(u => u.Addresses)
+                //.Include(u => u.Addresses)
                 .Include(u => u.Products)
                 .ThenInclude(p => p.Category)
                 .Include(u => u.Products)
-                .ThenInclude(p => p.ProductImages)
+                //.ThenInclude(p => p.ProductImages)
                 .FirstOrDefaultAsync(u => u.UserId == id);
             if (userWithDetails == null)
             {
@@ -193,11 +193,11 @@ namespace WebAPI.Controllers
                     userWithDetails.CreatedDate,
                     userWithDetails.BuyRating,
                     userWithDetails.SellRating,
-                    Addresses = userWithDetails.Addresses.Select(a => new
-                    {
-                        a.AddressId,
-                        a.SpecificAddress
-                    })
+                    //Addresses = userWithDetails.Addresses.Select(a => new
+                    //{
+                    //    a.AddressId,
+                    //    a.SpecificAddress
+                    //})
                 },
                 Products = userWithDetails.Products
                        .Where(p => p.Status == 1)
@@ -216,12 +216,12 @@ namespace WebAPI.Controllers
                            p.ImageLink,
                            p.StoredQuantity,
 
-                           ProductImages = p.ProductImages.Select(pi => new
-                           {
-                               pi.ProductId,
-                               pi.ImageName,
-                               pi.ImageLink
-                           })
+                           //ProductImages = p.ProductImages.Select(pi => new
+                           //{
+                           //    pi.ProductId,
+                           //    pi.ImageName,
+                           //    pi.ImageLink
+                           //})
                        })
             };
 
@@ -411,7 +411,7 @@ namespace WebAPI.Controllers
                 return NotFound("Product ID not found. Please enter a valid Product ID.");
             }
 
-            var address = await _productRepo.getSellerAddress(product.SellerId);
+            //var address = await _productRepo.getSellerAddress(product.SellerId);
             var productDTO = product.ToProductDto();
 
             bool contact = false;
@@ -420,7 +420,7 @@ namespace WebAPI.Controllers
             {
                 contact = await _contactService.CheckContactAsync(userId, product.SellerId);
             }
-            return Ok(new { product = productDTO, address, sellerId = product.SellerId, contact });
+            return Ok(new { product = productDTO, /*address,*/ sellerId = product.SellerId, contact });
         }
 
 

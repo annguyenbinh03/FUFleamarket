@@ -23,13 +23,13 @@ namespace Repository
         }
         public async Task<List<Order>> GetAllOrderAsync()
         {
-            return await _context.Orders.Include(add => add.Feedbacks).ToListAsync();
+            return await _context.Orders.ToListAsync();
 
         }
 
         public async Task<Order?> GetByOrderIdAsync(int id)
         {
-            return await _context.Orders.Include(c => c.Feedbacks).SingleOrDefaultAsync(i => i.OrderId == id);
+            return await _context.Orders.SingleOrDefaultAsync(i => i.OrderId == id);
         }
 
         public async Task<Order?> UpdateOrderAsync(int id, UpdateOrderRequestDto updateOrder)

@@ -45,7 +45,7 @@ namespace Repository.Interfaces
 
         Task<List<Product>> GetProductsByUserIdAsync(int userId);
 
-        Task<string?> getSellerAddress(int sellerId);
+        
 
         Task<Product?> UpdateStoredQuantityAsync(int productId, int quantityChange);
         Task<bool> UpdateProductQuantityAsync(int productId, int orderQuantity);

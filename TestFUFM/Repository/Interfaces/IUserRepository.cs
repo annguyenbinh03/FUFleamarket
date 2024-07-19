@@ -20,7 +20,7 @@ namespace Repository.Interfaces
         public Task<User?> UnBanAccount(int id);
         public Task<bool> IsExistUser(int id);
 
-        public Task<User> GetProfileUser(int userId);
+        public Task<User?> GetProfileUser(int userId);
 
         public Task<List<User>> GetUsersByIdsAsync(IEnumerable<int> userIds);
         

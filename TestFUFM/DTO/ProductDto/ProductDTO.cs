@@ -1,7 +1,6 @@
 ﻿using BusinessObjects.Models;
 using BusinessObjects.CategoryDto;
 using BusinessObjects.Mappers;
-using BusinessObjects.ProductImageDto;
 using BusinessObjects.UserDto;
 using System.Collections.Generic;
 

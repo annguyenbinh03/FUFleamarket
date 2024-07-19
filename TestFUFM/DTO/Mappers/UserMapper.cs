@@ -26,11 +26,14 @@ namespace BusinessObjects.Mappers
                 RoleId = model.RoleId,
                 IsDeleted = model.IsDeleted,
                 Avarta = model.Avarta,
-                Addresses = model.Addresses.Select(x=> x.ToAddressDTO()).ToList(),
                 CreatedDate = model.CreatedDate,
                 Sub = model.Sub,
+                Address = model.Address,
+                AcceptedTradingPercent = model.AcceptedTradingPercent,
                 BuyRating = model.BuyRating,
+                BuyTimes = model.BuyTimes,
                 SellRating = model.SellRating,
+                SellTimes = model.SellTimes
             };
         }
         public static User ToUserFromCreateDTO(this CreateUserRequestDto userDto)
@@ -43,7 +46,7 @@ namespace BusinessObjects.Mappers
                 PhoneNumber = userDto.PhoneNumber,
                 Introduction = userDto.Introduction,         
                 Avarta = userDto.Avarta,
-                //CreatedDate = DateTime.Now,
+                
             };
         }
         public static ProfileUserDTO ToProfileUserDTO(this User model)
