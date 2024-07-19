@@ -13,7 +13,9 @@ using BusinessObjects.CategoryDto;
 using System.Linq;
 using Service.ContactCheck.Interfaces;
 using BusinessObjects.Models.Enum;
+using DTO.Helpers;
 using System.Globalization;
+using Repository;
 
 namespace WebAPI.Controllers
 {
@@ -24,12 +26,13 @@ namespace WebAPI.Controllers
         private readonly FufleaMarketContext _context;
         private readonly IProductReposity _productRepo;
         private readonly IContactService _contactService;
-
-        public ProductController(FufleaMarketContext context, IProductReposity productRepo, IContactService contactService)
+        private readonly IPromotionRepository _promotionRepo;
+        public ProductController(FufleaMarketContext context, IProductReposity productRepo, IContactService contactService, IPromotionRepository promotionRepo)
         {
             _productRepo = productRepo;
             _context = context;
             _contactService = contactService;
+            _promotionRepo = promotionRepo;
         }
 
 
@@ -212,7 +215,7 @@ namespace WebAPI.Controllers
                            p.Description,
                            p.CategoryId,
                            p.Status,
-                           p.CreatedDate,
+                           CreateDate = DateTimeExtensions.ToRelativeTime(p.CreatedDate),
                            p.ImageLink,
                            p.StoredQuantity,
 
@@ -508,6 +511,7 @@ namespace WebAPI.Controllers
                     query = query.OrderByDescending(p => p.CreatedDate);
                     break;
             }
+            
             var skipNumber = (PageNumber - 1) * PageSize;   
             var filteredProducts =  query.Skip(skipNumber).Take(PageSize).Select(p => new
             {
@@ -520,7 +524,7 @@ namespace WebAPI.Controllers
                 p.Description,
                 p.ImageLink,
                 p.StoredQuantity,
-                p.CreatedDate,
+                CreatedDate = DateTimeExtensions.ToRelativeTime(p.CreatedDate),
                 Seller = new
                 {
                     p.Seller.FullName,
@@ -825,7 +829,36 @@ namespace WebAPI.Controllers
             return Ok(productDtos);
         }
 
+        /// <summary>
+        /// return currentquantityproduct , productquantitylimit and acceptTradingPercent to CreateProdcut page
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getUserInforToCreateProduct")]
+        public async Task<IActionResult> getUserInforToCreateProduct()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("Claim user ID not found.");
+            }
 
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return Unauthorized("Invalid user ID claim.");
+            }
+
+            Promotion? promotion = await _promotionRepo.GetHighestPromotionForUser(userId);
+
+            var response = new
+            {
+                currentProductQuantity = await _productRepo.CountProduct(userId),
+                image = promotion != null ? promotion.ImageLink : "",
+                ProductQuantityLimit = promotion != null ? promotion.ProductQuantityLimit : 5  ,
+                acceptTradingPercent = await _context.Users.Where(x => x.UserId == userId).Select(x => x.AcceptedTradingPercent).FirstOrDefaultAsync()
+            };
+
+            return Ok(response);
+        }
 
     }
 }

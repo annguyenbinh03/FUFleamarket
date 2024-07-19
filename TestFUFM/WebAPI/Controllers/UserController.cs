@@ -162,5 +162,37 @@ namespace WebAPI.Controllers
             }
             return NoContent();
         }
+
+        [HttpGet("GetUserSettings")]
+        [Authorize]
+        public async Task<IActionResult> GetUserSettings()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID claim not found.");
+            }
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("Invalid User ID claim.");
+            }
+            User? user = await _userRepo.GetByIdAsync(userId);
+            if (user != null)
+            {
+                var userInfo = new
+                {
+                    fullName = user.FullName,
+                    email = user.Email,
+                    phoneNumber = user.PhoneNumber,
+                    address = user.Address,
+                    introduction = user.Introduction,
+                    createdDate = user.CreatedDate,
+                    acceptedTradingPercent = user.AcceptedTradingPercent,
+                    avarta = user.Avarta
+                };
+                return Ok(userInfo);
+            }
+            return NoContent();
+        }
     }
 }
