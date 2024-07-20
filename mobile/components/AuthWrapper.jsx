@@ -1,7 +1,7 @@
 // AuthWrapper.js
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AuthContext from "../context/AuthProvider";
 
 const AuthWrapper = ({ children, allowedRoles = [] }) => {
@@ -23,17 +23,19 @@ const AuthWrapper = ({ children, allowedRoles = [] }) => {
     );
   };
 
-  useEffect(() => {
-    if (!auth || !auth.token) {
-      showLoginAlert();
-    } else if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
-      Alert.alert(
-        "Không có quyền truy cập",
-        "Bạn không có quyền sử dụng tính năng này"
-      );
-      navigation.navigate("Trang chủ");
-    }
-  }, [auth, userRole]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!auth || !auth.token) {
+        showLoginAlert();
+      } else if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
+        Alert.alert(
+          "Không có quyền truy cập",
+          "Bạn không có quyền sử dụng tính năng này"
+        );
+        navigation.navigate("Trang chủ");
+      }
+    }, [auth, userRole, navigation, allowedRoles])
+  );
 
   if (
     auth &&

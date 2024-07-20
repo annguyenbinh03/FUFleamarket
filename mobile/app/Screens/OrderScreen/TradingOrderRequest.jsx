@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import AuthContext from "../../../context/AuthProvider";
 import {
@@ -12,12 +13,13 @@ import {
   user2AcceptRequest,
   user2RejectRequest,
 } from "../../api/tradingOrder";
+import Empty from "../../../components/Empty";
 
 const TradingOrderRequest = () => {
   const [orders, setOrders] = useState([]);
   const { auth } = useContext(AuthContext);
   const [tab, setTab] = useState(1);
-  const sortBy = "price";
+  const [sortBy, setSortBy] = useState("date");
 
   const fetchOrder = async () => {
     try {
@@ -27,9 +29,10 @@ const TradingOrderRequest = () => {
         sortBy
       );
       setOrders(response.data);
+      console.log("fetch trading Order: ", response.data);
     } catch (error) {
+      setOrders([]);
       console.error("Error fetching order:", error);
-      console.error("fetch Order trading:", error.response.data);
     }
   };
 
@@ -55,20 +58,52 @@ const TradingOrderRequest = () => {
 
   useEffect(() => {
     fetchOrder();
-  }, [tab]);
+  }, [tab, sortBy]);
 
   const renderOrder = ({ item: order }) => (
     <View style={styles.orderContainer}>
-      <Text>Bên yêu cầu: {order.user1?.fullName}</Text>
-      <Text>Bên tiếp nhận: {order.user2?.fullName}</Text>
+      <View style={styles.userInfo}>
+        <Text>Bên yêu cầu: {order.user1?.fullName}</Text>
+        <View style={styles.productList}>
+          {order.user1TradingOrderDetails?.map((product) => (
+            <View key={product.tradingOrderDetailId} style={styles.productItem}>
+              <Image
+                source={{ uri: product.product?.imageLink }}
+                style={styles.productImage}
+              />
+              <Text>{product.product?.productName}</Text>
+              <Text> x {product.quantity}</Text>
+            </View>
+          ))}
+        </View>
+        <Text>Bên tiếp nhận: {order.user2?.fullName}</Text>
+        <View style={styles.productList}>
+          {order.user2TradingOrderDetails?.map((product) => (
+            <View key={product.tradingOrderDetailId} style={styles.productItem}>
+              <Image
+                source={{ uri: product.product?.imageLink }}
+                style={styles.productImage}
+              />
+              <Text>{product.product?.productName}</Text>
+              <Text> x {product.quantity}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
       <Text>
         Trạng thái:{" "}
         {order.status === 0
           ? "Đang chờ duyệt"
           : order.status === 1
             ? "Đang trao đổi"
-            : "Khác"}
+            : order.status === 2
+              ? "Đã bị từ chối"
+              : order.status === 3
+                ? "Đã hoàn thành"
+                : "Đã bị Admin ẩn"}
       </Text>
+      <Text>Ghi chú: {order.note}</Text>
       {order.status === 0 && (
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -92,23 +127,31 @@ const TradingOrderRequest = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Yêu cầu trao đổi</Text>
       <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, tab === 1 && styles.selectedTab]}
-          onPress={() => setTab(1)}
-        >
-          <Text>Tất cả</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, tab === 2 && styles.selectedTab]}
-          onPress={() => setTab(2)}
-        >
-          <Text>Đang chờ duyệt</Text>
-        </TouchableOpacity>
+        {[1, 2, 3, 4, 5].map((tabNumber) => (
+          <TouchableOpacity
+            key={tabNumber}
+            style={[styles.tab, tab === tabNumber && styles.selectedTab]}
+            onPress={() => setTab(tabNumber)}
+          >
+            <Text>
+              {tabNumber === 1
+                ? "Tất cả"
+                : tabNumber === 2
+                  ? "Đang chờ duyệt"
+                  : tabNumber === 3
+                    ? "Đang trao đổi"
+                    : tabNumber === 4
+                      ? "Đã hoàn thành"
+                      : "Đã từ chối"}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
       <FlatList
         data={orders}
         renderItem={renderOrder}
         keyExtractor={(item) => item.tradingOrderId.toString()}
+        ListEmptyComponent={Empty}
       />
     </View>
   );
@@ -130,17 +173,33 @@ const styles = StyleSheet.create({
   },
   tab: {
     padding: 10,
-    marginRight: 10,
+    marginRight: 0,
     backgroundColor: "#e0e0e0",
   },
   selectedTab: {
-    backgroundColor: "#b0b0b0",
+    backgroundColor: "yellow",
   },
   orderContainer: {
     marginBottom: 20,
     padding: 10,
     borderWidth: 1,
     borderColor: "#ccc",
+  },
+  userInfo: {
+    marginBottom: 10,
+  },
+  productList: {
+    marginBottom: 10,
+  },
+  productItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  productImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
   },
   buttonContainer: {
     flexDirection: "row",

@@ -46,6 +46,14 @@ function SellOrder() {
       setOrders(response.data);
     } catch (error) {
       console.error("Lỗi khi tải đơn hàng:", error);
+      if (error.response && error.response.status === 404) {
+        Alert.alert("Thông báo", "Bạn hiện chưa có đơn hàng nào");
+      } else {
+        Alert.alert(
+          "Lỗi",
+          "Đã xảy ra lỗi khi tải đơn hàng. Vui lòng thử lại sau."
+        );
+      }
     } finally {
       setIsLoading(false);
     }

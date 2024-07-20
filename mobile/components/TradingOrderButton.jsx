@@ -3,21 +3,21 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
 
-const TradingOrderRequestButton = () => {
+const TradingOrderButton = () => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={() => navigation.navigate("TradingOrderRequest")}
+      onPress={() => navigation.navigate("TradingOrder")}
     >
       <FontAwesome5
-        name="handshake"
+        name="exchange-alt"
         size={20}
         color="#DD0000"
         style={styles.icon}
       />
-      <Text style={styles.buttonText}>Yêu cầu trao đổi</Text>
+      <Text style={styles.buttonText}>Đơn trao đổi</Text>
     </TouchableOpacity>
   );
 };
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TradingOrderRequestButton;
+export default TradingOrderButton;

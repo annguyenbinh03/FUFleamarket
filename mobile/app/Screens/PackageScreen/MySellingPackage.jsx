@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,6 +15,7 @@ import { getMyPackageAPI } from "../../api/packages";
 import { getUserPromoTransac } from "../../api/promotionOrder";
 import AuthContext from "../../../context/AuthProvider";
 import { formatDate } from "../../../utils/formatDate";
+import formatPrice from "../../../utils/formatPrice";
 
 const MySellingPackage = () => {
   const navigation = useNavigation();
@@ -28,6 +30,14 @@ const MySellingPackage = () => {
       console.log("MyPackageAPI: ", response.data);
     } catch (error) {
       console.error("Error fetching packages:", error);
+      if (error.response && error.response.status === 404) {
+        Alert.alert("Thông báo", "Bạn hiện chưa có gói bán hàng nào");
+      } else {
+        Alert.alert(
+          "Lỗi",
+          "Đã xảy ra lỗi khi tải gói bán hàng. Vui lòng thử lại sau."
+        );
+      }
     }
   };
 
@@ -45,10 +55,6 @@ const MySellingPackage = () => {
     fetchMyPackage();
     fetchPromoOrderTransactions();
   }, []);
-
-  const formatPrice = (value) => {
-    return value.toLocaleString("vi-VN") + "đ";
-  };
 
   const handleBuy = async (userId, promotionId) => {
     const appReturnUrl = encodeURIComponent("fufm://payment");

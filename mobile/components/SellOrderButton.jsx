@@ -17,7 +17,7 @@ const SellOrderButton = () => {
         color="#DD0000"
         style={styles.icon}
       />
-      <Text style={styles.buttonText}>Đơn bán</Text>
+      <Text style={styles.buttonText}>Yêu cầu mua hàng</Text>
     </TouchableOpacity>
   );
 };

@@ -8,12 +8,16 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../../context/AuthProvider";
 import LoginGoogle from "./LoginGoogle";
 import { user_login } from "../../api/user_api";
+import GoogleSignUpButton from "../../../components/GoogleSignUpButton";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -103,6 +107,7 @@ const LoginScreen = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
+      console.error("Login Error chi tiết:", error.response.data);
       handleLoginError(error);
     } finally {
       setIsLoading(false);
@@ -144,87 +149,127 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../../../assets/images/logo.png")}
-        style={styles.logo}
-      />
-      <Text style={styles.title}>Đăng nhập</Text>
-      <TextInput
-        ref={emailRef}
-        style={styles.input}
-        placeholder="Email @fpt.edu.vn"
-        onChangeText={setEmail}
-        value={email}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        textContentType="emailAddress"
-      />
-      <TextInput
-        ref={passwordRef}
-        style={styles.input}
-        placeholder="Mật khẩu"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry={true}
-        textContentType="password"
-      />
-      {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#007bff" />
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Đăng nhập</Text>
-        </TouchableOpacity>
-      )}
-      <LoginGoogle />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Image
+          source={require("../../../assets/images/logo.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.title}>Đăng nhập</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={emailRef}
+            style={styles.input}
+            placeholder="Email @fpt.edu.vn"
+            onChangeText={setEmail}
+            value={email}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            textContentType="emailAddress"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={passwordRef}
+            style={styles.input}
+            placeholder="Mật khẩu"
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry={true}
+            textContentType="password"
+          />
+        </View>
+        {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#007bff" />
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Đăng nhập</Text>
+          </TouchableOpacity>
+        )}
+        <View style={styles.divider}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>HOẶC</Text>
+          <View style={styles.line} />
+        </View>
+        <GoogleSignUpButton />
+        <LoginGoogle />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ff0000",
+  },
+  scrollView: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#FFA07A",
   },
   logo: {
-    width: 250,
-    height: 80,
-    padding: 20,
-    marginBottom: 20,
+    width: 200,
+    height: 64,
+    resizeMode: "contain",
+    marginBottom: 40,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 30,
+    color: "#333",
+  },
+  inputContainer: {
+    width: "100%",
+    marginBottom: 15,
   },
   input: {
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 16,
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 15,
-    width: "80%",
-    backgroundColor: "white",
+    borderColor: "#ddd",
   },
   button: {
     backgroundColor: "#007bff",
     padding: 15,
-    width: "80%",
-    borderRadius: 5,
+    width: "100%",
+    borderRadius: 8,
     alignItems: "center",
-    marginBottom: 15,
+    marginTop: 10,
   },
   buttonText: {
     color: "#ffffff",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   error: {
-    color: "red",
+    color: "#ff3333",
     marginBottom: 10,
+    textAlign: "center",
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 20,
+    width: "100%",
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#ddd",
+  },
+  orText: {
+    marginHorizontal: 10,
+    color: "#666",
+    fontWeight: "bold",
   },
 });
 

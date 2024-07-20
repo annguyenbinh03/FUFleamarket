@@ -6,13 +6,14 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
   Dimensions,
+  ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import formatPrice from "../utils/formatPrice";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { getProductAPI } from "../app/api/product";
-import Empty from "./Empty";
+import formatPrice from "../utils/formatPrice";
 
 const { width } = Dimensions.get("screen");
 const numColumns = 2;
@@ -28,24 +29,28 @@ const ProductItem = ({ item }) => {
       }
       style={styles.productItem}
     >
-      <View style={styles.productItemPicContainer}>
-        <Image
-          source={{ uri: item.productImages }}
-          style={styles.productItemPic}
+      <View style={styles.iconContainer}>
+        <FontAwesome5
+          name={item.dealType ? "exchange-alt" : "credit-card"}
+          size={16}
+          color="#fff"
+          style={styles.icon}
         />
       </View>
-
-      <Text style={styles.productTitle}>{item.productName}</Text>
-      <Text style={styles.productPrice}>{formatPrice(item.price)} VNĐ</Text>
+      <Image
+        source={{ uri: item.productImages }}
+        style={styles.productItemPic}
+      />
+      <Text style={styles.productTitle} numberOfLines={2}>
+        {item.productName}
+      </Text>
+      <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
       <View style={styles.sellerInfo}>
         <Image
           source={{ uri: item.seller.avarta }}
           style={styles.sellerAvatar}
         />
         <Text style={styles.sellerName}>{item.createdDate}</Text>
-        <Text style={styles.sellerName}>{item.storedQuatity}</Text>
-        <Text style={styles.sellerName}> - </Text>
-        <Text style={styles.sellerName}>{item.address}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -65,6 +70,7 @@ const ProductListContainer = () => {
       setLoading(false);
     } catch (error) {
       console.error("Lỗi API:", error);
+      console.log("lỗi ở listproduct");
       setError("Đã xảy ra lỗi khi tải danh sách sản phẩm");
       setLoading(false);
     }
@@ -83,91 +89,98 @@ const ProductListContainer = () => {
   }
 
   return (
-    <View style={styles.productListContainerBig}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.productListTitle}>Danh sách sản phẩm</Text>
-      {productList.length > 0 ? (
-        <View style={styles.productListWrapper}>
-          <FlatList
-            data={productList}
-            numColumns={numColumns}
-            renderItem={({ item }) => <ProductItem item={item} />}
-            keyExtractor={(item) => item.productId.toString()}
-            contentContainerStyle={styles.productListContainer}
-            scrollEnabled={false}
-            columnWrapperStyle={styles.columnWrapper}
-          />
-        </View>
-      ) : (
-        <Empty />
-      )}
-    </View>
+      <FlatList
+        data={productList}
+        numColumns={numColumns}
+        renderItem={({ item }) => <ProductItem item={item} />}
+        keyExtractor={(item) => item.productId.toString()}
+        contentContainerStyle={styles.productListContainer}
+        columnWrapperStyle={styles.columnWrapper}
+      />
+    </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
-  productListContainerBig: {
-    padding: 5,
-    alignItems: "center",
-  },
-  productListWrapper: {
-    width: "100%",
-    alignItems: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
   },
   productListContainer: {
+    paddingHorizontal: 30,
     paddingBottom: 20,
   },
   productListTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 16,
-    alignSelf: "flex-start",
+    marginVertical: 16,
+    marginLeft: 16,
   },
   columnWrapper: {
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
   productItem: {
     width: thumbMeasure,
-    margin: 5,
-    padding: 10,
+    marginBottom: 16,
     borderRadius: 8,
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  productItemPicContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    overflow: "hidden",
   },
   productItemPic: {
-    width: thumbMeasure - 20,
-    height: thumbMeasure - 20,
-    borderRadius: 8,
+    width: "100%",
+    height: thumbMeasure,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   productTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: "600",
     marginTop: 8,
+    marginHorizontal: 8,
+    height: 40,
   },
   productPrice: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: "bold",
     color: "#CC0000",
+    marginHorizontal: 8,
+    marginTop: 4,
   },
   sellerInfo: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 8,
+    marginHorizontal: 8,
+    marginBottom: 8,
   },
   sellerAvatar: {
-    width: 15,
-    height: 15,
-    borderRadius: 15,
-    marginRight: 5,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    marginRight: 8,
   },
   sellerName: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#555",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    zIndex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 12,
+    padding: 4,
+  },
+  icon: {
+    textAlign: "center",
   },
 });
 

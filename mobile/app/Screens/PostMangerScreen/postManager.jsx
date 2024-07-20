@@ -25,17 +25,24 @@ const PostManager = () => {
   const [activeTab, setActiveTab] = useState("ĐANG HIỂN THỊ");
   const [isLoading, setIsLoading] = useState(true);
   const [sellingPackages, setSellingPackages] = useState([]);
-  const [countProductAndLimit, setcountProductAndLimit] = useState();
+  const [countProductAndLimit, setCountProductAndLimit] = useState();
 
   const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const fetchProducts = useCallback(async () => {
-    console.log("Token:", auth.token);
+    const token = auth?.token;
+    if (!token) {
+      console.error("No auth token available");
+      setIsLoading(false);
+      return;
+    }
+
+    console.log("Token:", token);
 
     try {
       setIsLoading(true);
-      const response = await getMyProductsAPI(auth.token);
+      const response = await getMyProductsAPI(token);
 
       console.log("Phản hồi API:", response.data);
 
@@ -52,15 +59,17 @@ const PostManager = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [auth.token]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+  }, [auth]);
 
   const fetchMyPackage = useCallback(async () => {
+    const token = auth?.token;
+    if (!token) {
+      console.error("No auth token available");
+      return;
+    }
+
     try {
-      const response = await getMyPackageAPI(auth.token);
+      const response = await getMyPackageAPI(token);
       setSellingPackages(response.data);
       console.log("Gói bán hàng:", response.data);
       console.log(
@@ -71,22 +80,34 @@ const PostManager = () => {
       console.error("Lỗi khi lấy gói bán hàng:", error);
       console.error(error.response);
     }
-  }, [auth.token]);
+  }, [auth]);
 
   const fetchCountProductAndLimit = useCallback(async () => {
+    const token = auth?.token;
+    if (!token) {
+      console.error("No auth token available");
+      return;
+    }
+
     try {
-      const response = await getCountProductAndLimit(auth.token);
-      setcountProductAndLimit(response.data);
+      const response = await getCountProductAndLimit(token);
+      setCountProductAndLimit(response.data);
       console.log("fetch CountProductAndLimit: ", response.data);
     } catch (error) {
       console.error("Error fetch CountProductAndLimit: ", error.response);
     }
-  });
+  }, [auth]);
 
   useEffect(() => {
-    fetchMyPackage();
-    fetchCountProductAndLimit();
-  }, [fetchMyPackage]);
+    if (auth?.token) {
+      fetchProducts();
+      fetchMyPackage();
+      fetchCountProductAndLimit();
+    } else {
+      console.error("No auth token available");
+      setIsLoading(false);
+    }
+  }, [fetchProducts, fetchMyPackage, fetchCountProductAndLimit, auth]);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -127,25 +148,29 @@ const PostManager = () => {
         <Text style={styles.productName}>{item.productName}</Text>
         <Text style={styles.productPrice}>{formatPrice(item.price)} VND</Text>
         <Text style={styles.productCreatedDate}>
+          Loại: {item.dealType === true ? "Trao đổi" : "Bán"}
+        </Text>
+        <Text style={styles.productCreatedDate}>
           Số lượng: {item.storedQuantity}
         </Text>
         <Text style={styles.productCreatedDate}>
-          Ngày đăng: {formatDate(item.createdDate)}
+          Ngày đăng: {item.createdDate}
         </Text>
       </View>
       <View style={styles.productActions}>
-        <TouchableOpacity style={styles.productActionButton}>
-          <FontAwesome5 name="pencil-alt" size={16} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.productActionButton}>
+        {/* <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="eye-slash" size={16} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.productActionButton}>
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity style={styles.productActionButton}>
           <FontAwesome5 name="share" size={16} color="#fff" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
+
+  if (!auth) {
+    return <Text>Please log in to view your posts</Text>;
+  }
 
   return (
     <View style={styles.container}>
