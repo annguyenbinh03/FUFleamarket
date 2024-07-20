@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObjects.Mappers;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using DTO.Helpers;
 
 namespace Repository
 {
@@ -52,6 +53,7 @@ namespace Repository
 
         public async Task<Order> CreateOrderAsync(Order orderModel)
         {
+            orderModel.CreatedDate = SEATimeZone.GetCurrentSEATime();
             await _context.Orders.AddAsync(orderModel);
             await _context.SaveChangesAsync();
             return orderModel;

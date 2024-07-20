@@ -335,7 +335,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpPost("User2/Accept/{id}")]
+        [HttpPut("User2/Accept/{id}")]
         public async Task<IActionResult> User2Accept(int id)
         {
             // Lấy User2 từ claims
@@ -346,8 +346,10 @@ namespace WebAPI.Controllers
             }
             var user2Id = int.Parse(userIdClaim.Value);
 
-            // Tìm TradingOrder
-            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            // Tìm TradingOrder và bao gồm TradingOrderDetails
+            var tradingOrder = await _context.TradingOrders
+                                             .Include(to => to.TradingOrderDetails)
+                                             .FirstOrDefaultAsync(to => to.TradingOrderId == id);
             if (tradingOrder == null)
             {
                 return BadRequest("Order not found.");
@@ -362,20 +364,51 @@ namespace WebAPI.Controllers
             // Cập nhật trạng thái
             tradingOrder.Status = 1;
             await _contactService.OpenContactAsync(user2Id, tradingOrder.User1);
+
+            // Kiểm tra và cập nhật số lượng tồn kho sản phẩm
+            if (tradingOrder.TradingOrderDetails == null || !tradingOrder.TradingOrderDetails.Any())
+            {
+                return BadRequest("No order details found for the order.");
+            }
+
+            foreach (var detail in tradingOrder.TradingOrderDetails)
+            {
+
+                var product = await _context.Products.FindAsync(detail.ProductId);
+                if (product != null)
+                {
+                    if (product.StoredQuantity >= detail.Quantity)
+                    {
+                        product.StoredQuantity -= detail.Quantity;
+
+                    }
+                    else
+                    {
+                        return BadRequest($"Not enough stock for Product ID {product.ProductId}. Current stock: {product.StoredQuantity}, required: {detail.Quantity}");
+                    }
+                }
+                else
+                {
+                    return BadRequest($"Product ID {detail.ProductId} not found.");
+                }
+            }
+            
+            // Lưu các thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
             // Lấy thời gian hiện tại khi người dùng accept
             var acceptTime = DateTime.Now;
-            Console.WriteLine($"Order accepted at: {acceptTime}");
+            Console.WriteLine($"TradingOrder accepted at: {acceptTime}");
 
             // Chạy background job sau khi các tác vụ chính đã hoàn tất
             Task.Run(() => _statusTradingOrderService.RunBackgroundJobForTradingOrder(id, acceptTime));
 
             return NoContent();
         }
-    
 
-    [HttpPost("User2/Reject/{id}")]
+
+
+        [HttpPost("User2/Reject/{id}")]
         public async Task<IActionResult> User2Reject(int id)
         {
             // Lấy User2 từ claims
@@ -386,8 +419,10 @@ namespace WebAPI.Controllers
             }
             var user2Id = int.Parse(userIdClaim.Value);
 
-            // Tìm TradingOrder
-            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+            // Tìm TradingOrder và bao gồm TradingOrderDetails
+            var tradingOrder = await _context.TradingOrders
+                                             .Include(to => to.TradingOrderDetails)
+                                             .FirstOrDefaultAsync(to => to.TradingOrderId == id);
             if (tradingOrder == null)
             {
                 return BadRequest("Order not found.");
@@ -402,6 +437,42 @@ namespace WebAPI.Controllers
             // Cập nhật trạng thái
             tradingOrder.Status = 2;
             await _contactService.CloseContactAsync(user2Id, tradingOrder.User1);
+            // Kiểm tra và cập nhật số lượng tồn kho sản phẩm
+            if (tradingOrder.TradingOrderDetails == null || !tradingOrder.TradingOrderDetails.Any())
+            {
+                return BadRequest("No order details found for the order.");
+            }
+
+            foreach (var detail in tradingOrder.TradingOrderDetails)
+            {
+
+                var product = await _context.Products.FindAsync(detail.ProductId);
+                if (product != null)
+                {                                       
+                        product.StoredQuantity += detail.Quantity;
+                }
+                else
+                {
+                    return BadRequest($"Product ID {detail.ProductId} not found.");
+                }
+            }
+            // Thông tin User2
+            var user2 = await _context.Users
+                              .Where(u => u.UserId == tradingOrder.User2)
+                              .FirstOrDefaultAsync();
+            if (user2 == null)
+            {
+                return BadRequest("User2 not found.");
+            }
+
+            // Tính toán avg SellRating và số lần bán thành công của User2
+            var sellRatingUser2 = (user2.SellTimes * user2.SellRating) / (user2.SellTimes + 1);
+            var sellTimesUser2 = user2.SellTimes + 1;
+
+            // Cập nhật thông tin của User2
+            user2.SellRating = sellRatingUser2;
+            user2.SellTimes = sellTimesUser2;
+            // Lưu các thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -419,8 +490,11 @@ namespace WebAPI.Controllers
 
             var user1Id = int.Parse(userIdClaim.Value);
 
-            // Tìm TradingOrder
-            var tradingOrder = await _context.TradingOrders.FindAsync(id);
+
+            // Tìm TradingOrder và bao gồm TradingOrderDetails
+            var tradingOrder = await _context.TradingOrders
+                                             .Include(to => to.TradingOrderDetails)
+                                             .FirstOrDefaultAsync(to => to.TradingOrderId == id);
             if (tradingOrder == null)
             {
                 return BadRequest("Order not found.");
@@ -435,6 +509,43 @@ namespace WebAPI.Controllers
             // Cập nhật trạng thái
             tradingOrder.Status = 2;
             await _contactService.CloseContactAsync(user1Id, tradingOrder.User2);
+            // Kiểm tra và cập nhật số lượng tồn kho sản phẩm
+            if (tradingOrder.TradingOrderDetails == null || !tradingOrder.TradingOrderDetails.Any())
+            {
+                return BadRequest("No order details found for the order.");
+            }
+
+            foreach (var detail in tradingOrder.TradingOrderDetails)
+            {
+
+                var product = await _context.Products.FindAsync(detail.ProductId);
+                if (product != null)
+                {
+                        product.StoredQuantity += detail.Quantity;
+
+                }
+                else
+                {
+                    return BadRequest($"Product ID {detail.ProductId} not found.");
+                }
+            }
+            // Thông tin User1
+            var user1 = await _context.Users
+                              .Where(u => u.UserId == user1Id)
+                              .FirstOrDefaultAsync();
+            if (user1 == null)
+            {
+                return BadRequest("User1 not found.");
+            }
+
+            // Tính toán avg BuyRating và số lần mua thành công của User1
+            var buyRatingUser1 = (user1.BuyTimes * user1.BuyRating) / (user1.BuyTimes + 1);
+            var buyTimesUser1 = user1.BuyTimes + 1;
+
+            // Cập nhật thông tin của User1 và lưu BuyRating
+            user1.BuyRating = buyRatingUser1;
+            user1.BuyTimes = buyTimesUser1;
+            // Lưu các thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -468,10 +579,48 @@ namespace WebAPI.Controllers
             // Cập nhật trạng thái
             tradingOrder.Status = 3;
             await _contactService.CloseContactAsync(user1Id, tradingOrder.User2);
+
+            // Thông tin User1
+            var user1 = await _context.Users
+                              .Where(u => u.UserId == user1Id)
+                              .FirstOrDefaultAsync();
+            if (user1 == null)
+            {
+                return BadRequest("User1 not found.");
+            }
+
+            // Tính toán avg BuyRating và số lần mua thành công của User1
+            var buyRatingUser1 = ((user1.BuyTimes * user1.BuyRating) + 5) / (user1.BuyTimes + 1);
+            var buyTimesUser1 = user1.BuyTimes + 1;
+
+            // Cập nhật thông tin của User1 và lưu BuyRating
+            user1.BuyRating = buyRatingUser1;
+            user1.BuyTimes = buyTimesUser1;
+
+            // Thông tin User2
+            var user2 = await _context.Users
+                              .Where(u => u.UserId == tradingOrder.User2)
+                              .FirstOrDefaultAsync();
+            if (user2 == null)
+            {
+                return BadRequest("User2 not found.");
+            }
+
+            // Tính toán avg SellRating và số lần bán thành công của User2
+            var sellRatingUser2 = ((user2.SellTimes * user2.SellRating) + 5) / (user2.SellTimes + 1);
+            var sellTimesUser2 = user2.SellTimes + 1;
+
+            // Cập nhật thông tin của User2
+            user2.SellRating = sellRatingUser2;
+            user2.SellTimes = sellTimesUser2;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
-            
+
             return NoContent();
         }
+
+
 
         [HttpGet("user1/TradingOrder")]
         public async Task<IActionResult> TradingOrder(

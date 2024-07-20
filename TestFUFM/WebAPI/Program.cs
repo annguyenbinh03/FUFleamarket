@@ -26,6 +26,7 @@ using Service.BackgroudService;
 using Service.CheckProductHasActiveOrder;
 using Service.CheckProductHasActiveOrder.Interfaces;
 
+
 public class Program
 {
     public static void Main(string[] args)
@@ -150,6 +151,8 @@ public class Program
         builder.Services.AddHostedService<PromotionPackagesService>();
         builder.Services.AddScoped<ICheckProduct, CheckProductHascActiveOrder>();
         builder.Services.AddScoped<StatusTradingOrderService>();
+        builder.Services.AddScoped<StatusOrderService>();
+        builder.Services.AddScoped<IReportRepository, ReportRepository>();
         // VNPay setting 
         builder.Services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
 

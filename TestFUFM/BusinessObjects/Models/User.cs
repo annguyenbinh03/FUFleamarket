@@ -93,6 +93,12 @@ public partial class User
     [InverseProperty("User")]
     public virtual ICollection<PromotionOrder> PromotionOrders { get; set; } = new List<PromotionOrder>();
 
+    [InverseProperty("ReportedUser")]
+    public virtual ICollection<Report> ReportReportedUsers { get; set; } = new List<Report>();
+
+    [InverseProperty("Reporter")]
+    public virtual ICollection<Report> ReportReporters { get; set; } = new List<Report>();
+
     [InverseProperty("User1Navigation")]
     public virtual ICollection<TradingOrder> TradingOrderUser1Navigations { get; set; } = new List<TradingOrder>();
 

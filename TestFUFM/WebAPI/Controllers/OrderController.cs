@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Service.ContactCheck;
 using Service.ContactCheck.Interfaces;
 using Service.CheckProductHasActiveOrder.Interfaces;
+using Service.BackgroudService;
+
 
 
 namespace WebAPI.Controllers
@@ -32,8 +34,8 @@ namespace WebAPI.Controllers
         private readonly FufleaMarketContext _context;
         private readonly IContactService _contactService;
         private readonly ICheckProduct _checkProduct;
-
-        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context, IContactService contactService,ICheckProduct checkProduct)
+        private readonly StatusOrderService _statusOrderService;
+        public OrderController(IOrderRepository orderRepo, IUserRepository userRepo, IProductReposity productRepo, FufleaMarketContext context, IContactService contactService,ICheckProduct checkProduct, StatusOrderService statusOrderService)
         {
             _orderRepo = orderRepo;
             _userRepo = userRepo;
@@ -41,6 +43,7 @@ namespace WebAPI.Controllers
             _context = context;
             _contactService = contactService;
             _checkProduct = checkProduct;
+            _statusOrderService = statusOrderService;
         }
 
         [HttpGet("soldRequest")]
@@ -574,7 +577,12 @@ namespace WebAPI.Controllers
                     return StatusCode(500, "Internal server error");
                 }
             }
+            // Lấy thời gian hiện tại khi người dùng accept
+            var acceptTime = DateTime.Now;
+            Console.WriteLine($"Order accepted at: {acceptTime}");
 
+            // Chạy background job sau khi các tác vụ chính đã hoàn tất
+            Task.Run(() => _statusOrderService.RunBackgroundJobForOrder(orderId, acceptTime));
             return Ok("Order request accepted and product quantity updated");
         }
         [HttpPut]
@@ -701,6 +709,42 @@ namespace WebAPI.Controllers
                 return BadRequest("Failed to complete the order");
             }
 
+            // Thông tin User1
+            var user1 = await _context.Users
+                              .Where(u => u.UserId == order.BuyerId)
+                              .FirstOrDefaultAsync();
+            if (user1 == null)
+            {
+                return BadRequest("User1 not found.");
+            }
+
+            // Tính toán avg BuyRating và số lần mua thành công của User1
+            var buyRatingUser1 = ((user1.BuyTimes * user1.BuyRating) + 5) / (user1.BuyTimes + 1);
+            var buyTimesUser1 = user1.BuyTimes + 1;
+
+            // Cập nhật thông tin của User1 và lưu BuyRating
+            user1.BuyRating = buyRatingUser1;
+            user1.BuyTimes = buyTimesUser1;
+
+            // Thông tin User2
+            var user2 = await _context.Users
+                              .Where(u => u.UserId == order.SellerId)
+                              .FirstOrDefaultAsync();
+            if (user2 == null)
+            {
+                return BadRequest("User2 not found.");
+            }
+
+            // Tính toán avg SellRating và số lần bán thành công của User2
+            var sellRatingUser2 = ((user2.SellTimes * user2.SellRating) + 5) / (user2.SellTimes + 1);
+            var sellTimesUser2 = user2.SellTimes + 1;
+
+            // Cập nhật thông tin của User2
+            user2.SellRating = sellRatingUser2;
+            user2.SellTimes = sellTimesUser2;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _context.SaveChangesAsync();
             return Ok("Order completed successfully");
         }
         [HttpPut]
@@ -766,7 +810,25 @@ namespace WebAPI.Controllers
                     return StatusCode(500, "Internal server error");
                 }
             }
+            // Thông tin User2
+            var user2 = await _context.Users
+                              .Where(u => u.UserId == order.SellerId)
+                              .FirstOrDefaultAsync();
+            if (user2 == null)
+            {
+                return BadRequest("User2 not found.");
+            }
 
+            // Tính toán avg SellRating và số lần bán thành công của User2
+            var sellRatingUser2 = (user2.SellTimes * user2.SellRating)  / (user2.SellTimes + 1);
+            var sellTimesUser2 = user2.SellTimes + 1;
+
+            // Cập nhật thông tin của User2
+            user2.SellRating = sellRatingUser2;
+            user2.SellTimes = sellTimesUser2;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _context.SaveChangesAsync();
             return Ok("Order request rejected and product quantity updated");
         }
         [HttpPut]
@@ -814,7 +876,24 @@ namespace WebAPI.Controllers
             {
                 await _contactService.CloseContactAsync(userId, order.SellerId);
             }
+            // Thông tin User1
+            var user1 = await _context.Users
+                              .Where(u => u.UserId == userId)
+                              .FirstOrDefaultAsync();
+            if (user1 == null)
+            {
+                return BadRequest("User1 not found.");
+            }
 
+            // Tính toán avg BuyRating và số lần mua thành công của User1
+            var buyRatingUser1 = (user1.BuyTimes * user1.BuyRating) / (user1.BuyTimes + 1);
+            var buyTimesUser1 = user1.BuyTimes + 1;
+
+            // Cập nhật thông tin của User1 và lưu BuyRating
+            user1.BuyRating = buyRatingUser1;
+            user1.BuyTimes = buyTimesUser1;
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await _context.SaveChangesAsync();
             return Ok("Order rejected successfully");
         }
         [HttpGet]
