@@ -283,7 +283,8 @@ namespace WebAPI.Controllers
                 {
                     fullName = product.Seller.FullName,
                     avarta = product.Seller.Avarta,
-                    UserId = product.SellerId
+                    UserId = product.SellerId,
+                    AcceptedTradingPercent = user.AcceptedTradingPercent
                 },
                 requestSideProducts = user.Products.Select(p => new
                 {

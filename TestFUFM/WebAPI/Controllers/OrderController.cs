@@ -577,6 +577,7 @@ namespace WebAPI.Controllers
                     return StatusCode(500, "Internal server error");
                 }
             }
+            await _contactService.OpenContactAsync(userId, order.BuyerId);
             // Lấy thời gian hiện tại khi người dùng accept
             var acceptTime = DateTime.Now;
             Console.WriteLine($"Order accepted at: {acceptTime}");
@@ -708,7 +709,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Failed to complete the order");
             }
-
+            await _contactService.CloseContactAsync(userId, order.SellerId);
             // Thông tin User1
             var user1 = await _context.Users
                               .Where(u => u.UserId == order.BuyerId)
@@ -810,6 +811,7 @@ namespace WebAPI.Controllers
                     return StatusCode(500, "Internal server error");
                 }
             }
+            await _contactService.CloseContactAsync(userId, order.BuyerId);
             // Thông tin User2
             var user2 = await _context.Users
                               .Where(u => u.UserId == order.SellerId)
@@ -876,6 +878,7 @@ namespace WebAPI.Controllers
             {
                 await _contactService.CloseContactAsync(userId, order.SellerId);
             }
+
             // Thông tin User1
             var user1 = await _context.Users
                               .Where(u => u.UserId == userId)
