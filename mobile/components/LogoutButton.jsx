@@ -8,16 +8,14 @@ const LogoutButton = () => {
   const { logout } = useContext(AuthContext);
   const navigation = useNavigation();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
+  const handleLogout = () => {
+    logout(() => {
+      // Callback được gọi sau khi đăng xuất thành công
       navigation.reset({
         index: 0,
-        routes: [{ name: "Login" }],
+        routes: [{ name: "Trang chủ" }],
       });
-    } catch (error) {
-      console.error("Lỗi khi đăng xuất:", error);
-    }
+    });
   };
 
   return (

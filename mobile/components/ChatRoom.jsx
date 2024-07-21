@@ -7,7 +7,10 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const ChatRoom = ({
   messages,
@@ -24,22 +27,10 @@ const ChatRoom = ({
     if (flatListRef.current) {
       flatListRef.current.scrollToEnd({ animated: true });
     }
-    console.log("Current user ID:", auth.userId);
-    if (messages.length > 0) {
-      console.log("Sample message structure:", messages[0]);
-    }
-  }, [messages, auth.userId]);
+  }, [messages]);
 
   const renderMessage = ({ item, index }) => {
     const isSentByMe = item.receiverId !== auth.userId;
-    console.log(
-      "Message:",
-      item.messageText,
-      "isSentByMe:",
-      isSentByMe,
-      "receiverId:",
-      item.receiverId
-    );
 
     return (
       <View
@@ -80,7 +71,10 @@ const ChatRoom = ({
               isSentByMe ? styles.sentMessageTime : styles.receivedMessageTime,
             ]}
           >
-            {new Date(item.createdDate).toLocaleTimeString()}
+            {new Date(item.createdDate).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </Text>
         </View>
       </View>
@@ -88,13 +82,18 @@ const ChatRoom = ({
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={100}
+    >
       <FlatList
         ref={flatListRef}
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item, index) => `message-${item.messageId}-${index}`}
         style={styles.messageList}
+        contentContainerStyle={styles.messageListContent}
         extraData={messages}
       />
       <View style={styles.inputContainer}>
@@ -102,7 +101,8 @@ const ChatRoom = ({
           style={styles.input}
           value={msg}
           onChangeText={setMessage}
-          placeholder="Aa"
+          placeholder="Nhập tin nhắn..."
+          placeholderTextColor="#999"
           accessibilityLabel="Message input"
         />
         <TouchableOpacity
@@ -115,20 +115,23 @@ const ChatRoom = ({
           }}
           accessibilityLabel="Send message"
         >
-          <Text style={styles.sendButtonText}>Send</Text>
+          <FontAwesome5 name="paper-plane" size={20} color="white" solid />
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#F4F4F4",
   },
   messageList: {
     flex: 1,
+  },
+  messageListContent: {
+    paddingVertical: 20,
   },
   messageContainer: {
     flexDirection: "row",
@@ -142,28 +145,30 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   messageAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    marginRight: 8,
+    alignSelf: "flex-end",
   },
   messageContent: {
     borderRadius: 20,
-    padding: 10,
-    maxWidth: "70%",
+    padding: 12,
+    maxWidth: "75%",
   },
   sentMessageContent: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#0084FF",
     alignSelf: "flex-end",
-    borderTopRightRadius: 0,
+    borderBottomRightRadius: 4,
   },
   receivedMessageContent: {
     backgroundColor: "#E5E5EA",
     alignSelf: "flex-start",
-    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 4,
   },
   messageText: {
     fontSize: 16,
+    lineHeight: 22,
   },
   sentMessageText: {
     color: "white",
@@ -172,40 +177,41 @@ const styles = StyleSheet.create({
     color: "black",
   },
   messageTime: {
-    fontSize: 12,
-    color: "#888",
-    marginTop: 5,
+    fontSize: 11,
+    marginTop: 4,
   },
   sentMessageTime: {
     alignSelf: "flex-end",
+    color: "rgba(255, 255, 255, 0.7)",
   },
   receivedMessageTime: {
     alignSelf: "flex-start",
+    color: "#888",
   },
   inputContainer: {
     flexDirection: "row",
     padding: 10,
     backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#E5E5E5",
+    alignItems: "center",
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    backgroundColor: "#F0F0F0",
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
     marginRight: 10,
+    fontSize: 16,
   },
   sendButton: {
-    backgroundColor: "#007AFF",
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    backgroundColor: "#0084FF",
+    borderRadius: 50,
+    width: 44,
+    height: 44,
     justifyContent: "center",
-  },
-  sendButtonText: {
-    color: "white",
-    fontSize: 16,
+    alignItems: "center",
   },
 });
 

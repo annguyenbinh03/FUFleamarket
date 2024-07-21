@@ -217,15 +217,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
   },
-  icon: {
-    marginRight: 15,
-    width: 20,
-    textAlign: "center",
-  },
   infoText: {
     fontSize: 16,
     color: "#333333",
     flex: 1,
+    marginLeft: 15,
   },
   introductionSection: {
     backgroundColor: "#FFFFFF",

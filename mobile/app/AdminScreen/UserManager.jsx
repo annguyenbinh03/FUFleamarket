@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { formatDate } from "../../utils/formatDate";
 import Empty from "../../components/Empty";
 import { getAllUserAPI } from "../api/user_api";
+import AuthContext from "../../context/AuthProvider";
 
 const UserManager = () => {
   const navigation = useNavigation();
@@ -19,6 +20,7 @@ const UserManager = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { auth } = useContext(AuthContext);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -55,7 +57,7 @@ const UserManager = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Users</Text>
+      <Text style={styles.title}>Quản lý người dùng</Text>
       <FlatList
         data={users}
         keyExtractor={(item) => item.userId.toString()}
@@ -72,6 +74,9 @@ const UserManager = () => {
               <Text style={styles.userEmail}>{item.email}</Text>
               <Text style={styles.createdDate}>
                 {formatDate(item.createdDate)}
+              </Text>
+              <Text style={styles.role}>
+                {item.roleId === 1 ? "Người dùng" : "Người điều hành"}
               </Text>
             </View>
           </TouchableOpacity>
@@ -95,6 +100,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     marginBottom: 15,
+    color: "Blue",
   },
   userItem: {
     flexDirection: "row",
@@ -107,8 +113,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userAvatar: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     marginRight: 15,
     borderRadius: 50,
     shadowColor: "black",
@@ -124,6 +130,12 @@ const styles = StyleSheet.create({
   createdDate: {
     fontSize: 10,
     color: "#555",
+  },
+  role: {
+    fontSize: 10,
+    color: "#555",
+    fontWeight: "bold",
+    color: "green",
   },
 });
 

@@ -12,7 +12,7 @@ const BuyOrderButton = () => {
       onPress={() => navigation.navigate("BuyOrder")}
     >
       <FontAwesome5
-        name="shopping-bag"
+        name="credit-card"
         size={20}
         color="#DD0000"
         style={styles.icon}

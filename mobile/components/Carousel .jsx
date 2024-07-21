@@ -132,7 +132,7 @@ const Carousel = () => {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height * 0.3, // Adjust this value to change the height of the carousel
+    height: height * 0.3, 
   },
   imageContainer: {
     width: width,
