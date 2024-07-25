@@ -92,7 +92,7 @@ namespace WebAPI.Controllers
 
             if (!products.Any())
             {
-                return NotFound("There are currently no products pending approval.");
+                return NoContent();
             }
 
             return Ok(products);
@@ -338,7 +338,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return NoContent();
             }
         }
 
@@ -363,7 +363,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return NoContent();
             }
         }
 
@@ -389,7 +389,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return NoContent();
             }
         }
 
@@ -476,9 +476,12 @@ namespace WebAPI.Controllers
                         query = query.Where(p => p.Status == 1 && p.DealType == true);
                         break;
                     case 5:
-                        query = query.Where(p => p.Status == 3);
+                        query = query.Where(p => p.Status == 2);
                         break;
                     case 6:
+                        query = query.Where(p => p.Status == 3);
+                        break;
+                    case 7:
                         query = query.Where(p => p.Status == 4);
                         break;
                     default:
