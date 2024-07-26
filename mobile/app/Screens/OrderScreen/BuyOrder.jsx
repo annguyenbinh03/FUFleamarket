@@ -31,28 +31,26 @@ const BuyOrder = () => {
       console.log("Fetching orders for tab:", tab);
       const response = await getBuyOrdersAPI(auth.token, tab, sortBy);
       setOrders(response.data);
+      setIsLoading(false);
       console.log("Đã tải xong danh sách đơn hàng:", response.data);
     } catch (error) {
       setOrders([]);
-      console.error("Lỗi khi tải danh sách đơn hàng:", error);
-      Alert.alert(
-        "Lỗi",
-        "Đã xảy ra lỗi khi tải đơn hàng. Vui lòng thử lại sau."
-      );
-    } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCompleteOrder = async (productId) => {
-    console.log("Đang xác nhận hoàn thành đơn hàng:", productId);
+  const handleCompleteOrder = async (orderId) => {
+    console.log("Đang xác nhận hoàn thành đơn hàng:", orderId);
     try {
-      await completeOrdersByBuyerAPI(productId);
+      await completeOrdersByBuyerAPI(auth.token, orderId);
       console.log("Đã xác nhận hoàn thành đơn hàng thành công");
       fetchOrders();
       Alert.alert("Thành công", "Đã hoàn thành giao dịch");
     } catch (error) {
-      console.error("Lỗi khi xác nhận hoàn thành đơn hàng:", error);
+      console.error(
+        "Lỗi khi xác nhận hoàn thành đơn hàng:",
+        error.response.data
+      );
       Alert.alert(
         "Lỗi",
         "Không thể hoàn thành giao dịch. Vui lòng thử lại sau."
@@ -107,7 +105,7 @@ const BuyOrder = () => {
         {order.status === 1 && (
           <TouchableOpacity
             style={styles.completeButton}
-            onPress={() => handleCompleteOrder(order.productId)}
+            onPress={() => handleCompleteOrder(order.orderId)}
           >
             <Text style={styles.buttonText}>Hoàn thành giao dịch</Text>
           </TouchableOpacity>

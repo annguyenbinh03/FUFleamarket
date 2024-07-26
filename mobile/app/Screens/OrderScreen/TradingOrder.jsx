@@ -21,96 +21,56 @@ import Empty from "../../../components/Empty";
 
 const TradingOrder = () => {
   const [orders, setOrders] = useState([]);
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
   const [tab, setTab] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [sortBy, setSortBy] = useState("date");
 
-  const checkTokenValidity = async () => {
-    if (!auth.token) {
-      Alert.alert("Phiên đăng nhập hết hạn", "Vui lòng đăng nhập lại.");
-      navigation.navigate("Login");
-      return false;
-    }
-
-    try {
-      await getMyTradingOrderAPI(auth.token, tab, sortBy);
-      return true;
-    } catch (error) {
-      if (
-        (error.response && error.response.status === 401) ||
-        (error.response && error.response.status === 400)
-      ) {
-        Alert.alert("Phiên đăng nhập hết hạn", "Vui lòng đăng nhập lại.");
-        setAuth({});
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Login" }],
-        });
-        return false;
-      }
-      console.error("Lỗi khi kiểm tra token:", error);
-      return false;
-    }
-  };
-
   const fetchOrder = async () => {
     console.log("Đang tải danh sách đơn hàng...");
     setIsLoading(true);
-    if (await checkTokenValidity()) {
-      try {
-        const response = await getMyTradingOrderAPI(auth.token, tab, sortBy);
-        setOrders(response.data);
-        console.log("Đã tải xong danh sách đơn hàng:", response.data);
-      } catch (error) {
-        console.error("Lỗi khi tải danh sách đơn hàng:", error);
-        if (error.response && error.response.status === 404) {
-          Alert.alert(
-            "Thông báo",
-            `Bạn chưa có đơn nào trong mục ${getTabText(tab)}`
-          );
-        } else {
-          Alert.alert(
-            "Lỗi",
-            "Đã xảy ra lỗi khi tải đơn hàng. Vui lòng thử lại sau."
-          );
-        }
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      const response = await getMyTradingOrderAPI(auth.token, tab, sortBy);
+      setIsLoading(false);
+      setOrders(response.data);
+      console.log("Đã tải xong danh sách đơn hàng:", response.data);
+    } catch (error) {
+      setOrders([]);
+      console.error("Lỗi khi tải danh sách đơn hàng:", error);
+      setIsLoading(false);
     }
   };
 
   const handleCompleteOrder = async (orderId) => {
     console.log("Đang xác nhận hoàn thành đơn hàng:", orderId);
-    if (await checkTokenValidity()) {
-      try {
-        await user1CompleteTradingRequest(auth.token, orderId);
-        console.log("Đã xác nhận hoàn thành đơn hàng thành công");
-        fetchOrder();
-      } catch (error) {
-        console.error("Lỗi khi xác nhận hoàn thành đơn hàng:", error);
-      }
+    try {
+      await user1CompleteTradingRequest(auth.token, orderId);
+      console.log("Đã xác nhận hoàn thành đơn hàng thành công");
+      fetchOrder();
+    } catch (error) {
+      console.error("Lỗi khi xác nhận hoàn thành đơn hàng:", error);
     }
   };
 
   const handleRejectOrder = async (orderId) => {
     console.log("Đang từ chối đơn hàng:", orderId);
-    if (await checkTokenValidity()) {
-      try {
-        await user1RejectTradingRequest(auth.token, orderId);
-        console.log("Đã từ chối đơn hàng thành công");
-        fetchOrder();
-      } catch (error) {
-        console.error("Lỗi khi từ chối đơn hàng:", error);
-      }
+    try {
+      await user1RejectTradingRequest(auth.token, orderId);
+      console.log("Đã từ chối đơn hàng thành công");
+      fetchOrder();
+    } catch (error) {
+      console.error("Lỗi khi từ chối đơn hàng:", error);
     }
   };
 
-  useEffect(() => {
-    fetchOrder();
-  }, [tab]);
+  useEffect(
+    () => {
+      fetchOrder();
+    },
+    [tab],
+    [sortBy]
+  );
 
   const renderOrderItem = ({ item }) => (
     <View style={styles.orderContainer}>

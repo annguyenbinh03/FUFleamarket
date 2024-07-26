@@ -13,12 +13,14 @@ import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../../../utils/formatPrice";
 import { formatDate } from "../../../utils/formatDate";
 import AuthContext from "../../../context/AuthProvider";
+import Empty from "../../../components/Empty";
 
 const WishListScreen = () => {
   const navigation = useNavigation();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { auth } = useContext(AuthContext);
+  const [error, setError] = useState();
   useEffect(() => {
     fetchWishlist();
   }, []);
@@ -26,11 +28,13 @@ const WishListScreen = () => {
   const fetchWishlist = async () => {
     try {
       const response = await axios.get(
-        `https://fufleamarketapi.azurewebsites.net/api/Wishlist/user/${auth.userId}`
+        `https://fufleamarketapis.azurewebsites.net/api/Wishlist/user/${auth.userId}`
       );
+      console.log("Wishlist: ", response.data);
       setWishlistItems(response.data);
       setLoading(false);
     } catch (error) {
+      setError(error);
       console.error("Error fetching wishlist:", error);
       setLoading(false);
     }
@@ -43,10 +47,12 @@ const WishListScreen = () => {
       </View>
     );
   }
+  if (error) {
+    return <Text>Không có sản phẩm</Text>;
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Danh sách yêu thích</Text>
       <FlatList
         data={wishlistItems}
         keyExtractor={(item) => item.productId.toString()}

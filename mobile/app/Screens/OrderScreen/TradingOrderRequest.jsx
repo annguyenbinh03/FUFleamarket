@@ -34,6 +34,7 @@ const TradingOrderRequest = () => {
         sortBy
       );
       setOrders(response.data);
+      setIsLoading(false);
       console.log("fetch trading Order: ", response.data);
     } catch (error) {
       setOrders([]);
