@@ -57,7 +57,10 @@ const UserManager = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quản lý người dùng</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Quản lý người dùng</Text>
+      </View>
+
       <FlatList
         data={users}
         keyExtractor={(item) => item.userId.toString()}
@@ -89,18 +92,22 @@ const UserManager = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    gap: 10,
+    backgroundColor: "#F0F8FF",
   },
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
+  header: {
+    backgroundColor: "#1E90FF",
+    padding: 10,
     marginBottom: 15,
-    color: "Blue",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 5,
   },
   userItem: {
     flexDirection: "row",

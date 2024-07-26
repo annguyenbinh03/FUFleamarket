@@ -21,6 +21,7 @@ import CreateTradingOrder from "./Screens/OrderScreen/CreateTradingOrder";
 import TradingOrderRequest from "./Screens/OrderScreen/TradingOrderRequest";
 import TradingOrder from "./Screens/OrderScreen/TradingOrder";
 import AuthWrapper from "../components/AuthWrapper";
+import AdminOrderPackage from "./AdminScreen/AdminOrderPackage";
 
 const Stack = createNativeStackNavigator();
 
@@ -137,7 +138,7 @@ export default function App() {
               <Stack.Screen
                 name="SellOrder"
                 options={{
-                  title: "Đơn bán",
+                  title: "Đơn yêu cầu mua",
                   headerStyle: styles.header,
                   headerTitleStyle: styles.headerTitle,
                 }}
@@ -221,14 +222,24 @@ export default function App() {
               <Stack.Screen
                 name="AdminProductManager"
                 options={{
-                  title: "Quản lý sản phẩm",
-                  headerStyle: styles.header,
-                  headerTitleStyle: styles.headerTitle,
+                  headerShown: false,
                 }}
               >
                 {() => (
                   <AuthWrapper allowedRoles={[2]}>
                     <AdminProductManager />
+                  </AuthWrapper>
+                )}
+              </Stack.Screen>
+              <Stack.Screen
+                name="AdminOrderPackage"
+                options={{
+                  headerShown: false,
+                }}
+              >
+                {() => (
+                  <AuthWrapper allowedRoles={[2]}>
+                    <AdminOrderPackage />
                   </AuthWrapper>
                 )}
               </Stack.Screen>

@@ -6,14 +6,17 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  FlatList,
+  Image,
+  Alert,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { Picker } from "@react-native-picker/picker";
 import AuthContext from "../../../context/AuthProvider";
 import {
   createTradingOrderAPI,
   getInfoForCreateTradingOrder,
 } from "../../api/tradingOrder";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const ALLOW_TWO_SIDES_DIFFERENT_PERCENT = 90;
 
@@ -27,10 +30,9 @@ function CreateTradingOrder() {
   const [user2Products, setUser2Products] = useState([]);
   const [user1SelectedItems, setUser1SelectedItems] = useState([]);
   const [user2SelectedItems, setUser2SelectedItems] = useState([]);
+  const [selectedUser1Product, setSelectedUser1Product] = useState(null);
+  const [selectedUser2Product, setSelectedUser2Product] = useState(null);
   const [note, setNote] = useState("");
-
-  console.log("auth.userId:", auth.userId);
-  console.log("Seller:, ", sellerId);
 
   useEffect(() => {
     fetchData();
@@ -44,6 +46,7 @@ function CreateTradingOrder() {
       );
       setUser1Products(response.data.requestSideProducts);
       setUser2Products(response.data.responseSideProducts);
+      console.log("Products: ", response.data.requestSideProducts);
 
       // Automatically add the selected product to user2's items
       const selectedProduct = response.data.responseSideProducts.find(
@@ -57,6 +60,37 @@ function CreateTradingOrder() {
     }
   };
 
+  const checkStoredQuantity = (productId, quantity, isUser1) => {
+    const products = isUser1 ? user1Products : user2Products;
+    const product = products.find((p) => p.productId === productId);
+
+    if (product && quantity > product.storedQuantity) {
+      Alert.alert("Thông báo", "Số lượng đã đạt đến giới hạn");
+      return false;
+    }
+    return true;
+  };
+
+  const updateQuantity = (productId, isUser1, change) => {
+    const updatedItems = isUser1
+      ? [...user1SelectedItems]
+      : [...user2SelectedItems];
+    const item = updatedItems.find(
+      (item) => item.product.productId === productId
+    );
+    if (item) {
+      const newQuantity = Math.max(1, item.quantity + change);
+      if (checkStoredQuantity(productId, newQuantity, isUser1)) {
+        item.quantity = newQuantity;
+        if (isUser1) {
+          setUser1SelectedItems(updatedItems);
+        } else {
+          setUser2SelectedItems(updatedItems);
+        }
+      }
+    }
+  };
+
   const addProduct = (product, isUser1) => {
     const updatedItems = isUser1
       ? [...user1SelectedItems]
@@ -66,9 +100,19 @@ function CreateTradingOrder() {
     );
 
     if (existingItem) {
-      existingItem.quantity += 1;
+      if (
+        checkStoredQuantity(
+          product.productId,
+          existingItem.quantity + 1,
+          isUser1
+        )
+      ) {
+        existingItem.quantity += 1;
+      }
     } else {
-      updatedItems.push({ product, quantity: 1 });
+      if (checkStoredQuantity(product.productId, 1, isUser1)) {
+        updatedItems.push({ product, quantity: 1 });
+      }
     }
 
     if (isUser1) {
@@ -136,12 +180,9 @@ function CreateTradingOrder() {
         quantity: item.quantity,
       })),
     };
-    console.log("Data being sent to createTradingOrderAPI:", tradingOrderData);
 
     try {
       const response = await createTradingOrderAPI(tradingOrderData);
-      console.log("createTradingOrderAPI: ", response);
-
       if (response) {
         alert("Tạo đơn trao đổi hoàn tất, đang chờ đối phương xét duyệt!");
       } else {
@@ -153,29 +194,68 @@ function CreateTradingOrder() {
     }
   };
 
-  const renderProductItem = ({ item, isUser1 }) => (
-    <View style={styles.productItem}>
-      <Text>{item.productName}</Text>
-      <Text>Giá: {item.price}</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => addProduct(item, isUser1)}
-      >
-        <Text style={styles.buttonText}>Thêm</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   const renderSelectedItem = ({ item, isUser1 }) => (
     <View style={styles.selectedItem}>
-      <Text>{item.product.productName}</Text>
-      <Text>Số lượng: {item.quantity}</Text>
+      <Image
+        source={{ uri: item.product.imageLink }}
+        style={styles.selectedItemImage}
+      />
+      <View style={styles.selectedItemInfo}>
+        <Text
+          style={styles.selectedItemName}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {item.product.productName}
+        </Text>
+        <Text style={styles.selectedItemPrice}>
+          {item.product.price.toLocaleString()} đ
+        </Text>
+        <View style={styles.quantityContainer}>
+          <TouchableOpacity
+            onPress={() => updateQuantity(item.product.productId, isUser1, -1)}
+          >
+            <FontAwesome5 name="minus-circle" size={18} color="#F44336" />
+          </TouchableOpacity>
+          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <TouchableOpacity
+            onPress={() => updateQuantity(item.product.productId, isUser1, 1)}
+          >
+            <FontAwesome5 name="plus-circle" size={18} color="#4CAF50" />
+          </TouchableOpacity>
+        </View>
+      </View>
       <TouchableOpacity
         style={styles.removeButton}
         onPress={() => removeProduct(item.product.productId, isUser1)}
       >
-        <Text style={styles.buttonText}>Xóa</Text>
+        <FontAwesome5 name="times-circle" size={20} color="#F44336" />
       </TouchableOpacity>
+    </View>
+  );
+
+  const ProductPicker = ({
+    products,
+    selectedProduct,
+    onValueChange,
+    userLabel,
+  }) => (
+    <View style={styles.pickerContainer}>
+      <Text style={styles.pickerLabel}>{`Chọn sản phẩm ${userLabel}:`}</Text>
+      <Picker
+        selectedValue={selectedProduct}
+        onValueChange={onValueChange}
+        style={styles.picker}
+      >
+        <Picker.Item label="Chọn sản phẩm" value={null} />
+        {products.map((product) => (
+          <Picker.Item
+            key={product.productId}
+            label={`${product.productName} - ${product.price.toLocaleString()} đ`}
+            value={product}
+          />
+        ))}
+      </Picker>
     </View>
   );
 
@@ -185,39 +265,43 @@ function CreateTradingOrder() {
 
       <View style={styles.userSection}>
         <Text style={styles.sectionTitle}>Sản phẩm của bạn</Text>
-        <FlatList
-          data={user1Products}
-          renderItem={({ item }) => renderProductItem({ item, isUser1: true })}
-          keyExtractor={(item) => item.productId.toString()}
+        <ProductPicker
+          products={user1Products}
+          selectedProduct={selectedUser1Product}
+          onValueChange={(value) => {
+            setSelectedUser1Product(value);
+            if (value) {
+              addProduct(value, true);
+            }
+          }}
+          userLabel="của bạn"
         />
-        <Text style={styles.sectionTitle}>Đã chọn:</Text>
-        <FlatList
-          data={user1SelectedItems}
-          renderItem={({ item }) => renderSelectedItem({ item, isUser1: true })}
-          keyExtractor={(item) => item.product.productId.toString()}
-        />
+        {user1SelectedItems.map((item) =>
+          renderSelectedItem({ item, isUser1: true })
+        )}
         <Text style={styles.totalText}>
-          Tổng giá trị: {calculateTotal(user1SelectedItems)}
+          Tổng giá trị: {calculateTotal(user1SelectedItems).toLocaleString()} đ
         </Text>
       </View>
 
       <View style={styles.userSection}>
         <Text style={styles.sectionTitle}>Sản phẩm đối phương</Text>
-        <FlatList
-          data={user2Products}
-          renderItem={({ item }) => renderProductItem({ item, isUser1: false })}
-          keyExtractor={(item) => item.productId.toString()}
+        <ProductPicker
+          products={user2Products}
+          selectedProduct={selectedUser2Product}
+          onValueChange={(value) => {
+            setSelectedUser2Product(value);
+            if (value) {
+              addProduct(value, false);
+            }
+          }}
+          userLabel="đối phương"
         />
-        <Text style={styles.sectionTitle}>Đã chọn:</Text>
-        <FlatList
-          data={user2SelectedItems}
-          renderItem={({ item }) =>
-            renderSelectedItem({ item, isUser1: false })
-          }
-          keyExtractor={(item) => item.product.productId.toString()}
-        />
+        {user2SelectedItems.map((item) =>
+          renderSelectedItem({ item, isUser1: false })
+        )}
         <Text style={styles.totalText}>
-          Tổng giá trị: {calculateTotal(user2SelectedItems)}
+          Tổng giá trị: {calculateTotal(user2SelectedItems).toLocaleString()} đ
         </Text>
       </View>
 
@@ -240,68 +324,114 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 16,
+    marginBottom: 24,
+    color: "#333",
   },
   userSection: {
     marginBottom: 24,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
-  },
-  productItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 16,
+    color: "#333",
   },
   selectedItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+    padding: 8,
     marginBottom: 8,
-    backgroundColor: "#f0f0f0",
-    padding: 8,
-    borderRadius: 4,
   },
-  addButton: {
-    backgroundColor: "#4CAF50",
-    padding: 8,
+  selectedItemImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 5,
+    marginRight: 8,
+  },
+  selectedItemInfo: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  selectedItemName: {
+    fontSize: 12,
+    fontWeight: "bold",
+    flex: 1,
+    marginRight: 4,
+  },
+  selectedItemPrice: {
+    fontSize: 12,
+    color: "#666",
+    marginRight: 4,
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 4,
+    paddingHorizontal: 4,
+  },
+  quantityText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginHorizontal: 8,
   },
   removeButton: {
-    backgroundColor: "#F44336",
-    padding: 8,
-    borderRadius: 4,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
+    padding: 4,
   },
   totalText: {
     fontSize: 16,
     fontWeight: "bold",
-    marginTop: 8,
+    marginTop: 16,
+    color: "#333",
   },
   noteInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 24,
     minHeight: 100,
+    textAlignVertical: "top",
   },
   submitButton: {
     backgroundColor: "#2196F3",
     padding: 16,
-    borderRadius: 4,
+    borderRadius: 8,
     alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  pickerContainer: {
+    marginBottom: 16,
+  },
+  pickerLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  picker: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
   },
 });
 

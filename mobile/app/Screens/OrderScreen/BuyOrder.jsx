@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,52 +10,59 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import AuthContext from "../../../context/AuthProvider";
+import { useNavigation } from "@react-navigation/native";
 import Empty from "../../../components/Empty";
 import { formatDate } from "../../../utils/formatDate";
 import formatPrice from "../../../utils/formatPrice";
-import { completeOrdersByBuyerAPI, getBuyOrdersAPI } from "../../api/order";
+import { getBuyOrdersAPI, completeOrdersByBuyerAPI } from "../../api/order";
+import AuthContext from "../../../context/AuthProvider";
 
-function BuyOrder() {
+const BuyOrder = () => {
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState("all");
+  const [tab, setTab] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation();
+  const [sortBy, setSortBy] = useState("date");
   const { auth } = useContext(AuthContext);
-
-  useEffect(() => {
-    fetchOrders();
-  }, [auth]);
 
   const fetchOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await getBuyOrdersAPI(auth.token);
-      console.log("BuyOrdersAPI: ", response.data);
+      console.log("Fetching orders for tab:", tab);
+      const response = await getBuyOrdersAPI(auth.token, tab, sortBy);
       setOrders(response.data);
+      console.log("Đã tải xong danh sách đơn hàng:", response.data);
     } catch (error) {
-      console.error("Lỗi khi tải đơn hàng:", error);
-      if (error.response && error.response.status === 404) {
-        Alert.alert("Thông báo", "Bạn hiện chưa có đơn hàng nào");
-      } else {
-        Alert.alert(
-          "Lỗi",
-          "Đã xảy ra lỗi khi tải đơn hàng. Vui lòng thử lại sau."
-        );
-      }
+      setOrders([]);
+      console.error("Lỗi khi tải danh sách đơn hàng:", error);
+      Alert.alert(
+        "Lỗi",
+        "Đã xảy ra lỗi khi tải đơn hàng. Vui lòng thử lại sau."
+      );
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleCompleteOrder = async (productId) => {
+    console.log("Đang xác nhận hoàn thành đơn hàng:", productId);
     try {
-      await completeOrdersByBuyerAPI(auth.token, productId);
+      await completeOrdersByBuyerAPI(productId);
+      console.log("Đã xác nhận hoàn thành đơn hàng thành công");
       fetchOrders();
-      console.log("Order completed successfully");
-      Alert.alert("Đã hoàn thành giao dịch");
+      Alert.alert("Thành công", "Đã hoàn thành giao dịch");
     } catch (error) {
-      console.error("Error completing order:", error.response.data);
+      console.error("Lỗi khi xác nhận hoàn thành đơn hàng:", error);
+      Alert.alert(
+        "Lỗi",
+        "Không thể hoàn thành giao dịch. Vui lòng thử lại sau."
+      );
     }
   };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [tab, sortBy]);
 
   const renderOrderItem = ({ item }) => {
     const order = item.order;
@@ -63,53 +70,46 @@ function BuyOrder() {
     const seller = order.seller;
 
     return (
-      <View style={styles.productContainer}>
+      <View style={styles.orderContainer}>
         <View style={styles.sellerInfo}>
           <Image source={{ uri: seller.avarta }} style={styles.avatar} />
           <Text style={styles.fullName}>{seller.fullName}</Text>
         </View>
-        <View style={styles.productHeader}>
+        <View style={styles.productInfo}>
           <Image
             source={{ uri: product.imageLink }}
             style={styles.productImage}
           />
-          <View style={styles.productInfo}>
-            <Text style={styles.productName} numberOfLines={1}>
+          <View style={styles.productDetails}>
+            <Text style={styles.productName} numberOfLines={2}>
               {product.productName}
             </Text>
             <Text style={styles.productPrice}>
               {formatPrice(order.price)} VND
             </Text>
-            <Text
-              style={[
-                styles.productStatus,
-                { backgroundColor: getStatusColor(order.status) },
-              ]}
-            >
-              {getStatusText(order.status)}
-            </Text>
+            <Text style={styles.quantityText}>Số lượng: {order.quantity}</Text>
           </View>
         </View>
-        <View style={styles.orderDetails}>
-          <Text style={styles.orderDetailText}>Số lượng: {order.quantity}</Text>
-          <Text style={styles.orderDetailText}>
-            Ngày đặt: {formatDate(order.orderDate)}
+        <Text style={styles.orderDate}>
+          Ngày đặt: {formatDate(order.orderDate)}
+        </Text>
+        <Text style={styles.statusText}>
+          Trạng thái:{" "}
+          <Text
+            style={[
+              styles.statusValue,
+              { color: getStatusColor(order.status) },
+            ]}
+          >
+            {getStatusText(order.status)}
           </Text>
-          <Text style={styles.productPrice}>
-            {formatPrice(order.price)} VND
-          </Text>
-        </View>
+        </Text>
         {order.status === 1 && (
           <TouchableOpacity
             style={styles.completeButton}
             onPress={() => handleCompleteOrder(order.productId)}
           >
-            <Text style={styles.buttonText}>Hoàn thành</Text>
-          </TouchableOpacity>
-        )}
-        {order.status === 3 && (
-          <TouchableOpacity style={styles.productActionButton}>
-            <Text style={styles.buttonText}>Đánh giá</Text>
+            <Text style={styles.buttonText}>Hoàn thành giao dịch</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -119,113 +119,130 @@ function BuyOrder() {
   const getStatusText = (status) => {
     switch (status) {
       case 0:
-        return "Đang chờ người bán duyệt";
+        return "Đang chờ duyệt";
       case 1:
         return "Đang trao đổi";
       case 2:
-        return "Đã từ chối giao dịch";
+        return "Đã từ chối";
       case 3:
-        return "Đã hoàn thành giao dịch";
-      case 4:
-        return "Đã bị admin ẩn";
+        return "Đã hoàn thành";
       default:
-        return "Không xác định";
+        return "Đã bị admin ẩn";
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
       case 0:
-        return "#6c757d"; // secondary
+        return "#6c757d";
       case 1:
-        return "#17a2b8"; // info
+        return "#17a2b8";
       case 2:
-        return "#dc3545"; // danger
+        return "#dc3545";
       case 3:
-        return "#007bff"; // primary
-      case 4:
-        return "#dc3545"; // danger
+        return "#28a745";
       default:
-        return "#6c757d"; // secondary
+        return "#6c757d";
     }
   };
 
-  const getTabText = (tab) => {
-    switch (tab) {
-      case "all":
-        return "Tất cả";
-      case "pending":
-        return "Chờ duyệt";
-      case "exchanging":
-        return "Đang trao đổi";
-      case "rejected":
-        return "Đã từ chối";
-      case "completed":
-        return "Hoàn thành";
-      case "hidden":
-        return "Bị ẩn";
-      default:
-        return "";
-    }
-  };
-
-  const filteredOrders = orders.filter((item) => {
-    switch (activeTab) {
-      case "all":
-        return true;
-      case "pending":
-        return item.order.status === 0;
-      case "exchanging":
-        return item.order.status === 1;
-      case "rejected":
-        return item.order.status === 2;
-      case "completed":
-        return item.order.status === 3;
-      case "hidden":
-        return item.order.status === 4;
-      default:
-        return true;
-    }
-  });
+  // const getTabText = (tabNumber) => {
+  //   switch (tabNumber) {
+  //     case 1:
+  //       return "Tất cả";
+  //     case 2:
+  //       return "Đang chờ duyệt";
+  //     case 3:
+  //       return "Đang trao đổi";
+  //     case 4:
+  //       return "Đã hoàn thành";
+  //     case 5:
+  //       return "Đã từ chối";
+  //     default:
+  //       return "Không xác định";
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#DD0000" style="light" />
+      <StatusBar backgroundColor="#DD0000" barStyle="light-content" />
       <View style={styles.tabContainer}>
-        {[
-          "all",
-          "pending",
-          "exchanging",
-          "rejected",
-          "completed",
-          "hidden",
-        ].map((tab) => (
+        {[1, 2, 3, 4, 5].map((tabNumber) => (
           <TouchableOpacity
-            key={tab}
-            style={[styles.tabButton, activeTab === tab && styles.activeTab]}
-            onPress={() => setActiveTab(tab)}
+            key={tabNumber}
+            style={[styles.tab, tab === tabNumber && styles.selectedTab]}
+            onPress={() => setTab(tabNumber)}
           >
-            <Text style={styles.tabButtonText}>{getTabText(tab)}</Text>
+            <Text
+              style={[
+                styles.tabText,
+                tab === tabNumber && styles.selectedTabText,
+              ]}
+            >
+              {tabNumber === 1
+                ? "Tất cả"
+                : tabNumber === 2
+                  ? "Chờ duyệt"
+                  : tabNumber === 3
+                    ? "Đang trao đổi"
+                    : tabNumber === 4
+                      ? "Hoàn thành"
+                      : "Từ chối"}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
+      <View style={styles.sortByContainer}>
+        <Text style={styles.sortByLabel}>Sắp xếp theo:</Text>
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={[
+              styles.sortButton,
+              sortBy === "date" && styles.selectedSortButton,
+            ]}
+            onPress={() => setSortBy("date")}
+          >
+            <Text
+              style={[
+                styles.sortButtonText,
+                sortBy === "date" && styles.selectedSortButtonText,
+              ]}
+            >
+              Mới nhất
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.sortButton,
+              sortBy === "price" && styles.selectedSortButton,
+            ]}
+            onPress={() => setSortBy("price")}
+          >
+            <Text
+              style={[
+                styles.sortButtonText,
+                sortBy === "price" && styles.selectedSortButtonText,
+              ]}
+            >
+              Giá cao nhất
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       {isLoading ? (
         <ActivityIndicator style={styles.loader} size="large" color="#DD0000" />
-      ) : filteredOrders.length === 0 ? (
-        <Empty />
       ) : (
         <FlatList
-          data={filteredOrders}
+          data={orders}
           renderItem={renderOrderItem}
-          keyExtractor={(item) =>
-            item.order.orderId.toString() + item.product.productId.toString()
-          }
-          contentContainerStyle={styles.productList}
+          keyExtractor={(item) => item.order.orderId.toString()}
+          ListEmptyComponent={Empty}
+          contentContainerStyle={styles.listContent}
         />
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -237,92 +254,35 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     padding: 10,
     backgroundColor: "#fff",
+    elevation: 2,
   },
-  tabButton: {
+  tab: {
     padding: 8,
     borderRadius: 5,
   },
-  activeTab: {
+  selectedTab: {
     backgroundColor: "#FFA500",
   },
-  tabButtonText: {
+  tabText: {
     fontSize: 12,
     fontWeight: "bold",
   },
-  productList: {
+  selectedTabText: {
+    color: "#fff",
+  },
+  listContent: {
     padding: 10,
   },
-  productContainer: {
+  orderContainer: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-    elevation: 2,
+    padding: 15,
+    marginBottom: 15,
+    elevation: 3,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-  },
-  productHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  productImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  productInfo: {
-    flex: 1,
-  },
-  productName: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  productPrice: {
-    fontSize: 12,
-    color: "#FF6347",
-    marginTop: 2,
-  },
-  productStatus: {
-    backgroundColor: "#008000",
-    borderRadius: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    alignSelf: "flex-start",
-    marginTop: 4,
-    color: "#fff",
-  },
-  orderDetails: {
-    marginTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    paddingTop: 10,
-  },
-  orderDetailText: {
-    fontSize: 12,
-    color: "#444",
-    marginBottom: 2,
-  },
-  productActionButton: {
-    backgroundColor: "#FFA500",
-    padding: 8,
-    borderRadius: 5,
-    alignSelf: "flex-end",
-    marginTop: 10,
-  },
-  completeButton: {
-    backgroundColor: "#4CAF50",
-    padding: 8,
-    borderRadius: 5,
-    alignSelf: "flex-end",
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "bold",
   },
   sellerInfo: {
     flexDirection: "row",
@@ -337,11 +297,97 @@ const styles = StyleSheet.create({
   },
   fullName: {
     fontWeight: "bold",
+    fontSize: 14,
+  },
+  productInfo: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  productDetails: {
+    flex: 1,
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  productPrice: {
+    fontSize: 14,
+    color: "#FF6347",
+    marginBottom: 5,
+  },
+  quantityText: {
+    fontSize: 14,
+    color: "#666",
+  },
+  orderDate: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 5,
+  },
+  statusText: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  statusValue: {
+    fontWeight: "bold",
+  },
+  completeButton: {
+    backgroundColor: "#4CAF50",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  sortByContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  sortByLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+  },
+  sortButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#007AFF",
+    marginLeft: 10,
+  },
+  selectedSortButton: {
+    backgroundColor: "#007AFF",
+  },
+  sortButtonText: {
+    fontSize: 14,
+    color: "#007AFF",
+  },
+  selectedSortButtonText: {
+    color: "#fff",
   },
 });
 

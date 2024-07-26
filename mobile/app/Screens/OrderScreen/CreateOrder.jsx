@@ -149,6 +149,14 @@ const CreateOrder = () => {
       navigation.navigate("Login");
     }
   };
+  const calculateTotal = () => {
+    const numPrice = parseInt(price);
+    const numQuantity = parseInt(quantity);
+    if (isNaN(numPrice) || isNaN(numQuantity)) {
+      return 0;
+    }
+    return numPrice * numQuantity;
+  };
 
   if (loading) {
     return (
@@ -204,6 +212,12 @@ const CreateOrder = () => {
           returnKeyType="done"
           onSubmitEditing={() => checkQuantity(quantity)}
         />
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalLabel}>Tổng tiền:</Text>
+          <Text style={styles.totalValue}>
+            {formatPrice(calculateTotal())} VND
+          </Text>
+        </View>
 
         <Text style={styles.label}>Phương thức thanh toán:</Text>
         <View style={styles.paymentMethods}>
@@ -300,6 +314,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     marginTop: 15,
+  },
+  totalContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 15,
+    marginBottom: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "#e0e0e0",
+  },
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#DC3545",
   },
   input: {
     borderWidth: 1,

@@ -7,8 +7,8 @@ import {
   ActivityIndicator,
   Dimensions,
 } from "react-native";
-import axios from "axios";
-import { PieChart, BarChart } from "react-native-chart-kit";
+import { BarChart, PieChart } from "react-native-chart-kit";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   getMonthlyPackageAPI,
   getSummaryAPI,
@@ -18,19 +18,27 @@ import {
 
 const { width } = Dimensions.get("screen");
 
-// const TOP_SELLING_PRODUCT =
-//   "http://192.168.146.25:7057/api/DashBoard/topsellingproducts";
-// const DASHBOARD_SUMMARY =
-//   "http://192.168.146.25:7057/api/DashBoard/dashboardsummary";
-// const MONTHLY_PACKAGE =
-//   "http://192.168.146.25:7057/api/DashBoard/packagemonthlydata";
-// const TOP_SELLER = "http://192.168.146.25:7057/api/DashBoard/topsellers";
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#AF19FF",
+  "#FF4D4D",
+];
+
+const formatPrice = (value) => {
+  if (value) {
+    return value.toLocaleString("vi-VN");
+  }
+  return "0";
+};
 
 export default function AdminDashboard() {
-  const [summaryData, setSummaryData] = useState({});
-  const [topSellProductData, setTopSellProductData] = useState([]);
-  const [topSellerData, setTopSellerData] = useState([]);
-  const [sellingPackagesData, setSellingPackagesData] = useState([]);
+  const [summary, setSummary] = useState({});
+  const [topSellProduct, setTopSellProduct] = useState([]);
+  const [topSeller, setTopSeller] = useState([]);
+  const [sellingPackages, setSellingPackages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,22 +48,18 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
+      const [topSellProData, summaryData, topSellerData, packageData] =
+        await Promise.all([
+          getTopSellingProductAPI(),
+          getSummaryAPI(),
+          getTopSellerAPI(),
+          getMonthlyPackageAPI(),
+        ]);
 
-      const summaryResponse = await getSummaryAPI();
-      setSummaryData(summaryResponse.data);
-      console.log("summaryResponse: ", summaryResponse.data);
-
-      const topSellProductResponse = await getMonthlyPackageAPI();
-      setTopSellProductData(topSellProductResponse.data);
-      console.log("topSellProductResponse:", topSellProductResponse.data);
-
-      const topSellerResponse = await getTopSellerAPI();
-      setTopSellerData(topSellerResponse.data);
-      console.log("topSellerResponse:", topSellerResponse.data);
-
-      const sellingPackagesResponse = await getTopSellingProductAPI();
-      setSellingPackagesData(sellingPackagesResponse.data);
-      console.log("sellingPackagesResponse:", sellingPackagesResponse.data);
+      setTopSellProduct(topSellProData.data || []);
+      setSummary(summaryData.data || {});
+      setTopSeller(topSellerData.data || []);
+      setSellingPackages(packageData.data || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -63,84 +67,138 @@ export default function AdminDashboard() {
     }
   };
 
-  const renderSummary = () => (
-    <View style={styles.summaryContainer}>
-      <Text style={styles.summaryContainerItem}>
-        Tổng doanh thu: {summaryData.totalRevenue}
-      </Text>
-      <Text style={styles.summaryContainerItem}>
-        Tổng số đơn hàng: {summaryData.totalOrderCount}
-      </Text>
-      <Text style={styles.summaryContainerItem}>
-        Tổng số người dùng mới: {summaryData.totalUserCount}
-      </Text>
+  const renderSummaryCard = (title, value, iconName) => (
+    <View style={styles.summaryCard}>
+      <FontAwesome
+        name={iconName}
+        size={24}
+        color="#007AFF"
+        style={styles.summaryIcon}
+      />
+      <View style={styles.summaryTextContainer}>
+        <Text style={styles.summaryTitle}>{title}</Text>
+        <Text style={styles.summaryValue}>{value || "0"}</Text>
+      </View>
     </View>
   );
 
-  const renderBarChart = (chartData, dataKey, valueKey, title) => (
-    <View style={styles.chartContainer}>
-      <Text style={styles.chartTitle}>{title}</Text>
-      <BarChart
-        data={{
-          labels: chartData.map((item) => item[dataKey]),
-          datasets: [{ data: chartData.map((item) => item[valueKey]) }],
-        }}
-        width={300}
-        height={220}
-        yAxisLabel=""
-        chartConfig={{
-          backgroundColor: "#ffffff",
-          backgroundGradientFrom: "#ffffff",
-          backgroundGradientTo: "#ffffff",
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-        }}
-      />
-    </View>
-  );
+  const renderBarChart = (data, dataKey, valueKey, title) => {
+    const chartData = {
+      labels:
+        data.length > 0
+          ? data.map((item) => item[dataKey] || "").slice(0, 5)
+          : ["Không có dữ liệu"],
+      datasets: [
+        {
+          data:
+            data.length > 0
+              ? data.map((item) => item[valueKey] || 0).slice(0, 5)
+              : [0],
+        },
+      ],
+    };
 
-  const renderPieChart = () => (
-    <View style={styles.chartContainer}>
-      <Text style={styles.chartTitle}>Biểu đồ gói bán hàng</Text>
-      <PieChart
-        data={sellingPackagesData.map((item, index) => ({
-          name: item.promotionName,
-          population: item.totalPrice,
-          color: `rgba(0, 0, 255, ${0.5 + index * 0.1})`,
-        }))}
-        width={300}
-        height={220}
-        chartConfig={{
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-        }}
-        accessor="population"
-        backgroundColor="transparent"
-      />
-    </View>
-  );
+    return (
+      <View style={styles.chartContainer}>
+        <Text style={styles.chartTitle}>{title}</Text>
+        <BarChart
+          data={chartData}
+          width={width - 40}
+          height={220}
+          yAxisSuffix=""
+          chartConfig={{
+            backgroundColor: "#ffffff",
+            backgroundGradientFrom: "#ffffff",
+            backgroundGradientTo: "#ffffff",
+            decimalPlaces: 0,
+            color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+          }}
+          style={styles.chart}
+        />
+      </View>
+    );
+  };
+
+  const renderPieChart = () => {
+    const pieData =
+      sellingPackages.length > 0
+        ? sellingPackages.map((item, index) => ({
+            name: item.promotionName || "Không xác định",
+            population: item.totalPrice || 0,
+            color: COLORS[index % COLORS.length],
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 12,
+          }))
+        : [
+            {
+              name: "Không có dữ liệu",
+              population: 1,
+              color: COLORS[0],
+              legendFontColor: "#7F7F7F",
+              legendFontSize: 12,
+            },
+          ];
+
+    return (
+      <View style={styles.chartContainer}>
+        <Text style={styles.chartTitle}>Biểu đồ gói bán hàng</Text>
+        <PieChart
+          data={pieData}
+          width={width - 40}
+          height={220}
+          chartConfig={{
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          }}
+          accessor="population"
+          backgroundColor="transparent"
+          paddingLeft="15"
+        />
+      </View>
+    );
+  };
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#007AFF" />
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container}>
-      {renderSummary()}
+      <View style={styles.summaryContainer}>
+        {renderSummaryCard(
+          " Doanh thu trong tháng",
+          `${formatPrice(summary?.totalRevenue)} đ`,
+          "line-chart"
+        )}
+        {renderSummaryCard(
+          "Số lượng hóa đơn được tạo trong tháng",
+          summary?.totalOrderCount || "0",
+          "file-text-o"
+        )}
+        {renderSummaryCard(
+          "Người dùng mới trong tháng",
+          summary?.totalUserCount || "0",
+          "user-plus"
+        )}
+      </View>
       {renderBarChart(
-        topSellProductData,
+        topSellProduct,
         "productName",
         "quantity",
-        "Sản phẩm bán chạy"
+        "Top 5 sản phẩm bán chạy"
       )}
       {renderBarChart(
-        topSellerData,
+        topSeller,
         "sellerName",
         "totalOrders",
-        "Người bán hàng tiêu biểu"
+        "Top 5 người bán hàng"
       )}
       {renderPieChart()}
     </ScrollView>
@@ -158,24 +216,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   summaryContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 15,
+  },
+  summaryCard: {
+    flex: 1,
     flexDirection: "column",
-    justifyContent: "center",
-    padding: 10,
+    alignItems: "center",
     backgroundColor: "#fff",
-  },
-  summaryContainerItem: {
-    textAlign: "center",
-    backgroundColor: "#FFA500",
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#000000",
-    fontWeight: "bold",
-    padding: 10,
-    margin: 5,
-    elevation: 2,
+    padding: 15,
+    marginHorizontal: 5,
+    elevation: 3,
     shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-
+  summaryIcon: {
+    marginBottom: 10,
+  },
+  summaryTextContainer: {
+    alignItems: "center",
+  },
+  summaryTitle: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 5,
+    textAlign: "center",
+  },
+  summaryValue: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   chartContainer: {
     backgroundColor: "white",
     borderRadius: 10,
@@ -186,5 +261,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 15,
+    textAlign: "center",
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
   },
 });

@@ -1,19 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
-import AuthContext from "../context/AuthProvider";
 
 const WishListButton = () => {
-  const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.button}
       onPress={() => {
-        navigation.navigate("WishListScreen", { userId: auth.id });
-        console.log("User ID:", auth.id);
+        navigation.navigate("WishListScreen");
       }}
     >
       <FontAwesome5

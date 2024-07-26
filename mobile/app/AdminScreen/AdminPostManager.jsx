@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import AuthContext from "../../context/AuthProvider";
 import { MaterialIcons } from "@expo/vector-icons";
-import AdminProductManagerButton from "../../components/AdminProductManagerButton";
+import AdminProductManagerButton from "../../components/AdminNagativeButton";
 import formatPrice from "./../../utils/formatPrice";
 import Empty from "../../components/Empty";
 import {
@@ -20,6 +20,7 @@ import {
   getAdminProductRequestAPI,
   rejectCreateProductRequestAPI,
 } from "../api/product";
+import AdminNagativeButton from "../../components/AdminNagativeButton";
 
 const AdminPostManager = () => {
   const [products, setProducts] = useState([]);
@@ -144,14 +145,16 @@ const AdminPostManager = () => {
       <StatusBar barStyle="light-content" backgroundColor="#1E90FF" />
       <View style={styles.header}>
         <Text style={styles.title}>Quản lý yêu cầu đăng bài</Text>
-        <Text style={styles.subtitle}>
-          Danh sách sản phẩm <Text style={styles.pending}>chờ phê duyệt</Text>
-        </Text>
-        <AdminProductManagerButton
-          to="AdminProductManager"
-          title="Quản lý sản phẩm"
-          style={styles.productManagerButton}
-        />
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>
+            Sản phẩm <Text style={styles.pending}>chờ duyệt</Text>
+          </Text>
+          <AdminNagativeButton
+            to="AdminProductManager"
+            title="Quản lý sản phẩm"
+            style={styles.productManagerButton}
+          />
+        </View>
       </View>
       <FlatList
         data={pendingProducts}
@@ -175,14 +178,25 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#1E90FF",
-    padding: 20,
-    paddingTop: StatusBar.currentHeight + 10,
+    padding: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "white",
     marginBottom: 5,
+  },
+  subtitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "white",
+  },
+  pending: {
+    fontWeight: "bold",
   },
   subtitle: {
     fontSize: 16,

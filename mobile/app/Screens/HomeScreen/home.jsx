@@ -1,35 +1,34 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-} from "react-native";
-import {
-  GestureHandlerRootView,
-  ScrollView,
-} from "react-native-gesture-handler";
-import { Dimensions } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet, RefreshControl, ScrollView } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { images } from "../../../constants";
 import Carousel from "../../../components/Carousel ";
-import SearcInput from "../../../components/SearchInput";
-import ProductListContainer from "../../../components/ProductList";
 import Categories from "../../../components/Categories";
+import ProductListContainer from "../../../components/ProductList";
 import Header from "./Header";
 
 const Home = () => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setRefreshing(false);
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
         <StatusBar backgroundColor="#161622" style="light" />
         <Header />
-        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <Carousel />
           <Categories />
-          <ProductListContainer />
+          <ProductListContainer refreshing={refreshing} />
         </ScrollView>
       </View>
     </GestureHandlerRootView>
@@ -39,10 +38,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8", // Màu nền xám nhạt
-  },
-  scrollViewContainer: {
-    paddingBottom: 20,
+    backgroundColor: "#F8F8F8",
   },
 });
 

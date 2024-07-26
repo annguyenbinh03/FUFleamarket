@@ -11,7 +11,7 @@ const OrderBuyButton = ({ product, navigation }) => (
       });
     }}
   >
-    <FontAwesome5 name="shopping-cart" size={20} color="#fff" />
+    <FontAwesome5 name="credit-card" size={20} color="#fff" />
     <Text style={styles.buttonText}>Tạo hóa đơn mua</Text>
   </TouchableOpacity>
 );

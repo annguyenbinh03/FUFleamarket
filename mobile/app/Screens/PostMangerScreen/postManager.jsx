@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   ScrollView,
   StatusBar,
+  RefreshControl,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -24,8 +26,8 @@ const PostManager = () => {
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("ĐANG HIỂN THỊ");
   const [isLoading, setIsLoading] = useState(true);
-  const [sellingPackages, setSellingPackages] = useState([]);
   const [countProductAndLimit, setCountProductAndLimit] = useState();
+  const [refreshing, setRefreshing] = useState(false);
 
   const { auth } = useContext(AuthContext);
   const navigation = useNavigation();
@@ -56,29 +58,17 @@ const PostManager = () => {
     } catch (error) {
       console.error("Lỗi khi lấy sản phẩm:", error);
       setProducts([]);
+      if (
+        (error.response && error.response.status === 401) ||
+        (error.response && error.response.status === 400)
+      ) {
+        Alert.alert("Phiên đăng nhập hết hạn", "Vui lòng đăng nhập lại.");
+        setAuth({});
+        navigation.reset("Login");
+        return false;
+      }
     } finally {
       setIsLoading(false);
-    }
-  }, [auth]);
-
-  const fetchMyPackage = useCallback(async () => {
-    const token = auth?.token;
-    if (!token) {
-      console.error("No auth token available");
-      return;
-    }
-
-    try {
-      const response = await getMyPackageAPI(token);
-      setSellingPackages(response.data);
-      console.log("Gói bán hàng:", response.data);
-      console.log(
-        "Giới hạn số lượng sản phẩm:",
-        response.data[0].promotion.productQuantityLimit
-      );
-    } catch (error) {
-      console.error("Lỗi khi lấy gói bán hàng:", error);
-      console.error(error.response);
     }
   }, [auth]);
 
@@ -98,16 +88,21 @@ const PostManager = () => {
     }
   }, [auth]);
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await Promise.all([fetchProducts(), fetchCountProductAndLimit()]);
+    setRefreshing(false);
+  }, [fetchProducts, fetchCountProductAndLimit]);
+
   useEffect(() => {
     if (auth?.token) {
       fetchProducts();
-      fetchMyPackage();
       fetchCountProductAndLimit();
     } else {
       console.error("No auth token available");
       setIsLoading(false);
     }
-  }, [fetchProducts, fetchMyPackage, fetchCountProductAndLimit, auth]);
+  }, [fetchProducts, fetchCountProductAndLimit, auth]);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -158,30 +153,27 @@ const PostManager = () => {
         </Text>
       </View>
       <View style={styles.productActions}>
-        {/* <TouchableOpacity style={styles.productActionButton}>
-          <FontAwesome5 name="eye-slash" size={16} color="#fff" />
-        </TouchableOpacity> */}
-        {/* <TouchableOpacity style={styles.productActionButton}>
-          <FontAwesome5 name="share" size={16} color="#fff" />
-        </TouchableOpacity> */}
+        {/* Các nút hành động có thể được thêm vào đây */}
       </View>
     </View>
   );
 
   if (!auth) {
-    return <Text>Please log in to view your posts</Text>;
+    return Alert.alert("Thông báo", "Bạn cần đăng nhập để xem các bài đăng");
   }
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#DD0000" barStyle="light-content" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Quản lý tin</Text>
-        <View style={{ width: 20 }} />
-
+        <Text style={styles.headerTitle}>Quản lý bài đăng</Text>
+        <View style={styles.placeholder}></View>
         <TouchableOpacity onPress={handleNavigate}>
           <View style={styles.slotPost}>
             <Text style={styles.slotPostText}>
@@ -242,6 +234,9 @@ const PostManager = () => {
           renderItem={renderProductItem}
           keyExtractor={(item) => item.productId.toString()}
           style={styles.productList}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
     </View>

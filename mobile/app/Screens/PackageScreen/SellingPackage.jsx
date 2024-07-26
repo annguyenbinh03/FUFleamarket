@@ -34,7 +34,7 @@ const SellingPackage = () => {
   }, []);
 
   const handleBuy = (userId, promotionId) => {
-    const url = `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`;
+    const url = `https://fufleamarketapis.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`;
     console.log("Opening payment URL:", url);
     Linking.openURL(url);
   };

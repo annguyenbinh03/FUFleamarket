@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const AdminProductManagerButton = ({ to, title, style, textStyle }) => {
+const AdminNagativeButton = ({ to, title, style, textStyle }) => {
   const navigation = useNavigation();
 
   return (
@@ -18,9 +18,10 @@ const AdminProductManagerButton = ({ to, title, style, textStyle }) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FFA500",
-    padding: 10,
-    borderRadius: 5,
-    alignSelf: "flex-start",
+    padding: 5,
+    paddingHorizontal: 10,
+
+    borderRadius: 15,
   },
   buttonText: {
     color: "white",
@@ -28,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminProductManagerButton;
+export default AdminNagativeButton;

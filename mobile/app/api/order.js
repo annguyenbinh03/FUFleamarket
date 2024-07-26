@@ -23,13 +23,16 @@ export const createOrderAPI = (order, token) => {
   return axiosClient.post(`${END_POINT.ORDER}`, order, config);
 };
 
-export const getBuyOrdersAPI = (token) => {
+export const getBuyOrdersAPI = (token, tab, sortBy) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-  return axiosClient.get(`${END_POINT.BUY_ORDER}`, config);
+  return axiosClient.get(
+    `${END_POINT.BUY_ORDER}?sortBy=${sortBy}&tab=${tab}`,
+    config
+  );
 };
 
 export const getSellOrdersAPI = (token) => {
@@ -41,7 +44,7 @@ export const getSellOrdersAPI = (token) => {
   return axiosClient.get(`${END_POINT.MY_SOLD_ORDER_HISTORY}`, config);
 };
 
-export const getMySellOrdersRequestAPI = (token, sortBy, productId) => {
+export const getMySellOrdersRequestAPI = (token, sortBy, productId, tab) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -49,15 +52,24 @@ export const getMySellOrdersRequestAPI = (token, sortBy, productId) => {
   };
   if (productId !== null) {
     return axiosClient.get(
-      `${END_POINT.MY_ORDER_REQUEST}?sortBy=${sortBy}&descending=true&productId=${productId}`,
+      `${END_POINT.MY_ORDER_REQUEST}?sortBy=${sortBy}&productId=${productId}&tab=${tab}`,
       config
     );
   } else {
     return axiosClient.get(
-      `${END_POINT.MY_ORDER_REQUEST}?sortBy=${sortBy}&descending=true`,
+      `${END_POINT.MY_ORDER_REQUEST}?sortBy=${sortBy}&tab=${tab}`,
       config
     );
   }
+};
+
+export const getAdminAllOrders = (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return axiosClient.get(`${END_POINT.ADMIN_GET_ALL_ORDER}`, config);
 };
 
 export const acceptBuyRequestOrdersAPI = (token, productId) => {
@@ -86,13 +98,30 @@ export const denyBuyRequestOrdersAPI = (token, productId) => {
   );
 };
 
-export const getAdminAllOrders = (token) => {
+export const rejectBuyRequestOrdersAPI = (token, productId) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-  return axiosClient.get(`${END_POINT.ADMIN_GET_ALL_ORDER}`, config);
+  return axiosClient.put(
+    `${END_POINT.REJECT_ORDER_REQUEST}/${productId}`,
+    null,
+    config
+  );
+};
+
+export const rejectBuyRequestOrdersByBuyerAPI = (token, productId) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return axiosClient.put(
+    `${END_POINT.REJECT_ORDER_REQUEST_BY_BUYER}/${productId}`,
+    null,
+    config
+  );
 };
 
 export const completeOrdersByBuyerAPI = (token, productId) => {

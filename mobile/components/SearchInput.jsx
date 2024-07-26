@@ -12,6 +12,7 @@ import {
 import { icons } from "../constants";
 import { useNavigation } from "@react-navigation/native";
 import formatPrice from "../utils/formatPrice";
+import { getProductAPI } from "../app/api/product";
 
 function SearchInput({ initialQuery }) {
   const [searchProductName, setSearchProductName] = useState(
@@ -26,9 +27,9 @@ function SearchInput({ initialQuery }) {
 
   const fetchTopSearch = (value) => {
     if (value) {
-      fetch("https://fufleamarketapi.azurewebsites.net/api/product/listproduct")
-        .then((response) => response.json())
-        .then((json) => {
+      getProductAPI()
+        .then((response) => {
+          const json = response.data;
           const results = json.filter((product) => {
             return (
               product &&
@@ -45,7 +46,6 @@ function SearchInput({ initialQuery }) {
       setTopSearchResults([]);
     }
   };
-
   const handleSubmit = () => {
     if (searchProductName === "") {
       return Alert.alert("Vui lòng nhập sản phẩm bạn muốn vào ô tìm kiếm");

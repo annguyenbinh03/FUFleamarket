@@ -66,7 +66,7 @@ const Chat = ({ navigation }) => {
       console.log("Đang kết nối đến phòng chat...");
       try {
         const newConnection = new HubConnectionBuilder()
-          .withUrl("https://fufleamarketapi.azurewebsites.net/Chat")
+          .withUrl("https://fufleamarketapis.azurewebsites.net/Chat")
           .withAutomaticReconnect()
           .configureLogging(LogLevel.Information)
           .build();
@@ -160,12 +160,12 @@ const Chat = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#DD0000" barStyle="light-content" />
       <View style={styles.header}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
           <FontAwesome5 name="arrow-left" size={20} color="#fff" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={styles.headerTitle}>Nhắn tin</Text>
         <View style={styles.placeholder}></View>
       </View>
@@ -206,7 +206,13 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#DD0000",
   },
-  headerTitle: { flex: 1, textAlign: "center", color: "#fff", fontSize: 18 },
+  headerTitle: {
+    flex: 1,
+    textAlign: "center",
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   chatterList: {
     maxHeight: 100,
     backgroundColor: "#f5f5f5",

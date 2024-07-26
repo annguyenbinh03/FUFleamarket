@@ -9,6 +9,8 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
+  StatusBar,
 } from "react-native";
 import AuthContext from "../../context/AuthProvider";
 import Empty from "./../../components/Empty";
@@ -123,7 +125,11 @@ const AdminProductManager = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#1E90FF" />
+      <View style={styles.header}>
+        <Text style={styles.title}>Quản lý sản phẩm </Text>
+      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -167,14 +173,23 @@ const AdminProductManager = () => {
           </View>
         }
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    paddingBottom: 50,
+    backgroundColor: "#F0F8FF",
+  },
+  header: {
+    backgroundColor: "#1E90FF",
+    padding: 15,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 5,
   },
   tabContainer: {
     flexDirection: "row",
@@ -197,7 +212,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "white",
     padding: 16,
-    marginBottom: 8,
     marginHorizontal: 16,
     borderRadius: 8,
     alignItems: "center",

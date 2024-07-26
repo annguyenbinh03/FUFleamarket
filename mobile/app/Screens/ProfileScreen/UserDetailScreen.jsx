@@ -85,7 +85,7 @@ const UserDetailScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView nestedScrollEnabled={true} style={styles.container}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Image

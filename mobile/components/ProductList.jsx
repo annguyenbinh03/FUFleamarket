@@ -9,6 +9,7 @@ import {
   Dimensions,
   ActivityIndicator,
   SafeAreaView,
+  RefreshControl,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -56,7 +57,7 @@ const ProductItem = ({ item }) => {
   );
 };
 
-const ProductListContainer = () => {
+const ProductListContainer = ({ refreshing }) => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -67,11 +68,11 @@ const ProductListContainer = () => {
       const response = await getProductAPI();
       console.log("Dữ liệu API:", response.data);
       setProductList(response.data);
-      setLoading(false);
     } catch (error) {
       console.error("Lỗi API:", error);
       console.log("lỗi ở listproduct");
       setError("Đã xảy ra lỗi khi tải danh sách sản phẩm");
+    } finally {
       setLoading(false);
     }
   }, []);
@@ -80,11 +81,17 @@ const ProductListContainer = () => {
     fetchProducts();
   }, [fetchProducts]);
 
-  if (loading) {
+  useEffect(() => {
+    if (refreshing) {
+      fetchProducts();
+    }
+  }, [refreshing, fetchProducts]);
+
+  if (loading && !refreshing) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  if (error) {
+  if (error && !refreshing) {
     return <Text>Lỗi: {error}</Text>;
   }
 
@@ -102,7 +109,6 @@ const ProductListContainer = () => {
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

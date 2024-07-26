@@ -56,22 +56,11 @@ const MySellingPackage = () => {
     fetchPromoOrderTransactions();
   }, []);
 
-  const handleBuy = async (userId, promotionId) => {
-    const appReturnUrl = encodeURIComponent("fufm://payment");
-    const webReturnUrl = encodeURIComponent(
-      `https://fufleamarket.azurewebsites.net/my-selling-package?returnUrl=${appReturnUrl}`
+  const handleBuy = (userId, promotionId) => {
+    const url = `https://fufleamarketapis.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`;
+    Linking.openURL(url).catch((error) =>
+      console.error("An error occurred", error)
     );
-    const url = `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}?returnUrl=${webReturnUrl}`;
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        console.log("Cannot open URL:", url);
-      }
-    } catch (error) {
-      console.error("An error occurred while opening the URL:", error);
-    }
   };
 
   return (
