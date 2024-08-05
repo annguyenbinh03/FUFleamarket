@@ -101,7 +101,7 @@ function AdminDoashboard() {
       <nav className="navbar">
         <AdminHeader />
       </nav>
-      <div className="admin_main container-fluid d-flex justify-content-center p-0 pt-3 mt-5">
+      <div className="admin_main container-fluid d-flex justify-content-center p-0 pt-1 mt-5">
         <nav className="w-13 p-0 bg-white">
           <div className="col-lg-12 ">
             <AdminSidebar />
@@ -119,7 +119,6 @@ function AdminDoashboard() {
                 <i class="fa fa-line-chart ms-2" aria-hidden="true"></i>{" "}
               </div>
               <div className="statistic mb-2">{formatPrice(summary?.totalRevenue)} đ</div>
-              <div> ㅤ</div>
             </div>
           </div>
           <div className="col-lg-4 p-2 news-info">
@@ -129,11 +128,10 @@ function AdminDoashboard() {
                 alt="decoration"
               />
               <div className="title">
-                Số lượng hóa đơn được tạo trong tháng
+                Lượng hóa đơn được tạo trong tháng
                 <i class="fa fa-bookmark ms-2" aria-hidden="true"></i>
               </div>
               <div className="statistic  mb-2">{summary?.totalOrderCount}</div>
-              <div>ㅤ </div>
             </div>
           </div>
           <div className="col-lg-4 p-2 news-info">
@@ -146,8 +144,7 @@ function AdminDoashboard() {
                 Số lượng người dùng mới trong tháng
                 <i class="fa fa-user-plus ms-2  mb-2" aria-hidden="true"></i>
               </div>
-              <div className="statistic">{summary?.totalUserCount}</div>
-              <div>ㅤ </div>
+              <div className="statistic mb-2">{summary?.totalUserCount}</div>
             </div>
           </div>
           <div className="col-md-6 py-3 px-2 ">

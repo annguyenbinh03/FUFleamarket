@@ -65,6 +65,19 @@ const TradingOrder = () => {
     }
   };
 
+  function removeTimeFromISOString(isoString) {
+    if (isoString) {
+      const index = isoString.indexOf("T");
+      if (index !== -1) {
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index+1, index+6);
+        return string;
+      }
+    }
+    return isoString;
+  }
+
   useEffect(() => {
     fetchOrder();
   }, [tab, sortBy]);
@@ -311,7 +324,7 @@ const TradingOrder = () => {
                 </div>
               ) : (
                 <div className="not-found-text fs-3">
-                  Bạn vẫn chưa có yêu cầu trao đổi nào
+                  Bạn vẫn chưa tạo yêu cầu trao đổi nào
                 </div>
               )}
             </div>

@@ -124,8 +124,8 @@ namespace WebAPI.Controllers
 
             PromotionOrder? existingPromoOrder = await _promotionOrder.GetByUserIdAndPromotionIdAsync(userId, promotionId);
 
-            int predefinedThreshold = 100; // Định nghĩa ngưỡng hoặc logic của bạn ở đây
-            bool isHigherPromotion = promotionId > predefinedThreshold; // Kiểm tra nếu promotionId cao hơn
+            int predefinedThreshold = 100; // Định nghĩa ngưỡng hoặc logic của bạn ở đây                             ???
+            bool isHigherPromotion = promotionId > predefinedThreshold; // Kiểm tra nếu promotionId cao hơn         ???
 
             // Cập nhật bất kỳ khuyến mãi nào thấp hơn hiện có thành "Pending"
             var allUserPromotions = await _promotionOrder.GetByUserIdAsync(userId);
@@ -155,9 +155,9 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = isHigherPromotion || hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
 
-                    if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString() || existingPromoOrder.Status == StatusPromotionOrderEnum.Pending.ToString())
+                    if (existingPromoOrder.Status == StatusPromotionOrderEnum.Active.ToString() || existingPromoOrder.Status == StatusPromotionOrderEnum.Pending.ToString()) 
                     {
                         existingPromoOrder.RemainedDate += 30;
                     }
@@ -218,7 +218,7 @@ namespace WebAPI.Controllers
 
                 if (vnp_ResponseCode == "00")
                 {
-                    newPromoTransaction.TransactionStatus = hasActiveHigherPromotion ? StatusPromotionOrderEnum.Pending.ToString() : StatusPromotionOrderEnum.Completed.ToString();
+                    newPromoTransaction.TransactionStatus = StatusPromotionOrderEnum.Completed.ToString();
                 }
                 else
                 {
@@ -228,9 +228,8 @@ namespace WebAPI.Controllers
                 await _promotionTransactionRepo.CreateAsync(newPromoTransaction);
             }
 
-            return Redirect("http://localhost/my-selling-package");
-
-
+            return Redirect("https://fufleamarket.azurewebsites.net/my-selling-package");
+  
         }
 
 

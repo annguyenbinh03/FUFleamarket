@@ -9,8 +9,7 @@ import {
   createTradingOrderAPI,
 } from "../../api/tradingOrder";
 
-const ALLOW_TWO_SIDES_DIFFERENT_PERCENT = 90;
-
+ var ALLOW_TWO_SIDES_DIFFERENT_PERCENT;
 function CreateTradingOrder() {
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -37,6 +36,8 @@ function CreateTradingOrder() {
       console.log(response);
       setUser1Info(response.requestSide);
       setUser2Info(response.responseSide);
+      ALLOW_TWO_SIDES_DIFFERENT_PERCENT = response.responseSide.acceptedTradingPercent;
+      console.log(response.responseSide.acceptedTradingPercent);
       setUser1Products(response.requestSideProducts);
       setUser2Products(response.responseSideProducts);
       const productAfterFetch = response.responseSideProducts;
@@ -276,7 +277,7 @@ function CreateTradingOrder() {
         progress: undefined,
         theme: "colored",
       });
-      navigate("/my-posts", { replace: true });
+      navigate("/trading-order", { replace: true });
     }else{
       pushErrorToast('Tạo đơn thất bại!');
     }
@@ -313,10 +314,11 @@ function CreateTradingOrder() {
             <div className="fs-2 fw-bold text-center">Trao đổi vật phẩm </div>
             <div className="d-flex justify-content-center">
               <div
-                className="col-md-3 text-center py-2 px-4 alert alert-warning fw-bold"
+                className="col-md-3 text-center my-3 py-2 px-4 alert alert-warning fw-bold"
+                style={{width:"30%"}}
                 role="alert"
               >
-                Mức chênh lệch: {ALLOW_TWO_SIDES_DIFFERENT_PERCENT}%
+                Mức chênh lệch giá trị trao đổi: {ALLOW_TWO_SIDES_DIFFERENT_PERCENT}%
               </div>
             </div>
           </div>
@@ -629,12 +631,12 @@ function CreateTradingOrder() {
             <div className="col-md">
               <span className="text-body-secondary">Tổng giá trị: </span>
               {formatPrice(user1Total)}
-              <span className="text-body-secondary"> vnd</span>
+              <span className="text-body-secondary"> đ</span>
             </div>
             <div className="col-md text-end">
               <span className="text-body-secondary">Tổng giá trị: </span>
               {formatPrice(user2Total)}
-              <span className="text-body-secondary"> vnd</span>
+              <span className="text-body-secondary"> đ</span>
             </div>
           </div>
           <div className="row mt-3 px-5">

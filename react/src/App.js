@@ -28,6 +28,7 @@ const ShopProfile = lazy(() => import("./pages/userPages/ShopProfile"));
 const MySellingPackage = lazy(() => import("./pages/userPages/MySellingPackage"));
 const TradingOrderRequest = lazy(()=> import("./pages/userPages/TradingOrderRequest") );
 const Setting = lazy(()=> import("./pages/userPages/Setting"));
+const WishList = lazy(()=> import("./pages/userPages/Wishlist"));
 
 const AdminDoashboard = lazy(()=>import("./pages/adminPages/AdminDashboard") );
 const AdminProduct = lazy(() => import("./pages/adminPages/AdminProduct"));
@@ -36,6 +37,7 @@ const AdminUser = lazy(() => import("./pages/adminPages/AdminUsers"));
 const AdminSellingPackage = lazy(() => import("./pages/adminPages/AdminSellingPackage"));
 const AdminOrderProduct = lazy(() => import("./pages/adminPages/AdminOrderProduct"));
 const AdminOrderPackages = lazy(() => import("./pages/adminPages/AdminOrderPackages"));
+const AdminUserReport = lazy(() => import("./pages/adminPages/AdminUserReport"));
 
 const ROLES = {
   'User': 1,
@@ -67,6 +69,7 @@ function App() {
               <Route path="/trading-order-request" element={<TradingOrderRequest/>} />
               <Route path="/buy-order" element={<BuyOrder />} />   
               <Route path="/buy-order-request" element={<BuyOrderRequest/>} />
+              <Route path="/buy-order-request/:productId" element={<BuyOrderRequest/>} />
               <Route path="/my-products" element={<MyProducts />} />
               <Route path="/create-product" element={<CreateProduct />} />
               <Route path="/create-order/:productId" element={<CreateOrder />} />
@@ -74,7 +77,8 @@ function App() {
               <Route path="/chat" element={<Chat/>} />
               <Route path="/selling-package" element={<SellingPackage/>} />
               <Route path="/my-selling-package" element={<MySellingPackage/>} />
-              <Route path="/settings" element={<Setting />} />           
+              <Route path="/settings" element={<Setting />} />      
+              <Route path="/wishList" element={<WishList />} />           
             </Route>
             <Route element={<RequireAuth allowedRoles={[ROLES.Moderator,ROLES.Admin]} />} >
               <Route path="/admin" element={<AdminDoashboard />} />
@@ -84,6 +88,7 @@ function App() {
               <Route path="/admin/selling-packages" element={<AdminSellingPackage />} />
               <Route path="/admin/order-product" element={<AdminOrderProduct />} />
               <Route path="/admin/order-packages" element={<AdminOrderPackages />} />
+              <Route path="/admin/user-reports" element={<AdminUserReport />} />
             </Route>
         </Routes>
         <ToastContainer />

@@ -55,7 +55,10 @@ namespace WebAPI.Controllers
             {
                 return Unauthorized("User ID claim not found.");
             }
-
+            if (!int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("Invalid User ID claim.");
+            }
             List<User> users = await _userRepo.GetAllUserForChatAsync();
             foreach (var user in users)
             {
@@ -67,7 +70,7 @@ namespace WebAPI.Controllers
             }
             if (users == null || !users.Any())
             {
-                return NotFound("No users found.");
+                return NoContent();
             }
             return Ok(users);
         }

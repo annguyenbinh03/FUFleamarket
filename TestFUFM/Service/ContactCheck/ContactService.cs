@@ -33,8 +33,8 @@ namespace Service.ContactCheck
         {
 
             var activeOrder = await _context.Orders
-            .AnyAsync(o => ((o.BuyerId == user1 && o.SellerId == user2))
-                       && o.Status == 1);
+            .AnyAsync(o =>  ((o.BuyerId == user1 && o.SellerId == user2))
+                       && o.Status == 1   );
 
 
             var activeTradingOrder = await _context.TradingOrders
@@ -87,6 +87,13 @@ namespace Service.ContactCheck
             {
                 await CreateContactAsync(user1, user2);
             }
+            Contact? contact = await _context.Contacts.Where(c => (c.User1 == user1 && c.User2 == user2) || (c.User1 == user2 && c.User2 == user1)).FirstOrDefaultAsync();
+            if (contact != null)
+            {
+                contact.IsActive = true;
+                await _context.SaveChangesAsync(); 
+            }
+           
         }
 
 

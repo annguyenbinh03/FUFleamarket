@@ -438,7 +438,7 @@ namespace WebAPI.Controllers
         // chỉnh sửa trạng thái khi gọi đơn hàng của mình ra và thêm DealType
         [HttpGet("getmyproducts")]
         [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> GetMyProducts([FromQuery] int? tab, [FromQuery] bool? dealType, [FromQuery] string? sortBy, [FromQuery] int PageNumber = 1, [FromQuery] int PageSize = 10)
+        public async Task<IActionResult> GetMyProducts([FromQuery] int? tab, [FromQuery] bool? dealType, [FromQuery] string? sortBy, [FromQuery] int PageNumber, [FromQuery] int PageSize = 5)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -546,6 +546,16 @@ namespace WebAPI.Controllers
 
         }
 
+        private int GetDefaultMaxProduct()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", true, true)
+                        .Build();
+            var strConn = config["DefaultUserMaxProduct"];
+            int max = int.Parse(strConn);
+            return max;
+        }
 
 
         [HttpPost("createproductforsellers")]
@@ -567,7 +577,7 @@ namespace WebAPI.Controllers
                 return Unauthorized("Invalid user ID format.");
             }
 
-            const int standardProductLimit = 5;
+            int standardProductLimit = GetDefaultMaxProduct();
             int totalProductLimit = standardProductLimit;
 
             // Get all active promotion orders for the seller

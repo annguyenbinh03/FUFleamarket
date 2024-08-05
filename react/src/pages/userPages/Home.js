@@ -206,7 +206,7 @@ function Home() {
           <div className="row">
             <div className="col-lg-12 pt-3">
               <div className="section-title">
-                <h2>Sản phẩm nổi bật</h2>
+                <h2>Sản phẩm mới nhất</h2>
               </div>
             </div>
           </div>

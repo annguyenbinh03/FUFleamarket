@@ -47,7 +47,7 @@ const MySellingPackage = () => {
 
   const handleBuy = (userId, promotionId) => {
     window.open(
-      `https://fufleamarketapi.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`
+      `https://fufleamarketapis.azurewebsites.net/api/VNPay/payment/${userId}/${promotionId}`
     );
   };
 
@@ -55,7 +55,10 @@ const MySellingPackage = () => {
     if (isoString) {
       const index = isoString.indexOf("T");
       if (index !== -1) {
-        return isoString.slice(0, index);
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index + 1, index + 6);
+        return string;
       }
     }
     return isoString;
@@ -65,7 +68,7 @@ const MySellingPackage = () => {
     var result = false;
     if(sellingPackages){
       result = sellingPackages.some((aPackage) =>{
-        return aPackage.status !== "InActive" || aPackage.status !== "Failed"
+        return aPackage.status !== "InActive" && aPackage.status !== "Failed"
       });
     }
     return result;
@@ -204,7 +207,6 @@ const MySellingPackage = () => {
                     </th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {transactionOrders?.map((order) => (
                     <tr>
@@ -217,7 +219,7 @@ const MySellingPackage = () => {
                         />{" "}
                         {order.promotionName}
                       </th>
-                      <td className="text-center">{order.quantity} tháng</td>
+                      <td className="text-center">{order.quantity * 30} ngày</td>
                       <td className="text-center">
                         {formatPrice(order.price)} đ
                       </td>

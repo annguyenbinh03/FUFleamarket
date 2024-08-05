@@ -9,14 +9,15 @@ import {
 import Header from "../../Header";
 import Footer from "../../Footer";
 import { getSellingProductForSlectOrderAPI } from "../../api/product";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function BuyOrderRequest() {
+  const { productId } = useParams();
   const [orders, setOrder] = useState([]);
   const { auth } = useContext(AuthContext);
   const [sortBy, setSortBy] = useState("date");
-  const [sortProductId, setSortProductId] = useState(null);
+  const [sortProductId, setSortProductId] = useState(productId ? productId : null);
   const [sellingProducts, setSellingPorudct] = useState([]);
   const [tab, setTab] = useState(1);
 
@@ -37,10 +38,12 @@ function BuyOrderRequest() {
     try {
       var response = await getSellingProductForSlectOrderAPI(auth.accessToken);
       setSellingPorudct(response);
+      showChoosingProduct();
     } catch (error) {
       console.error("Error fetching SellingProduct:", error);
     }
   };
+
 
   useEffect(() => {
     fetchOrder();
@@ -85,10 +88,20 @@ function BuyOrderRequest() {
       try {
         await acceptBuyRequestOrdersAPI(auth.accessToken, productId);
         fetchOrder();
-        showSuccessToast("Đã xác nhận trao đổi!");
+        showSuccessToast("Đã xác nhận bắt đầu trao đổi!");
       } catch (error) {
         console.error("Error fetching order:", error);
       }
+    }
+  };
+
+  const handleDenyOrder = async (productId) => {
+    try {
+      await denyBuyRequestOrdersAPI(auth.accessToken, productId);
+      fetchOrder();
+      showSuccessToast("Đã từ chối yêu cầu mua hàng");
+    } catch (error) {
+      console.error("Error fetching order:", error);
     }
   };
 
@@ -124,8 +137,9 @@ function BuyOrderRequest() {
   const showChoosingProduct = () => {
     if (sortProductId !== null) {
       const filteredProduct = sellingProducts.find(
-        (product) => product.productId === sortProductId
-      );
+        (product) => (parseInt(product.productId)) === parseInt(sortProductId)
+      ); 
+      console.log(sortProductId + " " +  filteredProduct)
       return filteredProduct ? (
         <>
           <img
@@ -234,9 +248,9 @@ function BuyOrderRequest() {
                     </div>
                     <div className="col-md-7">
                       <div className="input-group px-2 ">
-                        <div class="dropdown w-100">
+                        <div className="dropdown w-100">
                           <button
-                            class="btn btn-secondary dropdown-toggle bg-white text-black w-100 text-left"
+                            className="btn btn-secondary dropdown-toggle bg-white text-black w-100 text-left"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
@@ -244,7 +258,7 @@ function BuyOrderRequest() {
                           >
                             {showChoosingProduct()}
                           </button>
-                          <ul class="dropdown-menu" style={{ width: "100%" }}>
+                          <ul className="dropdown-menu" style={{ width: "100%" }}>
                             {sellingProducts?.length > 0 ? (
                               <>
                                 <li
@@ -252,7 +266,7 @@ function BuyOrderRequest() {
                                   onClick={() => setSortProductId(null)}
                                 >
                                   <i
-                                    class="fa fa-list-alt"
+                                    className="fa fa-list-alt"
                                     aria-hidden="true"
                                   ></i>{" "}
                                   Tất cả sản phẩm
@@ -266,7 +280,7 @@ function BuyOrderRequest() {
                                       setSortProductId(product.productId)
                                     }
                                   >
-                                    <span class="badge text-bg-primary">
+                                    <span className="badge text-bg-primary">
                                       {" "}
                                       {product.waitingOrderNumber}
                                     </span>
@@ -317,23 +331,23 @@ function BuyOrderRequest() {
                         </span>
                         <div className="ms-2">
                           {order.order?.status === 0 ? (
-                            <span class="badge text-bg-secondary py-2">
+                            <span className="badge text-bg-secondary py-2">
                               Đang chờ duyệt
                             </span>
                           ) : order.order?.status === 1 ? (
-                            <span class="badge text-bg-info py-2">
+                            <span className="badge text-bg-info py-2">
                               Đang trao đổi
                             </span>
                           ) : order.order?.status === 2 ? (
-                            <span class="badge text-bg-danger py-2">
+                            <span className="badge text-bg-danger py-2">
                               Đã từ chối giao dịch
                             </span>
                           ) : order.order?.status === 3 ? (
-                            <span class="badge text-bg-primary py-2">
+                            <span className="badge text-bg-primary py-2">
                               Đã hoàn thành giao dịch
                             </span>
                           ) : (
-                            <span class="badge text-bg-danger py-2">
+                            <span className="badge text-bg-danger py-2">
                               Đã bị admin ẩn
                             </span>
                           )}
@@ -350,7 +364,7 @@ function BuyOrderRequest() {
                               {order.product?.productName}
                             </Link>
                             <div >
-                            Giá mong muốn: <span className="price">{ formatPrice(order.order?.price) } đ</span>
+                            Giá người mua mong muốn: <span className="price">{ formatPrice(order.order?.price) } đ</span>
                             <span className="text-secondary"> ( { formatPrice(order.product?.price) } đ )</span>
                           </div>
                             <div className="address">
@@ -374,7 +388,7 @@ function BuyOrderRequest() {
                                   <button
                                     className="btn btn-danger mx-3 "
                                     onClick={() =>
-                                      handleRejectOrder(order.order?.orderId)
+                                      handleDenyOrder(order.order?.orderId)
                                     }
                                   >
                                     Từ chối giao dịch
@@ -404,11 +418,11 @@ function BuyOrderRequest() {
                           <span>{order.order?.quantity}</span>{" "}
                           {order.product?.storedQuantity >
                           order.order?.quantity ? (
-                            <span class="badge text-bg-success">
+                            <span className="badge text-bg-success">
                               kho: {order.product?.storedQuantity}
                             </span>
                           ) : (
-                            <span class="badge text-bg-danger">
+                            <span className="badge text-bg-danger">
                               kho: {order.product?.storedQuantity}
                             </span>
                           )}

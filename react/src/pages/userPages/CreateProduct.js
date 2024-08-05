@@ -69,6 +69,10 @@ function CreateProduct() {
       );
       check = false;
     }
+    if (img === "") {
+        showErrorToast("Ảnh sản phẩm phải được đăng tải!")
+        check = false;
+    }
     return check;
   };
 
@@ -86,7 +90,7 @@ function CreateProduct() {
     if (!checkValidation()) {
       return; //stop
     }
-    var urlImg = await handleUploadImagesClick();
+   var urlImg = await handleUploadImagesClick();
     if (urlImg !== "") {
       var imageLink = urlImg;
       const product = {
@@ -99,10 +103,10 @@ function CreateProduct() {
         imageLink,
         storedQuantity,
       };
-      const response = await createProductAPI(product, auth.accessToken);
+     const response = await createProductAPI(product, auth.accessToken);
       if (response) {
         showInforToast("Tạo sản phẩm hoàn tất, đang chờ xét duyệt!", 5000);
-        navigate("my-products", { replace: true });
+        navigate("/my-products", { replace: true });
       } else {
         showErrorToast("Xảy ra lỗi trong quá trình tạo sản phẩm!", 7000);
       }
@@ -143,10 +147,7 @@ function CreateProduct() {
       const value = await uploadBytes(imgRef, img);
       const url = await getDownloadURL(value.ref);
       return url;
-    } else {
-      alert("Ảnh đại diện sản phẩm phải được đăng tải");
-      return "";
-    }
+    } 
   };
 
   const handleImageClick = () => {
@@ -154,6 +155,7 @@ function CreateProduct() {
   };
   const handleImageChange = (event) => {
     const file = event.target.files[0];
+    console.log(file);
     if (file) {
       const fileType = file.type;
       const validImagesType = ["image/png", "image/jpeg"];

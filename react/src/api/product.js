@@ -12,9 +12,19 @@ const END_POINT = {
     INFOR_PRODUCT_BUY_REQUEST : "product/GetInforProductBuyRequest",
     ADMIN_PRODUCT_REQUEST : "product/adminliststatus0",
     ADMIN_PRODUCT_S123 : "product/adminliststatus1,2,3",
-    GET_COUNT_PRODUCT_AND_LIMIT : "promotionOder/user/countproductandmaxlimit"
+    GET_COUNT_PRODUCT_AND_LIMIT : "promotionOder/user/countproductandmaxlimit",
+    USER_HIDE_PRODUCT: "product/deleteproductforsellers"
 }
 
+
+export const userHideProductAPI = (token, productId ) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.delete(`${END_POINT.LIST_PRODUCT}/${productId}`, config);
+};
 
 export const getProductAPI = () => {
   return axiosClient.get(`${END_POINT.LIST_PRODUCT}`);
@@ -94,14 +104,14 @@ export const createProductAPI = (product, token) => {
   return axiosClient.post(`${END_POINT.CREATE_PRODUCT}`,product, config);
 }
 
-export const getMyProductsAPI = ( token, tab, sortBy) => {
+export const getMyProductsAPI = ( token, tab, sortBy, pageNumber) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`
     }
   };
   if( tab && sortBy){
-    return axiosClient.get(`${END_POINT.GET_MY_PRODUCTS}?tab=${tab}&sortBy=${sortBy}`, config);
+    return axiosClient.get(`${END_POINT.GET_MY_PRODUCTS}?tab=${tab}&sortBy=${sortBy}&PageNumber=${pageNumber}`, config);
   }
   return axiosClient.get(`${END_POINT.GET_MY_PRODUCTS}`, config);
 }

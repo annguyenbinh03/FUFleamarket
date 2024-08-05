@@ -252,7 +252,7 @@ namespace WebAPI.Controllers
 
             // Get the user based on the userId from the claims with additional conditions
             var user = await _context.Users
-                     .Include(u => u.Products.Where(p => p.DealType == true && p.Status == 1)) // Added condition here
+                     .Include(u => u.Products.Where(p => p.DealType == true && p.Status == 1 && p.StoredQuantity > 0)) // Added condition here
                      .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user == null)
@@ -263,8 +263,8 @@ namespace WebAPI.Controllers
             // Get the product and its seller based on the productId with additional conditions
             var product = await _context.Products
                                 .Include(p => p.Seller)
-                                .ThenInclude(s => s.Products.Where(p => p.DealType == true && p.Status == 1)) // Added condition here
-                                .Where(p => p.ProductId == productId && p.DealType == true && p.Status == 1)
+                                .ThenInclude(s => s.Products.Where(p => p.DealType == true && p.Status == 1 && p.StoredQuantity>0)) // Added condition here
+                                .Where(p => p.ProductId == productId && p.DealType == true && p.Status == 1 && p.StoredQuantity > 0)
                                 .FirstOrDefaultAsync();
 
             if (product == null)
@@ -284,7 +284,7 @@ namespace WebAPI.Controllers
                     fullName = product.Seller.FullName,
                     avarta = product.Seller.Avarta,
                     UserId = product.SellerId,
-                    AcceptedTradingPercent = user.AcceptedTradingPercent
+                    AcceptedTradingPercent = product.Seller.AcceptedTradingPercent
                 },
                 requestSideProducts = user.Products.Select(p => new
                 {

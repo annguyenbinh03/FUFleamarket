@@ -57,7 +57,7 @@ const TradingOrderRequest = () => {
     try {
       await user2AcceptRequest(auth.accessToken, orderId);
       fetchOrder();
-      showSuccessToast("Đã xác nhận trao đổi!");
+      showSuccessToast("Đã xác nhận bắt đầu trao đổi!");
     } catch (error) {
       console.error("Error fetching order:", error);
     }
@@ -333,7 +333,11 @@ const TradingOrderRequest = () => {
                           )}
                         </div>
                       </div>
+                     
                       <div className="col-md-12 border-top border-1 pt-2 note">
+                      <div>
+                       Thời gian tạo đơn:  {removeTimeFromISOString( order?.createdDate)}
+                      </div>
                         <span className="text-secondary">Ghi chú:{" "}</span>
                         {order?.note}
                       </div>

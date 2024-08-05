@@ -14,8 +14,8 @@ function Footer() {
                     Địa chỉ: Lô E2a-7, Đường D1, Khu Công nghệ cao, P.Long Thạnh
                     Mỹ, Tp. Thủ Đức, TP.HCM.
                   </li>
-                  <li>Phone: (028) 7300 5588</li>
-                  <li>Email: daihoc.hcm@fpt.edu.vn</li>
+                  <li>Phone: 086 839 0406</li>
+                  <li>Email: annbse170470@fpt.edu.vn</li>
                 </ul>
               </div>
             </div>
@@ -39,19 +39,10 @@ function Footer() {
                 <h6>Follow Us Now</h6>
                 <div className="footer-widget-social mt-4">
                   <a
-                    href="https://www.facebook.com/people/S%E1%BB%A9c-S%E1%BB%91ng-Xanh/100093187681220/"
+                    href="https://www.facebook.com/profile.php?id=61562800665471"
                     rel="noreferrer"
                   >
                     <i className="fa fa-facebook"></i>
-                  </a>
-                  <a href="#" rel="noreferrer">
-                    <i className="fa fa-instagram"></i>
-                  </a>
-                  <a href="#" rel="noreferrer">
-                    <i className="fa fa-twitter"></i>
-                  </a>
-                  <a href="#" rel="noreferrer">
-                    <i className="fa fa-pinterest"></i>
                   </a>
                 </div>
               </div>

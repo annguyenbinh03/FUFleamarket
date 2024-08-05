@@ -13,104 +13,17 @@ const AdminHeader = () => {
   return (
     <div>
       <div>
-        <header className="header container-fluid d-flex justify-content-between px-4">
+        <header className="header container-fluid d-flex justify-content-between px-4 py-1">
           <div className="logo p-2">
-            <Link to="/">
+            <div>
               <img
                 className="img-fluid"
                 src={`../assets/img/logo.png`}
                 alt="logo"
               />
-            </Link>
-          </div>
-          <div className="d-flex align-items-center w-90 justify-content-between">
-            <div className="d-flex ps-4">
-              <div className="dropdown ">
-                <button
-                  type="button"
-                  className="btn dropdown-toggle text-white fs-5"
-                >
-                  <i className="fa fa-list" aria-hidden="true"></i>
-                  <span> Danh mục </span>
-                </button>
-                <ul className="dropdown-menu ">
-                  <li>
-                    <Link to="/search-product/1" className="dropdown-item py-2">
-                      <i className="fa fa-desktop me-2" aria-hidden="true"></i>{" "}
-                      Đồ điện tử
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/2" className="dropdown-item py-2">
-                      <i className="fa fa-book me-2" aria-hidden="true"></i> Đồ
-                      dùng học tập
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/3" className="dropdown-item py-2">
-                      <img
-                        width="20px"
-                        src={`../assets/img/icon/fridge.png`}
-                        alt="frideIcon"
-                      />
-                      Điện lạnh
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/4" className="dropdown-item py-2">
-                      <img
-                        width="20px"
-                        src={`../assets/img/icon/sofa.png`}
-                        alt="sofaIcon"
-                      />
-                      Đồ gia dụng, nội thất
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/5" className="dropdown-item py-2">
-                      <i className="fa fa-cutlery me-2" aria-hidden="true"></i>{" "}
-                      Đồ ăn, thực phẩm
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/6" className="dropdown-item py-2">
-                      <img
-                        width="20px"
-                        src={`../assets/img/icon/woman-clothes.png`}
-                        alt="sofaIcon"
-                      />
-                      Thời trang
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/search-product/7" className="dropdown-item py-2">
-                      <img
-                        width="20px"
-                        src={`../assets/img/icon/console.png`}
-                        alt="sofaIcon"
-                      />
-                      Giải trí, thể thao, sở thích
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <form className="w-40 px-3" action="">
-                <div className="input-group text-white">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Tìm kiếm"
-                  />
-                  <Link
-                    to="/search-product"
-                    className="btn btn-outline-secondary bg-white"
-                  >
-                    {/* Sử dụng Link */}
-                    <i className="fa fa-search" aria-hidden="true"></i>
-                  </Link>
-                </div>
-              </form>
             </div>
+          </div>
+          <div className="d-flex align-items-center">
             <div className="d-flex align-items-center">
               <div className="px-3 d-flex align-items-center">
                 <img
@@ -121,12 +34,6 @@ const AdminHeader = () => {
                 <span className="fs-5 username text-white px-2">{auth?.fullName}</span>
               </div>
               <div className="d-flex align-items-center">
-                <button className="btn fs-5 text-white px-4">
-                  <i className="fa fa-bell" aria-hidden="true"></i>
-                </button>
-                <button className="btn fs-5 text-white px-4">
-                  <i className="fa fa-comments-o" aria-hidden="true"></i>
-                </button>
                 <button className="btn fs-5 text-white px-4" onClick={(e)=> logout(e)}>
                   <i className="fa fa-sign-in" aria-hidden="true"></i>
                 </button>

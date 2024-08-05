@@ -1,12 +1,12 @@
-﻿GO
-IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'FUFleaMarket')
-DROP DATABASE [FUFleaMarket]
-GO
-CREATE DATABASE [FUFleaMarket]
-GO
-GO
-USE [FUFleaMarket]
-GO
+﻿-- GO
+-- IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'FUFleaMarket')
+-- DROP DATABASE [FUFleaMarket]
+-- GO
+-- CREATE DATABASE [FUFleaMarket]
+-- GO
+-- GO
+-- USE [FUFleaMarket]
+-- GO
 
 
 CREATE TABLE [dbo].[User](
@@ -211,18 +211,6 @@ VALUES
 	(N'Áo phông áo thun nam cổ tròn 4 chiều cotton trơn thun lạnh nhiều màu', 55000,1,0, N'Gồm những gam màu tươi mới giúp bạn dễ dàng phối nhiều loại trang phục khác nhau. Từng đường may tinh tế, chỉn chu, màu sắc đa dạng, tươi mát chắc chắn sẽ làm vừa lòng những chàng trai khó tính  nhất.', 5, 7, 1, '2024-06-27',  'https://img.lazcdn.com/g/p/9f6a4d316d084908129a7d1bd71faeb6.jpg_720x720q80.jpg_.webp', 5);
 GO
 
-GO
-INSERT INTO [dbo].[Wishlist] ([userId], [productId])
-VALUES
-    (1, 1),
-    (1, 2),
-    (2, 3),
-    (2, 4),
-    (4, 7),
-    (4, 8),
-    (5, 9),
-    (5, 10);
-GO
 
 GO
 INSERT INTO [dbo].[Promotion] ([name], [description], [productQuantityLimit], [price], [imageLink],[isDeleted])

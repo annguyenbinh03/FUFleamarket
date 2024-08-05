@@ -28,7 +28,7 @@ namespace Service.BackgroudService
                 var now = DateTimeOffset.Now;
 
                 // Thiết lập thời gian mục tiêu ban đầu 
-                var nextTargetTime = new DateTimeOffset(now.Year, now.Month, now.Day, 0, 5, 0 , now.Offset);
+                var nextTargetTime = new DateTimeOffset(now.Year, now.Month, now.Day, 18, 0, 0 , now.Offset);
 
                 // Nếu thời gian hiện tại đã qua thời gian mục tiêu, chuyển sang thời gian mục tiêu của ngày tiếp theo
                 if (now > nextTargetTime)
@@ -49,7 +49,7 @@ namespace Service.BackgroudService
                 Console.WriteLine($"Background service is running at: {DateTimeOffset.Now}");
 
                 // Thiết lập thời gian mục tiêu tiếp theo là 10 giây sau thời gian hiện tại
-                nextTargetTime = nextTargetTime.AddSeconds(30);
+                nextTargetTime = nextTargetTime.AddHours(6);
 
                 //// Vòng lặp phụ, chạy liên tục mỗi 10 giây cho đến khi dịch vụ bị hủy
                 while (!stoppingToken.IsCancellationRequested)
@@ -66,8 +66,8 @@ namespace Service.BackgroudService
                     // in ra thời gian hiện tại để ghi nhận hoạt động của dịch vụ
                     Console.WriteLine($"background service is running at: {DateTimeOffset.Now}");
 
-                    // thiết lập thời gian mục tiêu tiếp theo là 3h sau thời gian hiện tại
-                    nextTargetTime = nextTargetTime.AddSeconds(30);
+                    // thiết lập thời gian mục tiêu tiếp theo là 6h sau thời gian hiện tại
+                    nextTargetTime = nextTargetTime.AddHours(6);
                 }
             }
         }

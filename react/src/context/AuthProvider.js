@@ -2,7 +2,7 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({})
-const GoogleRedirect = 'https://fufleamarketapi.azurewebsites.net/Auth/loginGoogle';
+const GoogleRedirect = 'https://fufleamarketapis.azurewebsites.net/Auth/loginGoogle';
 //  https://localhost:7057/Auth/loginGoogle 
 
 export const AuthProvider = ({children}) =>{

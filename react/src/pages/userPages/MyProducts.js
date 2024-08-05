@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { getMyPackageAPI } from "../../api/packages";
 import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
+import Pagination from "../../component/pagination";
 
 function MyProducts() {
   const [products, setProducts] = useState([]);
@@ -16,10 +17,12 @@ function MyProducts() {
   const [tab, setTab] = useState(1);
   const [countProductAndLimit, setCountProductAndLimit] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
 
   const fetchProduct = async () => {
     try {
-      var response = await getMyProductsAPI(auth.accessToken, tab, sortBy);
+      var response = await getMyProductsAPI(auth.accessToken, tab, sortBy, pageNumber);
       setProducts(response);
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -29,6 +32,9 @@ function MyProducts() {
     try {
       var response = await getCountProductAndLimit(auth.accessToken);
       setCountProductAndLimit(response);
+      if( response.currentProductQuantity){
+        setMaxPage(Math.ceil(response.currentProductQuantity/5) );
+      }
     } catch (error) {
       console.error("Error fetching fetchCountProductAndLimit:", error);
     }
@@ -78,6 +84,16 @@ function MyProducts() {
     return value;
   };
 
+  const changePage = async (number) =>{
+      setPageNumber(number);
+      try {
+        var response = await getMyProductsAPI(auth.accessToken, tab, sortBy, number);
+        setProducts(response);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+  }
+
   function removeTimeFromISOString(isoString) {
     if (isoString) {
       const index = isoString.indexOf("T");
@@ -95,6 +111,11 @@ function MyProducts() {
     showSuccessToast("Đã sao chép đường dẫn sản phẩm vào clipboard!");
     navigator.clipboard.writeText(text);
   };
+  
+  const changeTab = (tabNumber) =>{
+    setPageNumber(1);
+    setTab(tabNumber);
+  }
 
   return (
     <div>
@@ -177,7 +198,7 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(1)}
+                  onClick={() => changeTab(1)}
                 >
                   <span className="name">Tất cả</span>
                 </button>
@@ -190,7 +211,7 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(2)}
+                  onClick={() => changeTab(2)}
                 >
                   <span>Đang chờ duyệt</span>
                 </button>
@@ -202,7 +223,7 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(3)}
+                  onClick={() => changeTab(3)}
                 >
                   <span>Đang đăng bán</span>
                 </button>
@@ -214,7 +235,7 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(4)}
+                  onClick={() => changeTab(4)}
                 >
                   <span>Đang trao đổi</span>
                 </button>
@@ -226,7 +247,7 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(5)}
+                  onClick={() => changeTab(5)}
                 >
                   <span>Đã ẩn</span>
                 </button>
@@ -238,9 +259,9 @@ function MyProducts() {
                   aria-selected="false"
                   aria-disabled="false"
                   tabIndex="-1"
-                  onClick={() => setTab(6)}
+                  onClick={() => changeTab(6)}
                 >
-                  <span>Bị admin ẩn</span>
+                  <span>Bị từ chối duyệt</span>
                 </button>
               </div>
               <div className="input-group">
@@ -313,7 +334,7 @@ function MyProducts() {
                           </span>
                         </div>
                         <div className="created_date">
-                          Ngày duyệt tin:{" "}
+                          <span> Ngày duyệt tin:{" "}</span>
                           <span>
                             {removeTimeFromISOString(product.createdDate)}
                           </span>
@@ -351,6 +372,15 @@ function MyProducts() {
                     </div>
                     <div className="d-flex justify-content-end mt-1 ">
                       <div className="post_button mt-3 text-end">
+                        {!product.dealType &&
+                          (
+                             <Link
+                            to={`/buy-order-request/${product.productId}`}
+                            className="btn btn-primary text-white"
+                          >
+                              Xem các hóa đơn bán
+                          </Link>)
+                        }                       
                         <button className="btn">
                           <i className="fa fa-eye-slash" aria-hidden="true"></i>
                           Ẩn tin
@@ -405,6 +435,7 @@ function MyProducts() {
             Bạn vẫn chưa đăng sản phẩm nào
           </div>
             }
+           <Pagination maxPage={maxPage} pageNumber={pageNumber} changePage={changePage}/>
         </div>
       </section>
       <Footer />

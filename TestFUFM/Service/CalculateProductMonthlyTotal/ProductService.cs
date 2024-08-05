@@ -21,7 +21,7 @@ namespace Service.CalculateProductMonthlyTotal
         public async Task<List<TopSellingProductDTO>> GetTop5BestSellingProductsAsync()
         {
             var top5Products = await _context.Orders
-                .Where(o => o.Status == 1) 
+                .Where(o => o.Status == 3) 
                 .GroupBy(o => o.ProductId)
                 .Select(g => new
                 {

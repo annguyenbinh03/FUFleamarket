@@ -247,8 +247,8 @@ body {
   padding-top: 25px;
   padding-bottom: 15px;
 }
-.product__pagination a,
-.blog__pagination a {
+.product__pagination button,
+.blog__pagination button {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -1186,7 +1186,25 @@ body {
   min-width: 120px;
 }
 
-
+/*---------------------
+  settings
+-----------------------*/
+.wishlist .container{
+  min-height: 800px;
+  padding: 0;
+  padding: 0;
+}
+.wishlist .container .row{
+  margin: 0;
+}
+.wishlist .td-description-content{
+  max-width: 500px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 
@@ -1287,7 +1305,11 @@ body {
   width: 86%;
 }
 
-.sidebar .sidebar-item {
+.admin_main{
+  padding-top: .25rem !important;
+}
+
+.admin_page .sidebar .sidebar-item {
   padding: 20px 20px 20px 25px;
 }
 
@@ -1297,7 +1319,10 @@ body {
 .sidebar a {
   transition: all 0.1s 0.1s ease;
 }
-
+.sidebar .sidebar-nav{
+  list-style-type: none;
+  padding-left: 0;
+}
 .sidebar a:hover {
   color: blue !important;
 }
@@ -1412,3 +1437,5 @@ body {
   display: flex;
   align-items: center;
 }
+
+

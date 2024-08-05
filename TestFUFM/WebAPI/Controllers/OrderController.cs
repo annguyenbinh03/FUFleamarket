@@ -468,7 +468,7 @@ namespace WebAPI.Controllers
             }
 
             // Kiểm tra xem số lượng yêu cầu (Quantity trong createDTO) có hợp lệ không. Yêu cầu phải lớn hơn 0 và nhỏ hơn số lượng tồn kho (StoredQuantity) của sản phẩm
-            if (createDTO.Quantity <= 0 || createDTO.Quantity >= product.StoredQuantity)
+            if (createDTO.Quantity <= 0 || createDTO.Quantity > product.StoredQuantity)
             {
                 return BadRequest("Invalid quantity requested");
             }

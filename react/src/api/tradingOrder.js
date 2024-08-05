@@ -59,7 +59,7 @@ export const user2AcceptRequest = (token, orderId) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  return axiosClient.post( `${END_POINT.USER2_ACCEPT_REQUEST}/${orderId}`, null, config );
+  return axiosClient.put( `${END_POINT.USER2_ACCEPT_REQUEST}/${orderId}`, null, config );
 };
 export const user2RejectRequest = (token, orderId) => {
   const config = {

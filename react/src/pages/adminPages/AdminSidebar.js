@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 function AdminSidebar(){
   const { auth } = useContext(AuthContext);
   //1 dashboard, 2 manageUser, 3 manageProduct, 4 managePackage, 5 manageOrder, 6 managePolicy
-
-
   return (
     <aside className="sidebar">
       <div className="py-3">
@@ -101,14 +99,9 @@ function AdminSidebar(){
           </ul>
         </li>
         <li className="sidebar-item">
-          <Link to="">Cài đặt chính sách</Link>
+          <Link to="/admin/user-reports">Báo cáo người dùng</Link>
         </li>
       </ul>
-      <div className="d-flex mt-5">
-        <button className="toggle-btn" type="button">
-          Toggle
-        </button>
-      </div>
     </aside>
   );
 };

@@ -1,8 +1,9 @@
-import { React, useContext } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import SearchButton from "./component/SearchButton";
 import AuthContext from "./context/AuthProvider";
+import { getCategoryAPI } from "./api/category";
 
 const UserDropdown = (authContainer) => {
   const auth = authContainer.auth;
@@ -158,10 +159,7 @@ const UserDropdown = (authContainer) => {
               </li>
               <li>
                 <div className="d-flex justify-content-between align-items-center">
-                  <Link
-                    className="dropdown-item"
-                    to={`/settings`}
-                  >
+                  <Link className="dropdown-item" to={`/settings`}>
                     <img
                       className="ps-1 me-2"
                       width="25px"
@@ -169,19 +167,6 @@ const UserDropdown = (authContainer) => {
                       alt="sofaIcon"
                     />
                     Cài đặt người dùng
-                  </Link>
-                </div>
-              </li>
-              <li>
-                <div className="d-flex justify-content-between align-items-center">
-                  <Link className="dropdown-item" href="#">
-                    <img
-                      className="ps-1 me-2"
-                      width="25px"
-                      src={`../assets/img/icon/help.png`}
-                      alt="sofaIcon"
-                    />
-                    Câu hỏi thường gặp
                   </Link>
                 </div>
               </li>
@@ -210,7 +195,16 @@ const UserDropdown = (authContainer) => {
 
 const Header = () => {
   const { auth } = useContext(AuthContext);
-
+  const [categories, setCategories] = useState();
+  const fetchCategories = async () => {
+    const response = await getCategoryAPI();
+    if (response) {
+      setCategories(response);
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
   return (
     <div>
       <header className="header container-fluid  d-flex flex-row justify-content-between align-items-center px-2 py-1">
@@ -231,83 +225,22 @@ const Header = () => {
             <span> Danh mục </span>
           </button>
           <ul className="dropdown-menu ">
-            <li>
-              <Link to="/search-product/1" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="28px"
-                  src={`../assets/img/icon/electronic-device.png`}
-                  alt="frideIcon"
-                />
-                Đồ điện tử
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/2" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/school-material.png`}
-                  alt="frideIcon"
-                />
-                Đồ dùng học tập
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/3" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/fridge.png`}
-                  alt="frideIcon"
-                />
-                Điện lạnh
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/4" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/sofa.png`}
-                  alt="sofaIcon"
-                />
-                Đồ gia dụng, nội thất
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/5" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/burger.png`}
-                  alt="sofaIcon"
-                />
-                Đồ ăn, thực phẩm
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/6" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/woman-clothes.png`}
-                  alt="sofaIcon"
-                />
-                Thời trang
-              </Link>
-            </li>
-            <li>
-              <Link to="/search-product/7" className="dropdown-item py-2">
-                <img
-                  className="me-2"
-                  width="25px"
-                  src={`../assets/img/icon/console.png`}
-                  alt="sofaIcon"
-                />
-                Giải trí, thể thao, sở thích
-              </Link>
-            </li>
+            {categories?.map((category) => (
+              <li key={category.categoryId}>
+                <Link
+                  to={`/search-product/${category.categoryId}`}
+                  className="dropdown-item py-2"
+                >
+                  <img
+                    className="me-2"
+                    width="28px"
+                    src={category?.iconLink}
+                    alt={category.name}
+                  />
+                  {category.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -323,7 +256,9 @@ const Header = () => {
             </Link>
           </button>
           <button className="col-md-4 ms-1 btn fs-5 text-white">
-            <i className="fa fa-heart" aria-hidden="true"></i>
+            <Link className="text-white" to="/wishlist">
+              <i className="fa fa-heart" aria-hidden="true"></i>
+            </Link>
           </button>
         </div>
 

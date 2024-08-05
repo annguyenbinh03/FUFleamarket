@@ -19,9 +19,9 @@ function CreateOrder() {
   const [isLoading, setIsLoading] = useState(true);
 
   //upload
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [paymentMethod, setpaymentMethod] = useState("");
+  const [pricePerProduct, setPrice] = useState(1);
+  const [quantity, setQuantity] = useState(1);
+  const [paymentMethod, setpaymentMethod] = useState("Thanh toán trực tiếp");
   const [receiverAddress, setAddress] = useState("");
   const [note, setNote] = useState("");
 
@@ -46,30 +46,51 @@ function CreateOrder() {
     }
   }, [productId]);
 
+  const checkValidation = () => {
+    var check = true;
+    if (pricePerProduct === null || pricePerProduct < 1) {
+      showErrorToast("Giá sản phẩm phải lớn hơn 0");
+      check = false;
+    }
+    if (quantity === null || quantity < 1) {
+      showErrorToast("Số lượng sản phẩm mua phải lớn hơn 0");
+      check = false;
+    }
+    return check;
+  };
+
   const handleSubmit = async (e) => {
-    var totalPrice = price*quantity;
+    var price = pricePerProduct*quantity;
     e.preventDefault();
     const order = {
-      totalPrice,
+      price,
       quantity,
       paymentMethod,
       receiverAddress,
       note,
       productId
     };
+    if(!checkValidation()){
+      return;
+    }
     const response = await createOrderAPI(order, auth.accessToken);
     console.log(response);
-    toast.info("Đã tạo đơn hàng, đang chờ xác nhận từ người bán!", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    navigate("/buy-order", { replace: true });
+    if(response){
+      toast.info("Đã tạo đơn hàng, đang chờ xác nhận từ người bán!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/buy-order", { replace: true });
+    }else{
+      showErrorToast("Tạo đơn thất bại!");
+    }
+   
   };
 
   const formatPrice = (value) => {
@@ -79,9 +100,17 @@ function CreateOrder() {
     return value;
   };
   const CheckQuantity = (value) => {
-    if (value > product.storedQuantity) {
-      showErrorToast("Số lượng muốn mua không được vượt quá số lượng trong kho!", 5000)
-    } else {
+    if(value){
+      if(value< 1){
+        showErrorToast("Số lượng sản phẩm mua phải lớn hơn 0");
+        return;
+      }
+      if (value > product.storedQuantity) {
+        showErrorToast("Số lượng muốn mua không được vượt quá số lượng trong kho!", 5000)
+      } else {
+        setQuantity(value);
+      }
+    }else{
       setQuantity(value);
     }
   };
@@ -176,48 +205,9 @@ function CreateOrder() {
                     aria-current="true"
                     aria-label="Slide 1"
                   />
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to={1}
-                    aria-label="Slide 2"
-                  />
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to={2}
-                    aria-label="Slide 3"
-                  />
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to={3}
-                    aria-label="Slide 4"
-                  />
                 </div>
                 <div className="carousel-inner">
                   <div className="carousel-item active">
-                    <img
-                      src={product?.productImages}
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="carousel-item">
-                    <img
-                      src={product?.productImages}
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="carousel-item">
-                    <img
-                      src={product?.productImages}
-                      className="d-block w-100"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="carousel-item">
                     <img
                       src={product?.productImages}
                       className="d-block w-100"
@@ -256,8 +246,8 @@ function CreateOrder() {
                   <div className="product_name">{product.productName}</div>
                   <div>
                     <p className="price_wistlist_left">
-                      {" "}
-                      {formatPrice(product.price)}đ
+                      <span className="text-black">Giá mong muốn:</span>  {" "}
+                      {formatPrice(product.price)} {` đ`}
                     </p>
                   </div>
                   <div>
@@ -269,7 +259,7 @@ function CreateOrder() {
                   </div>
                   <div>Số lượng trong kho: {product.storedQuantity}</div>
                   <div>
-                    <p className="">{product.description}</p>
+                    <p className="">{`Miêu tả: `} {product.description}</p>
                   </div>
                 </>
               ) : (
@@ -282,9 +272,9 @@ function CreateOrder() {
                   <input
                     type="number"
                     className="form-control"
-                    placeholder="300.000đ"
                     required
-                    value={price}
+                    min="1"
+                    value={pricePerProduct}
                     onChange={(e) => handleChangePrice(e.target.value)}
                   />
                   <label className="ms-2">
@@ -298,6 +288,7 @@ function CreateOrder() {
                       className="form-control"
                       required
                       value={quantity}
+                      min="1"
                       onChange={(e) => CheckQuantity(e.target.value)}
                     />
                     <label className="ms-2">Số lượng sản phẩm muốn mua *</label>
@@ -308,7 +299,7 @@ function CreateOrder() {
                       className="form-control"
                       required
                     >
-                      { formatPrice( quantity*price)} đ
+                      { formatPrice( quantity*pricePerProduct)} đ
                       </div>
                     <label className="ms-2">Tổng giá trị hóa đơn</label>
                   </div>

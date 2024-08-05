@@ -7,7 +7,7 @@ import Footer from "../../Footer";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
-const GoogleRedirect = 'https://fufleamarketapi.azurewebsites.net/Auth/loginGoogle';
+const GoogleRedirect = 'https://fufleamarketapis.azurewebsites.net/Auth/loginGoogle';
 //  https://localhost:7057/Auth/loginGoogle
 const Login = () => {
   const { setAuth } = useContext(AuthContext);

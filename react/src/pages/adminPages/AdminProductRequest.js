@@ -9,6 +9,7 @@ import {
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
 import AuthContext from "../../context/AuthProvider";
+import { toast } from "react-toastify";
 
 function AdminProductRequest() {
   const [products, setProducts] = useState([]);
@@ -27,11 +28,39 @@ function AdminProductRequest() {
     fetchData();
   }, []);
 
+  const showErrorToast = (message, closeTime) => {
+    toast.error(message, {
+      position: "bottom-right",
+      autoClose: closeTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const showInforToast = (message, closeTime) => {
+    toast.info(message, {
+      position: "bottom-right",
+      autoClose: closeTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
   const handleApproveProduct = async (productId) => {
     try {
       await acceptCreateProductRequestAPI(auth.accessToken, productId);
       fetchData();
+      showInforToast("Duyệt sản phẩm thành công")
     } catch (error) {
+      showErrorToast("Duyệt sản phẩm thất bại")
       console.error("Lỗi khi duyệt sản phẩm:", error);
     }
   };
@@ -40,7 +69,9 @@ function AdminProductRequest() {
     try {
       await rejectCreateProductRequestAPI(auth.accessToken, productId);
       fetchData();
+      showInforToast("Loại bỏ sản phẩm thành công")
     } catch (error) {
+      showErrorToast("Loại bỏ phẩm thất bại")
       console.error("Lỗi khi loại bỏ sản phẩm:", error);
     }
   };
@@ -50,7 +81,7 @@ function AdminProductRequest() {
       <nav className="navbar">
         <AdminHeader />
       </nav>
-      <div className="admin_main container-fluid d-flex justify-content-center p-0 pt-3 mt-5">
+      <div className="admin_main container-fluid d-flex justify-content-center p-0 mt-5">
         <nav className="w-13 p-0 bg-white">
           <div className="col-lg-12 ">
             <AdminSidebar />

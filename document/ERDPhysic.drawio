@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-07-19T16:20:28.608Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="seVCjWdRbKpOVCLBdn96" version="21.8.2" type="device">
+<mxfile host="Electron" modified="2024-07-25T13:12:24.005Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="vgp8G-5vWio540mkgXAH" version="21.8.2" type="device">
   <diagram name="Page-1" id="2ca16b54-16f6-2749-3443-fa8db7711227">
-    <mxGraphModel dx="2534" dy="1757" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+    <mxGraphModel dx="2136" dy="1527" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -809,7 +809,7 @@
             <mxRectangle width="130" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="QvAU7ecHsZQy278lUhVn-2" value="status:&lt;br&gt;0: đang chờ admin duyệt&lt;br&gt;1: admin đã duyệt (bình thường)&lt;br&gt;2: admin k duyệt&lt;br&gt;3: người dùng ẩn&lt;br&gt;4: admin xóa" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
+        <mxCell id="QvAU7ecHsZQy278lUhVn-2" value="status:&lt;br&gt;0: đang chờ admin duyệt&lt;br&gt;1: admin đã duyệt (bình thường)&lt;br&gt;2: admin k duyệt&lt;br&gt;3: người dùng ẩn&lt;br&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">
           <mxGeometry x="410" y="590" width="210" height="150" as="geometry" />
         </mxCell>
         <mxCell id="QvAU7ecHsZQy278lUhVn-4" value="condition(tình trạng đơn hàng):&amp;nbsp;&lt;br&gt;0: old&lt;br&gt;1 new" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;" parent="1" vertex="1">

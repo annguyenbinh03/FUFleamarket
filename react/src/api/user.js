@@ -6,7 +6,27 @@ const END_POINT = {
     SHOP_PROFILE : "product/ShopProfile",
     ADMIN_GET_ALL_PROFILE : "user/AllProfile(Admin)",
     EDIT_USER_PROFILE: "user/UpdateProfileOfUser",
-    USER_SETTINGS: "user/GetUserSettings"
+    USER_SETTINGS: "user/GetUserSettings",
+    BAN_ACCOUNT: "user/BanAccountOfUser(Admin)",
+    UNBAN_ACCOUNT : "user/UnBanAccountOfUser(Admin)"
+}
+
+export const adminUnBanAccount = (token, userId) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.put(`${END_POINT.UNBAN_ACCOUNT}/${userId}`, null,config);
+}
+
+export const adminBanAccount = (token, userId) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  return axiosClient.put(`${END_POINT.BAN_ACCOUNT}/${userId}`, null,config);
 }
 
 export const getAllUserAPI = () => {

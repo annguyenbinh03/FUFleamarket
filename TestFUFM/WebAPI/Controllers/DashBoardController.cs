@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
-using Service.CalculateOrderMonthlyTotal.Interfaces;
 using Service.CalculateProductMonthlyTotal;
 using Service.CalculateProductMonthlyTotal.Interfaces;
 using Service.CalculatePromotioTransactionMonthlyTotal;
@@ -16,15 +15,13 @@ namespace WebAPI.Controllers
     {
         private readonly IPromotionTransactionService _promotionTransactionService;
         private readonly IProductService _productService;
-        private readonly IOrderService _orderService;
         private readonly IUserRepository _userRepository;
         private readonly FufleaMarketContext _context;
 
-        public DashBoardController(IPromotionTransactionService promotionTransactionService, IProductService productService, IOrderService orderService, FufleaMarketContext context)
+        public DashBoardController(IPromotionTransactionService promotionTransactionService, IProductService productService, FufleaMarketContext context)
         {
             _promotionTransactionService = promotionTransactionService;
             _productService = productService;
-            _orderService = orderService;
             _context = context;
         }
 
@@ -72,7 +69,7 @@ namespace WebAPI.Controllers
 
 
             var totalOrderCount = await _context.Orders
-                .Where(o => o.Status == 1)
+                .Where(o => o.Status == 3)
                 .CountAsync();
 
 
@@ -93,7 +90,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> GetQuantityByCategory()
         {
             var quantityByCategory = await _context.Orders
-                .Where(o => o.Status == 1) 
+                .Where(o => o.Status == 3) 
                 .Join(_context.Products, o => o.ProductId, p => p.ProductId, (o, p) => new { o.Quantity, p.CategoryId })
                 .Join(_context.Categories, op => op.CategoryId, c => c.CategoryId, (op, c) => new { op.Quantity, c.CategoryId, c.Name })
                 .GroupBy(x => new { x.CategoryId, x.Name })
@@ -111,7 +108,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> GetTopSellers()
         {
             var topSellers = await _context.Orders
-                .Where(o => o.Status == 1) 
+                .Where(o => o.Status == 3) 
                 .GroupBy(o => o.SellerId)
                 .Select(g => new
                 {

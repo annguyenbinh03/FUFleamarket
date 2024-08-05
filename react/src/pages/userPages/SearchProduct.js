@@ -81,14 +81,7 @@ function SearchProduct() {
                   </div>
               )}
              
-              <div className="product__pagination d-flex justify-content-center">
-                <Link to="/search-product/1">1</Link>
-                <Link to="/search-product/2">2</Link>
-                <Link to="/search-product/3">3</Link>
-                <Link to="/search-product/4">
-                  <i className="fa fa-long-arrow-right"></i>
-                </Link>
-              </div>
+              
             </div>
           </div>
         </div>

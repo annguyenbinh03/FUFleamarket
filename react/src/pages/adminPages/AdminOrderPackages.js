@@ -26,10 +26,12 @@ function AdminOrderPackages() {
   };
   function removeTimeFromISOString(isoString) {
     if (isoString) {
-      var index = -1;
-      index = isoString.indexOf("T");
+      const index = isoString.indexOf("T");
       if (index !== -1) {
-        return isoString.slice(0, index);
+        var string = isoString.slice(0, index);
+        string += " ";
+        string += isoString.slice(index + 1, index + 6);
+        return string;
       }
     }
     return isoString;
@@ -57,8 +59,7 @@ function AdminOrderPackages() {
                 <th>Giá</th>
                 <th>Phương thức thanh toán</th>
                 <th>Mã giao dịch</th>
-                <th>Ngày tiếp nối</th>
-                <th>Ngày kết thúc</th>
+                <th>Ngày mua</th>
                 <th>Trạng thái</th>
               </tr>
             </thead>
@@ -97,14 +98,11 @@ function AdminOrderPackages() {
                     <span> {order?.transactionCode}</span>
                   </td>
                   <td>
-                    <span> {removeTimeFromISOString(order?.startDate)}</span>
-                  </td>
-                  <td>
-                    <span> {removeTimeFromISOString(order?.endDate)}</span>
+                    <span> {removeTimeFromISOString(order?.transactionCreatedDate)}</span>
                   </td>
                   <td>
                     <span>
-                      {order?.promotionOrderStatus === "Active" ? (
+                      {order?.promotionOrderStatus === "Active" || order?.promotionOrderStatus === "Pending"  ? (
                         <span class="badge text-bg-success ">Success</span>
                       ) : (
                         <span class="badge text-bg-danger ">Danger</span>

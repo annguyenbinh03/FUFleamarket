@@ -195,6 +195,17 @@ namespace WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = promoOrderModel.PromoOrderId }, promoOrderDTO);
         }
 
+        private int GetDefaultMaxProduct()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                 .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", true, true)
+                        .Build();
+            var strConn = config["DefaultUserMaxProduct"];
+            int max = int.Parse(strConn);
+            return max;
+        }
+
         [HttpGet("user/countproductandmaxlimit")]
         public async Task<IActionResult> GetHighestQuantityPromotionForUser()
         {
@@ -215,7 +226,7 @@ namespace WebAPI.Controllers
             {
                 currentProductQuantity = await _productReposity.CountProduct(userId),
                 image = promotion != null ? promotion.ImageLink : "",
-                ProductQuantityLimit = promotion != null ? promotion.ProductQuantityLimit : 5  // Use 5 as default value if highestQuantity is null
+                ProductQuantityLimit = promotion != null ? promotion.ProductQuantityLimit : GetDefaultMaxProduct()  // Use 5 as default value if highestQuantity is null
             };
 
             // Return response

@@ -234,13 +234,13 @@ function BuyOrder() {
                             {order.product?.productName}
                           </Link>
                           <div>
-                            Giá người mua mong muốn:{" "}
+                            Giá mong muốn:{" "}
                             <span className="price">
                               {formatPrice(order.order?.price)} đ
                             </span>
                             <span className="text-secondary">
                               {" "}
-                              ( {formatPrice(order.product?.productPrice)} đ )
+                              ( Ngươi bán muốn: {formatPrice(order.product?.productPrice)}đ/ 1 sản phẩm )
                             </span>
                           </div>
                           <div className="address">

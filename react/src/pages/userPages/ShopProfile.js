@@ -150,13 +150,7 @@ function ShopProfile() {
               />
             </div>
             <div className="fs-5 fw-bold mt-3">{userInfo?.fullName}</div>
-            <div>
-              {" "}
-              {userInfo?.sellRating !== 0
-                ? userInfo?.sellRating
-                : "Chưa có đánh giá"}{" "}
-            </div>
-            {auth.logged && userId === auth?.id?.toString() ? (
+            {/* {auth.logged && userId === auth?.id?.toString() ? (
               <button className="btn text-white fw-bold btn-secondary disabled my-2 w-100">
                 <i className="fa fa-comments-o" aria-hidden="true"></i> Chat
                 ngay
@@ -166,7 +160,7 @@ function ShopProfile() {
                 <i className="fa fa-comments-o" aria-hidden="true"></i> Chat
                 ngay
               </button>
-            )}
+            )} */}
 
             <div className="mb-2">
               <span className="text-body-secondary">
@@ -190,7 +184,7 @@ function ShopProfile() {
               </span>
               {removeTimeFromISOString(userInfo?.createdDate) || " "}
             </div>
-            <div className="mb-1">
+            {/* <div className="mb-1">
               <span className="text-body-secondary">
                 <i
                   className="fa fa-phone-square"
@@ -212,7 +206,7 @@ function ShopProfile() {
               </span>{" "}
               {userInfo?.addresses?.[0]?.specificAddress ||
                 "Người dùng này chưa cài địa chỉ"}
-            </div>
+            </div> */}
             {auth.logged && userId === auth?.id?.toString() ? (
               <div className="d-flex justify-content-center w-100">
                 <button
@@ -235,7 +229,7 @@ function ShopProfile() {
             <div className="row">
               {products?.map((product) => (
                 <div
-                  className="col-lg-3 col-md-4 col-sm-6"
+                  className="col-lg-3 col-md-4 col-sm-6 px-0"
                   key={product.productId}
                 >
                   <div className="product">

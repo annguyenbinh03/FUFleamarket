@@ -40,10 +40,10 @@ namespace WebAPI.Controllers
                 return NotFound("Product not found with the provided ProductId.");
             }
 
-            var exists = await _wishlistRepo.WishlistItemExistsAsync(userId, wishlistDto.ProductId);
+            var exists = await _wishlistRepo.WishlistItemExistsAsync(wishlistDto.UserId, wishlistDto.ProductId);
             if (exists)
             {
-                return Conflict("This item is already in the wishlist.");
+                return StatusCode(200,"This item is already in the wishlist.");
             }
 
             var result = await _wishlistRepo.CreateWishlistAsync(wishlistDto);
